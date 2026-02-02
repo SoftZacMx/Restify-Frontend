@@ -13,9 +13,12 @@ interface AuthState {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
+  /** Solo en memoria: true cuando el persist terminó de rehidratar desde localStorage */
+  _hasHydrated: boolean;
   login: (data: LoginResponse) => void;
   logout: () => void;
   setUser: (user: User) => void;
+  setHasHydrated: (value: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -24,6 +27,8 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       isAuthenticated: false,
+      _hasHydrated: false,
+      setHasHydrated: (value) => set({ _hasHydrated: value }),
       login: (data) => {
         set({
           user: data.user as User,
@@ -43,6 +48,14 @@ export const useAuthStore = create<AuthState>()(
     {
       name: 'auth-storage',
       version: 2, // Incrementar versión para limpiar datos antiguos
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+        isAuthenticated: state.isAuthenticated,
+      }),
+      onRehydrateStorage: () => (state) => {
+        useAuthStore.getState().setHasHydrated(true);
+      },
       migrate: (persistedState: any, version: number) => {
         // Migración: eliminar token de datos antiguos
         if (version < 2 && persistedState) {
