@@ -1,5 +1,5 @@
 import React from 'react';
-import { MoreVertical, Trash2 } from 'lucide-react';
+import { MoreVertical, Trash2, Eye } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -96,6 +96,9 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
                   TIPO
                 </TableHead>
                 <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  TÍTULO
+                </TableHead>
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   DESCRIPCIÓN
                 </TableHead>
                 <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
@@ -131,7 +134,12 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
                       {expense.typeLabel}
                     </Badge>
                   </TableCell>
-                  <TableCell className="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 max-w-md">
+                  <TableCell className="px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100 max-w-[200px]">
+                    <div className="truncate" title={expense.title}>
+                      {expense.title || '-'}
+                    </div>
+                  </TableCell>
+                  <TableCell className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400 max-w-md">
                     <div className="truncate" title={expense.description || ''}>
                       {expense.description || '-'}
                     </div>
@@ -153,6 +161,13 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
                         <MoreVertical className="h-4 w-4" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-40">
+                        <DropdownMenuItem
+                          onSelect={() => onExpenseAction?.(expense.id, 'view')}
+                          className="cursor-pointer"
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          <span>Ver detalle</span>
+                        </DropdownMenuItem>
                         <DropdownMenuItem
                           onSelect={() => onExpenseAction?.(expense.id, 'delete')}
                           className="cursor-pointer text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20"

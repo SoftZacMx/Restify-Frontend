@@ -46,6 +46,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
   isLoading = false,
 }) => {
   const { user } = useAuthStore();
+  const [title, setTitle] = useState<string>('');
   const [expenseType, setExpenseType] = useState<ExpenseType | ''>('');
   const [date, setDate] = useState<string>(
     new Date().toISOString().split('T')[0]
@@ -82,8 +83,19 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
+    const titleTrim = title?.trim() ?? '';
+    if (!titleTrim) {
+      newErrors.title = 'El título del gasto es requerido (mín. 1 carácter)';
+    } else if (titleTrim.length > 200) {
+      newErrors.title = 'El título no puede superar 200 caracteres';
+    }
+
     if (!expenseType) {
       newErrors.type = 'El tipo de gasto es requerido';
+    }
+
+    if (expenseType === 'MERCHANDISE' && (!merchandiseItems || merchandiseItems.length === 0)) {
+      newErrors.merchandiseItemsRequired = 'Debes agregar al menos un ítem para gastos de tipo Mercancía';
     }
 
     if (!date) {
@@ -126,19 +138,21 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
       return;
     }
 
-    const expenseData: CreateExpenseRequest = {
+    const base = {
+      title: title.trim(),
       type: expenseType as ExpenseType,
       date: new Date(date).toISOString(),
       total: parseFloat(total),
       subtotal: parseFloat(subtotal),
       iva: parseFloat(iva),
-      description: description || null,
+      description: description?.trim() || null,
       paymentMethod: paymentMethod as PaymentMethod,
       userId: user.id,
-      ...(expenseType === 'MERCHANDISE' && merchandiseItems.length > 0
-        ? { items: merchandiseItems }
-        : {}),
     };
+    const expenseData: CreateExpenseRequest =
+      expenseType === 'MERCHANDISE' && merchandiseItems.length > 0
+        ? { ...base, type: 'MERCHANDISE', items: merchandiseItems }
+        : { ...base, type: base.type as 'SERVICE_BUSINESS' | 'UTILITY' | 'RENT' | 'OTHER' };
 
     await onSubmit(expenseData);
   };
@@ -171,6 +185,28 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Título (obligatorio, máx. 200 caracteres) */}
+      <div className="space-y-2">
+        <Label htmlFor="title">
+          Título del gasto <span className="text-red-500">*</span>
+        </Label>
+        <Input
+          id="title"
+          type="text"
+          maxLength={200}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Ej. Pago luz enero, Compra insumos..."
+          className={cn(errors.title && 'border-red-500')}
+        />
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          {title.length}/200 caracteres
+        </p>
+        {errors.title && (
+          <p className="text-sm text-red-500">{errors.title}</p>
+        )}
+      </div>
+
       {/* Tipo de gasto y Fecha */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
@@ -264,18 +300,23 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
 
       {/* Formularios específicos por tipo */}
       {expenseType === 'MERCHANDISE' && (
-        <MerchandiseExpenseForm
-          products={products}
-          onItemsChange={(items) => {
-            setMerchandiseItems(items);
-            const itemsSubtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
-            const itemsTotal = items.reduce((sum, item) => sum + item.total, 0);
-            const calculatedIva = itemsTotal - itemsSubtotal;
-            setSubtotal(itemsSubtotal.toFixed(2));
-            setIva(calculatedIva.toFixed(2));
-            setTotal(itemsTotal.toFixed(2));
-          }}
-        />
+        <>
+          <MerchandiseExpenseForm
+            products={products}
+            onItemsChange={(items) => {
+              setMerchandiseItems(items);
+              const itemsSubtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
+              const itemsTotal = items.reduce((sum, item) => sum + item.total, 0);
+              const calculatedIva = itemsTotal - itemsSubtotal;
+              setSubtotal(itemsSubtotal.toFixed(2));
+              setIva(calculatedIva.toFixed(2));
+              setTotal(itemsTotal.toFixed(2));
+            }}
+          />
+          {errors.merchandiseItemsRequired && (
+            <p className="text-sm text-red-500">{errors.merchandiseItemsRequired}</p>
+          )}
+        </>
       )}
 
       {expenseType === 'SERVICE_BUSINESS' && (

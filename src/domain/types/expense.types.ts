@@ -6,13 +6,15 @@ export type ExpenseType = 'SERVICE_BUSINESS' | 'UTILITY' | 'RENT' | 'MERCHANDISE
 
 export type PaymentMethod = 1 | 2 | 3; // 1: Cash, 2: Transfer, 3: Card
 
-export type UnitOfMeasure = 'pieza' | 'kg' | 'gramos';
+/** Unidades de medida para ítems MERCHANDISE (enum del backend) */
+export type UnitOfMeasure = 'KG' | 'G' | 'PCS' | 'OTHER';
 
 /**
  * Gastos
  */
 export interface Expense {
   id: string;
+  title: string;
   type: ExpenseType;
   date: Date | string;
   total: number;
@@ -21,6 +23,7 @@ export interface Expense {
   description: string | null;
   paymentMethod: PaymentMethod;
   userId: string;
+  userName?: string; // Nombre del usuario que registró (viene del backend)
   createdAt: Date | string;
   updatedAt: Date | string;
   user?: {
@@ -50,14 +53,38 @@ export interface ExpenseItem {
 }
 
 /**
- * Filtros para la tabla de gastos
+ * Filtros y paginación para listar gastos (query params del backend)
  */
-export interface ExpenseTableFilters {
-  search?: string;
-  type?: ExpenseType | 'all';
-  paymentMethod?: PaymentMethod | 'all';
+export interface ListExpensesQuery {
+  type?: ExpenseType;
+  userId?: string;
+  paymentMethod?: PaymentMethod;
   dateFrom?: string;
   dateTo?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+/**
+ * Resultado de listar gastos (backend devuelve data + pagination)
+ */
+export interface ListExpensesResult {
+  data: Array<Omit<Expense, 'items' | 'updatedAt'>>;
+  pagination: { page: number; pageSize: number; total: number; totalPages: number };
+}
+
+/**
+ * Filtros para la tabla de gastos (UI)
+ */
+export interface ExpenseTableFilters {
+  search?: string; // Solo filtrado en frontend (no se envía al API)
+  type?: ExpenseType | 'all';
+  userId?: string; // UUID del usuario que registró el gasto (opcional)
+  paymentMethod?: PaymentMethod | 'all';
+  dateFrom?: string; // ISO ej. 2026-01-01
+  dateTo?: string;   // ISO ej. 2026-01-31
+  page?: number;
+  pageSize?: number;
 }
 
 /**
@@ -65,6 +92,7 @@ export interface ExpenseTableFilters {
  */
 export interface ExpenseTableItem {
   id: string;
+  title: string;
   date: string;
   type: ExpenseType;
   typeLabel: string;
@@ -77,19 +105,37 @@ export interface ExpenseTableItem {
 }
 
 /**
- * Request para crear un gasto
+ * Request para crear un gasto (sin ítems: SERVICE_BUSINESS, UTILITY, RENT, OTHER)
  */
-export interface CreateExpenseRequest {
-  type: ExpenseType;
-  date?: string; // ISO date string
+export interface CreateExpenseRequestNoItems {
+  title: string; // Obligatorio, mín. 1 carácter, máx. 200
+  type: 'SERVICE_BUSINESS' | 'UTILITY' | 'RENT' | 'OTHER';
   total: number;
   subtotal: number;
   iva: number;
-  description?: string | null;
   paymentMethod: PaymentMethod;
   userId: string;
-  items?: CreateExpenseItemRequest[];
+  date?: string;
+  description?: string | null;
 }
+
+/**
+ * Request para crear un gasto tipo MERCHANDISE (con ítems)
+ */
+export interface CreateExpenseRequestMerchandise {
+  title: string;
+  type: 'MERCHANDISE';
+  total: number;
+  subtotal: number;
+  iva: number;
+  paymentMethod: PaymentMethod;
+  userId: string;
+  date?: string;
+  description?: string | null;
+  items: CreateExpenseItemRequest[];
+}
+
+export type CreateExpenseRequest = CreateExpenseRequestNoItems | CreateExpenseRequestMerchandise;
 
 /**
  * Request para crear un item de gasto (MERCHANDISE)
@@ -103,9 +149,23 @@ export interface CreateExpenseItemRequest {
 }
 
 /**
+ * Request para actualizar un gasto (todos los campos opcionales; no se puede cambiar type ni items)
+ */
+export interface UpdateExpenseRequest {
+  title?: string;
+  date?: string;
+  total?: number;
+  subtotal?: number;
+  iva?: number;
+  description?: string | null;
+  paymentMethod?: PaymentMethod;
+}
+
+/**
  * Errores de validación del formulario de gasto
  */
 export interface ExpenseFormErrors {
+  title?: string;
   type?: string;
   date?: string;
   total?: string;

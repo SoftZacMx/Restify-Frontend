@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
@@ -15,9 +16,13 @@ import {
 } from '@/presentation/components/ui/alert-dialog';
 import { ExpenseFilters } from '@/presentation/components/expenses/ExpenseFilters';
 import { ExpenseTable } from '@/presentation/components/expenses/ExpenseTable';
+import { Pagination } from '@/presentation/components/ui/pagination';
 import { CreateExpenseDialog } from '@/presentation/components/expenses/CreateExpenseDialog';
 import { ExpenseService } from '@/application/services/expense.service';
 import type { ExpenseTableFilters, CreateExpenseRequest, Expense } from '@/domain/types';
+
+const DEFAULT_PAGE_SIZE = 20;
+const PAGE_SIZE_OPTIONS = [10, 20, 50];
 import { formatExpensesForTable } from '@/shared/utils';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
@@ -28,10 +33,13 @@ import { AppError } from '@/domain/errors';
  * Cumple SRP: Solo maneja el estado y la lógica de la página
  */
 const ExpensesPage: React.FC = () => {
+  const navigate = useNavigate();
   const [filters, setFilters] = useState<ExpenseTableFilters>({
     search: '',
     type: undefined,
     paymentMethod: undefined,
+    page: 1,
+    pageSize: DEFAULT_PAGE_SIZE,
   });
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isCreatingExpense, setIsCreatingExpense] = useState(false);
@@ -42,20 +50,28 @@ const ExpensesPage: React.FC = () => {
   const expenseService = new ExpenseService();
   const queryClient = useQueryClient();
 
-  // Query para obtener gastos de la API
+  // Query para obtener gastos de la API (con paginación)
   const {
-    data: expenses = [],
+    data: listResult,
     isLoading,
     error,
     refetch,
   } = useQuery({
     queryKey: ['expenses', filters],
     queryFn: async () => {
-      return await expenseService.listExpenses(filters);
+      return await expenseService.listExpensesWithPagination(filters);
     },
     staleTime: 30000,
     retry: 1,
   });
+
+  const expenses = listResult?.data ?? [];
+  const pagination = listResult?.pagination ?? {
+    page: 1,
+    pageSize: DEFAULT_PAGE_SIZE,
+    total: 0,
+    totalPages: 0,
+  };
 
   // Mostrar error si la carga falla
   React.useEffect(() => {
@@ -69,48 +85,72 @@ const ExpensesPage: React.FC = () => {
   }, [error]);
 
   /**
-   * Filtra gastos según los filtros aplicados
+   * Filtra gastos en cliente solo por búsqueda (título/descripción); tipo, fechas y paginación van al API
    */
   const filteredExpenses = useMemo(() => {
     let result = [...expenses];
-
-    // Filtro de búsqueda (descripción)
     if (filters.search) {
       const searchLower = filters.search.toLowerCase();
       result = result.filter(
         (expense) =>
+          expense.title?.toLowerCase().includes(searchLower) ||
           expense.description?.toLowerCase().includes(searchLower)
       );
     }
-
     return result;
-  }, [expenses, filters]);
+  }, [expenses, filters.search]);
 
-  /**
-   * Convierte gastos a formato de tabla
-   */
-  const tableExpenses = useMemo(() => {
-    return formatExpensesForTable(filteredExpenses);
-  }, [filteredExpenses]);
+  const tableExpenses = useMemo(() => formatExpensesForTable(filteredExpenses), [filteredExpenses]);
 
-  /**
-   * Handler para cambios en filtros
-   */
+  const paginationData = useMemo(
+    () => ({
+      currentPage: pagination.page,
+      totalPages: Math.max(1, pagination.totalPages),
+      totalItems: pagination.total,
+      itemsPerPage: pagination.pageSize,
+    }),
+    [pagination]
+  );
+
   const handleFiltersChange = (newFilters: ExpenseTableFilters) => {
-    setFilters(newFilters);
+    const paymentMethod = (() => {
+      const v = newFilters.paymentMethod;
+      if (v === undefined || v === 'all') return undefined;
+      const n = typeof v === 'string' ? parseInt(v, 10) : v;
+      return n === 1 || n === 2 || n === 3 ? (n as 1 | 2 | 3) : undefined;
+    })();
+    setFilters((prev) => ({
+      ...newFilters,
+      paymentMethod,
+      page: 1,
+      pageSize: prev.pageSize ?? DEFAULT_PAGE_SIZE,
+    }));
+  };
+
+  const handlePageChange = (page: number) => {
+    setFilters((prev) => ({ ...prev, page }));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePageSizeChange = (pageSize: number) => {
+    setFilters((prev) => ({ ...prev, pageSize, page: 1 }));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   /**
-   * Handler para acciones de gasto
+   * Handler para acciones de gasto.
+   * Ver detalle: navega a /expenses/:id con el gasto en state para mostrar al instante; la página de detalle obtiene datos completos (incl. ítems) desde API.
    */
   const handleExpenseAction = (expenseId: string, action: 'delete' | 'view') => {
     switch (action) {
+      case 'view': {
+        const expenseFromList = expenses.find((e) => e.id === expenseId);
+        navigate(`/expenses/${expenseId}`, { state: expenseFromList ? { expense: expenseFromList } : undefined });
+        break;
+      }
       case 'delete':
         setExpenseToDelete({ id: expenseId });
         setIsDeleteDialogOpen(true);
-        break;
-      case 'view':
-        // TODO: Implementar vista de detalle
         break;
     }
   };
@@ -187,6 +227,19 @@ const ExpensesPage: React.FC = () => {
           isLoading={isLoading}
           onExpenseAction={handleExpenseAction}
         />
+
+        {paginationData.totalItems > 0 && (
+          <Pagination
+            currentPage={paginationData.currentPage}
+            totalPages={paginationData.totalPages}
+            totalItems={paginationData.totalItems}
+            itemsPerPage={paginationData.itemsPerPage}
+            itemsLabel="gastos"
+            pageSizeOptions={PAGE_SIZE_OPTIONS}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+          />
+        )}
 
         {/* Create Dialog */}
         <CreateExpenseDialog

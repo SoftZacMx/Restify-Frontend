@@ -4,11 +4,14 @@ import type { User, LoginResponse } from '@/domain/types';
 
 /**
  * Store de autenticación
- * Maneja el estado global de autenticación
- * El token se almacena en HttpOnly cookie (no en el frontend)
+ * Maneja el estado global de autenticación.
+ * El backend guarda el JWT en cookie HttpOnly y además lo devuelve en el body del login.
+ * Guardamos el JWT en el store para enviarlo en el handshake/register_connection del WebSocket
+ * (el servidor WebSocket no lee la cookie).
  */
 interface AuthState {
   user: User | null;
+  token: string | null;
   isAuthenticated: boolean;
   login: (data: LoginResponse) => void;
   logout: () => void;
@@ -19,20 +22,19 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
+      token: null,
       isAuthenticated: false,
       login: (data) => {
-        // El token se almacena en HttpOnly cookie por el backend
-        // Solo guardamos el usuario para mostrar información en la UI
         set({
           user: data.user as User,
+          token: data.token ?? null,
           isAuthenticated: true,
         });
       },
       logout: () => {
-        // La cookie HttpOnly se limpia automáticamente por el backend al llamar /api/auth/logout
-        // Solo limpiamos el estado local
         set({
           user: null,
+          token: null,
           isAuthenticated: false,
         });
       },

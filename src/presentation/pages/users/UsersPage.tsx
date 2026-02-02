@@ -270,7 +270,6 @@ const UsersPage: React.FC = () => {
    */
   const handleExport = () => {
     // TODO: Implementar exportación (CSV, Excel, etc.)
-    console.log('Export users');
   };
 
   /**

@@ -1,4 +1,4 @@
-import type { Expense, ExpenseTableItem, ExpenseType, PaymentMethod } from '@/domain/types';
+import type { Expense, ExpenseTableItem, ExpenseType, PaymentMethod, UnitOfMeasure } from '@/domain/types';
 
 /**
  * Obtiene la etiqueta en español para el tipo de gasto
@@ -29,6 +29,20 @@ export function getExpenseTypeBadgeColor(type: ExpenseType): string {
 }
 
 /**
+ * Obtiene la etiqueta en español para la unidad de medida (ítems MERCHANDISE)
+ */
+export function getUnitOfMeasureLabel(unit: UnitOfMeasure | string | null): string {
+  if (!unit) return '—';
+  const labels: Record<string, string> = {
+    KG: 'Kilogramos',
+    G: 'Gramos',
+    PCS: 'Piezas',
+    OTHER: 'Otro',
+  };
+  return labels[unit] || unit;
+}
+
+/**
  * Obtiene la etiqueta en español para el método de pago
  */
 export function getPaymentMethodLabel(method: PaymentMethod): string {
@@ -46,7 +60,8 @@ export function getPaymentMethodLabel(method: PaymentMethod): string {
 export function formatExpenseForTable(expense: Expense): ExpenseTableItem {
   return {
     id: expense.id,
-    date: typeof expense.date === 'string' ? expense.date : expense.date.toISOString().split('T')[0],
+    title: expense.title ?? expense.description ?? '—',
+    date: typeof expense.date === 'string' ? expense.date : (expense.date as Date).toISOString?.()?.split('T')[0] ?? String(expense.date),
     type: expense.type,
     typeLabel: getExpenseTypeLabel(expense.type),
     description: expense.description,
@@ -54,9 +69,10 @@ export function formatExpenseForTable(expense: Expense): ExpenseTableItem {
     paymentMethod: expense.paymentMethod,
     paymentMethodLabel: getPaymentMethodLabel(expense.paymentMethod),
     userId: expense.userId,
-    userName: expense.user
-      ? `${expense.user.name} ${expense.user.last_name}`
-      : `Usuario ${expense.userId.substring(0, 8)}...`, // Mostrar parte del ID si no hay info del usuario
+    userName:
+      expense.userName ??
+      (expense.user ? `${expense.user.name} ${expense.user.last_name}` : null) ??
+      `Usuario ${expense.userId.substring(0, 8)}...`,
   };
 }
 

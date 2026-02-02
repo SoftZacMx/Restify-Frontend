@@ -1,6 +1,7 @@
 import React from 'react';
 import { Search, Calendar, CreditCard } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
+import { Label } from '@/presentation/components/ui/label';
 import { Button } from '@/presentation/components/ui/button';
 import {
   Select,
@@ -40,10 +41,21 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
   };
 
   const handlePaymentMethodChange = (value: string) => {
+    const num = value === 'all' ? undefined : parseInt(value, 10);
+    const paymentMethod: PaymentMethod | undefined =
+      num === 1 || num === 2 || num === 3 ? (num as PaymentMethod) : undefined;
     onFiltersChange({
       ...filters,
-      paymentMethod: value === 'all' ? undefined : (Number(value) as PaymentMethod),
+      paymentMethod,
     });
+  };
+
+  const handleDateFromChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onFiltersChange({ ...filters, dateFrom: e.target.value || undefined });
+  };
+
+  const handleDateToChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onFiltersChange({ ...filters, dateTo: e.target.value || undefined });
   };
 
   const getCurrentTypeValue = (): string => {
@@ -68,7 +80,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
             </div>
             <Input
               type="text"
-              placeholder="Buscar por descripción..."
+              placeholder="Buscar por título o descripción..."
               value={filters.search || ''}
               onChange={handleSearchChange}
               className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-800 dark:text-slate-200 focus:outline-0 focus:ring-0 border-none bg-slate-100 dark:bg-slate-800 h-full placeholder:text-slate-500 dark:placeholder:text-slate-400 pl-2 text-base font-normal leading-normal"
@@ -124,15 +136,32 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
           </SelectContent>
         </Select>
 
-        {/* Date Range Filter - Placeholder for future implementation */}
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-12 rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700"
-        >
-          <Calendar className="h-4 w-4 mr-2" />
-          <span>Rango de fechas</span>
-        </Button>
+        {/* Rango de fechas */}
+        <div className="flex items-center gap-2">
+          <Calendar className="h-4 w-4 text-slate-500 dark:text-slate-400 shrink-0" />
+          <div className="flex items-center gap-2">
+            <Label htmlFor="dateFrom" className="text-xs text-slate-500 dark:text-slate-400 shrink-0">
+              Desde
+            </Label>
+            <Input
+              id="dateFrom"
+              type="date"
+              value={filters.dateFrom ?? ''}
+              onChange={handleDateFromChange}
+              className="h-10 w-36 rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700"
+            />
+            <Label htmlFor="dateTo" className="text-xs text-slate-500 dark:text-slate-400 shrink-0">
+              Hasta
+            </Label>
+            <Input
+              id="dateTo"
+              type="date"
+              value={filters.dateTo ?? ''}
+              onChange={handleDateToChange}
+              className="h-10 w-36 rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

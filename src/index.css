@@ -1,13 +1,15 @@
+
+/* Sonner Toast Styles */
+@import 'sonner/dist/styles.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Sonner Toast Styles */
-@import 'sonner/dist/sonner.css';
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    /* Fondo off-white suave para no lastimar la vista en tema claro */
+    --background: 220 14% 96%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;

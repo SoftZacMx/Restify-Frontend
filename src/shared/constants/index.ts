@@ -34,3 +34,21 @@ export const STORAGE_KEYS = {
   AUTH_STORAGE: 'auth-storage',
 } as const;
 
+// Role-based access
+export {
+  WAITER_ALLOWED_PATH_PREFIXES,
+  isWaiterAllowedPath,
+  FULL_ACCESS_ROLES,
+  hasFullAccess,
+} from './roles.constants';
+
+// POS constants
+export {
+  AVAILABLE_TABLES,
+  PRODUCT_CATEGORIES,
+  EXTRA_PRODUCTS,
+  AVAILABLE_EXTRAS,
+  POS_PRODUCTS,
+  TAX_RATE,
+  PAYMENT_METHODS,
+} from './pos.constants';

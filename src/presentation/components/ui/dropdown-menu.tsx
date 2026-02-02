@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { createPortal } from 'react-dom';
 import { cn } from '@/shared/lib/utils';
 
 interface DropdownMenuProps {
@@ -8,6 +9,7 @@ interface DropdownMenuProps {
 interface DropdownMenuContextValue {
   open: boolean;
   setOpen: (open: boolean) => void;
+  triggerRef: React.RefObject<HTMLButtonElement>;
 }
 
 const DropdownMenuContext = React.createContext<DropdownMenuContextValue | undefined>(undefined);
@@ -22,12 +24,13 @@ const useDropdownMenuContext = () => {
 
 const DropdownMenu = ({ children }: DropdownMenuProps) => {
   const [open, setOpen] = React.useState(false);
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
 
   // Cerrar al hacer click fuera
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (!target.closest('[data-dropdown-menu]')) {
+      if (!target.closest('[data-dropdown-menu]') && !target.closest('[data-dropdown-content]')) {
         setOpen(false);
       }
     };
@@ -57,7 +60,7 @@ const DropdownMenu = ({ children }: DropdownMenuProps) => {
   }, [open]);
 
   return (
-    <DropdownMenuContext.Provider value={{ open, setOpen }}>
+    <DropdownMenuContext.Provider value={{ open, setOpen, triggerRef }}>
       <div className="relative" data-dropdown-menu>
         {children}
       </div>
@@ -73,7 +76,7 @@ const DropdownMenuTrigger = React.forwardRef<
   HTMLButtonElement,
   DropdownMenuTriggerProps
 >(({ className, children, asChild, ...props }, ref) => {
-  const { open, setOpen } = useDropdownMenuContext();
+  const { open, setOpen, triggerRef } = useDropdownMenuContext();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -81,9 +84,19 @@ const DropdownMenuTrigger = React.forwardRef<
     props.onClick?.(e);
   };
 
+  // Combinar refs
+  const combinedRef = (node: HTMLButtonElement) => {
+    (triggerRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
+    if (typeof ref === 'function') {
+      ref(node);
+    } else if (ref) {
+      ref.current = node;
+    }
+  };
+
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(children as React.ReactElement<any>, {
-      ref,
+      ref: combinedRef,
       onClick: handleClick,
       ...props,
     });
@@ -91,7 +104,7 @@ const DropdownMenuTrigger = React.forwardRef<
 
   return (
     <button
-      ref={ref}
+      ref={combinedRef}
       type="button"
       className={cn(className)}
       onClick={handleClick}
@@ -111,29 +124,53 @@ const DropdownMenuContent = React.forwardRef<
   HTMLDivElement,
   DropdownMenuContentProps
 >(({ className, align = 'end', children, ...props }, ref) => {
-  const { open } = useDropdownMenuContext();
+  const { open, triggerRef } = useDropdownMenuContext();
+  const [position, setPosition] = React.useState({ top: 0, left: 0, right: 0 });
+
+  React.useEffect(() => {
+    if (open && triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+
+      setPosition({
+        top: rect.bottom + 4,
+        left: rect.left,
+        right: window.innerWidth - rect.right,
+      });
+    }
+  }, [open, triggerRef]);
 
   if (!open) return null;
 
-  const alignClasses = {
-    start: 'left-0',
-    end: 'right-0',
-    center: 'left-1/2 -translate-x-1/2',
+  const getAlignStyles = (): React.CSSProperties => {
+    switch (align) {
+      case 'start':
+        return { left: position.left };
+      case 'center':
+        return { left: position.left, transform: 'translateX(-50%)' };
+      case 'end':
+      default:
+        return { right: position.right };
+    }
   };
 
-  return (
+  return createPortal(
     <div
       ref={ref}
+      data-dropdown-content
       className={cn(
-        'absolute z-50 mt-1 min-w-[8rem] overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg',
-        alignClasses[align],
+        'fixed z-[9999] min-w-[8rem] overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg',
         className
       )}
+      style={{
+        top: position.top,
+        ...getAlignStyles(),
+      }}
       onClick={(e) => e.stopPropagation()}
       {...props}
     >
       <div className="p-1">{children}</div>
-    </div>
+    </div>,
+    document.body
   );
 });
 DropdownMenuContent.displayName = 'DropdownMenuContent';
@@ -167,5 +204,22 @@ const DropdownMenuItem = React.forwardRef<
 });
 DropdownMenuItem.displayName = 'DropdownMenuItem';
 
-export { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem };
+const DropdownMenuSeparator = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        '-mx-1 my-1 h-px bg-slate-200 dark:bg-slate-700',
+        className
+      )}
+      {...props}
+    />
+  );
+});
+DropdownMenuSeparator.displayName = 'DropdownMenuSeparator';
+
+export { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator };
 

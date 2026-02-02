@@ -81,9 +81,109 @@ export const ERROR_CONFIG = {
     statusCode: 404,
     category: 'BUSINESS',
   },
+  ORDER_ALREADY_PAID: {
+    message: 'Esta orden ya fue pagada',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  SPLIT_PAYMENT_ALREADY_EXISTS: {
+    message: 'Esta orden ya tiene un pago dividido',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  SPLIT_PAYMENT_SAME_METHOD: {
+    message: 'Debes elegir dos métodos de pago distintos',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  SPLIT_PAYMENT_INVALID_METHOD: {
+    message: 'Método de pago no válido para pago dividido',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  SPLIT_PAYMENT_AMOUNT_EXCEEDS_TOTAL: {
+    message: 'La suma de los dos pagos no puede ser mayor al total de la orden',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  SPLIT_PAYMENT_AMOUNT_MISMATCH: {
+    message: 'La suma de los dos pagos debe ser igual al total de la orden',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  PAYMENT_AMOUNT_MISMATCH: {
+    message: 'El monto debe coincidir con el total de la orden',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
   PRODUCT_NOT_FOUND: {
     message: 'Producto no encontrado',
     statusCode: 404,
+    category: 'BUSINESS',
+  },
+  PRODUCT_CREATION_FAILED: {
+    message: 'No se pudo crear el producto',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  PRODUCT_FETCH_FAILED: {
+    message: 'Error al obtener el producto',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
+  PRODUCT_UPDATE_FAILED: {
+    message: 'No se pudo actualizar el producto',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  PRODUCT_DELETE_FAILED: {
+    message: 'No se pudo eliminar el producto',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  PRODUCT_LIST_FAILED: {
+    message: 'Error al listar productos',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  EXPENSE_NOT_FOUND: {
+    message: 'Gasto no encontrado',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
+  SUBTOTAL_MISMATCH: {
+    message: 'La suma de subtotales de ítems no coincide con el subtotal del gasto',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  IVA_MISMATCH: {
+    message: 'El IVA calculado no coincide con el IVA del gasto',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  TOTAL_MISMATCH: {
+    message: 'La suma de totales de ítems no coincide con el total del gasto',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  EXPENSE_CREATION_FAILED: {
+    message: 'No se pudo crear el gasto',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  EXPENSE_FETCH_FAILED: {
+    message: 'Error al obtener el gasto',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
+  EXPENSE_LIST_FAILED: {
+    message: 'Error al listar gastos',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  EXPENSE_DELETE_FAILED: {
+    message: 'No se pudo eliminar el gasto',
+    statusCode: 400,
     category: 'BUSINESS',
   },
   TABLE_NOT_FOUND: {

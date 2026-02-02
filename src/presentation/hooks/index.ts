@@ -3,4 +3,5 @@
  */
 
 export { useAuth } from './useAuth';
-
+export { usePos } from './usePos';
+export { useWebSocket } from './useWebSocket';

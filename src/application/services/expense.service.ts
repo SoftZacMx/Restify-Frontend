@@ -2,7 +2,9 @@ import { ExpenseRepository } from '@/infrastructure/api/repositories/expense.rep
 import type {
   Expense,
   CreateExpenseRequest,
+  UpdateExpenseRequest,
   ExpenseTableFilters,
+  ListExpensesResult,
 } from '@/domain/types';
 import { AppError } from '@/domain/errors';
 
@@ -62,29 +64,54 @@ export class ExpenseService {
   }
 
   /**
-   * Lista gastos con filtros opcionales
+   * Lista gastos con filtros opcionales (devuelve el array de data)
    */
   async listExpenses(filters?: ExpenseTableFilters): Promise<Expense[]> {
     try {
-      const response = await this.expenseRepository.listExpenses(filters);
-      if (!response.success) {
-        return [];
-      }
-      // El backend devuelve { data: Expense[], pagination: {...} }
-      // Necesitamos extraer solo el array de data
-      if (response.data && Array.isArray(response.data)) {
-        return response.data;
-      }
-      // Si viene en formato { data: [...], pagination: {...} }
-      if (response.data?.data && Array.isArray(response.data.data)) {
-        return response.data.data;
-      }
-      return [];
+      const result = await this.expenseRepository.listExpenses(filters);
+      return result.data ?? [];
     } catch (error) {
       if (error instanceof AppError) {
         throw error;
       }
       throw new AppError('EXPENSE_LIST_FAILED', 'Error al listar gastos');
+    }
+  }
+
+  /**
+   * Lista gastos con filtros y paginación (devuelve data + pagination para la UI)
+   */
+  async listExpensesWithPagination(filters?: ExpenseTableFilters): Promise<ListExpensesResult> {
+    try {
+      const result = await this.expenseRepository.listExpenses(filters);
+      return {
+        data: result.data ?? [],
+        pagination: result.pagination ?? { page: 1, pageSize: 20, total: 0, totalPages: 0 },
+      };
+    } catch (error) {
+      if (error instanceof AppError) {
+        throw error;
+      }
+      throw new AppError('EXPENSE_LIST_FAILED', 'Error al listar gastos');
+    }
+  }
+
+  /**
+   * Actualiza un gasto (no se puede cambiar type ni items)
+   */
+  async updateExpense(expenseId: string, data: UpdateExpenseRequest): Promise<Expense> {
+    if (!expenseId) {
+      throw new AppError('VALIDATION_ERROR', 'El ID del gasto es requerido');
+    }
+    try {
+      const response = await this.expenseRepository.updateExpense(expenseId, data);
+      if (!response.success || !response.data) {
+        throw new AppError('EXPENSE_NOT_FOUND', 'Gasto no encontrado');
+      }
+      return response.data;
+    } catch (error) {
+      if (error instanceof AppError) throw error;
+      throw new AppError('EXPENSE_FETCH_FAILED', 'Error al actualizar el gasto');
     }
   }
 
@@ -113,6 +140,14 @@ export class ExpenseService {
    * Valida los datos para crear un gasto
    */
   private validateCreateExpenseData(expenseData: CreateExpenseRequest): void {
+    const title = (expenseData as { title?: string }).title;
+    if (!title || typeof title !== 'string' || title.trim().length === 0) {
+      throw new AppError('VALIDATION_ERROR', 'El título del gasto es requerido (mín. 1 carácter)');
+    }
+    if (title.length > 200) {
+      throw new AppError('VALIDATION_ERROR', 'El título no puede superar 200 caracteres');
+    }
+
     if (!expenseData.type) {
       throw new AppError('VALIDATION_ERROR', 'El tipo de gasto es requerido');
     }

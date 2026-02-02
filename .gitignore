@@ -27,3 +27,15 @@ dist-ssr
 .env
 .env.local
 .env.production
+.env.development
+.env.qa
+.env.*.local
+
+# Test coverage
+coverage/
+
+# TypeScript incremental build
+*.tsbuildinfo
+
+# Cursor IDE (reglas/estado local; opcional)
+.cursor/

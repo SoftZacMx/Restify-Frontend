@@ -45,7 +45,12 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
     },
   ]);
 
-  const unitOfMeasures: UnitOfMeasure[] = ['pieza', 'kg', 'gramos'];
+  const unitOfMeasureOptions: { value: UnitOfMeasure; label: string }[] = [
+    { value: 'KG', label: 'Kilogramos' },
+    { value: 'G', label: 'Gramos' },
+    { value: 'PCS', label: 'Piezas' },
+    { value: 'OTHER', label: 'Otros' },
+  ];
 
   const calculateItemTotals = (item: ExpenseItemForm): ExpenseItemForm => {
     const amount = parseFloat(item.amount) || 0;
@@ -81,7 +86,7 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
         amount: parseFloat(item.amount) || 0,
         subtotal: parseFloat(item.subtotal) || 0,
         total: parseFloat(item.total) || 0,
-        unitOfMeasure: item.unitOfMeasure || null,
+        unitOfMeasure: (item.unitOfMeasure as UnitOfMeasure) || undefined,
       }));
 
     onItemsChange(validItems);
@@ -157,20 +162,23 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
             </div>
 
             <div className="col-span-6 md:col-span-2 space-y-2">
-              <Label>Unidad</Label>
+              <Label>Unidad (opcional)</Label>
               <Select
-                value={item.unitOfMeasure}
+                value={item.unitOfMeasure || ''}
                 onValueChange={(value) =>
-                  updateItem(index, { unitOfMeasure: value as UnitOfMeasure })
+                  updateItem(index, { unitOfMeasure: (value || '') as UnitOfMeasure | '' })
                 }
               >
                 <SelectTrigger>
-                  {item.unitOfMeasure || 'Seleccionar'}
+                  {item.unitOfMeasure
+                    ? unitOfMeasureOptions.find((u) => u.value === item.unitOfMeasure)?.label ?? item.unitOfMeasure
+                    : 'Seleccionar'}
                 </SelectTrigger>
                 <SelectContent>
-                  {unitOfMeasures.map((unit) => (
-                    <SelectItem key={unit} value={unit}>
-                      {unit}
+                  <SelectItem value="">Ninguna</SelectItem>
+                  {unitOfMeasureOptions.map((u) => (
+                    <SelectItem key={u.value} value={u.value}>
+                      {u.label}
                     </SelectItem>
                   ))}
                 </SelectContent>

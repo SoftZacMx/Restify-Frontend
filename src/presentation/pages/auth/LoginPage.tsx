@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Eye, EyeOff, UtensilsCrossed } from 'lucide-react';
 import { useAuth } from '@/presentation/hooks/useAuth';
+import { useAuthStore } from '@/presentation/store/auth.store';
 import { Button } from '@/presentation/components/ui/button';
 import { Input } from '@/presentation/components/ui/input';
 import { Label } from '@/presentation/components/ui/label';
@@ -39,7 +40,8 @@ export default function LoginPage() {
     });
 
     if (result.success) {
-      navigate('/dashboard');
+      const currentUser = useAuthStore.getState().user;
+      navigate(currentUser?.rol === 'WAITER' ? '/pos' : '/dashboard');
     }
   };
 
