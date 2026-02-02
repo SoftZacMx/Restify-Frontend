@@ -1,28 +1,31 @@
 import axios from 'axios';
 import type { AxiosInstance } from 'axios';
 import { handleApiError } from '@/shared/utils/error-handler';
+import { useAuthStore } from '@/presentation/store/auth.store';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
 /**
  * Cliente HTTP base configurado con interceptors
- * Maneja autenticación y errores globalmente
- * Usa HttpOnly cookies para autenticación (withCredentials: true)
+ * Maneja autenticación y errores globalmente.
+ * En same-origin puede usar cookies HttpOnly (withCredentials: true).
+ * En cross-origin (QA/producción) envía el token del store en Authorization para que el backend reciba la sesión.
  */
 export const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // Permite enviar cookies HttpOnly automáticamente
+  withCredentials: true,
 });
 
-// Request interceptor - Ya no necesita agregar token manualmente
-// El token se envía automáticamente en la cookie HttpOnly
+// Request interceptor: envía el token del store en Authorization (necesario en QA/prod cross-origin)
 apiClient.interceptors.request.use(
   (config) => {
-    // Las cookies HttpOnly se envían automáticamente por el navegador
-    // No necesitamos leer ni enviar el token manualmente
+    const token = useAuthStore.getState().token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
