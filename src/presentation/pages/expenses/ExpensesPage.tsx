@@ -19,7 +19,7 @@ import { ExpenseTable } from '@/presentation/components/expenses/ExpenseTable';
 import { Pagination } from '@/presentation/components/ui/pagination';
 import { CreateExpenseDialog } from '@/presentation/components/expenses/CreateExpenseDialog';
 import { ExpenseService } from '@/application/services/expense.service';
-import type { ExpenseTableFilters, CreateExpenseRequest, Expense } from '@/domain/types';
+import type { ExpenseTableFilters, CreateExpenseRequest } from '@/domain/types';
 
 const DEFAULT_PAGE_SIZE = 20;
 const PAGE_SIZE_OPTIONS = [10, 20, 50];

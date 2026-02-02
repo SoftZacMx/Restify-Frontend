@@ -1,7 +1,6 @@
 import React from 'react';
-import { Search, Download } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
-import { Button } from '@/presentation/components/ui/button';
 import {
   Select,
   SelectContent,

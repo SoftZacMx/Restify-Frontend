@@ -2,7 +2,6 @@ import React from 'react';
 import { Package, Plus, Loader2 } from 'lucide-react';
 import { Button } from '@/presentation/components/ui/button';
 import { Card, CardContent } from '@/presentation/components/ui/card';
-import { cn } from '@/shared/lib/utils';
 import type { PosProduct } from '@/domain/types';
 
 interface ProductGridProps {

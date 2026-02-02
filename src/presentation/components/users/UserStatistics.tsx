@@ -9,7 +9,7 @@ interface UserStatisticsProps {
  * Componente para mostrar estadísticas del usuario
  * TODO: Conectar con API para obtener estadísticas reales
  */
-export const UserStatistics: React.FC<UserStatisticsProps> = ({ userId }) => {
+export const UserStatistics: React.FC<UserStatisticsProps> = ({ userId: _userId }) => {
   // Datos mock - TODO: Reemplazar con datos reales de la API
   const statistics = [
     {

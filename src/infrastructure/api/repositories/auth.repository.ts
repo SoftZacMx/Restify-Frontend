@@ -1,6 +1,5 @@
 import apiClient from '../client';
 import type { LoginRequest, LoginResponse, ApiResponse } from '@/domain/types';
-import { AppError } from '@/domain/errors';
 
 /**
  * Repository para operaciones de autenticación

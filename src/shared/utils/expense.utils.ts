@@ -1,4 +1,4 @@
-import type { Expense, ExpenseTableItem, ExpenseType, PaymentMethod, UnitOfMeasure } from '@/domain/types';
+import type { ExpenseListItem, ExpenseTableItem, ExpenseType, PaymentMethod, UnitOfMeasure } from '@/domain/types';
 
 /**
  * Obtiene la etiqueta en español para el tipo de gasto
@@ -57,7 +57,7 @@ export function getPaymentMethodLabel(method: PaymentMethod): string {
 /**
  * Formatea un gasto para mostrar en la tabla
  */
-export function formatExpenseForTable(expense: Expense): ExpenseTableItem {
+export function formatExpenseForTable(expense: ExpenseListItem): ExpenseTableItem {
   return {
     id: expense.id,
     title: expense.title ?? expense.description ?? '—',
@@ -79,7 +79,7 @@ export function formatExpenseForTable(expense: Expense): ExpenseTableItem {
 /**
  * Formatea una lista de gastos para mostrar en la tabla
  */
-export function formatExpensesForTable(expenses: Expense[]): ExpenseTableItem[] {
+export function formatExpensesForTable(expenses: ExpenseListItem[]): ExpenseTableItem[] {
   return expenses.map(formatExpenseForTable);
 }
 

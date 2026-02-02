@@ -1,3 +1,4 @@
+import type { ApiResponse } from '@/domain/types';
 import type {
   PayOrderWithCashRequest,
   PayOrderWithTransferRequest,

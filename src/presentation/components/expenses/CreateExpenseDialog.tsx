@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/presentation/components/ui/dialog';
 import { CreateExpenseForm } from './CreateExpenseForm';
 import type { CreateExpenseRequest } from '@/domain/types';

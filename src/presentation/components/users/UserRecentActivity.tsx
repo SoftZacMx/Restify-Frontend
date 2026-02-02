@@ -9,7 +9,7 @@ interface UserRecentActivityProps {
  * Componente para mostrar la actividad reciente del usuario
  * TODO: Conectar con API para obtener actividad real
  */
-export const UserRecentActivity: React.FC<UserRecentActivityProps> = ({ userId }) => {
+export const UserRecentActivity: React.FC<UserRecentActivityProps> = ({ userId: _userId }) => {
   // Datos mock - TODO: Reemplazar con datos reales de la API
   const activities = [
     {

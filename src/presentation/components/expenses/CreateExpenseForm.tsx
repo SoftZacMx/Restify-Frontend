@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '@/presentation/store/auth.store';
 import { ProductRepository } from '@/infrastructure/api/repositories/product.repository';
@@ -16,9 +16,7 @@ import type {
   CreateExpenseRequest,
   ExpenseType,
   PaymentMethod,
-  Product,
   CreateExpenseItemRequest,
-  UnitOfMeasure,
 } from '@/domain/types';
 import { getExpenseTypeLabel, getPaymentMethodLabel } from '@/shared/utils';
 import { MerchandiseExpenseForm } from './MerchandiseExpenseForm';
@@ -60,24 +58,26 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
   const [merchandiseItems, setMerchandiseItems] = useState<CreateExpenseItemRequest[]>([]);
 
   // Cargar productos para compra de mercancía
+  const productsQueryEnabled: boolean = expenseType === 'MERCHANDISE';
   const { data: products = [] } = useQuery({
     queryKey: ['products'],
     queryFn: async () => {
-      const response = await productRepository.listProducts({ status: 'true' });
-      return response.data || [];
+      const response = await productRepository.listProducts({ status: true });
+      return response.data ?? [];
     },
-    enabled: expenseType === 'MERCHANDISE',
+    enabled: productsQueryEnabled,
   });
 
   // Cargar usuarios para pagos de salarios (solo no clientes)
+  const employeesQueryEnabled = expenseType === 'OTHER';
   const { data: employees = [] } = useQuery({
     queryKey: ['employees'],
     queryFn: async () => {
       const response = await userRepository.listUsers({ status: 'true' });
       // Filtrar solo usuarios que no sean clientes (todos los roles excepto CLIENT si existe)
-      return (response.data || []).filter((u) => u.rol !== 'CLIENT');
+      return (response.data || []).filter((u) => (u.rol as string) !== 'CLIENT');
     },
-    enabled: expenseType === 'OTHER', // Usaremos OTHER para pagos de salarios temporalmente
+    enabled: employeesQueryEnabled,
   });
 
   const validateForm = (): boolean => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trash2, ShoppingBag, X } from 'lucide-react';
+import { ShoppingBag, X } from 'lucide-react';
 import { Button } from '@/presentation/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card';
 import { Badge } from '@/presentation/components/ui/badge';

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Receipt, DollarSign } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card';
-import { Badge } from '@/presentation/components/ui/badge';
 import type { CartState } from '@/domain/types';
 
 interface OrderSummaryProps {

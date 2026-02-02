@@ -6,28 +6,23 @@
 // ============ ENUM DE EVENTOS ============
 
 /**
- * Tipos de eventos WebSocket
+ * Tipos de eventos WebSocket (const object for erasableSyntaxOnly)
  */
-export enum WebSocketEventType {
-  // Conexión
-  CONNECT = 'connect',
-  DISCONNECT = 'disconnect',
-  CONNECTION_ACK = 'connection_ack',
+export const WebSocketEventType = {
+  CONNECT: 'connect',
+  DISCONNECT: 'disconnect',
+  CONNECTION_ACK: 'connection_ack',
+  PAYMENT_CONFIRMED: 'payment_confirmed',
+  PAYMENT_FAILED: 'payment_failed',
+  PAYMENT_PENDING: 'payment_pending',
+  ORDER_CREATED: 'order_created',
+  ORDER_UPDATED: 'order_updated',
+  ORDER_DELIVERED: 'order_delivered',
+  ORDER_CANCELED: 'order_canceled',
+  ERROR: 'error',
+} as const;
 
-  // Pagos
-  PAYMENT_CONFIRMED = 'payment_confirmed',
-  PAYMENT_FAILED = 'payment_failed',
-  PAYMENT_PENDING = 'payment_pending',
-
-  // Órdenes
-  ORDER_CREATED = 'order_created',
-  ORDER_UPDATED = 'order_updated',
-  ORDER_DELIVERED = 'order_delivered',
-  ORDER_CANCELED = 'order_canceled',
-
-  // Errores
-  ERROR = 'error',
-}
+export type WebSocketEventType = (typeof WebSocketEventType)[keyof typeof WebSocketEventType];
 
 // ============ INTERFACES DE MENSAJE ============
 

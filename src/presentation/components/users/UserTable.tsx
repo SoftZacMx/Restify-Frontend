@@ -10,7 +10,6 @@ import {
   TableRow,
 } from '@/presentation/components/ui/table';
 import { Badge } from '@/presentation/components/ui/badge';
-import { Button } from '@/presentation/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,16 +35,6 @@ export const UserTable: React.FC<UserTableProps> = ({
   isLoading = false,
   onUserAction,
 }) => {
-  const getRoleBadgeVariant = (role: string): 'default' | 'secondary' | 'outline' => {
-    const roleVariants: Record<string, 'default' | 'secondary' | 'outline'> = {
-      Administrador: 'secondary',
-      Gerente: 'default',
-      Mesero: 'default',
-      Cocinero: 'outline',
-    };
-    return roleVariants[role] || 'default';
-  };
-
   const getRoleBadgeColor = (role: string): string => {
     const colors: Record<string, string> = {
       Administrador: 'bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300',

@@ -1,12 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-
-/**
- * Estado de la sidebar
- */
-interface SidebarState {
-  isCollapsed: boolean; // Estado colapsado en desktop
-  isMobileOpen: boolean; // Estado abierto/cerrado en móvil
-}
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 
 /**
  * Contexto de la sidebar

@@ -75,8 +75,8 @@ export type {
   CreateExpenseItemRequest,
   UpdateExpenseRequest,
   ExpenseFormErrors,
-  Product,
   EmployeeUser,
+  ExpenseListItem,
 } from './expense.types';
 
 // Re-export order types

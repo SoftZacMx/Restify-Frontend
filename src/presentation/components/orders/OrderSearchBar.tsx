@@ -126,7 +126,7 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
           <SelectContent>
             <SelectItem value="all">Todas las mesas</SelectItem>
             {isLoadingTables ? (
-              <SelectItem value="loading" disabled>
+              <SelectItem value="loading">
                 Cargando...
               </SelectItem>
             ) : (

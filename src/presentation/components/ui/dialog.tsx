@@ -68,7 +68,7 @@ const DialogContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, children, ...props }, ref) => {
-  const { onOpenChange } = useDialogContext();
+  useDialogContext();
 
   return (
     <div

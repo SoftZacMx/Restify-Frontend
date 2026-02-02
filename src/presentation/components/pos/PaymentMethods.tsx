@@ -112,7 +112,7 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
         {/* Selector de método 1 */}
         <div className="space-y-2">
           <Label htmlFor="method1">Primer Método de Pago *</Label>
-          <Select value={selectedMethod1 || ''} onValueChange={onMethod1Change}>
+          <Select value={selectedMethod1 || ''} onValueChange={(value) => onMethod1Change(value === '' ? null : (value as PosPaymentMethod))}>
             <SelectTrigger id="method1">
               {selectedMethod1 ? (
                 <span className="flex items-center gap-2">
@@ -193,8 +193,7 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
               <Label htmlFor="method2">Segundo Método de Pago (Opcional)</Label>
               <Select
                 value={selectedMethod2 || ''}
-                onValueChange={onMethod2Change}
-                disabled={!selectedMethod1}
+                onValueChange={(value) => onMethod2Change(value === '' ? null : (value as PosPaymentMethod))}
               >
                 <SelectTrigger id="method2">
                   {selectedMethod2 ? (

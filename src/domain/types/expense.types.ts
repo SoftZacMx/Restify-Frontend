@@ -65,11 +65,14 @@ export interface ListExpensesQuery {
   pageSize?: number;
 }
 
+/** Elemento de gasto en listados (sin items ni updatedAt) */
+export type ExpenseListItem = Omit<Expense, 'items' | 'updatedAt'>;
+
 /**
  * Resultado de listar gastos (backend devuelve data + pagination)
  */
 export interface ListExpensesResult {
-  data: Array<Omit<Expense, 'items' | 'updatedAt'>>;
+  data: ExpenseListItem[];
   pagination: { page: number; pageSize: number; total: number; totalPages: number };
 }
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import type { LucideIcon } from 'lucide-react';
 import { LogOut, UtensilsCrossed, ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { useAuth } from '@/presentation/hooks/useAuth';
 import { useSidebarNavigation, type NavItem } from '@/presentation/hooks/useSidebarNavigation';
@@ -14,7 +15,7 @@ import { cn } from '@/shared/lib/utils';
  */
 export const Sidebar = () => {
   const { logout } = useAuth();
-  const { mainNavItems, bottomNavItems, isActive, isSubItemActive, handleNavigate, currentPath } = useSidebarNavigation();
+  const { mainNavItems, bottomNavItems, isActive, handleNavigate, currentPath } = useSidebarNavigation();
   const { isCollapsed, isMobile, isMobileOpen, toggleSidebar, closeSidebar } = useSidebar();
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
 
@@ -75,8 +76,6 @@ export const Sidebar = () => {
     }
   }, [currentPath]); // Solo depende de currentPath del hook
 
-  // Determinar si la sidebar debe estar visible
-  const isVisible = !isMobile || isMobileOpen;
   const sidebarWidth = isCollapsed ? 'w-16' : 'w-64';
 
   return (
@@ -170,15 +169,16 @@ export const Sidebar = () => {
         <div className={cn('border-t border-slate-100 dark:border-slate-700 space-y-1', isCollapsed ? 'p-2' : 'p-4')}>
           {bottomNavItems.map((item: NavItem) => {
             const IconComponent = item.icon;
+            const path = item.path ?? '';
             return (
               <NavItemComponent
-                key={item.path}
+                key={path || item.label}
                 icon={<IconComponent size={20} />}
                 label={item.label}
-                path={item.path}
-                isActive={isActive(item.path)}
+                path={path}
+                isActive={isActive(path)}
                 isCollapsed={isCollapsed}
-                onClick={() => handleNavClick(item.path)}
+                onClick={() => handleNavClick(path)}
               />
             );
           })}

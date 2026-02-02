@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Square, MoreVertical, Edit, Trash2, Power, ToggleLeft } from 'lucide-react';
-import { Button } from '@/presentation/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -155,9 +154,8 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onSelect={() => onTableAction?.(table.id, 'toggle-availability')}
-                  className="cursor-pointer"
-                  disabled={!table.status}
+                  onSelect={() => table.status && onTableAction?.(table.id, 'toggle-availability')}
+                  className={cn('cursor-pointer', !table.status && 'opacity-50 pointer-events-none')}
                 >
                   <ToggleLeft className="mr-2 h-4 w-4" />
                   <span>

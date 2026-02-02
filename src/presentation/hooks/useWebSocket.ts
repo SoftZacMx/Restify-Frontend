@@ -134,7 +134,7 @@ export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
       onError?.(message.data);
     });
 
-    socket.on('connect_error', (error) => {
+    socket.on('connect_error', (error: Error & { type?: string; description?: string; context?: unknown }) => {
       console.error('[WebSocket] Error de conexión:', {
         message: error.message,
         type: error.type,

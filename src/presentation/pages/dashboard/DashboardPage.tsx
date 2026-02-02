@@ -44,7 +44,6 @@ const DashboardPage = () => {
     data: dashboard,
     isLoading,
     error,
-    refetch,
   } = useQuery({
     queryKey: ['dashboard'],
     queryFn: () => dashboardService.getDashboard(),
@@ -207,7 +206,7 @@ const DashboardPage = () => {
                     Sin datos de ventas
                   </p>
                 ) : (
-                  salesLast7Days.byDay.map((d, i) => {
+                  salesLast7Days.byDay.map((d) => {
                     const isToday =
                       d.date === new Date().toISOString().split('T')[0];
                     const heightPct = Math.round((d.total / maxBarTotal) * 100);

@@ -84,8 +84,8 @@ const PosPage = () => {
     tablesError,
     // Estado de categorías del backend
     categories,
-    isLoadingCategories,
-    categoriesError,
+    isLoadingCategories: _isLoadingCategories,
+    categoriesError: _categoriesError,
     // Estado de orden cargada (del hook)
     loadedOrder,
     isLoadingOrder,

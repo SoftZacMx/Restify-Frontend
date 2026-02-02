@@ -191,6 +191,101 @@ export const ERROR_CONFIG = {
     statusCode: 404,
     category: 'BUSINESS',
   },
+  TABLE_CREATION_FAILED: {
+    message: 'No se pudo crear la mesa',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  TABLE_UPDATE_FAILED: {
+    message: 'No se pudo actualizar la mesa',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  TABLE_DELETE_FAILED: {
+    message: 'No se pudo eliminar la mesa',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  MENU_CATEGORY_CREATION_FAILED: {
+    message: 'No se pudo crear la categoría',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  MENU_CATEGORY_NOT_FOUND: {
+    message: 'Categoría no encontrada',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
+  MENU_CATEGORY_FETCH_FAILED: {
+    message: 'Error al obtener la categoría',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
+  MENU_CATEGORY_LIST_FAILED: {
+    message: 'Error al listar categorías',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  MENU_CATEGORY_UPDATE_FAILED: {
+    message: 'No se pudo actualizar la categoría',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  MENU_CATEGORY_DELETE_FAILED: {
+    message: 'No se pudo eliminar la categoría',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  MENU_ITEM_CREATION_FAILED: {
+    message: 'No se pudo crear el platillo',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  MENU_ITEM_NOT_FOUND: {
+    message: 'Platillo no encontrado',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
+  MENU_ITEM_FETCH_FAILED: {
+    message: 'Error al obtener el platillo',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
+  MENU_ITEM_LIST_FAILED: {
+    message: 'Error al listar platillos',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  MENU_ITEM_UPDATE_FAILED: {
+    message: 'No se pudo actualizar el platillo',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  MENU_ITEM_DELETE_FAILED: {
+    message: 'No se pudo eliminar el platillo',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  USER_CREATION_FAILED: {
+    message: 'No se pudo crear el usuario',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  USER_FETCH_FAILED: {
+    message: 'Error al obtener el usuario',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
+  USER_LIST_FAILED: {
+    message: 'Error al listar usuarios',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  USER_UPDATE_FAILED: {
+    message: 'No se pudo actualizar el usuario',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
   USER_DELETE_FAILED: {
     message: 'No se pudo desactivar el usuario',
     statusCode: 400,

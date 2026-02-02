@@ -53,7 +53,7 @@ const OrdersPage: React.FC = () => {
   const [orderForSplitPayment, setOrderForSplitPayment] = useState<OrderResponse | null>(null);
 
   // Estado de operaciones
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [_isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPrintingTicket, setIsPrintingTicket] = useState(false);
 

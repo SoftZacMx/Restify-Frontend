@@ -3,7 +3,7 @@
  * Estos datos pueden ser reemplazados por llamadas a API en el futuro
  */
 
-import type { Table, Category, PosProduct, ProductExtra } from '@/domain/types';
+import type { Table, Category, PosProduct } from '@/domain/types';
 
 /**
  * Mesas disponibles del restaurante

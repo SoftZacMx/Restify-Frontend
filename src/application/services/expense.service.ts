@@ -1,6 +1,7 @@
 import { ExpenseRepository } from '@/infrastructure/api/repositories/expense.repository';
 import type {
   Expense,
+  ExpenseListItem,
   CreateExpenseRequest,
   UpdateExpenseRequest,
   ExpenseTableFilters,
@@ -66,7 +67,7 @@ export class ExpenseService {
   /**
    * Lista gastos con filtros opcionales (devuelve el array de data)
    */
-  async listExpenses(filters?: ExpenseTableFilters): Promise<Expense[]> {
+  async listExpenses(filters?: ExpenseTableFilters): Promise<ExpenseListItem[]> {
     try {
       const result = await this.expenseRepository.listExpenses(filters);
       return result.data ?? [];

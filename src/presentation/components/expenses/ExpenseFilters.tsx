@@ -120,8 +120,8 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
             <div className="flex items-center gap-2">
               <CreditCard className="h-4 w-4" />
               <span>
-                {filters.paymentMethod
-                  ? getPaymentMethodLabel(filters.paymentMethod)
+                {filters.paymentMethod && filters.paymentMethod !== 'all'
+                  ? getPaymentMethodLabel(filters.paymentMethod as 1 | 2 | 3)
                   : 'Método de pago'}
               </span>
             </div>

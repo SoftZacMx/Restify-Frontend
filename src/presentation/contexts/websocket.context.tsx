@@ -3,7 +3,8 @@
  * Basado en: websocket-frontend-guide.md
  */
 
-import React, { createContext, useContext, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useCallback } from 'react';
+import type { ReactNode } from 'react';
 import { useWebSocket } from '@/presentation/hooks/useWebSocket';
 import { useAuthStore } from '@/presentation/store/auth.store';
 import { useQueryClient } from '@tanstack/react-query';
