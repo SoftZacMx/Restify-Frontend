@@ -40,6 +40,12 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   }
 
   if (!isAuthenticated) {
+    console.warn('[Auth] PrivateRoute → redirect to login (guard)', {
+      pathname: location.pathname,
+      hasHydrated,
+      isAuthenticated,
+      hasUser: !!user,
+    });
     return <Navigate to="/auth/login" replace />;
   }
 

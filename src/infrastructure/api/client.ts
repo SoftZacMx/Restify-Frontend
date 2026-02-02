@@ -26,10 +26,11 @@ apiClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    const url = config.url ?? config.baseURL ?? '';
+    console.info('[API] Request', config.method?.toUpperCase(), url, { hasToken: !!token });
     return config;
   },
   (error) => {
-    // Convert request errors to AppError
     return Promise.reject(handleApiError(error));
   }
 );
@@ -38,17 +39,23 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Convert to AppError
     const appError = handleApiError(error);
+    const requestUrl = error?.config?.url ?? error?.config?.baseURL ?? 'unknown';
+    const requestMethod = error?.config?.method ?? '?';
 
     // Handle 401 (Unauthorized) - redirect to login
     if (appError.statusCode === 401 || appError.code === 'UNAUTHORIZED' || appError.code === 'TOKEN_EXPIRED') {
-      // La cookie HttpOnly se limpia automáticamente por el backend
-      // Solo redirigimos al login
+      console.warn('[API] 401 → redirect to login', {
+        url: requestMethod.toUpperCase() + ' ' + requestUrl,
+        statusCode: appError.statusCode,
+        code: appError.code,
+        message: appError.message,
+        storeHasToken: !!useAuthStore.getState().token,
+        storeIsAuthenticated: useAuthStore.getState().isAuthenticated,
+      });
       window.location.href = '/auth/login';
     }
 
-    // Reject with AppError
     return Promise.reject(appError);
   }
 );
