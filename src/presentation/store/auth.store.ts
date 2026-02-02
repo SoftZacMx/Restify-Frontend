@@ -53,7 +53,7 @@ export const useAuthStore = create<AuthState>()(
         token: state.token,
         isAuthenticated: state.isAuthenticated,
       }),
-      onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => (_state) => {
         useAuthStore.getState().setHasHydrated(true);
       },
       migrate: (persistedState: any, version: number) => {
