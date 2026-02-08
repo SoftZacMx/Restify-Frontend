@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Eye, EyeOff, UtensilsCrossed } from 'lucide-react';
 import { useAuth } from '@/presentation/hooks/useAuth';
 import { useAuthStore } from '@/presentation/store/auth.store';
@@ -11,13 +10,7 @@ import { Input } from '@/presentation/components/ui/input';
 import { Label } from '@/presentation/components/ui/label';
 import { Card, CardContent, CardHeader } from '@/presentation/components/ui/card';
 import { ThemeToggle } from '@/presentation/components/ui/theme-toggle';
-
-const loginSchema = z.object({
-  email: z.string().email('Email inválido'),
-  password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
+import { loginSchema, type LoginFormData } from './login.schema';
 
 export default function LoginPage() {
   const navigate = useNavigate();

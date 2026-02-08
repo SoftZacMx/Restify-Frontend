@@ -184,6 +184,7 @@ export const OrderPaymentLayout: React.FC<OrderPaymentLayoutProps> = ({
               disabled={!isProcessPaymentEnabled}
               className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl transition-all mt-auto"
               size="lg"
+              data-testid="pay-order"
             >
               <Receipt className="h-5 w-5 mr-2" />
               Procesar Pago

@@ -263,12 +263,21 @@ export class OrderService {
     const sum = Math.round(sumRaw * 100) / 100;
     const totalRounded = Math.round(total * 100) / 100;
 
-    // Validar suma vs total: no puede ser mayor; debe coincidir (salvo efectivo solo que puede ser mayor para dar cambio)
+    // Validar suma vs total
     const tolerance = 0.01;
-    if (sum > totalRounded + tolerance) {
-      errors.paymentMethods = `La suma de los pagos ($${sum.toFixed(2)}) no puede ser mayor al total de la orden ($${total.toFixed(2)})`;
-    } else if (Math.abs(sum - totalRounded) > tolerance) {
-      errors.paymentMethods = `La suma de los pagos ($${sum.toFixed(2)}) debe ser igual al total ($${total.toFixed(2)})`;
+    const isCashOnly = selectedMethod1 === 'CASH' && !selectedMethod2;
+    if (isCashOnly) {
+      // Efectivo solo: el monto puede ser mayor al total (para calcular el cambio)
+      if (sum < totalRounded - tolerance) {
+        errors.paymentMethods = `La suma de los pagos ($${sum.toFixed(2)}) debe ser al menos el total ($${total.toFixed(2)})`;
+      }
+    } else {
+      // Tarjeta/transferencia o pago dividido: la suma debe coincidir con el total
+      if (sum > totalRounded + tolerance) {
+        errors.paymentMethods = `La suma de los pagos ($${sum.toFixed(2)}) no puede ser mayor al total de la orden ($${total.toFixed(2)})`;
+      } else if (Math.abs(sum - totalRounded) > tolerance) {
+        errors.paymentMethods = `La suma de los pagos ($${sum.toFixed(2)}) debe ser igual al total ($${total.toFixed(2)})`;
+      }
     }
 
     // Validar que solo se usen los métodos seleccionados (los demás deben ser 0)

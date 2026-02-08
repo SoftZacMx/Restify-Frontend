@@ -80,3 +80,8 @@ npx shadcn-ui@latest add button
 - `npm run build` - Build para producción
 - `npm run preview` - Preview del build
 - `npm run lint` - Ejecuta ESLint
+- `npm run test` - Tests unitarios (Vitest, modo watch)
+- `npm run test:run` - Tests unitarios (una ejecución)
+- `npm run test:coverage` - Tests con cobertura
+- `npm run test:e2e` - Tests E2E (Playwright). Requiere backend para el flujo de login completo.
+- `npm run test:e2e:ui` - Tests E2E con interfaz de Playwright

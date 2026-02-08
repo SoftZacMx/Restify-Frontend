@@ -148,6 +148,7 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
             </Label>
             <Input
               id="amount1"
+              data-testid="payment-amount-1"
               type="number"
               min="0"
               max={selectedMethod1 === 'CARD' || selectedMethod1 === 'TRANSFER' ? paymentState.total : undefined}
@@ -181,6 +182,7 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
           </Label>
           <Switch
             id="show-second-method"
+            data-testid="payment-split-toggle"
             checked={showSecondPaymentMethod}
             onCheckedChange={onShowSecondPaymentMethodChange}
           />
@@ -231,6 +233,7 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
                 </Label>
                 <Input
                   id="amount2"
+                  data-testid="payment-amount-2"
                   type="number"
                   min="0"
                   max={selectedMethod2 === 'CARD' || selectedMethod2 === 'TRANSFER' ? paymentState.total : undefined}
