@@ -17,7 +17,7 @@ import {
 } from '@/presentation/components/ui/alert-dialog';
 import { ProductSearchBar } from '@/presentation/components/products/ProductSearchBar';
 import { ProductTable } from '@/presentation/components/products/ProductTable';
-import { ProductPagination } from '@/presentation/components/products/ProductPagination';
+import { Pagination } from '@/presentation/components/ui/pagination';
 import { CreateProductForm } from '@/presentation/components/products/CreateProductForm';
 import { productService } from '@/application/services';
 import { useAuthStore } from '@/presentation/store/auth.store';
@@ -32,7 +32,8 @@ import { AppError } from '@/domain/errors';
  * Cumple SRP: Solo maneja el estado y la lógica de la página
  */
 
-const ITEMS_PER_PAGE = 10;
+const PAGE_SIZE_OPTIONS = [10, 20, 50];
+const DEFAULT_ITEMS_PER_PAGE = 10;
 
 const ProductsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ const ProductsPage: React.FC = () => {
     status: undefined,
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isCreatingProduct, setIsCreatingProduct] = useState(false);
   const { user } = useAuthStore();
@@ -119,24 +121,24 @@ const ProductsPage: React.FC = () => {
    */
   const paginationData: PaginationData = useMemo(() => {
     const totalItems = filteredProducts.length;
-    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     return {
       currentPage,
       totalPages: totalPages || 1,
       totalItems,
-      itemsPerPage: ITEMS_PER_PAGE,
+      itemsPerPage,
     };
-  }, [filteredProducts.length, currentPage]);
+  }, [filteredProducts.length, currentPage, itemsPerPage]);
 
   /**
    * Obtiene productos para la página actual
    */
   const paginatedProducts = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
     return filteredProducts.slice(startIndex, endIndex);
-  }, [filteredProducts, currentPage]);
+  }, [filteredProducts, currentPage, itemsPerPage]);
 
   /**
    * Convierte productos a formato de tabla
@@ -158,8 +160,12 @@ const ProductsPage: React.FC = () => {
    */
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll al inicio de la tabla
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePageSizeChange = (pageSize: number) => {
+    setItemsPerPage(pageSize);
+    setCurrentPage(1);
   };
 
   const [productToDelete, setProductToDelete] = useState<{ id: string; name: string } | null>(null);
@@ -329,9 +335,15 @@ const ProductsPage: React.FC = () => {
         />
 
         {paginationData.totalItems > 0 && (
-          <ProductPagination
-            pagination={paginationData}
+          <Pagination
+            currentPage={paginationData.currentPage}
+            totalPages={paginationData.totalPages}
+            totalItems={paginationData.totalItems}
+            itemsPerPage={paginationData.itemsPerPage}
+            itemsLabel="productos"
+            pageSizeOptions={PAGE_SIZE_OPTIONS}
             onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
           />
         )}
 

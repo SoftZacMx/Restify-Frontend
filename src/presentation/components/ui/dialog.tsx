@@ -143,5 +143,19 @@ const DialogClose = React.forwardRef<
 });
 DialogClose.displayName = 'DialogClose';
 
-export { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose };
+const DialogFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
+  return (
+    <div
+      ref={ref}
+      className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-2 mt-6', className)}
+      {...props}
+    />
+  );
+});
+DialogFooter.displayName = 'DialogFooter';
+
+export { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose, DialogFooter };
 

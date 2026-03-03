@@ -281,3 +281,6 @@ export type {
   ReportsApiResponse,
   GenerateReportParams,
 } from './report.types';
+
+// Re-export company types (configuración de la compañía)
+export type { CompanyResponse, UpsertCompanyRequest } from './company.types';

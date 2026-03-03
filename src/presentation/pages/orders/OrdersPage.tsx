@@ -14,6 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/presentation/components/ui/alert-dialog';
+import { Pagination } from '@/presentation/components/ui/pagination';
 import { OrderSearchBar } from '@/presentation/components/orders/OrderSearchBar';
 import { OrdersGrid } from '@/presentation/components/orders/OrdersGrid';
 import { OrderDetailDialog } from '@/presentation/components/orders/OrderDetailDialog';
@@ -31,6 +32,9 @@ import {
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
 
+const PAGE_SIZE_OPTIONS = [10, 20, 50];
+const DEFAULT_ITEMS_PER_PAGE = 20;
+
 /**
  * Página de Órdenes
  * Muestra lista de órdenes con filtros, detalles y acciones
@@ -45,6 +49,10 @@ const OrdersPage: React.FC = () => {
   // Estado de filtros (por defecto: órdenes del día de hoy)
   const [filters, setFilters] = useState<OrderViewFilters>(() => getDefaultOrderFiltersForToday());
   const [showFilters, setShowFilters] = useState(false); // Por defecto oculto
+
+  // Estado de paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
 
   // Estado de modales
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
@@ -130,6 +138,24 @@ const OrdersPage: React.FC = () => {
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
   }, [filteredOrders]);
+
+  // Datos de paginación (sobre la lista filtrada/ordenada)
+  const paginationData = useMemo(() => {
+    const totalItems = sortedOrders.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+    return {
+      currentPage,
+      totalPages,
+      totalItems,
+      itemsPerPage,
+    };
+  }, [sortedOrders.length, currentPage, itemsPerPage]);
+
+  // Órdenes de la página actual
+  const ordersToShow = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return sortedOrders.slice(start, start + itemsPerPage);
+  }, [sortedOrders, currentPage, itemsPerPage]);
 
   // Mostrar error si la carga falla
   React.useEffect(() => {
@@ -250,6 +276,21 @@ const OrdersPage: React.FC = () => {
     navigate('/pos');
   }, [navigate]);
 
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  const handlePageSizeChange = useCallback((pageSize: number) => {
+    setItemsPerPage(pageSize);
+    setCurrentPage(1);
+  }, []);
+
+  const handleFiltersChange = useCallback((newFilters: OrderViewFilters) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+  }, []);
+
   // Contar órdenes por estado (solo pendientes y pagadas)
   const orderCounts = useMemo(() => {
     const pending = orders.filter((o) => !o.status).length;
@@ -351,7 +392,7 @@ const OrdersPage: React.FC = () => {
             <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-4">
               <OrderSearchBar
                 filters={filters}
-                onFiltersChange={setFilters}
+                onFiltersChange={handleFiltersChange}
                 tables={tables}
                 isLoadingTables={isLoadingTables}
               />
@@ -361,7 +402,7 @@ const OrdersPage: React.FC = () => {
 
         {/* Grid de órdenes */}
         <OrdersGrid
-          orders={sortedOrders}
+          orders={ordersToShow}
           isLoading={isLoadingOrders}
           error={ordersError instanceof Error ? ordersError.message : null}
           onViewDetails={handleViewDetails}
@@ -372,6 +413,19 @@ const OrdersPage: React.FC = () => {
           onPrintClientTicket={handlePrintClientTicket}
           onPrintKitchenTicket={handlePrintKitchenTicket}
         />
+
+        {paginationData.totalItems > 0 && (
+          <Pagination
+            currentPage={paginationData.currentPage}
+            totalPages={paginationData.totalPages}
+            totalItems={paginationData.totalItems}
+            itemsPerPage={paginationData.itemsPerPage}
+            itemsLabel="órdenes"
+            pageSizeOptions={PAGE_SIZE_OPTIONS}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+          />
+        )}
 
         {/* Diálogo de detalle (solo ver info; acciones en la card) */}
         <OrderDetailDialog

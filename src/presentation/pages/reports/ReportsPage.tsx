@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BarChart3 } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
+import { LoadingOverlay } from '@/presentation/components/ui/loading-overlay';
 import { ReportFilters, type ReportFiltersState } from '@/presentation/components/reports/ReportFilters';
 import { CashFlowReportView } from '@/presentation/components/reports/CashFlowReportView';
 import { SalesPerformanceReportView } from '@/presentation/components/reports/SalesPerformanceReportView';
@@ -62,6 +63,7 @@ const ReportsPage = () => {
 
   return (
     <MainLayout>
+      <LoadingOverlay open={isLoading} message="Generando reporte..." />
       <div className="flex flex-col h-full">
         <div className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
           <div className="px-4 py-4 bg-gradient-to-br from-slate-50 via-white to-primary/5 dark:from-slate-900/80 dark:via-slate-900/50 dark:to-primary/10">

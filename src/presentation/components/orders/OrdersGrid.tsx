@@ -72,10 +72,10 @@ export const OrdersGrid: React.FC<OrdersGridProps> = ({
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 min-w-0">
       {orders.map((order) => (
-        <OrderCard
-          key={order.id}
+        <div key={order.id} className="min-w-0">
+          <OrderCard
           order={order}
           onViewDetails={onViewDetails}
           onMarkDelivered={onMarkDelivered}
@@ -85,6 +85,7 @@ export const OrdersGrid: React.FC<OrdersGridProps> = ({
           onPrintClientTicket={onPrintClientTicket}
           onPrintKitchenTicket={onPrintKitchenTicket}
         />
+        </div>
       ))}
     </div>
   );

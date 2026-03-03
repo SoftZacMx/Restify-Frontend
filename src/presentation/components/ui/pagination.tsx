@@ -2,9 +2,11 @@ import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/presentation/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/presentation/components/ui/select';
-import { cn } from '@/shared/lib/utils';
 
 /**
+ * Componente estándar de paginación (estilo shadcn, colores de la UI).
+ * Usa tokens de diseño: border-border, text-muted-foreground, text-foreground y Button variants.
+ *
  * Parámetros necesarios para el componente de paginación.
  * Permite al usuario: seleccionar página, ir a anterior/siguiente y elegir items por página.
  */
@@ -75,21 +77,21 @@ export const Pagination: React.FC<PaginationProps> = ({
   }
 
   return (
-    <div className="px-4 py-4 border-t border-slate-200 dark:border-slate-800">
+    <div className="px-4 py-4 border-t border-border">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         {/* Texto + selector de items por página */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-          <div className="text-sm text-slate-500 dark:text-slate-400">
+          <div className="text-sm text-muted-foreground">
             Mostrando{' '}
-            <span className="font-medium text-slate-700 dark:text-slate-300">{startItem}</span> a{' '}
-            <span className="font-medium text-slate-700 dark:text-slate-300">{endItem}</span> de{' '}
-            <span className="font-medium text-slate-700 dark:text-slate-300">{totalItems}</span>{' '}
+            <span className="font-medium text-foreground">{startItem}</span> a{' '}
+            <span className="font-medium text-foreground">{endItem}</span> de{' '}
+            <span className="font-medium text-foreground">{totalItems}</span>{' '}
             {itemsLabel}
           </div>
 
           {showPageSizeSelector && (
             <div className="flex items-center gap-2">
-              <span className="text-sm text-slate-500 dark:text-slate-400">Por página:</span>
+              <span className="text-sm text-muted-foreground">Por página:</span>
               <Select
                 value={String(itemsPerPage)}
                 onValueChange={(v) => onPageSizeChange?.(Number(v))}
@@ -130,10 +132,7 @@ export const Pagination: React.FC<PaginationProps> = ({
                   variant={currentPage === page ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => onPageChange(page)}
-                  className={cn(
-                    'h-9 w-9 p-0 min-w-9',
-                    currentPage === page && 'bg-primary text-white'
-                  )}
+                  className="h-9 w-9 p-0 min-w-9"
                   aria-label={`Ir a página ${page}`}
                 >
                   {page}
