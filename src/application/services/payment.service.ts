@@ -59,7 +59,8 @@ export class PaymentService {
   }
 
   /**
-   * Valida los datos de un pago dividido
+   * Valida los datos de un pago dividido (pago diferido).
+   * Única validación: la suma de ambos métodos no puede ser mayor al total de la orden.
    */
   validateSplitPaymentData(
     orderId: string,
@@ -69,40 +70,10 @@ export class PaymentService {
   ): { isValid: boolean; errors: PaymentFormErrors } {
     const errors: PaymentFormErrors = {};
 
-    // Validar orderId
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    if (!orderId) {
-      errors.orderId = 'El ID de la orden es requerido';
-    } else if (!uuidRegex.test(orderId)) {
-      errors.orderId = 'El ID de la orden debe ser un UUID válido';
-    }
-
-    // Validar que los métodos sean diferentes
-    if (firstPayment.paymentMethod === secondPayment.paymentMethod) {
-      errors.splitPayment = 'Los métodos de pago deben ser diferentes';
-    }
-
-    // Validar montos positivos
-    if (firstPayment.amount <= 0) {
-      errors.firstPayment = 'El monto del primer pago debe ser mayor a 0';
-    }
-    if (secondPayment.amount <= 0) {
-      errors.secondPayment = 'El monto del segundo pago debe ser mayor a 0';
-    }
-
-    // Validar que la suma sea exactamente el total (tolerancia 0.01)
     const total = firstPayment.amount + secondPayment.amount;
     const tolerance = 0.01;
-    if (total < orderTotal - tolerance) {
-      errors.splitPayment = `La suma de los pagos ($${total.toFixed(2)}) debe ser igual al total ($${orderTotal.toFixed(2)})`;
-    }
     if (total > orderTotal + tolerance) {
-      errors.splitPayment = `La suma de los pagos ($${total.toFixed(2)}) no puede ser mayor al total ($${orderTotal.toFixed(2)})`;
-    }
-
-    // Validar que no se use CARD_STRIPE en split payment
-    if (firstPayment.paymentMethod === 'CARD_STRIPE' as unknown || secondPayment.paymentMethod === 'CARD_STRIPE' as unknown) {
-      errors.splitPayment = 'No se puede usar tarjeta Stripe en pagos divididos';
+      errors.splitPayment = `La suma de los pagos ($${total.toFixed(2)}) no puede ser mayor al total de la orden ($${orderTotal.toFixed(2)})`;
     }
 
     return {

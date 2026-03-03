@@ -333,7 +333,8 @@ export const filterOrdersClient = (
   orders: OrderResponse[],
   filters: OrderViewFilters
 ): OrderResponse[] => {
-  let filtered = [...orders];
+  const list = Array.isArray(orders) ? orders : [];
+  let filtered = [...list];
 
   // Filtrar por búsqueda (cliente o número de orden)
   if (filters.search) {

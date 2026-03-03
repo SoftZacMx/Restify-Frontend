@@ -60,7 +60,6 @@ export const TableSelector: React.FC<TableSelectorProps> = ({
               {/* Información de la mesa */}
               <div className="flex flex-col items-center gap-0.5">
                 <span className="text-xs font-semibold">Mesa {table.number}</span>
-                <span className="text-xs opacity-75">{table.capacity} pers.</span>
               </div>
             </Button>
           );

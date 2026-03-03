@@ -30,14 +30,6 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({ cartState }) => {
             ${cartState.subtotal.toFixed(2)}
           </span>
         </div>
-        <div className="flex justify-between items-center py-2">
-          <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-            IVA (16%):
-          </span>
-          <span className="font-semibold text-slate-900 dark:text-slate-100">
-            ${cartState.tax.toFixed(2)}
-          </span>
-        </div>
         <div className="border-t-2 border-slate-200 dark:border-slate-700 pt-4 mt-2">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">

@@ -4,6 +4,7 @@ import type {
   OrderResponse,
   UpdateOrderRequest,
   ListOrdersRequest,
+  ListOrdersResponse,
   PayOrderRequest,
   PayOrderResult,
   ApiResponse,
@@ -85,18 +86,21 @@ export class OrderRepository {
   }
 
   /**
-   * Lista órdenes con filtros opcionales
+   * Lista órdenes con filtros opcionales.
+   * Devuelve la respuesta del backend tal cual: { data: { data: Order[], pagination } }.
    */
-  async listOrders(filters?: ListOrdersRequest): Promise<ApiResponse<OrderResponse[]>> {
+  async listOrders(filters?: ListOrdersRequest): Promise<ApiResponse<ListOrdersResponse>> {
     try {
       const response = await apiClient.get('/api/orders', {
         params: { ...filters, include: 'orderItems' },
       });
-      const data = response.data as ApiResponse<OrderResponse[]>;
-      if (data?.data && Array.isArray(data.data)) {
-        data.data = data.data.map((o) => this.normalizeOrder(o as unknown as Record<string, unknown>));
+      const body = response.data as ApiResponse<ListOrdersResponse>;
+      if (body?.data?.data && Array.isArray(body.data.data)) {
+        body.data.data = body.data.data.map((o: unknown) =>
+          this.normalizeOrder(o as Record<string, unknown>)
+        );
       }
-      return response.data;
+      return body;
     } catch (error) {
       throw error;
     }

@@ -75,17 +75,16 @@ export const SplitPaymentDialog: React.FC<SplitPaymentDialogProps> = ({
   const a2 = parseFloat(secondAmount) || 0;
   const sum = roundTo2(a1 + a2);
   const tolerance = 0.01;
-  const sumValid = Math.abs(sum - orderTotal) <= tolerance;
-  const methodsDifferent = firstMethod && secondMethod && firstMethod !== secondMethod;
+  // Pago diferido: única validación — la suma no puede ser mayor al total
+  const sumNotExceedsTotal = sum <= orderTotal + tolerance;
 
   const canSubmit =
     order &&
     firstMethod &&
     secondMethod &&
-    a1 > 0 &&
-    a2 > 0 &&
-    sumValid &&
-    methodsDifferent;
+    a1 >= 0 &&
+    a2 >= 0 &&
+    sumNotExceedsTotal;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -212,11 +211,11 @@ export const SplitPaymentDialog: React.FC<SplitPaymentDialogProps> = ({
             {(a1 > 0 || a2 > 0) && (
               <div className="flex justify-between text-sm pt-2 border-t border-slate-200 dark:border-slate-700">
                 <span className="text-slate-600 dark:text-slate-400">Suma ingresada:</span>
-                <span className={sumValid ? 'text-green-600 dark:text-green-400 font-medium' : 'text-destructive'}>
+                <span className={sumNotExceedsTotal ? 'text-green-600 dark:text-green-400 font-medium' : 'text-destructive'}>
                   {formatCurrency(sum)}
-                  {!sumValid && orderTotal > 0 && (
+                  {!sumNotExceedsTotal && orderTotal > 0 && (
                     <span className="ml-1 text-xs">
-                      (debe ser {formatCurrency(orderTotal)})
+                      (no puede ser mayor a {formatCurrency(orderTotal)})
                     </span>
                   )}
                 </span>

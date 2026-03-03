@@ -203,6 +203,12 @@ export interface ListOrdersRequest {
   dateTo?: string; // Fecha fin (ISO string)
 }
 
+/** Respuesta de GET /api/orders: mismo formato que el backend (data + pagination) */
+export interface ListOrdersResponse {
+  data: OrderResponse[];
+  pagination: { page: number; limit: number; total: number; totalPages: number };
+}
+
 /**
  * Request para POST /api/orders/:order_id/pay (guía payment-frontend-guide)
  */

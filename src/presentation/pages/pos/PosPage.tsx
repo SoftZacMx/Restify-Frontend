@@ -535,20 +535,20 @@ const PosPage = () => {
                           : 'Procesar Pago'
                       }
                     </h1>
-                    <Badge
-                      variant={posMode === 'ORDER_BUILDING' ? 'default' : 'secondary'}
-                      className="text-sm px-3 py-1"
-                    >
-                      {isPaymentOnlyMode 
-                        ? 'Pago' 
-                        : loadedOrder && posMode === 'ORDER_BUILDING' 
-                          ? 'Edición' 
-                          : loadedOrder 
-                            ? 'Visualización' 
-                            : posMode === 'ORDER_BUILDING' 
-                              ? 'Construcción' 
+                    {!(posMode === 'ORDER_BUILDING' && !loadedOrder && !isPaymentOnlyMode) && (
+                      <Badge
+                        variant={posMode === 'ORDER_BUILDING' ? 'default' : 'secondary'}
+                        className="text-sm px-3 py-1"
+                      >
+                        {isPaymentOnlyMode 
+                          ? 'Pago' 
+                          : loadedOrder && posMode === 'ORDER_BUILDING' 
+                            ? 'Edición' 
+                            : loadedOrder 
+                              ? 'Visualización' 
                               : 'Pago'}
-                    </Badge>
+                      </Badge>
+                    )}
                   </div>
               {(currentOrderId || loadedOrder) && (
                 <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-2">

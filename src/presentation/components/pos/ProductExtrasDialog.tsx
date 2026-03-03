@@ -73,12 +73,10 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
   const extrasTotal = selectedExtras.reduce((sum, extra) => sum + extra.price, 0);
 
   const itemSubtotal = (product.price + extrasTotal) * quantity;
-  const itemTax = itemSubtotal * 0.16;
-  const itemTotalWithTax = itemSubtotal + itemTax;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl bg-white dark:bg-slate-800">
+      <DialogContent className="w-[42rem] max-w-[95vw] bg-white dark:bg-slate-800">
         <DialogHeader>
           <DialogTitle className="text-2xl text-center">{product.name}</DialogTitle>
           <DialogClose />
@@ -266,15 +264,9 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
                 ${itemSubtotal.toFixed(2)}
               </span>
             </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-slate-600 dark:text-slate-400">IVA (16%):</span>
-              <span className="font-medium text-slate-900 dark:text-slate-100">
-                ${itemTax.toFixed(2)}
-              </span>
-            </div>
             <div className="flex justify-between text-xl font-bold pt-2 border-t-2 border-slate-300 dark:border-slate-600">
               <span className="text-slate-900 dark:text-slate-100">Total:</span>
-              <span className="text-primary">${itemTotalWithTax.toFixed(2)}</span>
+              <span className="text-primary">${itemSubtotal.toFixed(2)}</span>
             </div>
           </div>
 

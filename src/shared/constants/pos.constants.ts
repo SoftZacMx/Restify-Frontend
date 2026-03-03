@@ -246,9 +246,9 @@ export const POS_PRODUCTS: PosProduct[] = [
 ];
 
 /**
- * Tasa de impuesto (IVA)
+ * IVA no aplicado automáticamente (reservado para uso futuro)
  */
-export const TAX_RATE = 0.16; // 16% IVA
+export const TAX_RATE = 0;
 
 /**
  * Métodos de pago disponibles

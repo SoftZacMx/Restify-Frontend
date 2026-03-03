@@ -83,7 +83,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   return (
     <Card
       className={cn(
-        'hover:shadow-lg transition-shadow duration-200 border-l-4 min-w-[320px]',
+        'hover:shadow-lg transition-shadow duration-200 border-l-4 min-w-[480px]',
         getBorderColor()
       )}
     >
@@ -141,17 +141,29 @@ export const OrderCard: React.FC<OrderCardProps> = ({
       </CardContent>
 
       <CardFooter className="pt-0 gap-2 flex-wrap">
-        {/* Primarias: Ver detalles y Pagar (cuando aplique) */}
+        {/* Primarias: Ver detalles, Editar (si no completada) y Pagar (si pendiente) */}
         <Button
           variant="outline"
           size="sm"
           onClick={() => onViewDetails(order.id)}
           className="flex-1"
-          title="Ver detalles"
+          title="Detalles"
         >
           <Eye className="h-4 w-4 mr-1" />
-          Ver detalles
+           Detalles
         </Button>
+        {!(order.status && order.delivered) && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleViewInPos}
+            className="flex-1"
+            title="Editar en POS"
+          >
+            <Edit className="h-4 w-4 mr-1" />
+            Editar
+          </Button>
+        )}
         {!order.status && onProcessPayment && (
           <Button
             variant="outline"
@@ -164,7 +176,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
           </Button>
         )}
 
-        {/* Menú Acciones: Ver/Editar, Pago dividido, Eliminar, Imprimir tickets */}
+        {/* Menú Acciones: Pago dividido, Eliminar, Imprimir tickets */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="px-3" title="Más acciones">
@@ -172,12 +184,6 @@ export const OrderCard: React.FC<OrderCardProps> = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-[200px]">
-            {!order.status && (
-              <DropdownMenuItem onSelect={handleViewInPos}>
-                <Edit className="h-4 w-4 mr-2" />
-                Ver/Editar en POS
-              </DropdownMenuItem>
-            )}
             {!order.status && onSplitPayment && (
               <DropdownMenuItem onSelect={() => onSplitPayment(order)}>
                 <CreditCard className="h-4 w-4 mr-2" />

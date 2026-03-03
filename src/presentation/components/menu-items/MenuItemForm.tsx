@@ -61,7 +61,10 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
       setIsLoadingCategories(true);
       try {
         const activeCategories = await menuCategoryService.listMenuCategories({ status: true });
-        setCategories(activeCategories);
+        const withoutExtras = activeCategories.filter(
+          (cat) => cat.name?.toLowerCase() !== 'extras'
+        );
+        setCategories(withoutExtras);
       } catch (error) {
         console.error('Error al cargar categorías:', error);
         setCategories([]);

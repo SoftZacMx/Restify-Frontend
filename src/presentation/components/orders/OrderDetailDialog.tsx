@@ -205,12 +205,6 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
                 {formatCurrency(order.subtotal)}
               </span>
             </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-slate-600 dark:text-slate-400">IVA (16%)</span>
-              <span className="text-slate-900 dark:text-white">
-                {formatCurrency(order.iva)}
-              </span>
-            </div>
             {order.tip > 0 && (
               <div className="flex justify-between text-sm">
                 <span className="text-slate-600 dark:text-slate-400">Propina</span>

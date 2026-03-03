@@ -15,7 +15,6 @@ import type {
   PayOrderResult,
   OrderType,
 } from '@/domain/types';
-import { TAX_RATE } from '@/shared/constants';
 import { orderRepository } from '@/infrastructure/api/repositories/order.repository';
 
 /**
@@ -37,10 +36,10 @@ export class OrderService {
   }
 
   /**
-   * Calcula el total con impuestos de un item
+   * Calcula el total de un item (sin IVA aplicado automáticamente)
    */
   calculateItemTotal(itemSubtotal: number): number {
-    return itemSubtotal * (1 + TAX_RATE);
+    return itemSubtotal;
   }
 
   /**
@@ -75,8 +74,8 @@ export class OrderService {
    */
   calculateCartState(items: OrderItem[]): CartState {
     const subtotal = items.reduce((sum, item) => sum + item.itemSubtotal, 0);
-    const tax = subtotal * TAX_RATE;
-    const total = subtotal + tax;
+    const tax = 0; // IVA no aplicado automáticamente
+    const total = subtotal;
 
     return {
       items,
@@ -194,61 +193,60 @@ export class OrderService {
       total,
     } = paymentState;
 
-    // Validar que se haya seleccionado al menos un método
-    if (!selectedMethod1) {
-      errors.method1 = 'Debe seleccionar al menos un método de pago';
-    }
+    const isSplitPayment = Boolean(selectedMethod2);
 
-    // Validar que los métodos seleccionados sean diferentes
-    if (selectedMethod1 && selectedMethod2 && selectedMethod1 === selectedMethod2) {
-      errors.method2 = 'Los métodos de pago deben ser diferentes';
-    }
-
-    // Validar montos no negativos
-    if (cashAmount < 0) {
-      errors.cashAmount = 'El monto en efectivo no puede ser negativo';
-    }
-    if (cardAmount < 0) {
-      errors.cardAmount = 'El monto con tarjeta no puede ser negativo';
-    }
-    if (transferAmount < 0) {
-      errors.transferAmount = 'El monto de transferencia no puede ser negativo';
-    }
-
-    // Validar que los montos de los métodos seleccionados sean mayores a 0
-    if (selectedMethod1) {
-      const amount1 = this.getPaymentAmount(selectedMethod1, cashAmount, cardAmount, transferAmount);
-      if (amount1 <= 0) {
-        const methodName =
-          selectedMethod1 === 'CASH'
-            ? 'efectivo'
-            : selectedMethod1 === 'CARD'
-              ? 'tarjeta'
-              : 'transferencia';
-        errors.method1 = `Debe ingresar un monto para ${methodName}`;
+    // Para pago diferido (dos métodos) solo se valida suma <= total más abajo; se omiten el resto de validaciones
+    if (!isSplitPayment) {
+      if (!selectedMethod1) {
+        errors.method1 = 'Debe seleccionar al menos un método de pago';
       }
-      // Tarjeta y transferencia no pueden exceder el total (efectivo sí puede para calcular cambio)
-      if ((selectedMethod1 === 'CARD' || selectedMethod1 === 'TRANSFER') && amount1 > total) {
-        const methodName = selectedMethod1 === 'CARD' ? 'tarjeta' : 'transferencia';
-        errors.method1 = `El monto de ${methodName} no puede exceder el total ($${total.toFixed(2)})`;
-      }
-    }
 
-    if (selectedMethod2) {
-      const amount2 = this.getPaymentAmount(selectedMethod2, cashAmount, cardAmount, transferAmount);
-      if (amount2 <= 0) {
-        const methodName =
-          selectedMethod2 === 'CASH'
-            ? 'efectivo'
-            : selectedMethod2 === 'CARD'
-              ? 'tarjeta'
-              : 'transferencia';
-        errors.method2 = `Debe ingresar un monto para ${methodName}`;
+      if (selectedMethod1 && selectedMethod2 && selectedMethod1 === selectedMethod2) {
+        errors.method2 = 'Los métodos de pago deben ser diferentes';
       }
-      // Tarjeta y transferencia no pueden exceder el total (efectivo sí puede para calcular cambio)
-      if ((selectedMethod2 === 'CARD' || selectedMethod2 === 'TRANSFER') && amount2 > total) {
-        const methodName = selectedMethod2 === 'CARD' ? 'tarjeta' : 'transferencia';
-        errors.method2 = `El monto de ${methodName} no puede exceder el total ($${total.toFixed(2)})`;
+
+      if (cashAmount < 0) {
+        errors.cashAmount = 'El monto en efectivo no puede ser negativo';
+      }
+      if (cardAmount < 0) {
+        errors.cardAmount = 'El monto con tarjeta no puede ser negativo';
+      }
+      if (transferAmount < 0) {
+        errors.transferAmount = 'El monto de transferencia no puede ser negativo';
+      }
+
+      if (selectedMethod1) {
+        const amount1 = this.getPaymentAmount(selectedMethod1, cashAmount, cardAmount, transferAmount);
+        if (amount1 <= 0) {
+          const methodName =
+            selectedMethod1 === 'CASH'
+              ? 'efectivo'
+              : selectedMethod1 === 'CARD'
+                ? 'tarjeta'
+                : 'transferencia';
+          errors.method1 = `Debe ingresar un monto para ${methodName}`;
+        }
+        if ((selectedMethod1 === 'CARD' || selectedMethod1 === 'TRANSFER') && amount1 > total) {
+          const methodName = selectedMethod1 === 'CARD' ? 'tarjeta' : 'transferencia';
+          errors.method1 = `El monto de ${methodName} no puede exceder el total ($${total.toFixed(2)})`;
+        }
+      }
+
+      if (selectedMethod2) {
+        const amount2 = this.getPaymentAmount(selectedMethod2, cashAmount, cardAmount, transferAmount);
+        if (amount2 <= 0) {
+          const methodName =
+            selectedMethod2 === 'CASH'
+              ? 'efectivo'
+              : selectedMethod2 === 'CARD'
+                ? 'tarjeta'
+                : 'transferencia';
+          errors.method2 = `Debe ingresar un monto para ${methodName}`;
+        }
+        if ((selectedMethod2 === 'CARD' || selectedMethod2 === 'TRANSFER') && amount2 > total) {
+          const methodName = selectedMethod2 === 'CARD' ? 'tarjeta' : 'transferencia';
+          errors.method2 = `El monto de ${methodName} no puede exceder el total ($${total.toFixed(2)})`;
+        }
       }
     }
 
@@ -263,32 +261,38 @@ export class OrderService {
     const sum = Math.round(sumRaw * 100) / 100;
     const totalRounded = Math.round(total * 100) / 100;
 
-    // Validar suma vs total
     const tolerance = 0.01;
-    const isCashOnly = selectedMethod1 === 'CASH' && !selectedMethod2;
-    if (isCashOnly) {
-      // Efectivo solo: el monto puede ser mayor al total (para calcular el cambio)
-      if (sum < totalRounded - tolerance) {
-        errors.paymentMethods = `La suma de los pagos ($${sum.toFixed(2)}) debe ser al menos el total ($${total.toFixed(2)})`;
-      }
-    } else {
-      // Tarjeta/transferencia o pago dividido: la suma debe coincidir con el total
+
+    if (isSplitPayment) {
+      // Pago diferido (dos métodos): única validación — la suma no puede ser mayor al total
       if (sum > totalRounded + tolerance) {
         errors.paymentMethods = `La suma de los pagos ($${sum.toFixed(2)}) no puede ser mayor al total de la orden ($${total.toFixed(2)})`;
-      } else if (Math.abs(sum - totalRounded) > tolerance) {
-        errors.paymentMethods = `La suma de los pagos ($${sum.toFixed(2)}) debe ser igual al total ($${total.toFixed(2)})`;
       }
-    }
+    } else {
+      // Un solo método
+      const isCashOnly = selectedMethod1 === 'CASH';
+      if (isCashOnly) {
+        if (sum < totalRounded - tolerance) {
+          errors.paymentMethods = `La suma de los pagos ($${sum.toFixed(2)}) debe ser al menos el total ($${total.toFixed(2)})`;
+        }
+      } else {
+        if (sum > totalRounded + tolerance) {
+          errors.paymentMethods = `La suma de los pagos ($${sum.toFixed(2)}) no puede ser mayor al total de la orden ($${total.toFixed(2)})`;
+        } else if (Math.abs(sum - totalRounded) > tolerance) {
+          errors.paymentMethods = `La suma de los pagos ($${sum.toFixed(2)}) debe ser igual al total ($${total.toFixed(2)})`;
+        }
+      }
 
-    // Validar que solo se usen los métodos seleccionados (los demás deben ser 0)
-    if (selectedMethod1 !== 'CASH' && cashAmount > 0) {
-      errors.cashAmount = 'El monto en efectivo no debe tener valor si no está seleccionado';
-    }
-    if (selectedMethod1 !== 'CARD' && selectedMethod2 !== 'CARD' && cardAmount > 0) {
-      errors.cardAmount = 'El monto con tarjeta no debe tener valor si no está seleccionado';
-    }
-    if (selectedMethod1 !== 'TRANSFER' && selectedMethod2 !== 'TRANSFER' && transferAmount > 0) {
-      errors.transferAmount = 'El monto de transferencia no debe tener valor si no está seleccionado';
+      // Validar que solo se usen los métodos seleccionados (los demás deben ser 0)
+      if (selectedMethod1 !== 'CASH' && cashAmount > 0) {
+        errors.cashAmount = 'El monto en efectivo no debe tener valor si no está seleccionado';
+      }
+      if (selectedMethod1 !== 'CARD' && cardAmount > 0) {
+        errors.cardAmount = 'El monto con tarjeta no debe tener valor si no está seleccionado';
+      }
+      if (selectedMethod1 !== 'TRANSFER' && transferAmount > 0) {
+        errors.transferAmount = 'El monto de transferencia no debe tener valor si no está seleccionado';
+      }
     }
 
     return {
@@ -592,14 +596,16 @@ export class OrderService {
   }
 
   /**
-   * Lista órdenes con filtros opcionales del backend
+   * Lista órdenes con filtros opcionales del backend.
+   * La respuesta mantiene la estructura del backend: { data: Order[], pagination }.
    */
   async listOrders(filters?: ListOrdersRequest): Promise<OrderResponse[]> {
     const response = await orderRepository.listOrders(filters);
-    if (!response.success || !response.data) {
+    if (!response.success || response.data == null) {
       throw new Error('No se pudieron obtener las órdenes');
     }
-    return response.data;
+    const orders = response.data.data;
+    return Array.isArray(orders) ? orders : [];
   }
 
   /**

@@ -69,7 +69,9 @@ const OrdersPage: React.FC = () => {
   } = useQuery({
     queryKey: ['orders', apiFilters],
     queryFn: async () => {
-      return await orderService.listOrders(apiFilters);
+      const orders = await orderService.listOrders(apiFilters);
+      console.log('[OrdersPage] Órdenes del backend:', orders);
+      return orders;
     },
     staleTime: 10000, // 10 segundos
     retry: 1,
@@ -118,7 +120,8 @@ const OrdersPage: React.FC = () => {
 
   // Filtrar órdenes en cliente (para búsqueda y estados especiales)
   const filteredOrders = useMemo(() => {
-    return filterOrdersClient(orders, filters);
+    const list = Array.isArray(orders) ? orders : [];
+    return filterOrdersClient(list, filters);
   }, [orders, filters]);
 
   // Ordenar por fecha más reciente

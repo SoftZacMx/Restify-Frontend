@@ -23,7 +23,7 @@ import { paymentService } from '@/application/services/payment.service';
 /**
  * Constante para el IVA (16%)
  */
-const TAX_RATE = 0.16;
+// IVA no aplicado automáticamente
 
 interface UsePosOptions {
   initialMode?: PosMode;
@@ -134,7 +134,7 @@ const mapOrderItemResponseToOrderItem = (
   const basePrice = orderItemResponse.price;
   const quantity = orderItemResponse.quantity;
   const itemSubtotal = (basePrice + extrasTotal) * quantity;
-  const itemTotal = itemSubtotal * (1 + TAX_RATE);
+  const itemTotal = itemSubtotal;
 
   return {
     id: orderItemResponse.id,
@@ -241,7 +241,10 @@ export const usePos = (options?: UsePosOptions) => {
       setCategoriesError(null);
       try {
         const menuCategories = await menuCategoryService.listMenuCategories({ status: true });
-        const posCategories: Category[] = menuCategories.map((cat: MenuCategoryResponse) => ({
+        const filteredCategories = menuCategories.filter(
+          (cat: MenuCategoryResponse) => cat.name?.toLowerCase() !== 'extras'
+        );
+        const posCategories: Category[] = filteredCategories.map((cat: MenuCategoryResponse) => ({
           id: cat.id,
           name: cat.name,
           description: '',

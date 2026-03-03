@@ -97,6 +97,7 @@ export type {
   CreateOrderRequest,
   UpdateOrderRequest,
   ListOrdersRequest,
+  ListOrdersResponse,
   PayOrderRequest,
   PayOrderResult,
   OrderItemRequest,
