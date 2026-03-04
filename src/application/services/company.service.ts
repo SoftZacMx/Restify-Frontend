@@ -29,7 +29,7 @@ export class CompanyService {
     const response = await companyRepository.upsertCompany(data);
     if (!response.success || !response.data) {
       throw new AppError(
-        (response.error?.code as string) || 'COMPANY_UPDATE_FAILED',
+        'VALIDATION_ERROR',
         response.error?.message || 'No se pudo guardar la información de la compañía'
       );
     }

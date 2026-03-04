@@ -6,7 +6,7 @@ import { Button } from '@/presentation/components/ui/button';
 import { Input } from '@/presentation/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/presentation/components/ui/dialog';
 import { companyService } from '@/application/services';
-import type { CompanyResponse, UpsertCompanyRequest } from '@/domain/types';
+import type { UpsertCompanyRequest } from '@/domain/types';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
 import { cn } from '@/shared/lib/utils';
