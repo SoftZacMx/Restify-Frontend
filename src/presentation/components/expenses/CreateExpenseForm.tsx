@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { Info, Calendar, CreditCard, Save } from 'lucide-react';
 import { useAuthStore } from '@/presentation/store/auth.store';
 import { ProductRepository } from '@/infrastructure/api/repositories/product.repository';
 import { UserRepository } from '@/infrastructure/api/repositories/user.repository';
@@ -185,118 +186,128 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Título (obligatorio, máx. 200 caracteres) */}
-      <div className="space-y-2">
-        <Label htmlFor="title">
-          Título del gasto <span className="text-red-500">*</span>
-        </Label>
-        <Input
-          id="title"
-          type="text"
-          maxLength={200}
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Ej. Pago luz enero, Compra insumos..."
-          className={cn(errors.title && 'border-red-500')}
-        />
-        <p className="text-xs text-slate-500 dark:text-slate-400">
-          {title.length}/200 caracteres
-        </p>
-        {errors.title && (
-          <p className="text-sm text-red-500">{errors.title}</p>
-        )}
-      </div>
-
-      {/* Tipo de gasto y Fecha */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="type">
-            Tipo de gasto <span className="text-red-500">*</span>
-          </Label>
-          <Select
-            value={expenseType}
-            onValueChange={(value) => {
-              setExpenseType(value as ExpenseType);
-              setErrors({});
-            }}
-          >
-            <SelectTrigger
-              id="type"
-              className={cn(errors.type && 'border-red-500')}
+      {/* Información General */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-blue-600 text-white">
+            <Info className="h-4 w-4" />
+          </div>
+          <h3 className="text-base font-semibold text-slate-900 dark:text-white">
+            Información General
+          </h3>
+        </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="title">
+              Título del Gasto <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="title"
+              type="text"
+              maxLength={200}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Ej. Mercancía Proveedor Central"
+              className={cn(errors.title && 'border-red-500')}
+            />
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              {title.length}/200 caracteres
+            </p>
+            {errors.title && (
+              <p className="text-sm text-red-500">{errors.title}</p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="type">
+              Tipo de Gasto <span className="text-red-500">*</span>
+            </Label>
+            <Select
+              value={expenseType}
+              onValueChange={(value) => {
+                setExpenseType(value as ExpenseType);
+                setErrors({});
+              }}
             >
-              {expenseType ? getExpenseTypeLabel(expenseType) : 'Seleccionar tipo'}
-            </SelectTrigger>
-            <SelectContent>
-              {expenseTypes.map((type) => (
-                <SelectItem key={type} value={type}>
-                  {getExpenseTypeLabel(type)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {errors.type && (
-            <p className="text-sm text-red-500">{errors.type}</p>
-          )}
+              <SelectTrigger
+                id="type"
+                className={cn(errors.type && 'border-red-500')}
+              >
+                {expenseType ? getExpenseTypeLabel(expenseType) : 'Seleccionar tipo'}
+              </SelectTrigger>
+              <SelectContent>
+                {expenseTypes.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {getExpenseTypeLabel(type)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.type && (
+              <p className="text-sm text-red-500">{errors.type}</p>
+            )}
+          </div>
+          <div className="space-y-2 md:col-span-2 md:max-w-xs">
+            <Label htmlFor="date">
+              Fecha de Compra <span className="text-red-500">*</span>
+            </Label>
+            <div className="relative">
+              <Input
+                id="date"
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className={cn('pr-10', errors.date && 'border-red-500')}
+              />
+              <Calendar className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            </div>
+            {errors.date && (
+              <p className="text-sm text-red-500">{errors.date}</p>
+            )}
+          </div>
+          <div className="space-y-2 md:col-span-2">
+            <Label htmlFor="description">Descripción / Notas</Label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Detalles adicionales sobre la compra..."
+              rows={3}
+              className="flex w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-base text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="paymentMethod">
+              Método de Pago <span className="text-red-500">*</span>
+            </Label>
+            <div className="relative">
+              <Select
+                value={paymentMethod.toString()}
+                onValueChange={(value) => setPaymentMethod(Number(value) as PaymentMethod)}
+              >
+                <SelectTrigger
+                  id="paymentMethod"
+                  className={cn('pl-10', errors.paymentMethod && 'border-red-500')}
+                >
+                  {paymentMethod
+                    ? getPaymentMethodLabel(paymentMethod)
+                    : 'Seleccionar método'}
+                </SelectTrigger>
+                <SelectContent>
+                  {paymentMethods.map((method) => (
+                    <SelectItem key={method} value={method.toString()}>
+                      {getPaymentMethodLabel(method)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <CreditCard className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            </div>
+            {errors.paymentMethod && (
+              <p className="text-sm text-red-500">{errors.paymentMethod}</p>
+            )}
+          </div>
         </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="date">
-            Fecha <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="date"
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className={cn(errors.date && 'border-red-500')}
-          />
-          {errors.date && (
-            <p className="text-sm text-red-500">{errors.date}</p>
-          )}
-        </div>
-      </div>
-
-      {/* Descripción */}
-      <div className="space-y-2">
-        <Label htmlFor="description">Descripción</Label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Añade una descripción detallada del gasto..."
-          className="flex min-h-[100px] w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-base text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-        />
-      </div>
-
-      {/* Método de pago */}
-      <div className="space-y-2">
-        <Label htmlFor="paymentMethod">
-          Método de pago <span className="text-red-500">*</span>
-        </Label>
-        <Select
-          value={paymentMethod.toString()}
-          onValueChange={(value) => setPaymentMethod(Number(value) as PaymentMethod)}
-        >
-          <SelectTrigger
-            id="paymentMethod"
-            className={cn(errors.paymentMethod && 'border-red-500')}
-          >
-            {paymentMethod
-              ? getPaymentMethodLabel(paymentMethod)
-              : 'Seleccionar método'}
-          </SelectTrigger>
-          <SelectContent>
-            {paymentMethods.map((method) => (
-              <SelectItem key={method} value={method.toString()}>
-                {getPaymentMethodLabel(method)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {errors.paymentMethod && (
-          <p className="text-sm text-red-500">{errors.paymentMethod}</p>
-        )}
-      </div>
+      </section>
 
       {/* Formularios específicos por tipo */}
       {expenseType === 'MERCHANDISE' && (
@@ -360,59 +371,48 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
         />
       )}
 
-      {/* Totales */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-t pt-4">
-        <div className="space-y-2">
-          <Label htmlFor="subtotal">
-            Subtotal <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="subtotal"
-            type="number"
-            step="0.01"
-            min="0"
-            value={subtotal}
-            onChange={(e) => handleSubtotalChange(e.target.value)}
-            className={cn(errors.subtotal && 'border-red-500')}
-          />
-          {errors.subtotal && (
-            <p className="text-sm text-red-500">{errors.subtotal}</p>
+      {/* Resumen y totales */}
+      <section className="border-t border-slate-200 pt-6 dark:border-slate-700">
+        <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+          {expenseType === 'MERCHANDISE' && (
+            <div className="flex gap-3 rounded-lg bg-slate-100 p-4 dark:bg-slate-800/50">
+              <Info className="h-5 w-5 flex-shrink-0 text-blue-600 dark:text-blue-400" />
+              <p className="text-sm text-slate-600 dark:text-slate-300">
+                Los subtotales y totales se calculan automáticamente basándose en la cantidad y
+                precio unitario ingresado. El IVA se calcula al 19% por defecto.
+              </p>
+            </div>
           )}
+          <div className={cn('flex flex-col gap-2 md:min-w-[200px]', expenseType !== 'MERCHANDISE' && 'md:ml-auto')}>
+            <div className="flex justify-between text-sm">
+              <span className="text-slate-600 dark:text-slate-400">Subtotal:</span>
+              <span className="font-medium">${parseFloat(subtotal || '0').toLocaleString('es-CL', { minimumFractionDigits: 2 })}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-slate-600 dark:text-slate-400">IVA (19%):</span>
+              <span className="font-medium">${parseFloat(iva || '0').toLocaleString('es-CL', { minimumFractionDigits: 2 })}</span>
+            </div>
+            <div className="flex justify-between border-t border-slate-200 pt-2 dark:border-slate-700">
+              <span className="font-semibold text-slate-900 dark:text-white">Total a Pagar</span>
+              <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                ${parseFloat(total || '0').toLocaleString('es-CL', { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+          </div>
         </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="iva">
-            IVA <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="iva"
-            type="number"
-            step="0.01"
-            min="0"
-            value={iva}
-            onChange={(e) => handleIvaChange(e.target.value)}
-            className={cn(errors.iva && 'border-red-500')}
-          />
-          {errors.iva && (
-            <p className="text-sm text-red-500">{errors.iva}</p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="total">Total (Calculado)</Label>
-          <Input
-            id="total"
-            type="number"
-            step="0.01"
-            value={total}
-            readOnly
-            className="bg-slate-100 dark:bg-slate-800"
-          />
-        </div>
-      </div>
+        {errors.subtotal && (
+          <p className="mt-2 text-sm text-red-500">{errors.subtotal}</p>
+        )}
+        {errors.iva && (
+          <p className="mt-1 text-sm text-red-500">{errors.iva}</p>
+        )}
+        {errors.total && (
+          <p className="mt-1 text-sm text-red-500">{errors.total}</p>
+        )}
+      </section>
 
       {/* Botones de acción */}
-      <div className="flex justify-end gap-3 pt-4 border-t">
+      <div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:justify-between dark:border-slate-700">
         <Button
           type="button"
           variant="outline"
@@ -421,7 +421,8 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
         >
           Cancelar
         </Button>
-        <Button type="submit" disabled={isLoading}>
+        <Button type="submit" disabled={isLoading} className="bg-blue-600 hover:bg-blue-700">
+          <Save className="mr-2 h-4 w-4" />
           {isLoading ? 'Guardando...' : 'Guardar Gasto'}
         </Button>
       </div>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, LayoutGrid } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
-import { Label } from '@/presentation/components/ui/label';
 import { Button } from '@/presentation/components/ui/button';
 import {
   Select,
@@ -127,7 +126,7 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
   );
 
   return (
-    <div className="space-y-4 border-t pt-4">
+    <section className="space-y-4 border-t border-slate-200 pt-6 dark:border-slate-700">
       <SelectProductDialog
         open={productDialogTarget !== null}
         onOpenChange={(open) => !open && setProductDialogTarget(null)}
@@ -136,111 +135,118 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
       />
 
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Detalles de la Compra</h3>
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
+            <LayoutGrid className="h-4 w-4" />
+          </div>
+          <h3 className="text-base font-semibold text-slate-900 dark:text-white">
+            Detalle de la Compra
+          </h3>
+        </div>
         <Button
           type="button"
-          variant="outline"
           size="sm"
           onClick={() => setProductDialogTarget('add')}
+          className="bg-blue-600 hover:bg-blue-700"
         >
           <Plus className="h-4 w-4 mr-2" />
           Agregar Ítem
         </Button>
       </div>
 
-      <div className="space-y-4">
-        {items.map((item, index) => (
-          <div
-            key={index}
-            className="grid grid-cols-12 gap-4 p-4 border border-slate-200 dark:border-slate-700 rounded-lg"
-          >
-            <div className="col-span-12 md:col-span-3 space-y-2">
-              <Label>Ítem</Label>
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full justify-start font-normal h-11"
-                onClick={() => setProductDialogTarget(index)}
-              >
-                {item.productId
-                  ? products.find((p) => p.id === item.productId)?.name
-                  : 'Seleccionar producto'}
-              </Button>
-            </div>
-
-            <div className="col-span-6 md:col-span-2 space-y-2">
-              <Label>Cantidad</Label>
-              <Input
-                type="number"
-                step="0.01"
-                min="0"
-                value={item.amount}
-                onChange={(e) => updateItem(index, { amount: e.target.value })}
-                placeholder="10"
-              />
-            </div>
-
-            <div className="col-span-6 md:col-span-2 space-y-2">
-              <Label>Unidad (opcional)</Label>
-              <Select
-                value={item.unitOfMeasure || ''}
-                onValueChange={(value) =>
-                  updateItem(index, { unitOfMeasure: (value || '') as UnitOfMeasure | '' })
-                }
-              >
-                <SelectTrigger>
-                  {item.unitOfMeasure
-                    ? unitOfMeasureOptions.find((u) => u.value === item.unitOfMeasure)?.label ?? item.unitOfMeasure
-                    : 'Seleccionar'}
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">Ninguna</SelectItem>
-                  {unitOfMeasureOptions.map((u) => (
-                    <SelectItem key={u.value} value={u.value}>
-                      {u.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="col-span-6 md:col-span-2 space-y-2">
-              <Label>Precio Unitario</Label>
-              <Input
-                type="number"
-                step="0.01"
-                min="0"
-                value={item.unitPrice}
-                onChange={(e) => updateItem(index, { unitPrice: e.target.value })}
-                placeholder="$2.50"
-              />
-            </div>
-
-            <div className="col-span-6 md:col-span-2 space-y-2 min-w-[7rem]">
-              <Label>Subtotal</Label>
-              <Input
-                type="text"
-                value={`$${item.subtotal || '0.00'}`}
-                readOnly
-                className="bg-slate-100 dark:bg-slate-800"
-              />
-            </div>
-
-            <div className="col-span-12 md:col-span-1 flex items-end">
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={() => removeItem(index)}
-                className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
+      {/* Tabla de ítems */}
+      <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+        <div className="min-w-[640px]">
+          {/* Encabezados */}
+          <div className="grid grid-cols-12 gap-2 border-b border-slate-200 bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400">
+            <div className="col-span-3">Item / Producto</div>
+            <div className="col-span-2">Cant.</div>
+            <div className="col-span-2">Unidad</div>
+            <div className="col-span-2">Precio unit.</div>
+            <div className="col-span-3">Subtotal</div>
           </div>
-        ))}
+          {/* Filas */}
+          {items.map((item, index) => (
+            <div
+              key={index}
+              className="grid grid-cols-12 gap-2 border-b border-slate-100 px-4 py-3 last:border-b-0 dark:border-slate-700/50"
+            >
+              <div className="col-span-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-9 w-full justify-start font-normal"
+                  onClick={() => setProductDialogTarget(index)}
+                >
+                  {item.productId
+                    ? products.find((p) => p.id === item.productId)?.name
+                    : 'Seleccionar producto'}
+                </Button>
+              </div>
+              <div className="col-span-2">
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={item.amount}
+                  onChange={(e) => updateItem(index, { amount: e.target.value })}
+                  placeholder="0"
+                  className="h-9"
+                />
+              </div>
+              <div className="col-span-2">
+                <Select
+                  value={item.unitOfMeasure || ''}
+                  onValueChange={(value) =>
+                    updateItem(index, { unitOfMeasure: (value || '') as UnitOfMeasure | '' })
+                  }
+                >
+                  <SelectTrigger className="h-9">
+                    {item.unitOfMeasure
+                      ? unitOfMeasureOptions.find((u) => u.value === item.unitOfMeasure)?.label ?? item.unitOfMeasure
+                      : '—'}
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Ninguna</SelectItem>
+                    {unitOfMeasureOptions.map((u) => (
+                      <SelectItem key={u.value} value={u.value}>
+                        {u.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="col-span-2">
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={item.unitPrice}
+                  onChange={(e) => updateItem(index, { unitPrice: e.target.value })}
+                  placeholder="$ 0"
+                  className="h-9"
+                />
+              </div>
+              <div className="col-span-3 flex items-center justify-between gap-2">
+                <span className="font-semibold text-slate-900 dark:text-white">
+                  ${(item.subtotal || '0.00').replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                </span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => removeItem(index)}
+                  className="h-8 w-8 shrink-0 p-0 text-slate-400 hover:text-red-600 dark:hover:text-red-400"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
