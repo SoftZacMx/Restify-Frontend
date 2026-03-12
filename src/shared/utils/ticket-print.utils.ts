@@ -86,6 +86,7 @@ export function buildKitchenTicketHtml(data: KitchenTicketResponse): string {
  * Ticket cliente: claridad — Platillo/Extras/Nota con costo al lado de cada cosa; totales etiquetados.
  */
 export function buildSaleTicketHtml(data: SaleTicketResponse): string {
+  const companyName = data.companyName?.trim() || 'Restify';
   const tableText = data.tableNumber != null ? `Mesa ${data.tableNumber}` : 'Sin mesa';
   const orderShortId = data.orderId.slice(-8).toUpperCase();
   const dateFormatted = new Date(data.date).toLocaleString('es-MX', {
@@ -121,7 +122,8 @@ export function buildSaleTicketHtml(data: SaleTicketResponse): string {
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><style>${BASE_STYLES}</style></head><body>
 <div class="ticket">
-  <div class="head">TICKET DE VENTA #${orderShortId}</div>
+  <div class="head">${escapeHtml(companyName)}</div>
+  <div class="head-sub">TICKET DE VENTA #${orderShortId}</div>
   <div class="head-sub">${escapeHtml(dateFormatted)}</div>
   <div class="head-sub">${escapeHtml(tableText)}</div>
   ${clientLine}
