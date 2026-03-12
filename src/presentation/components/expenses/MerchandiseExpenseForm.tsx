@@ -9,7 +9,11 @@ import {
   SelectItem,
   SelectTrigger,
 } from '@/presentation/components/ui/select';
+import { SelectProductDialog } from './SelectProductDialog';
 import type { Product, CreateExpenseItemRequest, UnitOfMeasure } from '@/domain/types';
+
+/** Índice de fila o 'add' para abrir el diálogo añadiendo un ítem nuevo */
+type ProductDialogTarget = 'add' | number | null;
 
 interface MerchandiseExpenseFormProps {
   products: Product[];
@@ -44,6 +48,7 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
       total: '',
     },
   ]);
+  const [productDialogTarget, setProductDialogTarget] = useState<ProductDialogTarget>(null);
 
   const unitOfMeasureOptions: { value: UnitOfMeasure; label: string }[] = [
     { value: 'KG', label: 'Kilogramos' },
@@ -112,11 +117,46 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
     notifyItemsChange(newItems);
   };
 
+  const handleProductSelect = (product: { id: string; name: string; status: boolean }) => {
+    if (productDialogTarget === 'add') {
+      setItems((prev) => [
+        ...prev,
+        {
+          productId: product.id,
+          amount: '',
+          unitOfMeasure: '',
+          unitPrice: '',
+          subtotal: '',
+          total: '',
+        },
+      ]);
+    } else if (typeof productDialogTarget === 'number') {
+      updateItem(productDialogTarget, { productId: product.id });
+    }
+    setProductDialogTarget(null);
+  };
+
+  const productListForDialog: { id: string; name: string; status: boolean }[] = products.map(
+    (p) => ({ id: p.id, name: p.name, status: p.status })
+  );
+
   return (
     <div className="space-y-4 border-t pt-4">
+      <SelectProductDialog
+        open={productDialogTarget !== null}
+        onOpenChange={(open) => !open && setProductDialogTarget(null)}
+        products={productListForDialog}
+        onSelect={handleProductSelect}
+      />
+
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Detalles de la Compra</h3>
-        <Button type="button" variant="outline" size="sm" onClick={addItem}>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => setProductDialogTarget('add')}
+        >
           <Plus className="h-4 w-4 mr-2" />
           Agregar Ítem
         </Button>
@@ -130,23 +170,16 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
           >
             <div className="col-span-12 md:col-span-4 space-y-2">
               <Label>Ítem</Label>
-              <Select
-                value={item.productId}
-                onValueChange={(value) => updateItem(index, { productId: value })}
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full justify-start font-normal h-11"
+                onClick={() => setProductDialogTarget(index)}
               >
-                <SelectTrigger>
-                  {item.productId
-                    ? products.find((p) => p.id === item.productId)?.name
-                    : 'Ej. Tomates'}
-                </SelectTrigger>
-                <SelectContent>
-                  {products.map((product) => (
-                    <SelectItem key={product.id} value={product.id}>
-                      {product.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                {item.productId
+                  ? products.find((p) => p.id === item.productId)?.name
+                  : 'Seleccionar producto'}
+              </Button>
             </div>
 
             <div className="col-span-6 md:col-span-2 space-y-2">
