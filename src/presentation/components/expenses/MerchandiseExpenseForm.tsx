@@ -97,20 +97,6 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
     onItemsChange(validItems);
   };
 
-  const addItem = () => {
-    setItems([
-      ...items,
-      {
-        productId: '',
-        amount: '',
-        unitOfMeasure: '',
-        unitPrice: '',
-        subtotal: '',
-        total: '',
-      },
-    ]);
-  };
-
   const removeItem = (index: number) => {
     const newItems = items.filter((_, i) => i !== index);
     setItems(newItems);
