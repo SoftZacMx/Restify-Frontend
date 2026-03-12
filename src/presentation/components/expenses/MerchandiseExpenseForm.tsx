@@ -154,7 +154,7 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
             key={index}
             className="grid grid-cols-12 gap-4 p-4 border border-slate-200 dark:border-slate-700 rounded-lg"
           >
-            <div className="col-span-12 md:col-span-4 space-y-2">
+            <div className="col-span-12 md:col-span-3 space-y-2">
               <Label>Ítem</Label>
               <Button
                 type="button"
@@ -216,7 +216,7 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
               />
             </div>
 
-            <div className="col-span-6 md:col-span-1 space-y-2">
+            <div className="col-span-6 md:col-span-2 space-y-2 min-w-[7rem]">
               <Label>Subtotal</Label>
               <Input
                 type="text"

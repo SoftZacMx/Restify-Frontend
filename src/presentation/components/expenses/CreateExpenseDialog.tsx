@@ -32,7 +32,7 @@ export const CreateExpenseDialog: React.FC<CreateExpenseDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 shadow-xl">
+      <DialogContent className="max-w-6xl w-full max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 shadow-xl">
         <DialogHeader>
           <DialogTitle>Crear Gasto</DialogTitle>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
