@@ -158,22 +158,6 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
     await onSubmit(expenseData);
   };
 
-  const handleSubtotalChange = (value: string) => {
-    setSubtotal(value);
-    const subtotalNum = parseFloat(value) || 0;
-    const ivaNum = parseFloat(iva) || 0;
-    const newTotal = subtotalNum + ivaNum;
-    setTotal(newTotal.toFixed(2));
-  };
-
-  const handleIvaChange = (value: string) => {
-    setIva(value);
-    const subtotalNum = parseFloat(subtotal) || 0;
-    const ivaNum = parseFloat(value) || 0;
-    const newTotal = subtotalNum + ivaNum;
-    setTotal(newTotal.toFixed(2));
-  };
-
   const expenseTypes: ExpenseType[] = [
     'SERVICE_BUSINESS',
     'UTILITY',
