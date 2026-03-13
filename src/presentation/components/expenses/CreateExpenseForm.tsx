@@ -367,18 +367,18 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
               </p>
             </div>
           )}
-          <div className={cn('flex flex-col gap-2 md:min-w-[200px]', expenseType !== 'MERCHANDISE' && 'md:ml-auto')}>
+          <div className={cn('flex flex-col gap-2 md:min-w-[200px]', expenseType !== 'MERCHANDISE' && 'md:ml-auto')} data-testid="expense-form-totals">
             <div className="flex justify-between text-sm">
               <span className="text-slate-600 dark:text-slate-400">Subtotal:</span>
-              <span className="font-medium">${parseFloat(subtotal || '0').toLocaleString('es-CL', { minimumFractionDigits: 2 })}</span>
+              <span className="font-medium" data-testid="expense-form-subtotal">${parseFloat(subtotal || '0').toLocaleString('es-CL', { minimumFractionDigits: 2 })}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-slate-600 dark:text-slate-400">IVA (19%):</span>
-              <span className="font-medium">${parseFloat(iva || '0').toLocaleString('es-CL', { minimumFractionDigits: 2 })}</span>
+              <span className="font-medium" data-testid="expense-form-iva">${parseFloat(iva || '0').toLocaleString('es-CL', { minimumFractionDigits: 2 })}</span>
             </div>
             <div className="flex justify-between border-t border-slate-200 pt-2 dark:border-slate-700">
-              <span className="font-semibold text-slate-900 dark:text-white">Total a Pagar</span>
-              <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
+              <span className="font-semibold text-slate-900 dark:text-white" data-testid="expense-form-total-label">Total a Pagar</span>
+              <span className="text-lg font-bold text-blue-600 dark:text-blue-400" data-testid="expense-form-total">
                 ${parseFloat(total || '0').toLocaleString('es-CL', { minimumFractionDigits: 2 })}
               </span>
             </div>

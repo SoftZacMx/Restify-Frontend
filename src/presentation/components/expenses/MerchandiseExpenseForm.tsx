@@ -70,16 +70,15 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
   };
 
   const updateItem = (index: number, updates: Partial<ExpenseItemForm>) => {
-    const newItems = [...items];
-    newItems[index] = { ...newItems[index], ...updates };
-    
-    // Recalcular si cambió amount o unitPrice
-    if (updates.amount !== undefined || updates.unitPrice !== undefined) {
-      newItems[index] = calculateItemTotals(newItems[index]);
-    }
-
-    setItems(newItems);
-    notifyItemsChange(newItems);
+    setItems((currentItems) => {
+      const newItems = [...currentItems];
+      newItems[index] = { ...newItems[index], ...updates };
+      if (updates.amount !== undefined || updates.unitPrice !== undefined) {
+        newItems[index] = calculateItemTotals(newItems[index]);
+      }
+      notifyItemsChange(newItems);
+      return newItems;
+    });
   };
 
   const notifyItemsChange = (currentItems: ExpenseItemForm[]) => {
@@ -97,9 +96,11 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
   };
 
   const removeItem = (index: number) => {
-    const newItems = items.filter((_, i) => i !== index);
-    setItems(newItems);
-    notifyItemsChange(newItems);
+    setItems((currentItems) => {
+      const newItems = currentItems.filter((_, i) => i !== index);
+      notifyItemsChange(newItems);
+      return newItems;
+    });
   };
 
   const handleProductSelect = (product: { id: string; name: string; status: boolean }) => {
