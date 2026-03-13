@@ -33,7 +33,6 @@ import { formatCurrency } from '@/shared/utils';
 import type { ReportsSummaryResponse } from '@/domain/types';
 
 const PAYMENT_COLORS = ['#3b82f6', '#8b5cf6', '#22c55e'];
-const EXPENSE_COLORS = ['#3b82f6', '#8b5cf6', '#f59e0b', '#22c55e', '#ef4444', '#6b7280'];
 
 function formatPercent(value: number): string {
   const sign = value >= 0 ? '+' : '';
@@ -145,7 +144,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
                 />
                 <YAxis tickFormatter={(v) => `$${v}`} tick={{ fontSize: 12 }} />
                 <Tooltip
-                  formatter={(value: number) => [formatCurrency(value), 'Ventas']}
+                  formatter={(value: unknown) => [formatCurrency(Number(value ?? 0)), 'Ventas']}
                   labelFormatter={(_, payload) => (payload?.[0]?.payload?.date ?? '')}
                 />
                 <Line type="monotone" dataKey="total" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3 }} name="Ventas" />
@@ -173,13 +172,14 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
                     cx="50%"
                     cy="50%"
                     outerRadius={80}
-                    label={({ label, percentage }) => `${label} ${percentage.toFixed(0)}%`}
+                    label={({ payload }: { payload?: { label?: string; percentage?: number } }) =>
+                      `${payload?.label ?? ''} ${(payload?.percentage ?? 0).toFixed(0)}%`}
                   >
                     {paymentDistribution.map((_, i) => (
                       <Cell key={i} fill={PAYMENT_COLORS[i % PAYMENT_COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: number) => [`${value.toFixed(1)}%`, '']} />
+                  <Tooltip formatter={(value: unknown) => [`${Number(value ?? 0).toFixed(1)}%`, '']} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -198,7 +198,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
                   <CartesianGrid strokeDasharray="3 3" className="stroke-slate-200 dark:stroke-slate-700" />
                   <XAxis type="number" tickFormatter={(v) => v} />
                   <YAxis type="category" dataKey="name" width={120} tick={{ fontSize: 11 }} />
-                  <Tooltip formatter={(value: number) => [value, 'Cantidad']} />
+                  <Tooltip formatter={(value: unknown) => [Number(value ?? 0), 'Cantidad']} />
                   <Bar dataKey="quantitySold" fill="#3b82f6" name="Vendidos" radius={[0, 4, 4, 0]} />
                 </BarChart>
               </ResponsiveContainer>
@@ -219,7 +219,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
                 <CartesianGrid strokeDasharray="3 3" className="stroke-slate-200 dark:stroke-slate-700" />
                 <XAxis dataKey="label" tick={{ fontSize: 11 }} />
                 <YAxis tickFormatter={(v) => `$${v}`} tick={{ fontSize: 12 }} />
-                <Tooltip formatter={(value: number) => [formatCurrency(value), 'Total']} />
+                <Tooltip formatter={(value: unknown) => [formatCurrency(Number(value ?? 0)), 'Total']} />
                 <Legend />
                 <Bar dataKey="total" name="Total" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
               </BarChart>

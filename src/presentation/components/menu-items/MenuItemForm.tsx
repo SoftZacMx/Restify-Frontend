@@ -314,7 +314,7 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
           onOpenChange={setCategoryDialogOpen}
           categories={categories.map((c) => ({ id: c.id, name: c.name }))}
           onSelect={(category) => {
-            handleChange('categoryId', category?.id ?? undefined);
+            handleChange('categoryId', category?.id ?? null);
           }}
         />
         {errors.categoryId && (
