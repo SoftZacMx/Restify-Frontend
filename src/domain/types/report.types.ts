@@ -104,3 +104,64 @@ export interface GenerateReportParams {
   page?: number;
   pageSize?: number;
 }
+
+// Reports summary (GET /api/reports/summary) - JSON for dashboard charts
+export interface ReportsSummaryKpis {
+  totalSales: number;
+  totalSalesChangePercent: number;
+  ordersProcessed: number;
+  ordersProcessedChangePercent: number;
+  averagePerOrder: number;
+  averagePerOrderChangePercent: number;
+  totalExpenses: number;
+  totalExpensesChangePercent: number;
+  netProfit: number;
+  netProfitChangePercent: number;
+}
+
+export interface ReportsSummarySalesByDay {
+  date: string;
+  label: string;
+  total: number;
+}
+
+export interface ReportsSummaryPaymentItem {
+  method: string;
+  label: string;
+  total: number;
+  count: number;
+  percentage: number;
+}
+
+export interface ReportsSummaryTopProduct {
+  menuItemId: string;
+  name: string;
+  quantitySold: number;
+  totalSales: number;
+}
+
+export interface ReportsSummaryExpenseByCategory {
+  type: string;
+  label: string;
+  total: number;
+  percentage: number;
+}
+
+export interface ReportsSummaryDailyRow {
+  date: string;
+  sales: number;
+  orders: number;
+  expenses: number;
+  profit: number;
+}
+
+export interface ReportsSummaryResponse {
+  dateFrom: string;
+  dateTo: string;
+  kpis: ReportsSummaryKpis;
+  salesOverTime: ReportsSummarySalesByDay[];
+  paymentDistribution: ReportsSummaryPaymentItem[];
+  topProducts: ReportsSummaryTopProduct[];
+  expensesByCategory: ReportsSummaryExpenseByCategory[];
+  dailyTable: ReportsSummaryDailyRow[];
+}

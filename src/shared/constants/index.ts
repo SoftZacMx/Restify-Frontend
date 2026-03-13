@@ -52,3 +52,9 @@ export {
   TAX_RATE,
   PAYMENT_METHODS,
 } from './pos.constants';
+
+// Currency (global config for all money display)
+export { CURRENCY_CODE, CURRENCY_LOCALE } from './currency.constants';
+
+// Input lengths (simple_input, extended_input, text_area)
+export { INPUT_LENGTH, getInputMaxLength, type InputLengthType } from './input.constants';

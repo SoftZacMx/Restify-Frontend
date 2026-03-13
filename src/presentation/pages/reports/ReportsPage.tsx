@@ -1,17 +1,20 @@
 import { useState } from 'react';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, LayoutDashboard, FileText } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { LoadingOverlay } from '@/presentation/components/ui/loading-overlay';
+import { Button } from '@/presentation/components/ui/button';
 import { ReportFilters, type ReportFiltersState } from '@/presentation/components/reports/ReportFilters';
 import { CashFlowReportView } from '@/presentation/components/reports/CashFlowReportView';
 import { SalesPerformanceReportView } from '@/presentation/components/reports/SalesPerformanceReportView';
 import { ExpenseAnalysisReportView } from '@/presentation/components/reports/ExpenseAnalysisReportView';
+import { ReportsSummaryView } from '@/presentation/components/reports/ReportsSummaryView';
 import { ReportService } from '@/application/services/report.service';
 import type {
   BaseReportResponse,
   CashFlowReportData,
   SalesPerformanceReportData,
   ExpenseAnalysisReportData,
+  ReportsSummaryResponse,
 } from '@/domain/types';
 import { showErrorToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
@@ -26,15 +29,29 @@ function getDefaultDateRange(): { dateFrom: string; dateTo: string } {
   return { dateFrom, dateTo };
 }
 
+function getLast30Days(): { dateFrom: string; dateTo: string } {
+  const now = new Date();
+  const to = now.toISOString().slice(0, 10);
+  const from = new Date(now.getTime() - 29 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  return { dateFrom: from, dateTo: to };
+}
+
+type ViewMode = 'summary' | 'document';
+
 const ReportsPage = () => {
   const { dateFrom: defaultFrom, dateTo: defaultTo } = getDefaultDateRange();
+  const { dateFrom: summaryFrom, dateTo: summaryTo } = getLast30Days();
+  const [viewMode, setViewMode] = useState<ViewMode>('summary');
   const [filters, setFilters] = useState<ReportFiltersState>({
     type: 'CASH_FLOW',
     dateFrom: defaultFrom,
     dateTo: defaultTo,
   });
+  const [summaryFilters, setSummaryFilters] = useState({ dateFrom: summaryFrom, dateTo: summaryTo });
   const [report, setReport] = useState<BaseReportResponse<unknown> | null>(null);
+  const [summaryData, setSummaryData] = useState<ReportsSummaryResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingSummary, setIsLoadingSummary] = useState(false);
 
   const reportService = new ReportService();
 
@@ -61,29 +78,121 @@ const ReportsPage = () => {
     }
   };
 
+  const handleLoadSummary = async () => {
+    setIsLoadingSummary(true);
+    setSummaryData(null);
+    try {
+      const result = await reportService.getReportsSummary({
+        dateFrom: summaryFilters.dateFrom || undefined,
+        dateTo: summaryFilters.dateTo || undefined,
+      });
+      setSummaryData(result);
+    } catch (error) {
+      if (error instanceof AppError) {
+        showErrorToast('Error al cargar resumen', error.message);
+      } else {
+        showErrorToast('Error al cargar resumen', 'Intenta de nuevo más tarde.');
+      }
+    } finally {
+      setIsLoadingSummary(false);
+    }
+  };
+
   return (
     <MainLayout>
-      <LoadingOverlay open={isLoading} message="Generando reporte..." />
+      <LoadingOverlay open={isLoading || isLoadingSummary} message={viewMode === 'summary' ? 'Cargando resumen...' : 'Generando reporte...'} />
       <div className="flex flex-col h-full">
         <div className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
           <div className="px-4 py-4 bg-gradient-to-br from-slate-50 via-white to-primary/5 dark:from-slate-900/80 dark:via-slate-900/50 dark:to-primary/10">
-            <h1 className="text-2xl font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-              <span className="rounded-xl bg-primary/10 p-2 text-primary">Reportes</span>
-            </h1>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
-              Genera reportes de flujo de caja, desempeño de ventas o análisis de gastos. Opcionalmente filtra por rango de fechas.
-            </p>
-          </div>
-          <ReportFilters
-            filters={filters}
-            onFiltersChange={setFilters}
-            onGenerate={handleGenerate}
-            isLoading={isLoading}
-          />
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <h1 className="text-2xl font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                  <span className="rounded-xl bg-primary/10 p-2 text-primary">Reportes</span>
+                </h1>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
+                  {viewMode === 'summary'
+                    ? 'Resumen con gráficas: ventas, órdenes, gastos y utilidad por período.'
+                    : 'Genera reportes de flujo de caja, desempeño de ventas o análisis de gastos.'}
+                </p>
+              </div>
+              <div className="flex rounded-lg border border-slate-200 dark:border-slate-700 p-1 bg-slate-100/80 dark:bg-slate-800/80">
+                <Button
+                  variant={viewMode === 'summary' ? 'default' : 'ghost'}
+                  size="sm"
+                  className="gap-2"
+                  onClick={() => setViewMode('summary')}
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  Resumen (gráficas)
+                </Button>
+                <Button
+                  variant={viewMode === 'document' ? 'default' : 'ghost'}
+                  size="sm"
+                  className="gap-2"
+                  onClick={() => setViewMode('document')}
+                >
+                  <FileText className="h-4 w-4" />
+                  Reportes documentados
+                </Button>
+              </div>
+            </div>
+
+            {viewMode === 'summary' && (
+              <div className="mt-4 flex flex-wrap items-end gap-4 px-4 py-3 border-t border-slate-200/80 dark:border-slate-700/80">
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-medium text-slate-500">Desde</label>
+                  <input
+                    type="date"
+                    value={summaryFilters.dateFrom}
+                    onChange={(e) => setSummaryFilters((p) => ({ ...p, dateFrom: e.target.value }))}
+                    className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-medium text-slate-500">Hasta</label>
+                  <input
+                    type="date"
+                    value={summaryFilters.dateTo}
+                    onChange={(e) => setSummaryFilters((p) => ({ ...p, dateTo: e.target.value }))}
+                    className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm"
+                  />
+                </div>
+                <Button onClick={handleLoadSummary} disabled={isLoadingSummary} className="gap-2">
+                  {summaryData ? 'Actualizar resumen' : 'Cargar resumen'}
+                </Button>
+              </div>
+            )}
+
+            {viewMode === 'document' && (
+              <ReportFilters
+                filters={filters}
+                onFiltersChange={setFilters}
+                onGenerate={handleGenerate}
+                isLoading={isLoading}
+              />
+            )}
+        </div>
         </div>
 
         <div className="flex-1 overflow-auto bg-slate-50 dark:bg-slate-900/30">
-          {report && (
+          {viewMode === 'summary' && summaryData && (
+            <ReportsSummaryView data={summaryData} />
+          )}
+          {viewMode === 'summary' && !summaryData && !isLoadingSummary && (
+            <div className="flex flex-col items-center justify-center py-20 px-4">
+              <div className="rounded-2xl bg-slate-100 dark:bg-slate-800/60 p-8 max-w-md text-center border border-slate-200/80 dark:border-slate-700/80 shadow-inner">
+                <div className="mx-auto w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                  <LayoutDashboard className="h-8 w-8 text-primary" />
+                </div>
+                <p className="text-slate-600 dark:text-slate-300 font-medium mb-2">Resumen con gráficas</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Elige un rango de fechas y haz clic en &quot;Cargar resumen&quot; para ver ventas, órdenes, gastos y utilidad.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {viewMode === 'document' && report && (
             <div className="py-4">
               <div className="px-4 mb-3 flex flex-wrap items-center gap-2 text-sm">
                 <span className="rounded-full bg-slate-200/80 dark:bg-slate-700/80 px-3 py-1 text-slate-600 dark:text-slate-300">
@@ -106,7 +215,7 @@ const ReportsPage = () => {
               )}
             </div>
           )}
-          {!report && !isLoading && (
+          {viewMode === 'document' && !report && !isLoading && (
             <div className="flex flex-col items-center justify-center py-20 px-4">
               <div className="rounded-2xl bg-slate-100 dark:bg-slate-800/60 p-8 max-w-md text-center border border-slate-200/80 dark:border-slate-700/80 shadow-inner">
                 <div className="mx-auto w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">

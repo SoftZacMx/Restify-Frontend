@@ -1,6 +1,18 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Info, Calendar, CreditCard, Save } from 'lucide-react';
+import {
+  Info,
+  Calendar,
+  CreditCard,
+  Save,
+  Wrench,
+  Zap,
+  Building2,
+  Package,
+  Banknote,
+  FileText,
+  type LucideIcon,
+} from 'lucide-react';
 import { useAuthStore } from '@/presentation/store/auth.store';
 import { ProductRepository } from '@/infrastructure/api/repositories/product.repository';
 import { UserRepository } from '@/infrastructure/api/repositories/user.repository';
@@ -19,7 +31,7 @@ import type {
   PaymentMethod,
   CreateExpenseItemRequest,
 } from '@/domain/types';
-import { getExpenseTypeLabel, getPaymentMethodLabel } from '@/shared/utils';
+import { getExpenseTypeLabel, getPaymentMethodLabel, formatCurrency } from '@/shared/utils';
 import { MerchandiseExpenseForm } from './MerchandiseExpenseForm';
 import { ServiceExpenseForm } from './ServiceExpenseForm';
 import { SalaryExpenseForm } from './SalaryExpenseForm';
@@ -57,6 +69,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
   const [total, setTotal] = useState<string>('0.00');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [merchandiseItems, setMerchandiseItems] = useState<CreateExpenseItemRequest[]>([]);
+  const [salaryEmployee, setSalaryEmployee] = useState<{ id: string; name: string; last_name: string; email: string; rol: string } | null>(null);
 
   // Cargar productos para compra de mercancía
   const productsQueryEnabled: boolean = expenseType === 'MERCHANDISE';
@@ -70,7 +83,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
   });
 
   // Cargar usuarios para pagos de salarios (solo no clientes)
-  const employeesQueryEnabled = expenseType === 'OTHER';
+  const employeesQueryEnabled = expenseType === 'SALARY';
   const { data: employees = [] } = useQuery({
     queryKey: ['employees'],
     queryFn: async () => {
@@ -97,6 +110,10 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
 
     if (expenseType === 'MERCHANDISE' && (!merchandiseItems || merchandiseItems.length === 0)) {
       newErrors.merchandiseItemsRequired = 'Debes agregar al menos un ítem para gastos de tipo Mercancía';
+    }
+
+    if (expenseType === 'SALARY' && !salaryEmployee) {
+      newErrors.salaryEmployee = 'Debes seleccionar un empleado';
     }
 
     if (!date) {
@@ -139,6 +156,11 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
       return;
     }
 
+    const descriptionForSubmit =
+      expenseType === 'SALARY' && salaryEmployee
+        ? `Empleado: ${salaryEmployee.name} ${salaryEmployee.last_name} (${salaryEmployee.email})`
+        : description?.trim() || null;
+
     const base = {
       title: title.trim(),
       type: expenseType as ExpenseType,
@@ -146,14 +168,14 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
       total: parseFloat(total),
       subtotal: parseFloat(subtotal),
       iva: parseFloat(iva),
-      description: description?.trim() || null,
+      description: descriptionForSubmit,
       paymentMethod: paymentMethod as PaymentMethod,
       userId: user.id,
     };
     const expenseData: CreateExpenseRequest =
       expenseType === 'MERCHANDISE' && merchandiseItems.length > 0
         ? { ...base, type: 'MERCHANDISE', items: merchandiseItems }
-        : { ...base, type: base.type as 'SERVICE_BUSINESS' | 'UTILITY' | 'RENT' | 'OTHER' };
+        : { ...base, type: base.type as 'SERVICE_BUSINESS' | 'UTILITY' | 'RENT' | 'SALARY' | 'OTHER' };
 
     await onSubmit(expenseData);
   };
@@ -163,8 +185,18 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
     'UTILITY',
     'RENT',
     'MERCHANDISE',
+    'SALARY',
     'OTHER',
   ];
+
+  const expenseTypeIcons: Record<ExpenseType, LucideIcon> = {
+    SERVICE_BUSINESS: Wrench,
+    UTILITY: Zap,
+    RENT: Building2,
+    MERCHANDISE: Package,
+    SALARY: Banknote,
+    OTHER: FileText,
+  };
 
   const paymentMethods: PaymentMethod[] = [1, 2, 3];
 
@@ -208,22 +240,40 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
             <Select
               value={expenseType}
               onValueChange={(value) => {
-                setExpenseType(value as ExpenseType);
+                const type = value as ExpenseType;
+                setExpenseType(type);
+                setTitle(getExpenseTypeLabel(type));
                 setErrors({});
+                if (value !== 'SALARY') setSalaryEmployee(null);
               }}
             >
               <SelectTrigger
                 id="type"
                 className={cn(errors.type && 'border-red-500')}
               >
-                {expenseType ? getExpenseTypeLabel(expenseType) : 'Seleccionar tipo'}
+                {expenseType ? (
+                  <span className="flex items-center gap-2">
+                    {React.createElement(expenseTypeIcons[expenseType], {
+                      className: 'h-4 w-4 shrink-0',
+                    })}
+                    {getExpenseTypeLabel(expenseType)}
+                  </span>
+                ) : (
+                  'Seleccionar tipo'
+                )}
               </SelectTrigger>
               <SelectContent>
-                {expenseTypes.map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {getExpenseTypeLabel(type)}
-                  </SelectItem>
-                ))}
+                {expenseTypes.map((type) => {
+                  const Icon = expenseTypeIcons[type];
+                  return (
+                    <SelectItem key={type} value={type}>
+                      <span className="flex items-center gap-2">
+                        <Icon className="h-4 w-4 shrink-0" />
+                        {getExpenseTypeLabel(type)}
+                      </span>
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
             {errors.type && (
@@ -344,9 +394,26 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
         />
       )}
 
+      {expenseType === 'SALARY' && (
+        <>
+          <SalaryExpenseForm
+            employees={employees}
+            selectedEmployee={salaryEmployee}
+            onEmployeeSelect={setSalaryEmployee}
+            onAmountChange={(amount) => {
+              setSubtotal(amount.toFixed(2));
+              setIva('0.00');
+              setTotal(amount.toFixed(2));
+            }}
+          />
+          {errors.salaryEmployee && (
+            <p className="text-sm text-red-500">{errors.salaryEmployee}</p>
+          )}
+        </>
+      )}
+
       {expenseType === 'OTHER' && (
-        <SalaryExpenseForm
-          employees={employees}
+        <ServiceExpenseForm
           onAmountChange={(amount) => {
             setSubtotal(amount.toFixed(2));
             setIva('0.00');
@@ -370,16 +437,16 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
           <div className={cn('flex flex-col gap-2 md:min-w-[200px]', expenseType !== 'MERCHANDISE' && 'md:ml-auto')} data-testid="expense-form-totals">
             <div className="flex justify-between text-sm">
               <span className="text-slate-600 dark:text-slate-400">Subtotal:</span>
-              <span className="font-medium" data-testid="expense-form-subtotal">${parseFloat(subtotal || '0').toLocaleString('es-CL', { minimumFractionDigits: 2 })}</span>
+              <span className="font-medium" data-testid="expense-form-subtotal">{formatCurrency(parseFloat(subtotal || '0'))}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-slate-600 dark:text-slate-400">IVA (19%):</span>
-              <span className="font-medium" data-testid="expense-form-iva">${parseFloat(iva || '0').toLocaleString('es-CL', { minimumFractionDigits: 2 })}</span>
+              <span className="font-medium" data-testid="expense-form-iva">{formatCurrency(parseFloat(iva || '0'))}</span>
             </div>
             <div className="flex justify-between border-t border-slate-200 pt-2 dark:border-slate-700">
               <span className="font-semibold text-slate-900 dark:text-white" data-testid="expense-form-total-label">Total a Pagar</span>
               <span className="text-lg font-bold text-blue-600 dark:text-blue-400" data-testid="expense-form-total">
-                ${parseFloat(total || '0').toLocaleString('es-CL', { minimumFractionDigits: 2 })}
+                {formatCurrency(parseFloat(total || '0'))}
               </span>
             </div>
           </div>

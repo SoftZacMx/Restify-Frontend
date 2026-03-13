@@ -6,6 +6,7 @@ import type {
   CashFlowReportData,
   SalesPerformanceReportData,
   ExpenseAnalysisReportData,
+  ReportsSummaryResponse,
 } from '@/domain/types';
 import { AppError } from '@/domain/errors';
 
@@ -39,6 +40,10 @@ export class ReportService {
 
   async generateExpenseAnalysisReport(params: Omit<GenerateReportParams, 'type'>): Promise<BaseReportResponse<ExpenseAnalysisReportData>> {
     return this.generateReport<ExpenseAnalysisReportData>({ ...params, type: 'EXPENSE_ANALYSIS' });
+  }
+
+  async getReportsSummary(params?: { dateFrom?: string; dateTo?: string }): Promise<ReportsSummaryResponse> {
+    return reportRepository.getReportsSummary(params);
   }
 }
 

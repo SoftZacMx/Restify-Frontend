@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 /**
- * E2E expenses: create expense (merchandise), verify calculations and that it is saved.
- * Requires backend API running (auth + products for merchandise).
+ * E2E expenses: create expense (merchandise + otros tipos), validaciones, persistencia.
+ * Requires backend API running (auth + products for merchandise, users for salary).
  */
 test.describe('Expenses', () => {
   test.beforeEach(async ({ page }) => {
@@ -25,11 +25,10 @@ test.describe('Expenses', () => {
     test.setTimeout(90_000);
     const title = `E2E Gasto Mercancía ${Date.now()}`;
 
-    // 3 productos: cantidad × precio unitario → total por línea; la suma debe coincidir con Subtotal y Total
     const items: { quantity: number; unit: string; unitPrice: number }[] = [
-      { quantity: 3, unit: 'Piezas', unitPrice: 100 },   // 300
-      { quantity: 2, unit: 'Kilogramos', unitPrice: 50 }, // 100
-      { quantity: 1, unit: 'Gramos', unitPrice: 10 },     // 10
+      { quantity: 3, unit: 'Piezas', unitPrice: 100 },
+      { quantity: 2, unit: 'Kilogramos', unitPrice: 50 },
+      { quantity: 1, unit: 'Gramos', unitPrice: 10 },
     ];
     const expectedTotal = items.reduce((sum, i) => sum + i.quantity * i.unitPrice, 0); // 410
 
@@ -78,14 +77,12 @@ test.describe('Expenses', () => {
       await row.getByPlaceholder('$ 0').fill(String(item.unitPrice));
     };
 
-    // 1.º producto: usar la fila que ya existe por defecto ("Seleccionar producto")
     await detailSection.getByRole('button', { name: /seleccionar producto/i }).first().click();
     await openProductDialogAndSelectFirst();
     const firstRow = detailSection.getByPlaceholder('0', { exact: true }).first().locator('..').locator('..');
     await firstRow.getByPlaceholder('0', { exact: true }).waitFor({ state: 'visible', timeout: 15_000 });
     await fillRow(firstRow, items[0]);
 
-    // 2.º y 3.º producto: agregar ítem y rellenar la nueva fila (última)
     for (const item of items.slice(1)) {
       await form.getByRole('button', { name: /agregar ítem/i }).click();
       await openProductDialogAndSelectFirst();
@@ -95,7 +92,6 @@ test.describe('Expenses', () => {
       await fillRow(row, item);
     }
 
-    // Subtotal y Total deben ser la suma de (cantidad × precio) de cada ítem
     const totalRegex = new RegExp(`\\$${expectedTotal}[,.]00`);
     await expect(form.getByTestId('expense-form-subtotal')).toHaveText(totalRegex, { timeout: 5_000 });
     await expect(form.getByTestId('expense-form-total')).toHaveText(totalRegex, { timeout: 5_000 });
@@ -107,7 +103,6 @@ test.describe('Expenses', () => {
     await expect(page.getByText(/gasto creado exitosamente/i)).toBeVisible({ timeout: 10_000 });
     await expect(page.getByText(title)).toBeVisible({ timeout: 10_000 });
 
-    // Persistencia: filtrar por "Compra de mercancía" y comprobar que el gasto aparece con el total correcto
     await page.getByRole('button', { name: /compra de mercancía/i }).click();
     const expenseRow = page.getByRole('row').filter({ has: page.getByText(title) });
     await expect(expenseRow).toBeVisible({ timeout: 5_000 });
@@ -270,14 +265,12 @@ test.describe('Expenses', () => {
     await typeTrigger.first().click({ timeout: 10_000 });
     await page.locator('[data-select-content]').getByText('Compra de mercancía', { exact: true }).click({ timeout: 10_000 });
     await form.getByLabel(/fecha de compra/i).fill(new Date().toISOString().split('T')[0]);
-    // No elegir método de pago
 
     await form.getByRole('button', { name: /guardar gasto/i }).click();
 
     await expect(form).toBeVisible();
     await expect(page.getByText(/método de pago es requerido/i)).toBeVisible({ timeout: 5_000 });
   });
-
 
   test('validación: fecha requerida', async ({ page }) => {
     test.setTimeout(45_000);
@@ -322,5 +315,147 @@ test.describe('Expenses', () => {
     await expect(formAgain.getByLabel(/título del gasto/i)).toHaveValue('');
     await expect(formAgain.getByRole('button', { name: /seleccionar tipo|tipo de gasto/i })).toBeVisible();
   });
-  
+
+  // --- Fase 4: Otros tipos de gasto ---
+
+  async function openNewExpenseAndFillGeneral(
+    page: import('@playwright/test').Page,
+    options: { title: string; typeLabel: string; amount: string }
+  ) {
+    await page.goto('/expenses');
+    await expect(page).toHaveURL(/\/expenses/);
+    await page.getByRole('button', { name: /nuevo gasto/i }).click();
+    const form = page.locator('form').filter({ has: page.getByLabel(/título del gasto/i) });
+    await expect(form).toBeVisible();
+    await form.getByLabel(/título del gasto/i).fill(options.title);
+    const typeTrigger = page.getByRole('button', { name: /seleccionar tipo|tipo de gasto/i });
+    await typeTrigger.first().click({ timeout: 10_000 });
+    await page.locator('[data-select-content]').getByText(options.typeLabel, { exact: true }).click({ timeout: 10_000 });
+    await form.getByLabel(/fecha de compra/i).fill(new Date().toISOString().split('T')[0]);
+    await form.getByRole('button', { name: /método de pago|seleccionar método/i }).click();
+    await page.locator('[data-select-content]').getByText('Transferencia', { exact: true }).click({ timeout: 10_000 });
+    await form.getByLabel(/cantidad pagada/i).fill(options.amount);
+    return form;
+  }
+
+  test('Fase 4.1: crear gasto Servicios del negocio y guardar', async ({ page }) => {
+    test.setTimeout(60_000);
+    const title = `E2E Servicios ${Date.now()}`;
+    const form = await openNewExpenseAndFillGeneral(page, {
+      title,
+      typeLabel: 'Servicios del negocio',
+      amount: '500',
+    });
+    await form.getByRole('button', { name: /guardar gasto/i }).click();
+    await expect(form).not.toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/gasto creado exitosamente/i)).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(title)).toBeVisible({ timeout: 10_000 });
+    await page.getByRole('button', { name: /servicios del negocio/i }).click();
+    const row = page.getByRole('row').filter({ has: page.getByText(title) });
+    await expect(row).toBeVisible({ timeout: 5_000 });
+  });
+
+  test('Fase 4.2: crear gasto Renta y guardar', async ({ page }) => {
+    test.setTimeout(60_000);
+    const title = `E2E Renta ${Date.now()}`;
+    const form = await openNewExpenseAndFillGeneral(page, {
+      title,
+      typeLabel: 'Renta',
+      amount: '1200',
+    });
+    await form.getByRole('button', { name: /guardar gasto/i }).click();
+    await expect(form).not.toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/gasto creado exitosamente/i)).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(title)).toBeVisible({ timeout: 10_000 });
+    await page.getByRole('button', { name: /^renta$/i }).click();
+    const row = page.getByRole('row').filter({ has: page.getByText(title) });
+    await expect(row).toBeVisible({ timeout: 5_000 });
+  });
+
+  test('Fase 4.3: crear gasto Servicios públicos y guardar', async ({ page }) => {
+    test.setTimeout(60_000);
+    const title = `E2E Servicios públicos ${Date.now()}`;
+    const form = await openNewExpenseAndFillGeneral(page, {
+      title,
+      typeLabel: 'Servicios públicos',
+      amount: '180',
+    });
+    await form.getByRole('button', { name: /guardar gasto/i }).click();
+    await expect(form).not.toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/gasto creado exitosamente/i)).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(title)).toBeVisible({ timeout: 10_000 });
+    await page.getByRole('button', { name: /servicios públicos/i }).click();
+    const row = page.getByRole('row').filter({ has: page.getByText(title) });
+    await expect(row).toBeVisible({ timeout: 5_000 });
+  });
+
+  test('Fase 4.4: crear gasto Otros y guardar', async ({ page }) => {
+    test.setTimeout(60_000);
+    const title = `E2E Otros ${Date.now()}`;
+    const form = await openNewExpenseAndFillGeneral(page, {
+      title,
+      typeLabel: 'Otros',
+      amount: '75',
+    });
+    await form.getByRole('button', { name: /guardar gasto/i }).click();
+    await expect(form).not.toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/gasto creado exitosamente/i)).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(title)).toBeVisible({ timeout: 10_000 });
+    await page.getByRole('button', { name: /^otros$/i }).click();
+    const row = page.getByRole('row').filter({ has: page.getByText(title) });
+    await expect(row).toBeVisible({ timeout: 5_000 });
+  });
+
+  test('Fase 4.5: crear gasto Salarios con empleado y guardar', async ({ page }) => {
+    test.setTimeout(60_000);
+    const title = `E2E Salario ${Date.now()}`;
+    await page.goto('/expenses');
+    await expect(page).toHaveURL(/\/expenses/);
+    await page.getByRole('button', { name: /nuevo gasto/i }).click();
+    const form = page.locator('form').filter({ has: page.getByLabel(/título del gasto/i) });
+    await expect(form).toBeVisible();
+    await form.getByLabel(/título del gasto/i).fill(title);
+    const typeTrigger = page.getByRole('button', { name: /seleccionar tipo|tipo de gasto/i });
+    await typeTrigger.first().click({ timeout: 10_000 });
+    await page.locator('[data-select-content]').getByText('Salarios', { exact: true }).click({ timeout: 10_000 });
+    await form.getByLabel(/fecha de compra/i).fill(new Date().toISOString().split('T')[0]);
+    await form.getByRole('button', { name: /método de pago|seleccionar método/i }).click();
+    await page.locator('[data-select-content]').getByText('Transferencia', { exact: true }).click({ timeout: 10_000 });
+
+    await form.getByRole('button', { name: /seleccionar empleado/i }).click();
+    await expect(page.getByRole('heading', { name: /seleccionar empleado/i })).toBeVisible({ timeout: 10_000 });
+    const dialogContent = page.getByRole('heading', { name: /seleccionar empleado/i }).locator('..').locator('..');
+    await dialogContent.locator('button').filter({ hasText: '@' }).first().click();
+    await dialogContent.getByRole('button', { name: 'Seleccionar' }).click();
+    await expect(page.getByRole('heading', { name: /seleccionar empleado/i })).not.toBeVisible({ timeout: 5_000 });
+
+    await form.getByLabel(/monto del pago/i).fill('2500');
+    await form.getByRole('button', { name: /guardar gasto/i }).click();
+
+    await expect(form).not.toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/gasto creado exitosamente/i)).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(title)).toBeVisible({ timeout: 10_000 });
+    await page.getByRole('button', { name: /salarios/i }).click();
+    const row = page.getByRole('row').filter({ has: page.getByText(title) });
+    await expect(row).toBeVisible({ timeout: 5_000 });
+  });
+
+  test('validación: Salarios requiere seleccionar empleado', async ({ page }) => {
+    test.setTimeout(45_000);
+    await page.goto('/expenses');
+    await expect(page).toHaveURL(/\/expenses/);
+    await page.getByRole('button', { name: /nuevo gasto/i }).click();
+    const form = page.locator('form').filter({ has: page.getByLabel(/título del gasto/i) });
+    await form.getByLabel(/título del gasto/i).fill('Salario sin empleado');
+    const typeTrigger = page.getByRole('button', { name: /seleccionar tipo|tipo de gasto/i });
+    await typeTrigger.first().click({ timeout: 10_000 });
+    await page.locator('[data-select-content]').getByText('Salarios', { exact: true }).click({ timeout: 10_000 });
+    await form.getByLabel(/fecha de compra/i).fill(new Date().toISOString().split('T')[0]);
+    await form.getByRole('button', { name: /método de pago|seleccionar método/i }).click();
+    await page.locator('[data-select-content]').getByText('Transferencia', { exact: true }).click({ timeout: 10_000 });
+    await form.getByLabel(/monto del pago/i).fill('1000');
+    await form.getByRole('button', { name: /guardar gasto/i }).click();
+    await expect(form).toBeVisible();
+    await expect(page.getByText(/debes seleccionar un empleado/i)).toBeVisible({ timeout: 5_000 });
+  });
 });

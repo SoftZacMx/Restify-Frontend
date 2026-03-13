@@ -2,7 +2,7 @@
  * Tipos relacionados con gastos (expenses)
  */
 
-export type ExpenseType = 'SERVICE_BUSINESS' | 'UTILITY' | 'RENT' | 'MERCHANDISE' | 'OTHER';
+export type ExpenseType = 'SERVICE_BUSINESS' | 'UTILITY' | 'RENT' | 'MERCHANDISE' | 'SALARY' | 'OTHER';
 
 export type PaymentMethod = 1 | 2 | 3; // 1: Cash, 2: Transfer, 3: Card
 
@@ -112,7 +112,7 @@ export interface ExpenseTableItem {
  */
 export interface CreateExpenseRequestNoItems {
   title: string; // Obligatorio, mín. 1 carácter, máx. 200
-  type: 'SERVICE_BUSINESS' | 'UTILITY' | 'RENT' | 'OTHER';
+  type: 'SERVICE_BUSINESS' | 'UTILITY' | 'RENT' | 'SALARY' | 'OTHER';
   total: number;
   subtotal: number;
   iva: number;

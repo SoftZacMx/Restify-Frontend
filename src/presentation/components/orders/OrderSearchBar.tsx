@@ -100,8 +100,10 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
         {/* Estado */}
         <Select value={filters.status} onValueChange={handleStatusChange}>
           <SelectTrigger className="w-full sm:w-[180px]">
-            <Filter className="h-4 w-4 mr-2 text-slate-400" />
-            <SelectValue placeholder="Estado" />
+            <span className="flex items-center gap-2">
+              <Filter className="h-4 w-4 shrink-0 text-slate-400" />
+              <SelectValue placeholder="Estado" />
+            </span>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos los estados</SelectItem>

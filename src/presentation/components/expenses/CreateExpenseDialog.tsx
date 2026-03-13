@@ -33,7 +33,7 @@ export const CreateExpenseDialog: React.FC<CreateExpenseDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl w-full max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 shadow-xl rounded-xl">
+      <DialogContent className="w-full md:w-[55vw] max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 shadow-xl rounded-xl">
         <DialogHeader className="flex flex-row items-start gap-3 pr-10">
           <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
             <ShoppingCart className="h-5 w-5" />
