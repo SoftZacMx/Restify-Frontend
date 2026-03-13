@@ -106,8 +106,8 @@ const ReportsPage = () => {
           <div className="px-4 py-4 bg-gradient-to-br from-slate-50 via-white to-primary/5 dark:from-slate-900/80 dark:via-slate-900/50 dark:to-primary/10">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                  <span className="rounded-xl bg-primary/10 p-2 text-primary">Reportes</span>
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+                  Reportes
                 </h1>
                 <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
                   {viewMode === 'summary'
