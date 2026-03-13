@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/presentation/contexts/theme.context';
 import { PaletteProvider } from '@/presentation/contexts/palette.context';
 import { SidebarProvider } from '@/presentation/contexts/sidebar.context';
 import { WebSocketProvider } from '@/presentation/contexts/websocket.context';
+import { ErrorBoundary } from '@/presentation/components/ErrorBoundary';
 
 // Pages
 import LoginPage from '@/presentation/pages/auth/LoginPage';
@@ -43,6 +44,7 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <ThemeProvider>
+      <ErrorBoundary>
       <PaletteProvider>
       <SidebarProvider>
         <QueryClientProvider client={queryClient}>
@@ -211,6 +213,7 @@ function App() {
         </QueryClientProvider>
       </SidebarProvider>
       </PaletteProvider>
+      </ErrorBoundary>
     </ThemeProvider>
   );
 }
