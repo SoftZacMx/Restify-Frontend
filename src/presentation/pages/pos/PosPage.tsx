@@ -116,15 +116,12 @@ const PosPage = () => {
   const [validationErrors, setValidationErrors] = React.useState<OrderFormErrors>({});
   const [savedOrder, setSavedOrder] = React.useState<CreateOrderResponse | null>(null);
   const [isSavingOrder, setIsSavingOrder] = React.useState(false);
-<<<<<<< HEAD
   const [isTableDialogOpen, setIsTableDialogOpen] = React.useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = React.useState(false);
 
   const selectedTable = selectedTableId
     ? tables.find((t) => t.id === selectedTableId)
     : undefined;
-=======
-  const [isProcessingPayment, setIsProcessingPayment] = React.useState(false);
->>>>>>> 840d6d75767b5c6aa0760f1a81178da924491aaa
 
   /**
    * Mapea el método de pago del POS al formato numérico del backend

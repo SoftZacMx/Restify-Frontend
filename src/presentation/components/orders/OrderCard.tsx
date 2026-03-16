@@ -83,11 +83,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   return (
     <Card
       className={cn(
-<<<<<<< HEAD
         'w-full min-w-0 hover:shadow-lg transition-shadow duration-200 border-l-4',
-=======
-        'hover:shadow-lg transition-shadow duration-200 border-l-4 min-w-0 overflow-hidden',
->>>>>>> 840d6d75767b5c6aa0760f1a81178da924491aaa
         getBorderColor()
       )}
     >
