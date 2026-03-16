@@ -15,6 +15,7 @@ import { Button } from '@/presentation/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card';
 import { Input } from '@/presentation/components/ui/input';
 import { Badge } from '@/presentation/components/ui/badge';
+import { LoadingOverlay } from '@/presentation/components/ui/loading-overlay';
 // Ya no usamos PRODUCT_CATEGORIES, ahora cargamos categorías del backend
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { useAuthStore } from '@/presentation/store/auth.store';
@@ -115,11 +116,15 @@ const PosPage = () => {
   const [validationErrors, setValidationErrors] = React.useState<OrderFormErrors>({});
   const [savedOrder, setSavedOrder] = React.useState<CreateOrderResponse | null>(null);
   const [isSavingOrder, setIsSavingOrder] = React.useState(false);
+<<<<<<< HEAD
   const [isTableDialogOpen, setIsTableDialogOpen] = React.useState(false);
 
   const selectedTable = selectedTableId
     ? tables.find((t) => t.id === selectedTableId)
     : undefined;
+=======
+  const [isProcessingPayment, setIsProcessingPayment] = React.useState(false);
+>>>>>>> 840d6d75767b5c6aa0760f1a81178da924491aaa
 
   /**
    * Mapea el método de pago del POS al formato numérico del backend
@@ -348,6 +353,7 @@ const PosPage = () => {
     const orderTotal = loadedOrder ? loadedOrder.total : cartState.total;
     const amountRounded = Math.round(orderTotal * 100) / 100;
 
+    setIsProcessingPayment(true);
     try {
       // Pago único: intentar POST /api/orders/:order_id/pay; si 404, fallback a PUT updateOrder
       if (!selectedMethod2) {
@@ -419,6 +425,8 @@ const PosPage = () => {
       } else {
         showErrorToast('Error', 'No se pudo procesar el pago');
       }
+    } finally {
+      setIsProcessingPayment(false);
     }
   };
 
@@ -472,6 +480,10 @@ const PosPage = () => {
 
   return (
     <MainLayout>
+      <LoadingOverlay
+        open={isSavingOrder || isProcessingPayment}
+        message={isProcessingPayment ? 'Procesando pago...' : 'Guardando orden...'}
+      />
       <div className="space-y-6 p-6 bg-slate-50 dark:bg-slate-900 min-h-screen">
         {/* Banner de orden cargada */}
         {loadedOrder && (
@@ -611,7 +623,7 @@ const PosPage = () => {
             onMethod1Change={handleMethod1Change}
             onMethod2Change={handleMethod2Change}
             onProcessPayment={handleProcessPayment}
-            isProcessPaymentEnabled={isPaymentButtonEnabled()}
+            isProcessPaymentEnabled={isPaymentButtonEnabled() && !isProcessingPayment}
           />
         )}
 

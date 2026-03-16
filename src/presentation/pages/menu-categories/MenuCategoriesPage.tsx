@@ -16,7 +16,7 @@ import {
 } from '@/presentation/components/ui/alert-dialog';
 import { MenuCategorySearchBar } from '@/presentation/components/menu-categories/MenuCategorySearchBar';
 import { MenuCategoryTable } from '@/presentation/components/menu-categories/MenuCategoryTable';
-import { MenuCategoryPagination } from '@/presentation/components/menu-categories/MenuCategoryPagination';
+import { Pagination } from '@/presentation/components/ui/pagination';
 import { CreateMenuCategoryForm } from '@/presentation/components/menu-categories/CreateMenuCategoryForm';
 import { menuCategoryService } from '@/application/services';
 import type { MenuCategoryTableFilters, PaginationData, CreateMenuCategoryRequest } from '@/domain/types';
@@ -30,7 +30,8 @@ import { AppError } from '@/domain/errors';
  * Cumple SRP: Solo maneja el estado y la lógica de la página
  */
 
-const ITEMS_PER_PAGE = 10;
+const PAGE_SIZE_OPTIONS = [10, 20, 50];
+const DEFAULT_ITEMS_PER_PAGE = 10;
 
 const MenuCategoriesPage: React.FC = () => {
   const [filters, setFilters] = useState<MenuCategoryTableFilters>({
@@ -38,6 +39,7 @@ const MenuCategoriesPage: React.FC = () => {
     status: undefined,
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
 
@@ -115,24 +117,24 @@ const MenuCategoriesPage: React.FC = () => {
    */
   const paginationData: PaginationData = useMemo(() => {
     const totalItems = filteredCategories.length;
-    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     return {
       currentPage,
       totalPages: totalPages || 1,
       totalItems,
-      itemsPerPage: ITEMS_PER_PAGE,
+      itemsPerPage,
     };
-  }, [filteredCategories.length, currentPage]);
+  }, [filteredCategories.length, currentPage, itemsPerPage]);
 
   /**
    * Obtiene categorías para la página actual
    */
   const paginatedCategories = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
     return filteredCategories.slice(startIndex, endIndex);
-  }, [filteredCategories, currentPage]);
+  }, [filteredCategories, currentPage, itemsPerPage]);
 
   /**
    * Convierte categorías a formato de tabla
@@ -155,6 +157,11 @@ const MenuCategoriesPage: React.FC = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePageSizeChange = (pageSize: number) => {
+    setItemsPerPage(pageSize);
+    setCurrentPage(1);
   };
 
   const [categoryToDelete, setCategoryToDelete] = useState<{ id: string; name: string } | null>(null);
@@ -304,9 +311,15 @@ const MenuCategoriesPage: React.FC = () => {
       />
 
       {paginationData.totalItems > 0 && (
-        <MenuCategoryPagination
-          pagination={paginationData}
+        <Pagination
+          currentPage={paginationData.currentPage}
+          totalPages={paginationData.totalPages}
+          totalItems={paginationData.totalItems}
+          itemsPerPage={paginationData.itemsPerPage}
+          itemsLabel="categorías"
+          pageSizeOptions={PAGE_SIZE_OPTIONS}
           onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
         />
       )}
 

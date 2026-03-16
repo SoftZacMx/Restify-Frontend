@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { LogOut, UtensilsCrossed, ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/presentation/hooks/useAuth';
 import { useSidebarNavigation, type NavItem } from '@/presentation/hooks/useSidebarNavigation';
 import { useSidebar } from '@/presentation/contexts/sidebar.context';
 import { Tooltip } from '@/presentation/components/ui/tooltip';
 import { Button } from '@/presentation/components/ui/button';
 import { cn } from '@/shared/lib/utils';
+import { companyService } from '@/application/services';
 
 /**
  * Componente Sidebar
@@ -18,6 +20,13 @@ export const Sidebar = () => {
   const { mainNavItems, bottomNavItems, isActive, handleNavigate, currentPath } = useSidebarNavigation();
   const { isCollapsed, isMobile, isMobileOpen, toggleSidebar, closeSidebar } = useSidebar();
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+
+  const { data: company } = useQuery({
+    queryKey: ['company'],
+    queryFn: () => companyService.getCompany(),
+    staleTime: 5 * 60 * 1000,
+  });
+  const businessName = company?.name ?? 'Restify';
 
   const handleLogout = async () => {
     await logout();
@@ -102,8 +111,8 @@ export const Sidebar = () => {
         <div className={cn('p-6 flex items-center gap-2', isCollapsed && 'justify-center px-2')}>
           <UtensilsCrossed className="h-6 w-6 text-blue-600 dark:text-blue-400 flex-shrink-0" />
           {!isCollapsed && (
-            <span className="text-xl font-bold text-slate-900 dark:text-slate-100 whitespace-nowrap">
-              Restify
+            <span className="text-xl font-bold text-slate-900 dark:text-slate-100 whitespace-nowrap truncate" title={businessName}>
+              {businessName}
             </span>
           )}
           {/* Botón de toggle para desktop */}

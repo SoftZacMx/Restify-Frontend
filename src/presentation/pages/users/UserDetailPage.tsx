@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Edit, ArrowLeft } from 'lucide-react';
+import { Edit, ArrowLeft, UserCog } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { Button } from '@/presentation/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/presentation/components/ui/dialog';
@@ -146,7 +146,12 @@ const UserDetailPage: React.FC = () => {
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogClose />
             <DialogHeader>
-              <DialogTitle>Editar Usuario</DialogTitle>
+              <div className="flex items-center gap-2">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <UserCog className="h-5 w-5" />
+                </div>
+                <DialogTitle>Editar Usuario</DialogTitle>
+              </div>
             </DialogHeader>
             <EditUserForm
               user={user}

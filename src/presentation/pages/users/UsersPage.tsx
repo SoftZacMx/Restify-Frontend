@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, UserPlus } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { Button } from '@/presentation/components/ui/button';
@@ -16,7 +16,7 @@ import {
 } from '@/presentation/components/ui/alert-dialog';
 import { UserSearchBar } from '@/presentation/components/users/UserSearchBar';
 import { UserTable } from '@/presentation/components/users/UserTable';
-import { UserPagination } from '@/presentation/components/users/UserPagination';
+import { Pagination } from '@/presentation/components/ui/pagination';
 import { CreateUserForm } from '@/presentation/components/users/CreateUserForm';
 import { UserService } from '@/application/services/user.service';
 import type { UserTableFilters, PaginationData, CreateUserRequest } from '@/domain/types';
@@ -30,7 +30,8 @@ import { AppError } from '@/domain/errors';
  * Cumple SRP: Solo maneja el estado y la lógica de la página
  */
 
-const ITEMS_PER_PAGE = 5;
+const PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
+const DEFAULT_ITEMS_PER_PAGE = 5;
 
 const UsersPage: React.FC = () => {
   const [filters, setFilters] = useState<UserTableFilters>({
@@ -39,6 +40,7 @@ const UsersPage: React.FC = () => {
     status: undefined,
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isCreatingUser, setIsCreatingUser] = useState(false);
   
@@ -135,24 +137,24 @@ const UsersPage: React.FC = () => {
    */
   const paginationData: PaginationData = useMemo(() => {
     const totalItems = filteredUsers.length;
-    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     return {
       currentPage,
       totalPages: totalPages || 1,
       totalItems,
-      itemsPerPage: ITEMS_PER_PAGE,
+      itemsPerPage,
     };
-  }, [filteredUsers.length, currentPage]);
+  }, [filteredUsers.length, currentPage, itemsPerPage]);
 
   /**
    * Obtiene usuarios para la página actual
    */
   const paginatedUsers = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
     return filteredUsers.slice(startIndex, endIndex);
-  }, [filteredUsers, currentPage]);
+  }, [filteredUsers, currentPage, itemsPerPage]);
 
   /**
    * Convierte usuarios a formato de tabla
@@ -174,8 +176,12 @@ const UsersPage: React.FC = () => {
    */
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll al inicio de la tabla
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePageSizeChange = (pageSize: number) => {
+    setItemsPerPage(pageSize);
+    setCurrentPage(1);
   };
 
   const [userToDelete, setUserToDelete] = useState<{ id: string; name: string } | null>(null);
@@ -339,18 +345,29 @@ const UsersPage: React.FC = () => {
       />
 
       {paginationData.totalItems > 0 && (
-        <UserPagination
-          pagination={paginationData}
+        <Pagination
+          currentPage={paginationData.currentPage}
+          totalPages={paginationData.totalPages}
+          totalItems={paginationData.totalItems}
+          itemsPerPage={paginationData.itemsPerPage}
+          itemsLabel="usuarios"
+          pageSizeOptions={PAGE_SIZE_OPTIONS}
           onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
         />
       )}
 
       {/* Modal de Creación de Usuario */}
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-full md:w-[45vw] max-h-[90vh] overflow-y-auto">
           <DialogClose />
           <DialogHeader>
-            <DialogTitle>Crear Nuevo Usuario</DialogTitle>
+            <div className="flex items-center gap-2">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <UserPlus className="h-5 w-5" />
+              </div>
+              <DialogTitle>Crear Nuevo Usuario</DialogTitle>
+            </div>
           </DialogHeader>
           <CreateUserForm
             onSubmit={handleCreateUser}

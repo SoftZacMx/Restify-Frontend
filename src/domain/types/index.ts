@@ -280,4 +280,14 @@ export type {
   ExpenseAnalysisReportData,
   ReportsApiResponse,
   GenerateReportParams,
+  ReportsSummaryKpis,
+  ReportsSummarySalesByDay,
+  ReportsSummaryPaymentItem,
+  ReportsSummaryTopProduct,
+  ReportsSummaryExpenseByCategory,
+  ReportsSummaryDailyRow,
+  ReportsSummaryResponse,
 } from './report.types';
+
+// Re-export company types (configuración de la compañía)
+export type { CompanyResponse, UpsertCompanyRequest } from './company.types';

@@ -9,6 +9,7 @@ export function getExpenseTypeLabel(type: ExpenseType): string {
     UTILITY: 'Servicios públicos',
     RENT: 'Renta',
     MERCHANDISE: 'Compra de mercancía',
+    SALARY: 'Salarios',
     OTHER: 'Otros',
   };
   return labels[type] || type;
@@ -23,6 +24,7 @@ export function getExpenseTypeBadgeColor(type: ExpenseType): string {
     UTILITY: 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300',
     RENT: 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300',
     MERCHANDISE: 'bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-300',
+    SALARY: 'bg-violet-100 dark:bg-violet-900/50 text-violet-800 dark:text-violet-300',
     OTHER: 'bg-gray-100 dark:bg-gray-900/50 text-gray-800 dark:text-gray-300',
   };
   return colors[type] || '';
@@ -83,15 +85,7 @@ export function formatExpensesForTable(expenses: ExpenseListItem[]): ExpenseTabl
   return expenses.map(formatExpenseForTable);
 }
 
-/**
- * Formatea un número como moneda
- */
-export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('es-MX', {
-    style: 'currency',
-    currency: 'MXN',
-  }).format(amount);
-}
+export { formatCurrency } from './currency.utils';
 
 /**
  * Formatea una fecha

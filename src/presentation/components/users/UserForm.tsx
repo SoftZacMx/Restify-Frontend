@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Briefcase, Lock, Settings, Save, UtensilsCrossed, ChefHat, UserCog, Shield } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
 import { Button } from '@/presentation/components/ui/button';
 import { Label } from '@/presentation/components/ui/label';
@@ -13,6 +13,17 @@ import {
   getPasswordStrengthTextColor,
 } from '@/shared/utils/password.utils';
 import { cn } from '@/shared/lib/utils';
+import { INPUT_LENGTH } from '@/shared/constants';
+
+const PHONE_DIGITS = 10;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const roleConfig: Record<UserRole, { label: string; Icon: React.ComponentType<{ className?: string }> }> = {
+  WAITER: { label: 'Mesero', Icon: UtensilsCrossed },
+  CHEF: { label: 'Cocinero', Icon: ChefHat },
+  MANAGER: { label: 'Gerente', Icon: UserCog },
+  ADMIN: { label: 'Administrador', Icon: Shield },
+};
 
 interface UserFormProps {
   initialData?: User | null; // Si se proporciona, es modo edición
@@ -73,18 +84,35 @@ export const UserForm: React.FC<UserFormProps> = ({
     // Validar nombre
     if (!formData.name.trim()) {
       newErrors.name = 'El nombre es requerido';
+    } else if (formData.name.length > INPUT_LENGTH.simple_input) {
+      newErrors.name = `El nombre no puede superar ${INPUT_LENGTH.simple_input} caracteres`;
     }
 
     // Validar apellido
     if (!formData.last_name.trim()) {
       newErrors.last_name = 'El apellido es requerido';
+    } else if (formData.last_name.length > INPUT_LENGTH.simple_input) {
+      newErrors.last_name = `El apellido no puede superar ${INPUT_LENGTH.simple_input} caracteres`;
+    }
+
+    // Validar segundo apellido (solo longitud si tiene valor)
+    if (formData.second_last_name && formData.second_last_name.length > INPUT_LENGTH.simple_input) {
+      newErrors.second_last_name = `El segundo apellido no puede superar ${INPUT_LENGTH.simple_input} caracteres`;
     }
 
     // Validar email
     if (!formData.email.trim()) {
       newErrors.email = 'El email es requerido';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    } else if (!EMAIL_REGEX.test(formData.email)) {
       newErrors.email = 'El formato del email no es válido';
+    }
+
+    // Validar teléfono: si tiene valor, debe ser exactamente 10 dígitos
+    if (formData.phone && formData.phone.trim()) {
+      const digitsOnly = formData.phone.replace(/\D/g, '');
+      if (digitsOnly.length !== PHONE_DIGITS) {
+        newErrors.phone = `El teléfono debe tener ${PHONE_DIGITS} dígitos`;
+      }
     }
 
     // Validar contraseña (solo requerida en modo creación)
@@ -139,11 +167,14 @@ export const UserForm: React.FC<UserFormProps> = ({
     }
 
     try {
-      // Limpiar campos opcionales vacíos
+      // Normalizar teléfono: solo dígitos, si tiene 10 se envía
+      const phoneDigits = formData.phone?.replace(/\D/g, '') || '';
+      const phoneValue = phoneDigits.length === PHONE_DIGITS ? phoneDigits : (formData.phone?.trim() || null);
+
       const userData: CreateUserRequest | UpdateUserRequest = {
         ...formData,
         second_last_name: formData.second_last_name?.trim() || null,
-        phone: formData.phone?.trim() || null,
+        phone: phoneValue,
       };
 
       // En modo edición, solo incluir password si se proporcionó
@@ -178,248 +209,213 @@ export const UserForm: React.FC<UserFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      {/* Sección: Información Personal */}
+      {/* INFORMACIÓN PERSONAL */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-          Información Personal
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-          Datos básicos {isEditMode ? 'del usuario' : 'del nuevo miembro del equipo'}.
-        </p>
+        <div className="flex items-center gap-2 mb-4">
+          <Briefcase className="h-5 w-5 text-slate-500 dark:text-slate-400 shrink-0" />
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-900 dark:text-white">
+            Información personal
+          </h2>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Nombre */}
-          <div className="flex flex-col">
-            <Label htmlFor="name" className="text-gray-800 dark:text-gray-200 text-sm font-medium leading-normal pb-2">
-              Nombre <span className="text-red-600 dark:text-red-400">*</span>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="name" className="text-sm font-medium text-slate-800 dark:text-slate-200">
+              Nombre <span className="text-red-500">*</span>
             </Label>
             <Input
               id="name"
               type="text"
-              placeholder="Ingrese el nombre"
+              placeholder="Ej. Juan"
+              maxLength={INPUT_LENGTH.simple_input}
               value={formData.name}
               onChange={(e) => handleChange('name', e.target.value)}
-              className={cn(
-                'h-11',
-                errors.name && 'border-red-600 dark:border-red-400 focus:ring-red-600/50 focus:border-red-600'
-              )}
+              className={cn('h-11 rounded-lg', errors.name && 'border-red-500 focus-visible:ring-red-500')}
               required
             />
-            {errors.name && (
-              <p className="text-red-600 dark:text-red-400 text-xs mt-1.5">{errors.name}</p>
-            )}
+            <p className="text-xs text-slate-500 dark:text-slate-400">{formData.name.length}/{INPUT_LENGTH.simple_input}</p>
+            {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
           </div>
-
-          {/* Apellido */}
-          <div className="flex flex-col">
-            <Label htmlFor="last_name" className="text-gray-800 dark:text-gray-200 text-sm font-medium leading-normal pb-2">
-              Apellido <span className="text-red-600 dark:text-red-400">*</span>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="last_name" className="text-sm font-medium text-slate-800 dark:text-slate-200">
+              Apellido <span className="text-red-500">*</span>
             </Label>
             <Input
               id="last_name"
               type="text"
-              placeholder="Ingrese el apellido"
+              placeholder="Ej. Pérez"
+              maxLength={INPUT_LENGTH.simple_input}
               value={formData.last_name}
               onChange={(e) => handleChange('last_name', e.target.value)}
-              className={cn(
-                'h-11',
-                errors.last_name && 'border-red-600 dark:border-red-400 focus:ring-red-600/50 focus:border-red-600'
-              )}
+              className={cn('h-11 rounded-lg', errors.last_name && 'border-red-500 focus-visible:ring-red-500')}
               required
             />
-            {errors.last_name && (
-              <p className="text-red-600 dark:text-red-400 text-xs mt-1.5">{errors.last_name}</p>
-            )}
+            <p className="text-xs text-slate-500 dark:text-slate-400">{formData.last_name.length}/{INPUT_LENGTH.simple_input}</p>
+            {errors.last_name && <p className="text-red-500 text-xs">{errors.last_name}</p>}
           </div>
-
-          {/* Segundo Apellido */}
-          <div className="flex flex-col">
-            <Label htmlFor="second_last_name" className="text-gray-800 dark:text-gray-200 text-sm font-medium leading-normal pb-2">
-              Segundo apellido (opcional)
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="second_last_name" className="text-sm font-medium text-slate-800 dark:text-slate-200">
+              Segundo apellido <span className="text-slate-400 dark:text-slate-500 font-normal text-xs">(opcional)</span>
             </Label>
             <Input
               id="second_last_name"
               type="text"
-              placeholder="Ingrese el segundo apellido"
+              placeholder="Ej. García"
+              maxLength={INPUT_LENGTH.simple_input}
               value={formData.second_last_name || ''}
               onChange={(e) => handleChange('second_last_name', e.target.value)}
-              className="h-11"
+              className={cn('h-11 rounded-lg', errors.second_last_name && 'border-red-500 focus-visible:ring-red-500')}
             />
+            <p className="text-xs text-slate-500 dark:text-slate-400">{(formData.second_last_name || '').length}/{INPUT_LENGTH.simple_input}</p>
+            {errors.second_last_name && <p className="text-red-500 text-xs">{errors.second_last_name}</p>}
           </div>
-
-          {/* Teléfono */}
-          <div className="flex flex-col">
-            <Label htmlFor="phone" className="text-gray-800 dark:text-gray-200 text-sm font-medium leading-normal pb-2">
-              Teléfono (opcional)
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="phone" className="text-sm font-medium text-slate-800 dark:text-slate-200">
+              Teléfono <span className="text-slate-400 dark:text-slate-500 font-normal text-xs">(opcional, 10 dígitos)</span>
             </Label>
             <Input
               id="phone"
               type="tel"
-              placeholder="+1 (555) 123-4567"
+              inputMode="numeric"
+              placeholder="Ej. 5512345678"
+              maxLength={PHONE_DIGITS + 4}
               value={formData.phone || ''}
               onChange={(e) => handleChange('phone', e.target.value)}
-              className="h-11"
+              className={cn('h-11 rounded-lg', errors.phone && 'border-red-500 focus-visible:ring-red-500')}
             />
+            {errors.phone && <p className="text-red-500 text-xs">{errors.phone}</p>}
           </div>
         </div>
       </div>
 
-      <div className="border-t border-gray-200 dark:border-gray-800" />
+      <div className="border-t border-slate-200 dark:border-slate-700" />
 
-      {/* Sección: Credenciales y Acceso */}
+      {/* CREDENCIALES Y ACCESO */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-          Credenciales y Acceso
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-          Información para el inicio de sesión y contacto.
-        </p>
+        <div className="flex items-center gap-2 mb-4">
+          <Lock className="h-5 w-5 text-slate-500 dark:text-slate-400 shrink-0" />
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-900 dark:text-white">
+            Credenciales y acceso
+          </h2>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Email */}
-          <div className="flex flex-col">
-            <Label htmlFor="email" className="text-gray-800 dark:text-gray-200 text-sm font-medium leading-normal pb-2">
-              Email <span className="text-red-600 dark:text-red-400">*</span>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="email" className="text-sm font-medium text-slate-800 dark:text-slate-200">
+              Email <span className="text-red-500">*</span>
             </Label>
             <Input
               id="email"
               type="email"
-              placeholder="ejemplo@dominio.com"
+              placeholder="usuario@empresa.com"
               value={formData.email}
               onChange={(e) => handleChange('email', e.target.value)}
-              className={cn(
-                'h-11',
-                errors.email && 'border-red-600 dark:border-red-400 focus:ring-red-600/50 focus:border-red-600'
-              )}
+              className={cn('h-11 rounded-lg', errors.email && 'border-red-500 focus-visible:ring-red-500')}
               required
             />
-            {errors.email && (
-              <p className="text-red-600 dark:text-red-400 text-xs mt-1.5">{errors.email}</p>
-            )}
+            {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
           </div>
-
-          {/* Contraseña */}
-          <div className="flex flex-col">
-            <Label htmlFor="password" className="text-gray-800 dark:text-gray-200 text-sm font-medium leading-normal pb-2">
-              {isEditMode ? 'Nueva contraseña (opcional)' : 'Contraseña'} <span className="text-red-600 dark:text-red-400">{!isEditMode && '*'}</span>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="password" className="text-sm font-medium text-slate-800 dark:text-slate-200">
+              Contraseña {!isEditMode && <span className="text-red-500">*</span>}
+              {isEditMode && <span className="text-slate-400 dark:text-slate-500 font-normal text-xs">(opcional)</span>}
             </Label>
             <div className="relative">
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
-                placeholder={isEditMode ? 'Dejar vacío para mantener la actual' : 'Ingrese la contraseña'}
+                placeholder={isEditMode ? 'Dejar vacío para mantener la actual' : '••••••••'}
                 value={formData.password}
                 onChange={(e) => handleChange('password', e.target.value)}
-                className={cn(
-                  'h-11 pr-10',
-                  errors.password && 'border-red-600 dark:border-red-400 focus:ring-red-600/50 focus:border-red-600'
-                )}
+                className={cn('h-11 rounded-lg pr-10', errors.password && 'border-red-500 focus-visible:ring-red-500')}
                 required={!isEditMode}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
               >
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
-            {errors.password && (
-              <p className="text-red-600 dark:text-red-400 text-xs mt-1.5">{errors.password}</p>
-            )}
-            {/* Indicador de fortaleza de contraseña */}
+            {errors.password && <p className="text-red-500 text-xs">{errors.password}</p>}
             {formData.password && (
-              <div className="flex items-center gap-2 mt-2">
-                <div className="flex-1 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+              <div className="flex items-center gap-2 mt-1.5">
+                <div className="flex-1 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                   <div
                     className={cn('h-full rounded-full transition-all', passwordStrengthColor)}
                     style={{ width: `${passwordStrengthPercentage}%` }}
                   />
                 </div>
-                <p className={cn('text-xs font-medium', passwordStrengthTextColor)}>
-                  {passwordStrengthLabel}
-                </p>
+                <p className={cn('text-xs font-medium', passwordStrengthTextColor)}>{passwordStrengthLabel}</p>
               </div>
-            )}
-            {isEditMode && !formData.password && (
-              <p className="text-gray-500 dark:text-gray-400 text-xs mt-1.5">
-                Dejar vacío para mantener la contraseña actual
-              </p>
             )}
           </div>
         </div>
       </div>
 
-      <div className="border-t border-gray-200 dark:border-gray-800" />
+      <div className="border-t border-slate-200 dark:border-slate-700" />
 
-      {/* Sección: Configuración del Sistema */}
+      {/* CONFIGURACIÓN DEL SISTEMA */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-          Configuración del Sistema
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-          Define los permisos y el estado {isEditMode ? 'del usuario' : 'inicial del usuario'}.
-        </p>
+        <div className="flex items-center gap-2 mb-4">
+          <Settings className="h-5 w-5 text-slate-500 dark:text-slate-400 shrink-0" />
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-900 dark:text-white">
+            Configuración del sistema
+          </h2>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-          {/* Rol */}
-          <div className="flex flex-col">
-            <Label htmlFor="rol" className="text-gray-800 dark:text-gray-200 text-sm font-medium leading-normal pb-2">
-              Rol del usuario <span className="text-red-600 dark:text-red-400">*</span>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="rol" className="text-sm font-medium text-slate-800 dark:text-slate-200">
+              Rol del usuario <span className="text-red-500">*</span>
             </Label>
-            <Select
-              value={formData.rol}
-              onValueChange={(value) => handleChange('rol', value as UserRole)}
-            >
-              <SelectTrigger id="rol" className="h-11">
-                {formData.rol === 'WAITER' && 'Mesero (Waiter)'}
-                {formData.rol === 'CHEF' && 'Cocinero (Chef)'}
-                {formData.rol === 'MANAGER' && 'Gerente (Manager)'}
-                {formData.rol === 'ADMIN' && 'Administrador'}
+            <Select value={formData.rol} onValueChange={(value) => handleChange('rol', value as UserRole)}>
+              <SelectTrigger id="rol" className="h-11 rounded-lg">
+                <span className="flex items-center justify-between w-full gap-3">
+                  <span>{roleConfig[formData.rol].label}</span>
+                  {React.createElement(roleConfig[formData.rol].Icon, { className: 'h-4 w-4 text-slate-500 dark:text-slate-400 shrink-0 ml-1' })}
+                </span>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="WAITER">Mesero (Waiter)</SelectItem>
-                <SelectItem value="CHEF">Cocinero (Chef)</SelectItem>
-                <SelectItem value="MANAGER">Gerente (Manager)</SelectItem>
-                <SelectItem value="ADMIN">Administrador</SelectItem>
+                {(Object.entries(roleConfig) as [UserRole, typeof roleConfig[UserRole]][]).map(([role, { label, Icon }]) => (
+                  <SelectItem key={role} value={role}>
+                    <span className="flex items-center justify-between w-full gap-3">
+                      <span>{label}</span>
+                      <Icon className="h-4 w-4 text-slate-500 dark:text-slate-400 shrink-0 ml-1" />
+                    </span>
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
-            {errors.rol && (
-              <p className="text-red-600 dark:text-red-400 text-xs mt-1.5">{errors.rol}</p>
-            )}
+            {errors.rol && <p className="text-red-500 text-xs">{errors.rol}</p>}
           </div>
-
-          {/* Estado */}
-          <div className="flex flex-col">
-            <Label className="text-gray-800 dark:text-gray-200 text-sm font-medium leading-normal pb-2">
+          <div className="flex flex-col gap-2">
+            <Label className="text-sm font-medium text-slate-800 dark:text-slate-200">
               Estado de la cuenta
             </Label>
-            <div className="flex items-center space-x-3 h-11">
+            <div className="flex items-center gap-3 h-11">
               <Switch
                 checked={formData.status}
                 onCheckedChange={(checked) => handleChange('status', checked)}
               />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {formData.status ? 'Activo' : 'Inactivo'}
+              <span className="text-sm text-slate-700 dark:text-slate-300">
+                Permitir acceso inmediato
               </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Botones de acción */}
+      {/* Botones */}
       <div className="flex justify-end gap-3 pt-4">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onCancel}
-          disabled={isLoading}
-          className="px-5 py-2.5 text-sm font-semibold"
-        >
+        <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading} className="rounded-lg px-5 py-2.5">
           Cancelar
         </Button>
         <Button
           type="submit"
           disabled={isLoading}
-          className="px-5 py-2.5 text-sm font-semibold bg-primary text-white hover:bg-primary/90"
+          className="rounded-lg px-5 py-2.5 bg-primary text-white hover:bg-primary/90 inline-flex items-center gap-2"
         >
+          <Save className="h-4 w-4" />
           {isLoading ? 'Guardando...' : isEditMode ? 'Actualizar Usuario' : 'Guardar Usuario'}
         </Button>
       </div>

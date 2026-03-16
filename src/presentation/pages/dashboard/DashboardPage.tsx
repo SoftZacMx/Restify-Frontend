@@ -37,6 +37,7 @@ const DAY_NAMES_ES: Record<string, string> = {
 };
 
 const DashboardPage = () => {
+
   const { user } = useAuthStore();
   const navigate = useNavigate();
 

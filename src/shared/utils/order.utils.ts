@@ -3,6 +3,7 @@
  */
 
 import type { OrderResponse } from '@/domain/types';
+import { formatCurrency } from './currency.utils';
 
 /**
  * Información de estado de una orden para UI
@@ -138,15 +139,7 @@ export const formatOrderDateTime = (dateString: string): string => {
   });
 };
 
-/**
- * Formatea el precio en moneda
- */
-export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('es-MX', {
-    style: 'currency',
-    currency: 'MXN',
-  }).format(amount);
-};
+export { formatCurrency } from './currency.utils';
 
 /**
  * Cuenta los items totales de una orden

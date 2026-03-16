@@ -13,10 +13,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  
 } from '@/presentation/components/ui/alert-dialog';
 import { MenuItemSearchBar } from '@/presentation/components/menu-items/MenuItemSearchBar';
 import { MenuItemTable } from '@/presentation/components/menu-items/MenuItemTable';
-import { MenuItemPagination } from '@/presentation/components/menu-items/MenuItemPagination';
+import { Pagination } from '@/presentation/components/ui/pagination';
 import { CreateMenuItemForm } from '@/presentation/components/menu-items/CreateMenuItemForm';
 import { menuItemService } from '@/application/services';
 import { useAuthStore } from '@/presentation/store/auth.store';
@@ -31,7 +32,8 @@ import { AppError } from '@/domain/errors';
  * Cumple SRP: Solo maneja el estado y la lógica de la página
  */
 
-const ITEMS_PER_PAGE = 10;
+const PAGE_SIZE_OPTIONS = [10, 20, 50];
+const DEFAULT_ITEMS_PER_PAGE = 10;
 
 const MenuItemsPage: React.FC = () => {
   const [filters, setFilters] = useState<MenuItemTableFilters>({
@@ -39,6 +41,7 @@ const MenuItemsPage: React.FC = () => {
     status: undefined,
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isCreatingMenuItem, setIsCreatingMenuItem] = useState(false);
   const { user } = useAuthStore();
@@ -122,24 +125,24 @@ const MenuItemsPage: React.FC = () => {
    */
   const paginationData: PaginationData = useMemo(() => {
     const totalItems = filteredMenuItems.length;
-    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     return {
       currentPage,
       totalPages: totalPages || 1,
       totalItems,
-      itemsPerPage: ITEMS_PER_PAGE,
+      itemsPerPage,
     };
-  }, [filteredMenuItems.length, currentPage]);
+  }, [filteredMenuItems.length, currentPage, itemsPerPage]);
 
   /**
    * Obtiene platillos para la página actual
    */
   const paginatedMenuItems = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
     return filteredMenuItems.slice(startIndex, endIndex);
-  }, [filteredMenuItems, currentPage]);
+  }, [filteredMenuItems, currentPage, itemsPerPage]);
 
   /**
    * Convierte platillos a formato de tabla
@@ -161,8 +164,12 @@ const MenuItemsPage: React.FC = () => {
    */
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll al inicio de la tabla
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePageSizeChange = (pageSize: number) => {
+    setItemsPerPage(pageSize);
+    setCurrentPage(1);
   };
 
   const [menuItemToDelete, setMenuItemToDelete] = useState<{ id: string; name: string } | null>(null);
@@ -327,9 +334,15 @@ const MenuItemsPage: React.FC = () => {
       />
 
       {paginationData.totalItems > 0 && (
-        <MenuItemPagination
-          pagination={paginationData}
+        <Pagination
+          currentPage={paginationData.currentPage}
+          totalPages={paginationData.totalPages}
+          totalItems={paginationData.totalItems}
+          itemsPerPage={paginationData.itemsPerPage}
+          itemsLabel="platillos"
+          pageSizeOptions={PAGE_SIZE_OPTIONS}
           onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
         />
       )}
 

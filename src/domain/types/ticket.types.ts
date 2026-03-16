@@ -43,6 +43,7 @@ export interface SaleTicketOrderItem {
 
 /** Respuesta GET /api/orders/:order_id/ticket/sale-ticket */
 export interface SaleTicketResponse {
+  companyName?: string;
   orderId: string;
   date: string;
   tableNumber: number | null;

@@ -14,6 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/presentation/components/ui/alert-dialog';
+import { Pagination } from '@/presentation/components/ui/pagination';
 import { OrderSearchBar } from '@/presentation/components/orders/OrderSearchBar';
 import { OrdersGrid } from '@/presentation/components/orders/OrdersGrid';
 import { OrderPagination } from '@/presentation/components/orders/OrderPagination';
@@ -32,6 +33,9 @@ import {
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
 
+const PAGE_SIZE_OPTIONS = [10, 20, 50];
+const DEFAULT_ITEMS_PER_PAGE = 20;
+
 /**
  * Página de Órdenes
  * Muestra lista de órdenes con filtros, detalles, paginación y acciones
@@ -48,6 +52,10 @@ const OrdersPage: React.FC = () => {
   const [showFilters, setShowFilters] = useState(false); // Por defecto oculto
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  // Estado de paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
 
   // Estado de modales
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
@@ -134,8 +142,13 @@ const OrdersPage: React.FC = () => {
     );
   }, [filteredOrders]);
 
+<<<<<<< HEAD
   // Paginación (por defecto 10 por página)
   const paginationData: PaginationData = useMemo(() => {
+=======
+  // Datos de paginación (sobre la lista filtrada/ordenada)
+  const paginationData = useMemo(() => {
+>>>>>>> 840d6d75767b5c6aa0760f1a81178da924491aaa
     const totalItems = sortedOrders.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
     return {
@@ -146,7 +159,12 @@ const OrdersPage: React.FC = () => {
     };
   }, [sortedOrders.length, currentPage, itemsPerPage]);
 
+<<<<<<< HEAD
   const paginatedOrders = useMemo(() => {
+=======
+  // Órdenes de la página actual
+  const ordersToShow = useMemo(() => {
+>>>>>>> 840d6d75767b5c6aa0760f1a81178da924491aaa
     const start = (currentPage - 1) * itemsPerPage;
     return sortedOrders.slice(start, start + itemsPerPage);
   }, [sortedOrders, currentPage, itemsPerPage]);
@@ -270,6 +288,21 @@ const OrdersPage: React.FC = () => {
     navigate('/pos');
   }, [navigate]);
 
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  const handlePageSizeChange = useCallback((pageSize: number) => {
+    setItemsPerPage(pageSize);
+    setCurrentPage(1);
+  }, []);
+
+  const handleFiltersChange = useCallback((newFilters: OrderViewFilters) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+  }, []);
+
   // Contar órdenes por estado (solo pendientes y pagadas)
   const orderCounts = useMemo(() => {
     const pending = orders.filter((o) => !o.status).length;
@@ -371,10 +404,14 @@ const OrdersPage: React.FC = () => {
             <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-4">
               <OrderSearchBar
                 filters={filters}
+<<<<<<< HEAD
                 onFiltersChange={(newFilters) => {
                   setFilters(newFilters);
                   setCurrentPage(1);
                 }}
+=======
+                onFiltersChange={handleFiltersChange}
+>>>>>>> 840d6d75767b5c6aa0760f1a81178da924491aaa
                 tables={tables}
                 isLoadingTables={isLoadingTables}
               />
@@ -382,6 +419,7 @@ const OrdersPage: React.FC = () => {
           )}
         </div>
 
+<<<<<<< HEAD
         {/* Grid de órdenes con paginación (sin overflow-hidden para que el selector "por página" no se recorte) */}
         <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
           <OrdersGrid
@@ -412,6 +450,34 @@ const OrdersPage: React.FC = () => {
             />
           )}
         </div>
+=======
+        {/* Grid de órdenes */}
+        <OrdersGrid
+          orders={ordersToShow}
+          isLoading={isLoadingOrders}
+          error={ordersError instanceof Error ? ordersError.message : null}
+          onViewDetails={handleViewDetails}
+          onMarkDelivered={handleMarkDelivered}
+          onProcessPayment={handleProcessPayment}
+          onSplitPayment={handleSplitPayment}
+          onDelete={handleDeleteOrder}
+          onPrintClientTicket={handlePrintClientTicket}
+          onPrintKitchenTicket={handlePrintKitchenTicket}
+        />
+>>>>>>> 840d6d75767b5c6aa0760f1a81178da924491aaa
+
+        {paginationData.totalItems > 0 && (
+          <Pagination
+            currentPage={paginationData.currentPage}
+            totalPages={paginationData.totalPages}
+            totalItems={paginationData.totalItems}
+            itemsPerPage={paginationData.itemsPerPage}
+            itemsLabel="órdenes"
+            pageSizeOptions={PAGE_SIZE_OPTIONS}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+          />
+        )}
 
         {/* Diálogo de detalle (solo ver info; acciones en la card) */}
         <OrderDetailDialog

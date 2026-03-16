@@ -66,7 +66,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
     return filters.paymentMethod?.toString() || 'all';
   };
 
-  const expenseTypes: ExpenseType[] = ['SERVICE_BUSINESS', 'UTILITY', 'RENT', 'MERCHANDISE', 'OTHER'];
+  const expenseTypes: ExpenseType[] = ['SERVICE_BUSINESS', 'UTILITY', 'RENT', 'MERCHANDISE', 'SALARY', 'OTHER'];
   const paymentMethods: PaymentMethod[] = [1, 2, 3];
 
   return (

@@ -311,6 +311,16 @@ export const ERROR_CONFIG = {
     statusCode: 400,
     category: 'BUSINESS',
   },
+  COMPANY_NOT_FOUND: {
+    message: 'Información de la compañía no configurada',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
+  OUTSIDE_OPERATING_HOURS: {
+    message: 'No se pueden crear órdenes fuera del horario de operación',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
 
   // ============================================
   // Network & Client Errors (Frontend specific)

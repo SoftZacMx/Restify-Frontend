@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/presentation/contexts/theme.context';
 import { PaletteProvider } from '@/presentation/contexts/palette.context';
 import { SidebarProvider } from '@/presentation/contexts/sidebar.context';
 import { WebSocketProvider } from '@/presentation/contexts/websocket.context';
+import { ErrorBoundary } from '@/presentation/components/ErrorBoundary';
 
 // Pages
 import LoginPage from '@/presentation/pages/auth/LoginPage';
@@ -25,7 +26,9 @@ import MenuItemsPage from '@/presentation/pages/menu-items/MenuItemsPage';
 import MenuItemDetailPage from '@/presentation/pages/menu-items/MenuItemDetailPage';
 import MenuCategoriesPage from '@/presentation/pages/menu-categories/MenuCategoriesPage';
 import MenuCategoryDetailPage from '@/presentation/pages/menu-categories/MenuCategoryDetailPage';
-import SettingsPage from '@/presentation/pages/settings/SettingsPage';
+import SettingsLayout from '@/presentation/components/layouts/SettingsLayout';
+import SettingsGeneralPage from '@/presentation/pages/settings/SettingsGeneralPage';
+import CompanyConfigPage from '@/presentation/pages/settings/company/CompanyConfigPage';
 import { PrivateRoute } from '@/presentation/components/PrivateRoute';
 
 const queryClient = new QueryClient({
@@ -41,6 +44,7 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <ThemeProvider>
+      <ErrorBoundary>
       <PaletteProvider>
       <SidebarProvider>
         <QueryClientProvider client={queryClient}>
@@ -191,10 +195,14 @@ function App() {
                 path="/settings"
                 element={
                   <PrivateRoute>
-                    <SettingsPage />
+                    <SettingsLayout />
                   </PrivateRoute>
                 }
-              />
+              >
+                <Route index element={<Navigate to="/settings/company" replace />} />
+                <Route path="company" element={<CompanyConfigPage />} />
+                <Route path="general" element={<SettingsGeneralPage />} />
+              </Route>
 
               {/* Default redirect */}
               <Route path="/" element={<Navigate to="/auth/login" replace />} />
@@ -205,6 +213,7 @@ function App() {
         </QueryClientProvider>
       </SidebarProvider>
       </PaletteProvider>
+      </ErrorBoundary>
     </ThemeProvider>
   );
 }

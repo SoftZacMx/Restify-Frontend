@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, FolderOpen } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
 import { Button } from '@/presentation/components/ui/button';
 import { Label } from '@/presentation/components/ui/label';
 import { Switch } from '@/presentation/components/ui/switch';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from '@/presentation/components/ui/select';
 import type {
   MenuItemResponse,
   CreateMenuItemRequest,
@@ -19,6 +13,7 @@ import type {
 } from '@/domain/types';
 import { cn } from '@/shared/lib/utils';
 import { menuCategoryService } from '@/application/services';
+import { SelectCategoryDialog } from './SelectCategoryDialog';
 
 interface MenuItemFormProps {
   initialData?: MenuItemResponse | null; // Si se proporciona, es modo edición
@@ -48,9 +43,9 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
     categoryId: undefined,
   });
   
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('none');
   const [errors, setErrors] = useState<MenuItemFormErrors>({});
-  
+  const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
+
   // Estado para categorías cargadas desde el backend
   const [categories, setCategories] = useState<MenuCategoryResponse[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
@@ -83,11 +78,9 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
         name: initialData.name,
         price: initialData.price,
         status: initialData.status,
-        // Asegurar que isExtra siempre sea booleano (el backend puede no devolverlo)
         isExtra: initialData.isExtra ?? false,
         categoryId: initialData.categoryId,
       });
-      setSelectedCategoryId(initialData.categoryId || 'none');
     }
   }, [initialData]);
 
@@ -278,42 +271,52 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
 
       {/* Categoría */}
       <div className="space-y-2">
-        <Label htmlFor="categoryId" className="text-sm font-medium">
-          Categoría
-        </Label>
+        <Label className="text-sm font-medium">Categoría</Label>
         {isLoadingCategories ? (
           <div className="flex items-center gap-2 h-10 px-3 text-sm text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded-md">
             <Loader2 className="h-4 w-4 animate-spin" />
             <span>Cargando categorías...</span>
           </div>
-        ) : (
-          <Select
-            value={selectedCategoryId}
-            onValueChange={(value) => {
-              setSelectedCategoryId(value);
-              const categoryId = value === 'none' ? null : value;
-              handleChange('categoryId', categoryId);
-            }}
-          >
-            <SelectTrigger
-              id="categoryId"
-              className={cn(errors.categoryId && 'border-destructive')}
+        ) : formData.categoryId ? (
+          <div className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
+              <FolderOpen className="h-5 w-5 text-slate-500 dark:text-slate-400" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-slate-900 dark:text-white">
+                {categories.find((c) => c.id === formData.categoryId)?.name ?? 'Categoría'}
+              </p>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setCategoryDialogOpen(true)}
               disabled={isLoading}
             >
-              {selectedCategoryId === 'none' || !selectedCategoryId
-                ? 'Sin categoría (opcional)'
-                : categories.find((cat) => cat.id === selectedCategoryId)?.name || 'Sin categoría (opcional)'}
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">Sin categoría</SelectItem>
-              {categories.map((category) => (
-                <SelectItem key={category.id} value={category.id}>
-                  {category.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+              Cambiar
+            </Button>
+          </div>
+        ) : (
+          <Button
+            type="button"
+            variant="outline"
+            className={cn('w-full justify-start text-slate-500', errors.categoryId && 'border-destructive')}
+            onClick={() => setCategoryDialogOpen(true)}
+            disabled={isLoading}
+          >
+            <FolderOpen className="h-4 w-4 mr-2" />
+            Seleccionar categoría
+          </Button>
         )}
+        <SelectCategoryDialog
+          open={categoryDialogOpen}
+          onOpenChange={setCategoryDialogOpen}
+          categories={categories.map((c) => ({ id: c.id, name: c.name }))}
+          onSelect={(category) => {
+            handleChange('categoryId', category?.id ?? null);
+          }}
+        />
         {errors.categoryId && (
           <p className="text-sm text-destructive">{errors.categoryId}</p>
         )}
