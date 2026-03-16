@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DollarSign, CreditCard, Building2, Check, RotateCw } from 'lucide-react';
 import { Button } from '@/presentation/components/ui/button';
 import { Input } from '@/presentation/components/ui/input';
@@ -81,6 +81,30 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
   /** Parsea valor del input aceptando coma o punto como decimal */
   const parseAmountFromInput = (value: string): string =>
     value.replace(',', '.');
+  /** Deja solo dígitos y un punto decimal para evitar caracteres inválidos */
+  const sanitizeDecimalInput = (value: string): string => {
+    const normalized = parseAmountFromInput(value);
+    const parts = normalized.split('.');
+    if (parts.length > 2) return parts[0] + '.' + parts.slice(1).join('');
+    if (parts.length === 2) return parts[0] + '.' + parts[1].replace(/\D/g, '').slice(0, 2);
+    return parts[0].replace(/\D/g, '');
+  };
+
+  const [amount1Display, setAmount1Display] = useState('');
+  const [amount2Display, setAmount2Display] = useState('');
+  const focusedAmount1 = useRef(false);
+  const focusedAmount2 = useRef(false);
+
+  useEffect(() => {
+    if (!focusedAmount1.current) {
+      setAmount1Display(formatAmountForInput(amount1));
+    }
+  }, [amount1, selectedMethod1]);
+  useEffect(() => {
+    if (!focusedAmount2.current) {
+      setAmount2Display(formatAmountForInput(amount2));
+    }
+  }, [amount2, selectedMethod2]);
 
   const handleAmountChange = (method: PosPaymentMethod, value: string) => {
     const amount = roundTo2Decimals(parseFloat(parseAmountFromInput(value)) || 0);
@@ -136,8 +160,14 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
               type="text"
               inputMode="decimal"
               placeholder="0.00"
-              value={formatAmountForInput(getAmount(selectedMethod1))}
-              onChange={(e) => handleAmountChange(selectedMethod1, e.target.value)}
+              value={amount1Display}
+              onFocus={() => { focusedAmount1.current = true; setAmount1Display(formatAmountForInput(getAmount(selectedMethod1))); }}
+              onBlur={() => { focusedAmount1.current = false; setAmount1Display(formatAmountForInput(getAmount(selectedMethod1))); }}
+              onChange={(e) => {
+                const raw = sanitizeDecimalInput(e.target.value);
+                setAmount1Display(raw);
+                handleAmountChange(selectedMethod1, raw);
+              }}
               className={cn(
                 'pl-8 h-12 text-lg font-semibold',
                 (errors.cashAmount || errors.cardAmount || errors.transferAmount) && 'border-destructive'
@@ -217,8 +247,14 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
               type="text"
               inputMode="decimal"
               placeholder="0.00"
-              value={formatAmountForInput(getAmount(selectedMethod2))}
-              onChange={(e) => handleAmountChange(selectedMethod2, e.target.value)}
+              value={amount2Display}
+              onFocus={() => { focusedAmount2.current = true; setAmount2Display(formatAmountForInput(getAmount(selectedMethod2))); }}
+              onBlur={() => { focusedAmount2.current = false; setAmount2Display(formatAmountForInput(getAmount(selectedMethod2))); }}
+              onChange={(e) => {
+                const raw = sanitizeDecimalInput(e.target.value);
+                setAmount2Display(raw);
+                handleAmountChange(selectedMethod2, raw);
+              }}
               className={cn(
                 'h-12 text-lg font-semibold',
                 (errors.cashAmount || errors.cardAmount || errors.transferAmount) && 'border-destructive'
