@@ -75,8 +75,15 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
 
   const roundTo2Decimals = (n: number) => Math.round(n * 100) / 100;
 
+  /** Formato de monto para el input: siempre punto como decimal (evita coma por locale) */
+  const formatAmountForInput = (amount: number): string =>
+    amount > 0 ? amount.toFixed(2) : '';
+  /** Parsea valor del input aceptando coma o punto como decimal */
+  const parseAmountFromInput = (value: string): string =>
+    value.replace(',', '.');
+
   const handleAmountChange = (method: PosPaymentMethod, value: string) => {
-    const amount = roundTo2Decimals(parseFloat(value) || 0);
+    const amount = roundTo2Decimals(parseFloat(parseAmountFromInput(value)) || 0);
     if ((method === 'CARD' || method === 'TRANSFER') && amount > paymentState.total) {
       onPaymentAmountChange(method, roundTo2Decimals(paymentState.total));
     } else {
@@ -126,12 +133,10 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
             <Input
               id="amount1"
               data-testid="payment-amount-1"
-              type="number"
-              min="0"
-              max={selectedMethod1 === 'CARD' || selectedMethod1 === 'TRANSFER' ? paymentState.total : undefined}
-              step="0.01"
+              type="text"
+              inputMode="decimal"
               placeholder="0.00"
-              value={getAmount(selectedMethod1) > 0 ? parseFloat(getAmount(selectedMethod1).toFixed(2)) : ''}
+              value={formatAmountForInput(getAmount(selectedMethod1))}
               onChange={(e) => handleAmountChange(selectedMethod1, e.target.value)}
               className={cn(
                 'pl-8 h-12 text-lg font-semibold',
@@ -209,12 +214,10 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
           {selectedMethod2 && (
             <Input
               data-testid="payment-amount-2"
-              type="number"
-              min="0"
-              max={paymentState.total}
-              step="0.01"
+              type="text"
+              inputMode="decimal"
               placeholder="0.00"
-              value={getAmount(selectedMethod2) > 0 ? parseFloat(getAmount(selectedMethod2).toFixed(2)) : ''}
+              value={formatAmountForInput(getAmount(selectedMethod2))}
               onChange={(e) => handleAmountChange(selectedMethod2, e.target.value)}
               className={cn(
                 'h-12 text-lg font-semibold',

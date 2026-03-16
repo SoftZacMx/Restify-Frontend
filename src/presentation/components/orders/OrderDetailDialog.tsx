@@ -57,8 +57,17 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
   onPrintKitchenTicket,
   isPrintingTicket = false,
 }) => {
-  const paymentMethod = order ? getPaymentMethodName(order.paymentMethod) : '';
-  const paymentIcon = order ? getPaymentMethodIcon(order.paymentMethod) : '';
+  // Si la orden no está pagada y no tiene método de pago, mostrar "Pendiente"
+  const paymentMethod = order
+    ? !order.status && order.paymentMethod == null
+      ? 'Pendiente'
+      : getPaymentMethodName(order.paymentMethod)
+    : '';
+  const paymentIcon = order
+    ? !order.status && order.paymentMethod == null
+      ? '⏳'
+      : getPaymentMethodIcon(order.paymentMethod)
+    : '';
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>

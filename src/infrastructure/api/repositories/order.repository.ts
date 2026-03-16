@@ -2,6 +2,7 @@ import apiClient from '../client';
 import type {
   CreateOrderRequest,
   OrderResponse,
+  OrderItemResponse,
   UpdateOrderRequest,
   ListOrdersRequest,
   ListOrdersResponse,
@@ -97,7 +98,7 @@ export class OrderRepository {
     menuResults.forEach(([id, r]) => r && menuMap.set(id, r));
     productResults.forEach(([id, r]) => r && productMap.set(id, r));
 
-    const orderItems = items.map((item) => {
+    const orderItems = items.map((item): OrderItemResponse => {
       const menuItem = (item.menuItem as { name?: string } | undefined)?.name
         ? item.menuItem
         : item.menuItemId
@@ -114,7 +115,7 @@ export class OrderRepository {
           : menuMap.get(ex.extraId) ?? ex.extra;
         return { ...ex, extra };
       });
-      return { ...item, menuItem, product, extras };
+      return { ...item, menuItem, product, extras } as OrderItemResponse;
     });
 
     return { ...order, orderItems };
@@ -161,12 +162,13 @@ export class OrderRepository {
     if (!rawItems || !Array.isArray(rawItems)) {
       return { ...order, orderItems: [] };
     }
-    const orderItems = rawItems.map((item: Record<string, unknown>) => {
-      const menuItem = item.menuItem ?? item.menu_item;
-      const product = item.product;
-      const rawExtras = (item.extras ?? []) as Array<Record<string, unknown>>;
+    const orderItems: OrderItemResponse[] = rawItems.map((item) => {
+      const it = item as unknown as Record<string, unknown>;
+      const menuItem = it.menuItem ?? it.menu_item;
+      const product = it.product;
+      const rawExtras = (it.extras ?? []) as Array<Record<string, unknown>>;
       const extras = rawExtras.map((ex) => ({ ...ex, extra: ex.extra ?? ex.extra }));
-      return { ...item, menuItem, product, extras };
+      return { ...item, menuItem, product, extras } as OrderItemResponse;
     });
     return { ...order, orderItems };
   }
