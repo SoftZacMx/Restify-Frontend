@@ -114,6 +114,16 @@ export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = fals
               )}
             </div>
 
+            {/* Nota del item */}
+            {item.note && item.note.trim() !== '' && (
+              <div className="pt-2">
+                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 uppercase tracking-wide">
+                  Nota
+                </p>
+                <p className="text-sm text-slate-700 dark:text-slate-300 italic">{item.note}</p>
+              </div>
+            )}
+
             {/* Extras */}
             {item.selectedExtras.length > 0 && (
               <div className="pt-3 border-t border-slate-200 dark:border-slate-700">

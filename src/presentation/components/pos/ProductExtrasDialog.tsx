@@ -8,6 +8,8 @@ import {
   DialogClose,
 } from '@/presentation/components/ui/dialog';
 import { Button } from '@/presentation/components/ui/button';
+import { Input } from '@/presentation/components/ui/input';
+import { Label } from '@/presentation/components/ui/label';
 import { ExtrasSelectionDialog } from '@/presentation/components/pos/ExtrasSelectionDialog';
 import type { PosProduct } from '@/domain/types';
 import type { Category } from '@/domain/types';
@@ -16,7 +18,7 @@ interface ProductExtrasDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   product: PosProduct | null;
-  onAddToCart: (product: PosProduct, quantity: number, selectedExtras: PosProduct[]) => void;
+  onAddToCart: (product: PosProduct, quantity: number, selectedExtras: PosProduct[], note?: string | null) => void;
   availableExtras?: PosProduct[];
   categories?: Category[];
 }
@@ -35,6 +37,7 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
 }) => {
   const [quantity, setQuantity] = useState(1);
   const [selectedExtras, setSelectedExtras] = useState<PosProduct[]>([]);
+  const [note, setNote] = useState('');
   const [isExtrasPickerOpen, setIsExtrasPickerOpen] = useState(false);
   const [animateTotal, setAnimateTotal] = useState(false);
   const prevSubtotalRef = useRef<number>(0);
@@ -46,6 +49,7 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
     if (open) {
       setQuantity(1);
       setSelectedExtras([]);
+      setNote('');
       setIsExtrasPickerOpen(false);
       prevSubtotalRef.current = product ? product.price : 0;
     }
@@ -68,9 +72,10 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
   };
 
   const handleAddToCart = () => {
-    onAddToCart(product, quantity, selectedExtras);
+    onAddToCart(product, quantity, selectedExtras, note.trim() || null);
     setQuantity(1);
     setSelectedExtras([]);
+    setNote('');
     onOpenChange(false);
   };
 
@@ -192,6 +197,26 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
                 {availableExtras.length === 0 && (
                   <p className="text-sm text-slate-500 dark:text-slate-400">No hay extras disponibles</p>
                 )}
+              </div>
+
+              {/* Nota del item (opcional, máx 50 caracteres) */}
+              <div className="space-y-2">
+                <Label htmlFor="item-note" className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Nota (opcional)
+                </Label>
+                <Input
+                  id="item-note"
+                  type="text"
+                  placeholder="Ej: Sin cebolla, bien cocido..."
+                  maxLength={50}
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  className="bg-slate-50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600"
+                  aria-describedby="item-note-count"
+                />
+                <p id="item-note-count" className="text-xs text-slate-500 dark:text-slate-400 text-right">
+                  {note.length}/50
+                </p>
               </div>
 
               {/* Desglose de precio */}

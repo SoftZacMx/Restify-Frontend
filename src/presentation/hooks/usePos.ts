@@ -461,8 +461,8 @@ export const usePos = (options?: UsePosOptions) => {
   );
 
   const handleAddProductToCart = useCallback(
-    (product: PosProduct, quantity: number, selectedExtras: PosProduct[]) => {
-      const newItems = orderService.addItemToCart(cartItems, product, quantity, selectedExtras);
+    (product: PosProduct, quantity: number, selectedExtras: PosProduct[], note?: string | null) => {
+      const newItems = orderService.addItemToCart(cartItems, product, quantity, selectedExtras, note);
       setCartItems(newItems);
       setIsExtrasDialogOpen(false);
       setSelectedProductForExtras(null);

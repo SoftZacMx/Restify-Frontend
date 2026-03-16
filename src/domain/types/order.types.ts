@@ -139,7 +139,7 @@ export interface OrderItemInput {
   menuItemId?: string | null; // UUID del item del menú (uno de los dos es requerido)
   quantity: number; // Entero positivo
   price: number; // Precio unitario (positivo, máx 2 decimales)
-  note?: string | null; // Nota del item (máx 500 caracteres)
+  note?: string | null; // Nota del item (máx 50 caracteres)
   extras?: OrderItemExtraInput[]; // Extras para este item
 }
 

@@ -49,7 +49,8 @@ export class OrderService {
     product: PosProduct,
     quantity: number,
     selectedExtras: PosProduct[],
-    itemId?: string
+    itemId?: string,
+    note?: string | null
   ): OrderItem {
     const basePrice = product.price;
     const extrasTotal = selectedExtras.reduce((sum, extra) => sum + extra.price, 0);
@@ -66,6 +67,7 @@ export class OrderService {
       extrasTotal,
       itemSubtotal,
       itemTotal,
+      ...(note != null && note.trim() !== '' ? { note: note.trim().slice(0, 50) } : {}),
     };
   }
 
@@ -92,9 +94,10 @@ export class OrderService {
     currentItems: OrderItem[],
     product: PosProduct,
     quantity: number,
-    selectedExtras: PosProduct[]
+    selectedExtras: PosProduct[],
+    note?: string | null
   ): OrderItem[] {
-    const newItem = this.createOrderItem(product, quantity, selectedExtras);
+    const newItem = this.createOrderItem(product, quantity, selectedExtras, undefined, note);
     return [...currentItems, newItem];
   }
 
@@ -370,9 +373,9 @@ export class OrderService {
       price: item.basePrice, // Precio unitario sin extras
     };
 
-    // Solo agregar campos opcionales si tienen valor
-    if (item.note) {
-      orderItemInput.note = item.note;
+    // Solo agregar campos opcionales si tienen valor (nota máx 50 caracteres)
+    if (item.note && item.note.trim() !== '') {
+      orderItemInput.note = item.note.trim().slice(0, 50);
     }
 
     if (extras.length > 0) {
