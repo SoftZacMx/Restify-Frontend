@@ -63,7 +63,7 @@ export class PaymentService {
    * Única validación: la suma de ambos métodos no puede ser mayor al total de la orden.
    */
   validateSplitPaymentData(
-    orderId: string,
+    _orderId: string,
     firstPayment: SplitPaymentPart,
     secondPayment: SplitPaymentPart,
     orderTotal: number

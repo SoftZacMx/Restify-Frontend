@@ -196,6 +196,7 @@ export const usePos = (options?: UsePosOptions) => {
 
   // Estado de filtros
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const [productSearch, setProductSearch] = useState('');
 
   // Estado del diálogo de extras
   const [isExtrasDialogOpen, setIsExtrasDialogOpen] = useState(false);
@@ -387,14 +388,22 @@ export const usePos = (options?: UsePosOptions) => {
     return tables.find((table) => table.id === selectedTableId);
   }, [selectedTableId, tables]);
 
-  // Filtrar productos por categoría (excluyendo extras y solo mostrando activos)
+  // Filtrar productos por categoría y búsqueda (excluyendo extras y solo mostrando activos)
   const filteredProducts = useMemo(() => {
     const regularProducts = products.filter(
       (product) => product.status === true && product.isExtra !== true
     );
-    if (!selectedCategoryId) return regularProducts;
-    return regularProducts.filter((product) => product.categoryId === selectedCategoryId);
-  }, [selectedCategoryId, products]);
+    const byCategory = selectedCategoryId
+      ? regularProducts.filter((product) => product.categoryId === selectedCategoryId)
+      : regularProducts;
+    const query = productSearch.trim().toLowerCase();
+    if (!query) return byCategory;
+    return byCategory.filter(
+      (product) =>
+        product.name.toLowerCase().includes(query) ||
+        (product.description ?? '').toLowerCase().includes(query)
+    );
+  }, [selectedCategoryId, products, productSearch]);
 
   // Obtener productos extras disponibles
   const availableExtras = useMemo(() => {
@@ -868,6 +877,7 @@ export const usePos = (options?: UsePosOptions) => {
     setSelectedMethod1(null);
     setSelectedMethod2(null);
     setSelectedCategoryId(null);
+    setProductSearch('');
     setIsExtrasDialogOpen(false);
     setSelectedProductForExtras(null);
     // Resetear estado de operaciones
@@ -897,6 +907,8 @@ export const usePos = (options?: UsePosOptions) => {
     showSecondPaymentMethod,
     paymentState,
     selectedCategoryId,
+    productSearch,
+    setProductSearch,
     filteredProducts,
     isExtrasDialogOpen,
     selectedProductForExtras,

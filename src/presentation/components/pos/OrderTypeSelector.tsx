@@ -19,12 +19,12 @@ export const OrderTypeSelector: React.FC<OrderTypeSelectorProps> = ({
   onOrderTypeChange,
 }) => {
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col gap-3 w-full">
       <Button
         variant={orderType === 'DINE_IN' ? 'default' : 'outline'}
         onClick={() => onOrderTypeChange(orderType === 'DINE_IN' ? null : 'DINE_IN')}
         className={cn(
-          'flex-1 flex items-center justify-center gap-2 h-20',
+          'w-full flex items-center justify-center gap-2 h-14',
           orderType === 'DINE_IN' && 'bg-primary text-white'
         )}
       >
@@ -35,7 +35,7 @@ export const OrderTypeSelector: React.FC<OrderTypeSelectorProps> = ({
         variant={orderType === 'TAKEOUT' ? 'default' : 'outline'}
         onClick={() => onOrderTypeChange(orderType === 'TAKEOUT' ? null : 'TAKEOUT')}
         className={cn(
-          'flex-1 flex items-center justify-center gap-2 h-20',
+          'w-full flex items-center justify-center gap-2 h-14',
           orderType === 'TAKEOUT' && 'bg-primary text-white'
         )}
       >

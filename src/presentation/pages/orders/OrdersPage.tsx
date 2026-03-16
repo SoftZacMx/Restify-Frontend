@@ -16,12 +16,13 @@ import {
 } from '@/presentation/components/ui/alert-dialog';
 import { OrderSearchBar } from '@/presentation/components/orders/OrderSearchBar';
 import { OrdersGrid } from '@/presentation/components/orders/OrdersGrid';
+import { OrderPagination } from '@/presentation/components/orders/OrderPagination';
 import { OrderDetailDialog } from '@/presentation/components/orders/OrderDetailDialog';
 import { SplitPaymentDialog } from '@/presentation/components/orders/SplitPaymentDialog';
 import { ConnectionIndicator } from '@/presentation/components/websocket/ConnectionIndicator';
 import { useWebSocketContext } from '@/presentation/contexts/websocket.context';
 import { orderService, tableService, ticketService } from '@/application/services';
-import type { OrderResponse } from '@/domain/types';
+import type { OrderResponse, PaginationData } from '@/domain/types';
 import {
   type OrderViewFilters,
   getDefaultOrderFiltersForToday,
@@ -33,18 +34,20 @@ import { AppError } from '@/domain/errors';
 
 /**
  * Página de Órdenes
- * Muestra lista de órdenes con filtros, detalles y acciones
+ * Muestra lista de órdenes con filtros, detalles, paginación y acciones
  */
 const OrdersPage: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  
+
   // Estado de conexión WebSocket
   const { isConnected, connectionId } = useWebSocketContext();
 
   // Estado de filtros (por defecto: órdenes del día de hoy)
   const [filters, setFilters] = useState<OrderViewFilters>(() => getDefaultOrderFiltersForToday());
   const [showFilters, setShowFilters] = useState(false); // Por defecto oculto
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   // Estado de modales
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
@@ -130,6 +133,23 @@ const OrdersPage: React.FC = () => {
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
   }, [filteredOrders]);
+
+  // Paginación (por defecto 10 por página)
+  const paginationData: PaginationData = useMemo(() => {
+    const totalItems = sortedOrders.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+    return {
+      currentPage,
+      totalPages,
+      totalItems,
+      itemsPerPage,
+    };
+  }, [sortedOrders.length, currentPage, itemsPerPage]);
+
+  const paginatedOrders = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return sortedOrders.slice(start, start + itemsPerPage);
+  }, [sortedOrders, currentPage, itemsPerPage]);
 
   // Mostrar error si la carga falla
   React.useEffect(() => {
@@ -351,7 +371,10 @@ const OrdersPage: React.FC = () => {
             <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-4">
               <OrderSearchBar
                 filters={filters}
-                onFiltersChange={setFilters}
+                onFiltersChange={(newFilters) => {
+                  setFilters(newFilters);
+                  setCurrentPage(1);
+                }}
                 tables={tables}
                 isLoadingTables={isLoadingTables}
               />
@@ -359,19 +382,36 @@ const OrdersPage: React.FC = () => {
           )}
         </div>
 
-        {/* Grid de órdenes */}
-        <OrdersGrid
-          orders={sortedOrders}
-          isLoading={isLoadingOrders}
-          error={ordersError instanceof Error ? ordersError.message : null}
-          onViewDetails={handleViewDetails}
-          onMarkDelivered={handleMarkDelivered}
-          onProcessPayment={handleProcessPayment}
-          onSplitPayment={handleSplitPayment}
-          onDelete={handleDeleteOrder}
-          onPrintClientTicket={handlePrintClientTicket}
-          onPrintKitchenTicket={handlePrintKitchenTicket}
-        />
+        {/* Grid de órdenes con paginación (sin overflow-hidden para que el selector "por página" no se recorte) */}
+        <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
+          <OrdersGrid
+            orders={paginatedOrders}
+            isLoading={isLoadingOrders}
+            error={ordersError instanceof Error ? ordersError.message : null}
+            onViewDetails={handleViewDetails}
+            onMarkDelivered={handleMarkDelivered}
+            onProcessPayment={handleProcessPayment}
+            onSplitPayment={handleSplitPayment}
+            onDelete={handleDeleteOrder}
+            onPrintClientTicket={handlePrintClientTicket}
+            onPrintKitchenTicket={handlePrintKitchenTicket}
+          />
+          {!isLoadingOrders && !ordersError && sortedOrders.length > 0 && (
+            <OrderPagination
+              pagination={paginationData}
+              onPageChange={(page) => {
+                setCurrentPage(page);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              pageSizeOptions={[10, 25, 50]}
+              onPageSizeChange={(pageSize) => {
+                setItemsPerPage(pageSize);
+                setCurrentPage(1);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
+          )}
+        </div>
 
         {/* Diálogo de detalle (solo ver info; acciones en la card) */}
         <OrderDetailDialog

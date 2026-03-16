@@ -1,14 +1,45 @@
-import React from 'react';
-import { ShoppingBag, X } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ShoppingBag, Trash2 } from 'lucide-react';
 import { Button } from '@/presentation/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card';
 import { Badge } from '@/presentation/components/ui/badge';
 import type { OrderItem } from '@/domain/types';
 
+/** Total del ítem con animación cuando cambia */
+const CartItemTotal: React.FC<{ itemTotal: number; itemSubtotal: number }> = ({
+  itemTotal,
+  itemSubtotal,
+}) => {
+  const [animate, setAnimate] = useState(false);
+  const prevRef = useRef(itemTotal);
+
+  useEffect(() => {
+    if (prevRef.current !== itemTotal) {
+      prevRef.current = itemTotal;
+      setAnimate(true);
+      const t = setTimeout(() => setAnimate(false), 400);
+      return () => clearTimeout(t);
+    }
+  }, [itemTotal]);
+
+  return (
+    <div className="text-right">
+      <div className={`font-bold text-xl text-primary inline-block ${animate ? 'animate-total-bump' : ''}`}>
+        ${itemTotal.toFixed(2)}
+      </div>
+      <div className="text-xs text-slate-500 dark:text-slate-400">
+        ${itemSubtotal.toFixed(2)} + IVA
+      </div>
+    </div>
+  );
+};
+
 interface CartProps {
   items: OrderItem[];
   onRemoveItem: (itemId: string) => void;
   readOnly?: boolean;
+  /** Clase para el Card raíz (ej. h-full para llenar altura en layout flex) */
+  className?: string;
 }
 
 /**
@@ -16,10 +47,10 @@ interface CartProps {
  * Responsabilidad única: Mostrar y gestionar los items del carrito
  * Cumple SRP: Solo maneja la visualización y acciones del carrito
  */
-export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = false }) => {
+export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = false, className }) => {
   if (items.length === 0) {
     return (
-      <Card className="border-2 border-dashed border-slate-200 dark:border-slate-700">
+      <Card className={`border-2 border-dashed border-slate-200 dark:border-slate-700 ${className ?? ''}`}>
         <CardContent className="p-12">
           <div className="flex flex-col items-center justify-center text-center">
             <div className="p-4 rounded-full bg-slate-100 dark:bg-slate-800 mb-4">
@@ -38,8 +69,8 @@ export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = fals
   }
 
   return (
-    <Card className="shadow-lg border-0">
-      <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-slate-200 dark:border-slate-700">
+    <Card className={`shadow-lg border-0 flex flex-col min-h-0 ${className ?? ''}`}>
+      <CardHeader className="shrink-0 bg-gradient-to-r from-primary/10 to-primary/5 border-b border-slate-200 dark:border-slate-700">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ShoppingBag className="h-5 w-5 text-primary" />
@@ -50,7 +81,7 @@ export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = fals
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="p-4 space-y-3 max-h-[600px] overflow-y-auto">
+      <CardContent className="p-4 space-y-3 flex-1 min-h-0 overflow-y-auto">
         {items.map((item) => (
           <div
             key={item.id}
@@ -73,9 +104,11 @@ export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = fals
                   variant="ghost"
                   size="sm"
                   onClick={() => onRemoveItem(item.id)}
-                  className="text-destructive hover:text-destructive hover:bg-destructive/10 flex-shrink-0"
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10 flex-shrink-0 p-2"
+                  title="Eliminar del carrito"
+                  aria-label="Eliminar del carrito"
                 >
-                  <X className="h-4 w-4" />
+                  <Trash2 className="h-5 w-5" />
                 </Button>
               )}
             </div>
@@ -109,14 +142,7 @@ export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = fals
                 <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
                   Total:
                 </span>
-                <div className="text-right">
-                  <div className="font-bold text-xl text-primary">
-                    ${item.itemTotal.toFixed(2)}
-                  </div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400">
-                    ${item.itemSubtotal.toFixed(2)} + IVA
-                  </div>
-                </div>
+                <CartItemTotal itemTotal={item.itemTotal} itemSubtotal={item.itemSubtotal} />
               </div>
             </div>
           </div>

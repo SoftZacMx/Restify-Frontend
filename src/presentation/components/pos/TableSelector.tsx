@@ -1,6 +1,5 @@
 import React from 'react';
-import { Square } from 'lucide-react';
-import { Button } from '@/presentation/components/ui/button';
+import { Check } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import type { Table } from '@/domain/types';
 
@@ -14,8 +13,8 @@ interface TableSelectorProps {
 
 /**
  * Componente TableSelector
- * Responsabilidad única: Permitir seleccionar una mesa disponible
- * Cumple SRP: Solo maneja la selección de mesa
+ * Vista: número grande, estado (LIBRE/OCUPADA/SELECCIONADA), indicador (verde/rojo/check).
+ * Al hacer clic en una mesa se selecciona y se cierra el diálogo (sin botones Confirmar/Cancelar).
  */
 export const TableSelector: React.FC<TableSelectorProps> = ({
   tables,
@@ -24,47 +23,57 @@ export const TableSelector: React.FC<TableSelectorProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className="space-y-4">
-      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-        Seleccionar Mesa
-      </label>
-      <div className="grid grid-cols-5 gap-3">
-        {tables.map((table) => {
-          const isSelected = selectedTableId === table.id;
-          const isAvailable = table.isAvailable;
+    <div className="grid grid-cols-4 gap-3">
+      {tables.map((table) => {
+        const isSelected = selectedTableId === table.id;
+        const isAvailable = table.isAvailable;
 
-          return (
-            <Button
-              key={table.id}
-              variant={isSelected ? 'default' : 'outline'}
-              onClick={() => !disabled && onTableSelect(isSelected ? null : table.id)}
-              disabled={disabled || (!isAvailable && !isSelected)}
-              className={cn(
-                'flex flex-col items-center justify-center gap-2 h-24 relative',
-                isSelected && 'bg-primary text-white',
-                (!isAvailable && !isSelected) && 'opacity-50 cursor-not-allowed'
+        const statusLabel = isSelected
+          ? 'SELECCIONADA'
+          : isAvailable
+            ? 'LIBRE'
+            : 'OCUPADA';
+
+        const isClickable = !disabled && (isAvailable || isSelected);
+
+        return (
+          <button
+            key={table.id}
+            type="button"
+            onClick={() => isClickable && onTableSelect(isSelected ? null : table.id)}
+            disabled={!isClickable}
+            className={cn(
+              'flex flex-col items-center justify-center gap-1 h-24 rounded-xl border-2 relative transition-colors',
+              isSelected
+                ? 'bg-primary border-primary text-white'
+                : 'border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white hover:border-primary/50',
+              (!isAvailable && !isSelected) && 'opacity-60 cursor-not-allowed'
+            )}
+          >
+            {/* Indicador: check seleccionada, verde libre, rojo ocupada */}
+            <div className="absolute top-2 right-2">
+              {isSelected ? (
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
+                  <Check className="h-3.5 w-3.5" />
+                </div>
+              ) : (
+                <div
+                  className={cn(
+                    'w-3 h-3 rounded-full',
+                    isAvailable ? 'bg-green-500' : 'bg-red-500'
+                  )}
+                  title={isAvailable ? 'Libre' : 'Ocupada'}
+                />
               )}
-            >
-              {/* Indicador de estatus */}
-              <div
-                className={cn(
-                  'absolute top-2 right-2 w-3 h-3 rounded-full',
-                  isAvailable ? 'bg-green-500' : 'bg-red-500'
-                )}
-                title={isAvailable ? 'Disponible' : 'Ocupada'}
-              />
-              
-              {/* Icono de mesa */}
-              <Square className="h-6 w-6" />
-              
-              {/* Información de la mesa */}
-              <div className="flex flex-col items-center gap-0.5">
-                <span className="text-xs font-semibold">Mesa {table.number}</span>
-              </div>
-            </Button>
-          );
-        })}
-      </div>
+            </div>
+
+            <span className="text-2xl font-bold tabular-nums">{table.number}</span>
+            <span className="text-xs font-medium uppercase tracking-wide opacity-90">
+              {statusLabel}
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 };

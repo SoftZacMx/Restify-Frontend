@@ -1,20 +1,19 @@
 import React from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { ShoppingCart, Receipt, Edit, ArrowLeft, Loader2 } from 'lucide-react';
+import { ShoppingCart, Receipt, ArrowLeft, Loader2, Search } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { usePos } from '@/presentation/hooks/usePos';
-import { OrderTypeSelector } from '@/presentation/components/pos/OrderTypeSelector';
-import { TableSelector } from '@/presentation/components/pos/TableSelector';
-import { CustomerNameInput } from '@/presentation/components/pos/CustomerNameInput';
+import { OrderOriginCard } from '@/presentation/components/pos/OrderOriginCard';
+import { TableSelectionDialog } from '@/presentation/components/pos/TableSelectionDialog';
 import { CategoryFilter } from '@/presentation/components/pos/CategoryFilter';
 import { ProductGrid } from '@/presentation/components/pos/ProductGrid';
 import { ProductExtrasDialog } from '@/presentation/components/pos/ProductExtrasDialog';
 import { Cart } from '@/presentation/components/pos/Cart';
-import { OrderSummary } from '@/presentation/components/pos/OrderSummary';
 import { OrderPaymentLayout } from '@/presentation/components/pos/OrderPaymentLayout';
 import { Button } from '@/presentation/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card';
+import { Input } from '@/presentation/components/ui/input';
 import { Badge } from '@/presentation/components/ui/badge';
 // Ya no usamos PRODUCT_CATEGORIES, ahora cargamos categorías del backend
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
@@ -73,6 +72,8 @@ const PosPage = () => {
     selectedMethod2,
     showSecondPaymentMethod,
     selectedCategoryId,
+    productSearch,
+    setProductSearch,
     filteredProducts,
     isExtrasDialogOpen,
     selectedProductForExtras,
@@ -114,6 +115,11 @@ const PosPage = () => {
   const [validationErrors, setValidationErrors] = React.useState<OrderFormErrors>({});
   const [savedOrder, setSavedOrder] = React.useState<CreateOrderResponse | null>(null);
   const [isSavingOrder, setIsSavingOrder] = React.useState(false);
+  const [isTableDialogOpen, setIsTableDialogOpen] = React.useState(false);
+
+  const selectedTable = selectedTableId
+    ? tables.find((t) => t.id === selectedTableId)
+    : undefined;
 
   /**
    * Mapea el método de pago del POS al formato numérico del backend
@@ -560,22 +566,10 @@ const PosPage = () => {
             </div>
           </div>
           <div className="flex gap-2">
-            {loadedOrder && (
-              <Button variant="outline" onClick={() => navigate('/orders')} className="gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Volver a Órdenes
-              </Button>
-            )}
             {posMode === 'PAYMENT_PROCESSING' && !loadedOrder && !isPaymentOnlyMode && (
               <Button variant="outline" onClick={handleBackToEdit} className="gap-2">
                 <ArrowLeft className="h-4 w-4" />
                 Volver a Editar
-              </Button>
-            )}
-            {cartItems.length > 0 && posMode === 'ORDER_BUILDING' && !loadedOrder && (
-              <Button variant="outline" onClick={resetPos} className="gap-2">
-                <Edit className="h-4 w-4" />
-                Nueva Orden
               </Button>
             )}
           </div>
@@ -621,145 +615,111 @@ const PosPage = () => {
           />
         )}
 
-        {/* Modo creación/edición: grid productos + carrito */}
+        {/* Modo creación/edición: grid productos + carrito - ambas columnas mismo alto, todo el espacio en productos con overflow */}
         {posMode === 'ORDER_BUILDING' && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Columna izquierda - Productos o información de orden */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Modo edición/creación: tipo, mesas, cliente, grid de productos */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch h-[calc(100vh)] min-h-[420px]">
+          {/* Columna izquierda - Productos: un poco más ancha que la derecha, todo el alto, contenido con overflow */}
+          <div className="lg:col-span-3 flex flex-col min-h-0 h-full">
             {!isPaymentOnlyMode && (
-              <>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Tipo de Orden</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <OrderTypeSelector
-                      orderType={orderType}
-                      onOrderTypeChange={handleOrderTypeChange}
+              <Card className="flex flex-col flex-1 min-h-0 overflow-hidden">
+                <CardHeader className="shrink-0">
+                  <CardTitle>Productos</CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col flex-1 min-h-0 gap-4 p-4 pt-0 overflow-hidden">
+                  <div className="relative shrink-0">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500 pointer-events-none" />
+                    <Input
+                      type="search"
+                      placeholder="Buscar platos, categorías o ingredientes..."
+                      value={productSearch}
+                      onChange={(e) => setProductSearch(e.target.value)}
+                      className="pl-9"
+                      aria-label="Buscar productos"
                     />
-                  </CardContent>
-                </Card>
-
-                {orderType === 'DINE_IN' && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Información de Mesa</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      {isLoadingTables ? (
-                        <div className="text-center py-8 text-slate-500 dark:text-slate-400">
-                          Cargando mesas...
-                        </div>
-                      ) : tablesError ? (
-                        <div className="text-center py-8 text-red-500">
-                          {tablesError}
-                        </div>
-                      ) : tables.length === 0 ? (
-                        <div className="text-center py-8 text-slate-500 dark:text-slate-400">
-                          No hay mesas disponibles
-                        </div>
-                      ) : (
-                        <TableSelector
-                          tables={tables}
-                          selectedTableId={selectedTableId}
-                          onTableSelect={handleTableSelect}
-                          disabled={!!(loadedOrder && loadedOrder.origin === OrderOrigins.LOCAL)}
-                        />
-                      )}
-                      {validationErrors.tableId && (
-                        <p className="text-sm text-destructive mt-2">{validationErrors.tableId}</p>
-                      )}
-                    </CardContent>
-                  </Card>
-                )}
-
-                {orderType === 'TAKEOUT' && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Información del Cliente</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <CustomerNameInput
-                        customerName={customerName}
-                        onCustomerNameChange={handleCustomerNameChange}
-                      />
-                      {validationErrors.customerName && (
-                        <p className="text-sm text-destructive mt-2">
-                          {validationErrors.customerName}
-                        </p>
-                      )}
-                    </CardContent>
-                  </Card>
-                )}
-
-                {orderType && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Productos</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <CategoryFilter
-                        categories={categories}
-                        selectedCategoryId={selectedCategoryId}
-                        onCategorySelect={handleCategorySelect}
-                      />
-                      <ProductGrid
-                        products={filteredProducts}
-                        onProductSelect={handleProductSelect}
-                        isLoading={isLoadingProducts}
-                        error={productsError}
-                      />
-                    </CardContent>
-                  </Card>
-                )}
-              </>
+                  </div>
+                  <CategoryFilter
+                    categories={categories}
+                    selectedCategoryId={selectedCategoryId}
+                    onCategorySelect={handleCategorySelect}
+                  />
+                  <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+                    <ProductGrid
+                      products={filteredProducts}
+                      onProductSelect={handleProductSelect}
+                      isLoading={isLoadingProducts}
+                      error={productsError}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
             )}
           </div>
 
-          {/* Columna derecha - Carrito (solo modo ORDER_BUILDING) */}
-          <div className="space-y-6">
-            <Cart items={cartItems} onRemoveItem={handleRemoveItem} readOnly={false} />
+          {/* Columna derecha - Cards siempre visibles (carrito, origen, guardar) */}
+          <div className="flex md:col-span-2 flex-col gap-6 min-h-0 h-full overflow-hidden">
+            {/* 1. Carrito - siempre visible (vacío o con ítems), ocupa el espacio restante con overflow */}
+            <div className="min-h-0 flex-1 flex flex-col overflow-hidden">
+              <Cart
+                items={cartItems}
+                onRemoveItem={handleRemoveItem}
+                readOnly={false}
+                className="h-full"
+              />
+            </div>
 
-            {cartItems.length > 0 && (
-              <>
-                <OrderSummary cartState={cartState} />
-                <div className="space-y-3">
-                  {/* Nueva orden: "Guardar Orden". Editar: "Guardar Cambios" (al guardar redirige a /orders) */}
-                  {loadedOrder ? (
-                    <Button
-                      onClick={handleSaveOrder}
-                      disabled={!isOrderValid() || isSavingOrder}
-                      className="w-full shadow-md hover:shadow-lg transition-all"
-                      variant="outline"
-                      size="lg"
-                    >
-                      {isSavingOrder ? 'Guardando...' : 'Guardar Cambios'}
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={handleSaveOrder}
-                      disabled={!isOrderValid() || isSavingOrder}
-                      className="w-full shadow-md hover:shadow-lg transition-all"
-                      variant="outline"
-                      size="lg"
-                    >
-                      {isSavingOrder ? 'Guardando...' : 'Guardar Orden'}
-                    </Button>
-                  )}
-                  {savedOrder && !savedOrder.status && (
-                    <Button
-                      onClick={handleContinueToPayment}
-                      disabled={!isOrderValid()}
-                      className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl transition-all"
-                      size="lg"
-                    >
-                      Continuar al Pago
-                    </Button>
-                  )}
-                </div>
-              </>
+            {/* 2. Origen de la orden (tipo + mesa o nombre cliente) - siempre visible */}
+            {!isPaymentOnlyMode && (
+              <OrderOriginCard
+                orderType={orderType}
+                onOrderTypeChange={(type) => {
+                  handleOrderTypeChange(type);
+                  if (type === 'DINE_IN') setIsTableDialogOpen(true);
+                }}
+                selectedTable={selectedTable}
+                onSelectTableClick={() => setIsTableDialogOpen(true)}
+                customerName={customerName}
+                onCustomerNameChange={handleCustomerNameChange}
+                validationErrors={{
+                  tableId: validationErrors.tableId,
+                  customerName: validationErrors.customerName,
+                }}
+              />
             )}
+
+            {/* 3. Guardar orden - siempre visible, deshabilitado si no hay ítems */}
+            <div className="space-y-3 shrink-0">
+              {loadedOrder ? (
+                <Button
+                  onClick={handleSaveOrder}
+                  disabled={cartItems.length === 0 || !isOrderValid() || isSavingOrder}
+                  className="w-full shadow-md hover:shadow-lg transition-all"
+                  variant="outline"
+                  size="lg"
+                >
+                  {isSavingOrder ? 'Guardando...' : 'Guardar Cambios'}
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleSaveOrder}
+                  disabled={cartItems.length === 0 || !isOrderValid() || isSavingOrder}
+                  className="w-full shadow-md hover:shadow-lg transition-all"
+                  variant="outline"
+                  size="lg"
+                >
+                  {isSavingOrder ? 'Guardando...' : 'Guardar Orden'}
+                </Button>
+              )}
+              {savedOrder && !savedOrder.status && (
+                <Button
+                  onClick={handleContinueToPayment}
+                  disabled={cartItems.length === 0 || !isOrderValid()}
+                  className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl transition-all"
+                  size="lg"
+                >
+                  Continuar al Pago
+                </Button>
+              )}
+            </div>
           </div>
         </div>
         )}
@@ -771,6 +731,19 @@ const PosPage = () => {
           product={selectedProductForExtras}
           onAddToCart={handleAddProductToCart}
           availableExtras={availableExtras}
+          categories={categories}
+        />
+
+        {/* Diálogo de selección de mesa (solo tipo local) */}
+        <TableSelectionDialog
+          open={isTableDialogOpen}
+          onOpenChange={setIsTableDialogOpen}
+          tables={tables}
+          selectedTableId={selectedTableId}
+          onTableSelect={handleTableSelect}
+          isLoading={isLoadingTables}
+          error={tablesError}
+          disabled={!!(loadedOrder && loadedOrder.origin === OrderOrigins.LOCAL)}
         />
       </div>
     </MainLayout>

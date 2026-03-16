@@ -61,6 +61,12 @@ const DashboardPage = () => {
     }
   }, [error]);
 
+  React.useEffect(() => {
+    if (dashboard) {
+      console.log('[Dashboard] Respuesta del API:', dashboard);
+    }
+  }, [dashboard]);
+
   const getInitials = (name: string, lastName: string) => {
     return `${name.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
