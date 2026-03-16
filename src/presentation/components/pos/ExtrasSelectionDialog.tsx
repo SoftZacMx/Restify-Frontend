@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SlidersHorizontal, X } from 'lucide-react';
+import { SlidersHorizontal, X, UtensilsCrossed } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -94,35 +94,8 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
           <DialogClose />
         </DialogHeader>
 
+        {/* Lista de extras disponibles: ocupa el espacio central con scroll */}
         <div className="flex flex-col flex-1 min-h-0 overflow-y-auto px-6 py-4">
-          <div className="mb-6">
-            <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
-              Extras seleccionados
-            </p>
-            {selectedExtras.length === 0 ? (
-              <p className="text-sm text-slate-500 dark:text-slate-400">Ninguno</p>
-            ) : (
-              <div className="flex flex-wrap gap-2">
-                {selectedExtras.map((extra) => (
-                  <span
-                    key={extra.id}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground"
-                  >
-                    {extra.name}
-                    <button
-                      type="button"
-                      onClick={() => removeExtra(extra)}
-                      className="rounded-full p-0.5 hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white/50"
-                      aria-label={`Quitar ${extra.name}`}
-                    >
-                      <X className="h-3.5 w-3.5" />
-                    </button>
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
           <div className="space-y-5">
             {grouped.length === 0 ? (
               <p className="text-sm text-slate-500 dark:text-slate-400">No hay extras disponibles</p>
@@ -183,6 +156,40 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
                   </ul>
                 </div>
               ))
+            )}
+          </div>
+        </div>
+
+        {/* Sección fija de ítems seleccionados: altura fija con overflow */}
+        <div className="shrink-0 px-6 py-3 border-t border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/50">
+          <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+            Extras seleccionados
+          </p>
+          <div className="h-24 min-h-24 max-h-28 overflow-y-auto rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3">
+            {selectedExtras.length === 0 ? (
+              <div className="h-full flex flex-col items-center justify-center text-slate-400 dark:text-slate-500">
+                <UtensilsCrossed className="h-10 w-10 mb-1 opacity-60" />
+                <span className="text-xs font-medium">Ninguno</span>
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {selectedExtras.map((extra) => (
+                  <span
+                    key={extra.id}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground"
+                  >
+                    {extra.name}
+                    <button
+                      type="button"
+                      onClick={() => removeExtra(extra)}
+                      className="rounded-full p-0.5 hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white/50"
+                      aria-label={`Quitar ${extra.name}`}
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </span>
+                ))}
+              </div>
             )}
           </div>
         </div>

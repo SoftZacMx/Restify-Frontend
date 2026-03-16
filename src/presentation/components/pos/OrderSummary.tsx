@@ -38,7 +38,7 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({ cartState }) => {
           <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
             Subtotal:
           </span>
-          <span className="font-semibold text-slate-900 dark:text-slate-100">
+          <span className="font-semibold text-slate-900 dark:text-slate-100" data-testid="order-subtotal" aria-label={`Subtotal ${cartState.subtotal.toFixed(2)}`}>
             ${cartState.subtotal.toFixed(2)}
           </span>
         </div>
@@ -51,6 +51,8 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({ cartState }) => {
             <div className="text-right">
               <span
                 className={`text-2xl font-bold text-primary inline-block ${animateTotal ? 'animate-total-bump' : ''}`}
+                data-testid="order-total"
+                aria-label={`Total de la orden ${cartState.total.toFixed(2)}`}
               >
                 ${cartState.total.toFixed(2)}
               </span>

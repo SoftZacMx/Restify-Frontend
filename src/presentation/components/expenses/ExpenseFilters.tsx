@@ -70,7 +70,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
   const paymentMethods: PaymentMethod[] = [1, 2, 3];
 
   return (
-    <div className="space-y-4 px-4 py-3 border-b border-slate-200 dark:border-slate-800">
+    <div className="space-y-4 px-4 py-3 border-b border-slate-200 dark:border-slate-800 overflow-x-visible min-w-0">
       {/* Search Input */}
       <div className="flex-grow">
         <label className="flex flex-col min-w-40 h-12 w-full">
@@ -112,9 +112,8 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
         ))}
       </div>
 
-      {/* Additional Filters */}
-      <div className="flex items-center gap-3">
-        {/* Payment Method Filter */}
+      {/* Método de pago y rango de fechas en una misma fila */}
+      <div className="flex flex-wrap items-center gap-3">
         <Select value={getCurrentPaymentMethodValue()} onValueChange={handlePaymentMethodChange}>
           <SelectTrigger className="h-12 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal min-w-[180px]">
             <div className="flex items-center gap-2">
@@ -136,31 +135,30 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
           </SelectContent>
         </Select>
 
-        {/* Rango de fechas */}
+        <Calendar className="h-4 w-4 text-slate-500 dark:text-slate-400 shrink-0" />
         <div className="flex items-center gap-2">
-          <Calendar className="h-4 w-4 text-slate-500 dark:text-slate-400 shrink-0" />
-          <div className="flex items-center gap-2">
-            <Label htmlFor="dateFrom" className="text-xs text-slate-500 dark:text-slate-400 shrink-0">
-              Desde
-            </Label>
-            <Input
-              id="dateFrom"
-              type="date"
-              value={filters.dateFrom ?? ''}
-              onChange={handleDateFromChange}
-              className="h-10 w-36 rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700"
-            />
-            <Label htmlFor="dateTo" className="text-xs text-slate-500 dark:text-slate-400 shrink-0">
-              Hasta
-            </Label>
-            <Input
-              id="dateTo"
-              type="date"
-              value={filters.dateTo ?? ''}
-              onChange={handleDateToChange}
-              className="h-10 w-36 rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700"
-            />
-          </div>
+          <Label htmlFor="dateFrom" className="text-xs text-slate-500 dark:text-slate-400 shrink-0 whitespace-nowrap">
+            Desde
+          </Label>
+          <Input
+            id="dateFrom"
+            type="date"
+            value={filters.dateFrom ?? ''}
+            onChange={handleDateFromChange}
+            className="h-10 min-w-[140px] rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <Label htmlFor="dateTo" className="text-xs text-slate-500 dark:text-slate-400 shrink-0 whitespace-nowrap">
+            Hasta
+          </Label>
+          <Input
+            id="dateTo"
+            type="date"
+            value={filters.dateTo ?? ''}
+            onChange={handleDateToChange}
+            className="h-10 min-w-[140px] rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700"
+          />
         </div>
       </div>
     </div>

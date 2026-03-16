@@ -44,6 +44,12 @@ export interface SaleTicketOrderItem {
 /** Respuesta GET /api/orders/:order_id/ticket/sale-ticket */
 export interface SaleTicketResponse {
   companyName?: string;
+  /** Nombre de sucursal o marca (ej. DELIYUNOS) — opcional, si no hay se usa solo companyName */
+  companyBranch?: string | null;
+  companyRfc?: string | null;
+  companyAddress?: string | null;
+  companyPhone?: string | null;
+  companyWebsite?: string | null;
   orderId: string;
   date: string;
   tableNumber: number | null;

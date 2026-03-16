@@ -20,6 +20,7 @@ import { LoadingOverlay } from '@/presentation/components/ui/loading-overlay';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { useAuthStore } from '@/presentation/store/auth.store';
 import { orderService } from '@/application/services/order.service';
+import { ticketService } from '@/application/services/ticket.service';
 import type {
   OrderFormErrors,
   PosMode,
@@ -402,6 +403,15 @@ const PosPage = () => {
 
       showSuccessToast('Orden procesada', 'La orden se ha procesado correctamente');
       queryClient.invalidateQueries({ queryKey: ['orders'] });
+
+      // Lanzar diálogo de impresión del ticket de venta (cliente) tras pago exitoso
+      try {
+        await ticketService.printSaleTicket(orderIdToProcess);
+      } catch (ticketError) {
+        console.error('Error al imprimir ticket:', ticketError);
+        showErrorToast('Ticket no impreso', 'El pago fue exitoso pero no se pudo abrir el ticket para imprimir.');
+      }
+
       resetPos();
       setSavedOrder(null);
       setValidationErrors({});
@@ -594,6 +604,7 @@ const PosPage = () => {
                     tableNumber: loadedOrder.table?.numberTable,
                     client: loadedOrder.client,
                     isReadOnly: true,
+                    orderId: loadedOrder.id,
                   }
                 : {
                     origin: orderType === 'DINE_IN' ? 'Local' : 'Para llevar',
@@ -602,6 +613,7 @@ const PosPage = () => {
                       : undefined,
                     client: orderType === 'TAKEOUT' ? customerName || null : null,
                     isReadOnly: false,
+                    orderId: loadedOrder?.id || savedOrder?.id || orderId,
                   }
             }
             cartItems={cartItems}
@@ -693,6 +705,16 @@ const PosPage = () => {
                   customerName: validationErrors.customerName,
                 }}
               />
+            )}
+
+            {/* Total del carrito (visible antes de guardar para validar en E2E) */}
+            {cartItems.length > 0 && (
+              <div className="flex justify-between items-center py-2 px-3 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shrink-0">
+                <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Total</span>
+                <span className="text-lg font-bold text-primary" data-testid="cart-total" aria-label={`Total de la orden ${cartState.total.toFixed(2)}`}>
+                  ${cartState.total.toFixed(2)}
+                </span>
+              </div>
             )}
 
             {/* 3. Guardar orden - siempre visible, deshabilitado si no hay ítems */}

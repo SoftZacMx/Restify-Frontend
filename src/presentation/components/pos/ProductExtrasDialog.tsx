@@ -99,8 +99,8 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
           </DialogHeader>
 
           <div className="flex flex-col flex-1 min-h-0 overflow-y-auto">
-            {/* Imagen del producto */}
-            <div className="w-full aspect-[2/1] bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center overflow-hidden">
+            {/* Imagen del producto: tamaño fijo, no se compacta */}
+            <div className="shrink-0 w-full h-44 bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center overflow-hidden">
               {product.imageUrl ? (
                 <img
                   src={product.imageUrl}
@@ -186,8 +186,7 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
                     onClick={() => setIsExtrasPickerOpen(true)}
                     className="w-full rounded-lg"
                   >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Agregar más
+                    Extras
                   </Button>
                 )}
                 {availableExtras.length === 0 && (

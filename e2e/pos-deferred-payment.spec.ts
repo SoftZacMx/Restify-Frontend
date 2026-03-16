@@ -36,6 +36,8 @@ test.describe('POS - Pago diferido (dividido)', () => {
     const minProducts = 2;
 
     for (let i = 1; i < categoryCount && added < minProducts; i++) {
+      const btnText = await categoryButtons.nth(i).textContent();
+      if (btnText?.trim().toLowerCase().includes('mostrar más')) continue;
       await categoryButtons.nth(i).click();
       await page.waitForTimeout(300);
       const addButtons = page.getByRole('button', { name: /agregar/i });
@@ -72,25 +74,21 @@ test.describe('POS - Pago diferido (dividido)', () => {
     await expect(page).toHaveURL(/\/pos.*mode=pay/, { timeout: 10_000 });
 
     // Obtener el total de la orden (para distribuir entre dos métodos)
-    const totalText = await page.locator('text=Total a pagar').locator('..').locator('span').last().textContent();
-    const total = parseFloat((totalText || '0').replace('$', '').replace(',', '').trim()) || 0;
+    const totalText = await page.getByTestId('payment-total').textContent();
+    const total = parseFloat((totalText || '0').replace(/[$,]/g, '').trim()) || 0;
     const amount1 = Math.floor(total * 50) / 100;
     const amount2 = Math.round((total - amount1) * 100) / 100;
 
-    // Método 1: Efectivo
-    await page.getByLabel(/primer método de pago/i).click();
-    await expect(page.locator('div.absolute.z-50').getByText('Efectivo')).toBeVisible({ timeout: 5_000 });
-    await page.locator('div.absolute.z-50').getByText('Efectivo').click();
+    // Método 1: Efectivo (botón horizontal, no select)
+    await page.getByRole('button', { name: /^efectivo$/i }).first().click();
     await page.getByTestId('payment-amount-1').fill(amount1.toFixed(2));
 
-    // Activar pago dividido (checkbox está en sr-only; forzar clic para no depender de visibilidad)
+    // Activar pago dividido
     await page.getByTestId('payment-split-toggle').click({ force: true });
     await page.waitForTimeout(300);
 
-    // Método 2: Tarjeta
-    await page.getByLabel(/segundo método de pago/i).click();
-    await expect(page.locator('div.absolute.z-50').getByText('Tarjeta')).toBeVisible({ timeout: 5_000 });
-    await page.locator('div.absolute.z-50').getByText('Tarjeta').click();
+    // Método 2: Tarjeta — segundo botón "Tarjeta" en la página (el de la fila "Segundo método de pago")
+    await page.getByRole('button', { name: /^tarjeta$/i }).nth(1).click();
     await page.getByTestId('payment-amount-2').fill(amount2.toFixed(2));
 
     // Procesar pago

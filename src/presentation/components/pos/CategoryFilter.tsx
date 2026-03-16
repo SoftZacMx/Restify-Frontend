@@ -1,12 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/presentation/components/ui/dropdown-menu';
+import { CategorySelectionDialog } from './CategorySelectionDialog';
 import type { Category } from '@/domain/types';
 
 interface CategoryFilterProps {
@@ -27,8 +22,8 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
   selectedCategoryId,
   onCategorySelect,
 }) => {
+  const [isMoreDialogOpen, setIsMoreDialogOpen] = useState(false);
   const visibleCategories = categories.slice(0, 2);
-  const moreCategories = categories.slice(2);
 
   return (
     <div className="grid grid-cols-4 gap-2 shrink-0 pb-3">
@@ -70,38 +65,25 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
         <div key={`placeholder-${i}`} aria-hidden />
       ))}
 
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          className={cn(
-            pillBase,
-            'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 hover:text-slate-700 dark:hover:text-slate-300'
-          )}
-        >
-          Mostrar más
-          <ChevronDown className="h-4 w-4 opacity-70" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="max-h-[min(16rem,50vh)] overflow-y-auto">
-          {moreCategories.length === 0 ? (
-            <DropdownMenuItem onSelect={() => {}} className="text-slate-500 dark:text-slate-400">
-              No hay más categorías
-            </DropdownMenuItem>
-          ) : (
-            moreCategories.map((category) => {
-              const isSelected = selectedCategoryId === category.id;
-              return (
-                <DropdownMenuItem
-                  key={category.id}
-                  onSelect={() => onCategorySelect(category.id)}
-                  className={cn(isSelected && 'bg-primary/10 text-primary')}
-                >
-                  {category.icon && <span className="mr-2">{category.icon}</span>}
-                  {category.name}
-                </DropdownMenuItem>
-              );
-            })
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <button
+        type="button"
+        onClick={() => setIsMoreDialogOpen(true)}
+        className={cn(
+          pillBase,
+          'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 hover:text-slate-700 dark:hover:text-slate-300'
+        )}
+      >
+        Mostrar más
+        <ChevronDown className="h-4 w-4 opacity-70" />
+      </button>
+
+      <CategorySelectionDialog
+        open={isMoreDialogOpen}
+        onOpenChange={setIsMoreDialogOpen}
+        categories={categories}
+        selectedCategoryId={selectedCategoryId}
+        onCategorySelect={onCategorySelect}
+      />
     </div>
   );
 };

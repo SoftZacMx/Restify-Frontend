@@ -1,16 +1,10 @@
 import React from 'react';
-import { DollarSign, CreditCard, Building2 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card';
+import { DollarSign, CreditCard, Building2, Check, RotateCw } from 'lucide-react';
+import { Button } from '@/presentation/components/ui/button';
 import { Input } from '@/presentation/components/ui/input';
 import { Label } from '@/presentation/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/presentation/components/ui/select';
 import { Switch } from '@/presentation/components/ui/switch';
+import { cn } from '@/shared/lib/utils';
 import type { PaymentState, OrderFormErrors, PosPaymentMethod } from '@/domain/types';
 
 interface PaymentMethodsProps {
@@ -23,18 +17,18 @@ interface PaymentMethodsProps {
   onPaymentAmountChange: (method: PosPaymentMethod, amount: number) => void;
   onMethod1Change: (method: PosPaymentMethod | null) => void;
   onMethod2Change: (method: PosPaymentMethod | null) => void;
+  onProcessPayment?: () => void;
+  isProcessPaymentEnabled?: boolean;
 }
 
-const PAYMENT_METHODS: { value: PosPaymentMethod; label: string; icon: React.ReactNode }[] = [
-  { value: 'CASH', label: 'Efectivo', icon: <DollarSign className="h-4 w-4" /> },
-  { value: 'CARD', label: 'Tarjeta', icon: <CreditCard className="h-4 w-4" /> },
-  { value: 'TRANSFER', label: 'Transferencia', icon: <Building2 className="h-4 w-4" /> },
+const PAYMENT_METHODS: { value: PosPaymentMethod; label: string; shortLabel: string; icon: React.ReactNode }[] = [
+  { value: 'CASH', label: 'Efectivo', shortLabel: 'Efectivo', icon: <DollarSign className="h-5 w-5" /> },
+  { value: 'CARD', label: 'Tarjeta', shortLabel: 'Tarjeta', icon: <CreditCard className="h-5 w-5" /> },
+  { value: 'TRANSFER', label: 'Transferencia', shortLabel: 'Transferencia', icon: <Building2 className="h-5 w-5" /> },
 ];
 
 /**
- * Componente PaymentMethods
- * Responsabilidad única: Permitir seleccionar métodos de pago y ingresar montos
- * Cumple SRP: Solo maneja la entrada de métodos de pago
+ * Vista de métodos de pago tipo Checkout: botones horizontales, Amount Received, Change to Return, Split, Process.
  */
 export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
   paymentState,
@@ -46,8 +40,9 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
   onPaymentAmountChange,
   onMethod1Change,
   onMethod2Change,
+  onProcessPayment,
+  isProcessPaymentEnabled = false,
 }) => {
-  // Obtener el monto de un método específico
   const getAmount = (method: PosPaymentMethod | null): number => {
     if (!method) return 0;
     switch (method) {
@@ -62,23 +57,11 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
     }
   };
 
-  // Obtener el nombre del método
-  const getMethodName = (method: PosPaymentMethod): string => {
-    return PAYMENT_METHODS.find((m) => m.value === method)?.label || method;
-  };
-
-  // Obtener el icono del método
-  const getMethodIcon = (method: PosPaymentMethod): React.ReactNode => {
-    return PAYMENT_METHODS.find((m) => m.value === method)?.icon || null;
-  };
-
-  // Calcular lo que resta por pagar
   const amount1 = selectedMethod1 ? getAmount(selectedMethod1) : 0;
   const amount2 = selectedMethod2 ? getAmount(selectedMethod2) : 0;
   const totalEntered = amount1 + amount2;
   const remainingToPay = Math.max(0, paymentState.total - totalEntered);
 
-  // Cambio / vuelto: solo cuando el único método es efectivo y el monto entregado es mayor al total
   const change =
     selectedMethod1 === 'CASH' &&
     !selectedMethod2 &&
@@ -86,12 +69,10 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
       ? Math.round((paymentState.cashAmount - paymentState.total) * 100) / 100
       : 0;
 
-  // Filtrar métodos disponibles para el selector 2 (excluir el método 1)
   const availableMethodsForMethod2 = PAYMENT_METHODS.filter(
     (method) => method.value !== selectedMethod1
   );
 
-  /** Redondear a 2 decimales para montos de pago */
   const roundTo2Decimals = (n: number) => Math.round(n * 100) / 100;
 
   const handleAmountChange = (method: PosPaymentMethod, value: string) => {
@@ -104,48 +85,44 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Métodos de Pago</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Selector de método 1 */}
-        <div className="space-y-2">
-          <Label htmlFor="method1">Primer Método de Pago *</Label>
-          <Select value={selectedMethod1 || ''} onValueChange={(value) => onMethod1Change(value === '' ? null : (value as PosPaymentMethod))}>
-            <SelectTrigger id="method1">
-              {selectedMethod1 ? (
-                <span className="flex items-center gap-2">
-                  {getMethodIcon(selectedMethod1)}
-                  {getMethodName(selectedMethod1)}
-                </span>
-              ) : (
-                <SelectValue placeholder="Seleccione un método" />
-              )}
-            </SelectTrigger>
-            <SelectContent>
-              {PAYMENT_METHODS.map((method) => (
-                <SelectItem key={method.value} value={method.value}>
-                  <div className="flex items-center gap-2">
-                    {method.icon}
-                    <span>{method.label}</span>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {errors.method1 && (
-            <p className="text-sm text-destructive">{errors.method1}</p>
-          )}
-        </div>
+    <div className="flex flex-col h-full">
+      <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4">
+        Método de pago
+      </h3>
 
-        {/* Input de monto para método 1 */}
-        {selectedMethod1 && (
-          <div className="space-y-2">
-            <Label htmlFor="amount1" className="flex items-center gap-2">
-              {getMethodIcon(selectedMethod1)}
-              <span>Monto {getMethodName(selectedMethod1)}</span>
-            </Label>
+      {/* Tres botones horizontales: Efectivo, Tarjeta, Transferencia */}
+      <div className="flex gap-2 mb-4">
+        {PAYMENT_METHODS.map((method) => {
+          const isSelected = selectedMethod1 === method.value;
+          return (
+            <button
+              key={method.value}
+              type="button"
+              onClick={() => onMethod1Change(isSelected ? selectedMethod1 : method.value)}
+              className={cn(
+                'flex-1 flex flex-col items-center justify-center gap-2 py-4 px-3 rounded-xl border-2 transition-colors',
+                isSelected
+                  ? 'border-primary bg-primary text-primary-foreground'
+                  : 'border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-500'
+              )}
+            >
+              {method.icon}
+              <span className="text-sm font-semibold">{method.shortLabel}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Amount Received (cuando el método es Efectivo) */}
+      {selectedMethod1 && (
+        <div className="space-y-2 mb-4">
+          <Label htmlFor="amount1" className="text-slate-600 dark:text-slate-300">
+            Monto recibido
+          </Label>
+          <div className="relative">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 font-semibold">
+              $
+            </span>
             <Input
               id="amount1"
               data-testid="payment-amount-1"
@@ -156,175 +133,145 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
               placeholder="0.00"
               value={getAmount(selectedMethod1) > 0 ? parseFloat(getAmount(selectedMethod1).toFixed(2)) : ''}
               onChange={(e) => handleAmountChange(selectedMethod1, e.target.value)}
-              className={
-                errors.cashAmount || errors.cardAmount || errors.transferAmount
-                  ? 'border-destructive'
-                  : ''
-              }
-            />
-            {(errors.cashAmount || errors.cardAmount || errors.transferAmount) && (
-              <p className="text-sm text-destructive">
-                {errors.cashAmount || errors.cardAmount || errors.transferAmount}
-              </p>
-            )}
-            {selectedMethod1 === 'CASH' && !selectedMethod2 && (
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Puede ser mayor al total para calcular el cambio a devolver.
-              </p>
-            )}
-          </div>
-        )}
-
-        {/* Mostrar / ocultar segundo método de pago */}
-        <div className="flex items-center justify-between gap-2 py-2 border-t border-slate-200 dark:border-slate-700 pt-4">
-          <Label htmlFor="show-second-method" className="cursor-pointer text-sm font-medium text-slate-700 dark:text-slate-300">
-            Dividir pago en dos métodos (ej. efectivo + tarjeta)
-          </Label>
-          <Switch
-            id="show-second-method"
-            data-testid="payment-split-toggle"
-            checked={showSecondPaymentMethod}
-            onCheckedChange={onShowSecondPaymentMethodChange}
-          />
-        </div>
-
-        {/* Selector de método 2 (opcional) — solo si está visible */}
-        {showSecondPaymentMethod && (
-          <>
-            <div className="space-y-2">
-              <Label htmlFor="method2">Segundo Método de Pago (Opcional)</Label>
-              <Select
-                value={selectedMethod2 || ''}
-                onValueChange={(value) => onMethod2Change(value === '' ? null : (value as PosPaymentMethod))}
-              >
-                <SelectTrigger id="method2">
-                  {selectedMethod2 ? (
-                    <span className="flex items-center gap-2">
-                      {getMethodIcon(selectedMethod2)}
-                      {getMethodName(selectedMethod2)}
-                    </span>
-                  ) : (
-                    <SelectValue placeholder="Ninguno (opcional)" />
-                  )}
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">Ninguno</SelectItem>
-                  {availableMethodsForMethod2.map((method) => (
-                    <SelectItem key={method.value} value={method.value}>
-                      <div className="flex items-center gap-2">
-                        {method.icon}
-                        <span>{method.label}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.method2 && (
-                <p className="text-sm text-destructive">{errors.method2}</p>
+              className={cn(
+                'pl-8 h-12 text-lg font-semibold',
+                (errors.cashAmount || errors.cardAmount || errors.transferAmount) && 'border-destructive'
               )}
-            </div>
-
-            {/* Input de monto para método 2 */}
-            {selectedMethod2 && (
-              <div className="space-y-2">
-                <Label htmlFor="amount2" className="flex items-center gap-2">
-                  {getMethodIcon(selectedMethod2)}
-                  <span>Monto {getMethodName(selectedMethod2)}</span>
-                </Label>
-                <Input
-                  id="amount2"
-                  data-testid="payment-amount-2"
-                  type="number"
-                  min="0"
-                  max={selectedMethod2 === 'CARD' || selectedMethod2 === 'TRANSFER' ? paymentState.total : undefined}
-                  step="0.01"
-                  placeholder="0.00"
-                  value={getAmount(selectedMethod2) > 0 ? parseFloat(getAmount(selectedMethod2).toFixed(2)) : ''}
-                  onChange={(e) => handleAmountChange(selectedMethod2, e.target.value)}
-                  className={
-                    errors.cashAmount || errors.cardAmount || errors.transferAmount
-                      ? 'border-destructive'
-                      : ''
-                  }
-                />
-                {(errors.cashAmount || errors.cardAmount || errors.transferAmount) && (
-                  <p className="text-sm text-destructive">
-                    {errors.cashAmount || errors.cardAmount || errors.transferAmount}
-                  </p>
-                )}
-              </div>
-            )}
-          </>
-        )}
-
-        {/* Mensaje de error general */}
-        {errors.paymentMethods && (
-          <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
-            <p className="text-sm text-destructive">{errors.paymentMethods}</p>
+            />
           </div>
-        )}
-
-        {/* Resumen de pagos */}
-        <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-3">
-          <div className="flex justify-between text-sm">
-            <span className="text-slate-600 dark:text-slate-400">Total a pagar:</span>
-            <span className="font-semibold text-slate-900 dark:text-slate-100">
-              ${paymentState.total.toFixed(2)}
-            </span>
-          </div>
-
-          {selectedMethod1 && (
-            <div className="flex justify-between text-sm">
-              <span className="text-slate-600 dark:text-slate-400 flex items-center gap-2">
-                {getMethodIcon(selectedMethod1)}
-                {getMethodName(selectedMethod1)}:
-              </span>
-              <span className="font-medium text-slate-900 dark:text-slate-100">
-                ${amount1.toFixed(2)}
-              </span>
-            </div>
-          )}
-
-          {selectedMethod2 && (
-            <div className="flex justify-between text-sm">
-              <span className="text-slate-600 dark:text-slate-400 flex items-center gap-2">
-                {getMethodIcon(selectedMethod2)}
-                {getMethodName(selectedMethod2)}:
-              </span>
-              <span className="font-medium text-slate-900 dark:text-slate-100">
-                ${amount2.toFixed(2)}
-              </span>
-            </div>
-          )}
-
-          <div className="flex justify-between text-sm font-semibold pt-2 border-t border-slate-200 dark:border-slate-700">
-            <span className="text-slate-700 dark:text-slate-300">Total ingresado:</span>
-            <span className="text-slate-900 dark:text-slate-100">
-              ${totalEntered.toFixed(2)}
-            </span>
-          </div>
-
-          {/* Lo que resta por pagar */}
-          {remainingToPay > 0.01 && (
-            <div className="flex justify-between text-sm font-medium pt-2 border-t border-slate-200 dark:border-slate-700">
-              <span className="text-orange-600 dark:text-orange-400">Resta por pagar:</span>
-              <span className="text-orange-600 dark:text-orange-400 font-semibold">
-                ${remainingToPay.toFixed(2)}
-              </span>
-            </div>
-          )}
-
-          {/* Cambio / vuelto al cliente (solo efectivo cuando monto entregado > total) */}
-          {change > 0 && (
-            <div className="flex justify-between text-base font-bold pt-2 border-t-2 border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
-              <span className="text-green-700 dark:text-green-400">
-                Cambio a devolver (vuelto):
-              </span>
-              <span className="text-green-700 dark:text-green-400">${change.toFixed(2)}</span>
-            </div>
+          {(errors.cashAmount || errors.cardAmount || errors.transferAmount) && (
+            <p className="text-sm text-destructive">
+              {errors.cashAmount || errors.cardAmount || errors.transferAmount}
+            </p>
           )}
         </div>
-      </CardContent>
-    </Card>
+      )}
+
+      {/* Change to Return (solo efectivo, cuando monto > total) */}
+      {change > 0 && (
+        <div className="flex items-center justify-between gap-3 p-4 rounded-xl bg-primary/10 dark:bg-primary/20 border border-primary/20 mb-4">
+          <div>
+            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Cambio a devolver</p>
+            <p className="text-2xl font-bold text-primary">${change.toFixed(2)}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => onPaymentAmountChange('CASH', roundTo2Decimals(paymentState.total))}
+            className="p-2 rounded-full hover:bg-primary/20 text-primary"
+            aria-label="Recalcular cambio"
+          >
+            <RotateCw className="h-5 w-5" />
+          </button>
+        </div>
+      )}
+
+      {/* Split Payment */}
+      <div className="flex items-center justify-between gap-3 py-3 border-t border-slate-200 dark:border-slate-700">
+        <div>
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Dividir pago</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Repartir la cuenta entre varios métodos
+          </p>
+        </div>
+        <Switch
+          id="show-second-method"
+          data-testid="payment-split-toggle"
+          checked={showSecondPaymentMethod}
+          onCheckedChange={onShowSecondPaymentMethodChange}
+        />
+      </div>
+
+      {/* Segundo método (cuando split está activo) — mismos botones que el primer método */}
+      {showSecondPaymentMethod && (
+        <div className="space-y-2 mb-4">
+          <Label className="text-slate-600 dark:text-slate-300">Segundo método de pago</Label>
+          <div className="flex gap-2">
+            {availableMethodsForMethod2.map((method) => {
+              const isSelected = selectedMethod2 === method.value;
+              return (
+                <button
+                  key={method.value}
+                  type="button"
+                  onClick={() => onMethod2Change(isSelected ? null : method.value)}
+                  className={cn(
+                    'flex-1 flex flex-col items-center justify-center gap-2 py-4 px-3 rounded-xl border-2 transition-colors',
+                    isSelected
+                      ? 'border-primary bg-primary text-primary-foreground'
+                      : 'border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-500'
+                  )}
+                >
+                  {method.icon}
+                  <span className="text-sm font-semibold">{method.shortLabel}</span>
+                </button>
+              );
+            })}
+          </div>
+          {selectedMethod2 && (
+            <Input
+              data-testid="payment-amount-2"
+              type="number"
+              min="0"
+              max={paymentState.total}
+              step="0.01"
+              placeholder="0.00"
+              value={getAmount(selectedMethod2) > 0 ? parseFloat(getAmount(selectedMethod2).toFixed(2)) : ''}
+              onChange={(e) => handleAmountChange(selectedMethod2, e.target.value)}
+              className={cn(
+                'h-12 text-lg font-semibold',
+                (errors.cashAmount || errors.cardAmount || errors.transferAmount) && 'border-destructive'
+              )}
+            />
+          )}
+          {errors.method2 && <p className="text-sm text-destructive">{errors.method2}</p>}
+        </div>
+      )}
+
+      {errors.paymentMethods && (
+        <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg mb-4">
+          <p className="text-sm text-destructive">{errors.paymentMethods}</p>
+        </div>
+      )}
+
+      {/* Total a pagar (referencia) */}
+      <div className="flex justify-between text-sm py-2 mb-2">
+        <span className="text-slate-500 dark:text-slate-400">Total a pagar</span>
+        <span className="font-semibold" data-testid="payment-total" aria-label={`Total a pagar ${paymentState.total.toFixed(2)}`}>
+          ${paymentState.total.toFixed(2)}
+        </span>
+      </div>
+      {remainingToPay > 0.01 && (
+        <div className="flex justify-between text-sm text-amber-600 dark:text-amber-400 mb-4">
+          <span>Resta por pagar</span>
+          <span className="font-semibold">${remainingToPay.toFixed(2)}</span>
+        </div>
+      )}
+      {selectedMethod1 && totalEntered > 0 && (
+        <div className="flex justify-between text-sm font-semibold py-2 border-t border-slate-200 dark:border-slate-700 mb-4">
+          <span className="text-slate-600 dark:text-slate-400">Total ingresado</span>
+          <span data-testid="payment-total-entered" aria-label={`Total ingresado ${totalEntered.toFixed(2)}`}>
+            ${totalEntered.toFixed(2)}
+          </span>
+        </div>
+      )}
+
+      {/* Botón Process Payment & Print Receipt */}
+      {typeof onProcessPayment === 'function' && (
+        <div className="mt-auto pt-4 space-y-2">
+          <Button
+            onClick={onProcessPayment}
+            disabled={!isProcessPaymentEnabled}
+            className="w-full h-12 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground"
+            size="lg"
+            data-testid="pay-order"
+          >
+            <Check className="h-5 w-5 mr-2" />
+            Procesar pago e imprimir ticket
+          </Button>
+          <p className="text-xs text-slate-500 dark:text-slate-400 text-center">
+            Al procesar, confirmas que el monto fue recibido en su totalidad.
+          </p>
+        </div>
+      )}
+    </div>
   );
 };

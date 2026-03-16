@@ -24,7 +24,7 @@ const CartItemTotal: React.FC<{ itemTotal: number; itemSubtotal: number }> = ({
 
   return (
     <div className="text-right">
-      <div className={`font-bold text-xl text-primary inline-block ${animate ? 'animate-total-bump' : ''}`}>
+      <div className={`font-bold text-xl text-primary inline-block ${animate ? 'animate-total-bump' : ''}`} data-testid="cart-item-total-value">
         ${itemTotal.toFixed(2)}
       </div>
       <div className="text-xs text-slate-500 dark:text-slate-400">
@@ -69,7 +69,7 @@ export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = fals
   }
 
   return (
-    <Card className={`shadow-lg border-0 flex flex-col min-h-0 ${className ?? ''}`}>
+    <Card className={`shadow-lg border-0 flex flex-col min-h-0 ${className ?? ''}`} data-testid="cart">
       <CardHeader className="shrink-0 bg-gradient-to-r from-primary/10 to-primary/5 border-b border-slate-200 dark:border-slate-700">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -81,11 +81,12 @@ export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = fals
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="p-4 space-y-3 flex-1 min-h-0 overflow-y-auto">
+      <CardContent className="p-4 space-y-3 flex-1 min-h-0 overflow-y-auto" data-testid="cart-items">
         {items.map((item) => (
           <div
             key={item.id}
             className="group relative border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3 bg-white dark:bg-slate-800 hover:shadow-md transition-all duration-200 hover:border-primary/30"
+            data-testid="cart-item"
           >
             {/* Nombre del platillo */}
             <div className="flex justify-between items-start gap-3">
@@ -142,7 +143,9 @@ export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = fals
                 <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
                   Total:
                 </span>
-                <CartItemTotal itemTotal={item.itemTotal} itemSubtotal={item.itemSubtotal} />
+                <div data-testid="cart-item-total" aria-label={`Total ítem ${item.itemTotal.toFixed(2)}`}>
+                  <CartItemTotal itemTotal={item.itemTotal} itemSubtotal={item.itemSubtotal} />
+                </div>
               </div>
             </div>
           </div>

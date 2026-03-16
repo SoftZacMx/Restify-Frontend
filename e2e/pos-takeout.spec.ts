@@ -1,9 +1,15 @@
 import { test, expect } from '@playwright/test';
 
+/** Parsea texto de moneda (ej. "$245.00") a número para comparar totales. */
+function parseCurrency(text: string): number {
+  return parseFloat(text.replace(/[$,]/g, '').trim()) || 0;
+}
+
 /**
  * E2E POS - Flujo "Para Llevar".
  * Requiere backend API con: usuario, productos, categorías.
  * Agrega un producto por categoría, al menos 2 con extras; guarda orden; paga desde /orders.
+ * Valida que los totales mostrados coincidan (suma de ítems = total) antes de guardar y en la vista de pago.
  */
 test.describe('POS - Para Llevar', () => {
   test.beforeEach(async ({ page }) => {
@@ -41,7 +47,10 @@ test.describe('POS - Para Llevar', () => {
     const minExtras = 2;
 
     for (let i = 1; i < categoryCount; i++) {
-      await categoryButtons.nth(i).click();
+      const categoryBtn = categoryButtons.nth(i);
+      const btnText = await categoryBtn.textContent();
+      if (btnText?.trim().toLowerCase().includes('mostrar más')) continue;
+      await categoryBtn.click();
       await page.waitForTimeout(300);
 
       const addButtons = page.getByRole('button', { name: /agregar/i });
@@ -90,6 +99,19 @@ test.describe('POS - Para Llevar', () => {
       }
     }
 
+    // Validar totales antes de guardar: suma de totales por ítem = total del carrito
+    await expect(page.getByTestId('cart-total')).toBeVisible({ timeout: 5_000 });
+    const itemTotalEls = page.getByTestId('cart-item-total-value');
+    const itemCount = await itemTotalEls.count();
+    let sum = 0;
+    for (let i = 0; i < itemCount; i++) {
+      const text = await itemTotalEls.nth(i).textContent();
+      sum += parseCurrency(text ?? '');
+    }
+    const cartTotalText = await page.getByTestId('cart-total').textContent();
+    const cartTotal = parseCurrency(cartTotalText ?? '');
+    expect(Math.abs(sum - cartTotal)).toBeLessThan(0.02);
+
     // Guardar orden
     await page.getByRole('button', { name: /guardar orden/i }).click();
     await expect(page).toHaveURL(/\/orders/, { timeout: 15_000 });
@@ -100,10 +122,27 @@ test.describe('POS - Para Llevar', () => {
 
     await expect(page).toHaveURL(/\/pos.*mode=pay/, { timeout: 10_000 });
 
-    // Método de pago: Efectivo (Select custom: trigger por label, opción por texto en dropdown)
+    // Validar totales en vista de pago: suma de ítems = order-total = payment-total
+    const orderTotalEl = page.getByTestId('order-total');
+    await expect(orderTotalEl).toBeVisible({ timeout: 5_000 });
+    const orderItemTotalEls = page.getByTestId('order-item-total');
+    let orderItemsSum = 0;
+    const orderItemCount = await orderItemTotalEls.count();
+    for (let i = 0; i < orderItemCount; i++) {
+      const text = await orderItemTotalEls.nth(i).textContent();
+      orderItemsSum += parseCurrency(text ?? '');
+    }
+    const orderTotalValue = parseCurrency((await orderTotalEl.textContent()) ?? '');
+    expect(Math.abs(orderItemsSum - orderTotalValue)).toBeLessThan(0.02);
+    const paymentTotalValue = parseCurrency((await page.getByTestId('payment-total').textContent()) ?? '');
+    expect(Math.abs(orderTotalValue - paymentTotalValue)).toBeLessThan(0.02);
+
+    // Método de pago: Efectivo — Select usa data-select-content; clic en la fila para evitar "outside viewport"
     await page.getByLabel(/primer método de pago/i).click();
-    await expect(page.locator('div.absolute.z-50').getByText('Efectivo')).toBeVisible({ timeout: 5_000 });
-    await page.locator('div.absolute.z-50').getByText('Efectivo').click();
+    const selectContent = page.locator('[data-select-content]');
+    const efectivoOption = selectContent.locator('div.cursor-pointer').filter({ hasText: 'Efectivo' }).first();
+    await expect(efectivoOption).toBeVisible({ timeout: 5_000 });
+    await efectivoOption.click();
 
     // Monto efectivo: valor alto para cubrir el total
     const amountInput = page.getByLabel(/monto/i).first();
