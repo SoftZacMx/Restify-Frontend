@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MoreVertical, Edit, Trash2, RotateCw } from 'lucide-react';
+import { MoreVertical, Trash2, RotateCw } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -22,7 +22,7 @@ import { cn } from '@/shared/lib/utils';
 interface UserTableProps {
   users: UserTableItem[];
   isLoading?: boolean;
-  onUserAction?: (userId: string, action: 'edit' | 'delete' | 'reactivate' | 'toggle-status') => void;
+  onUserAction?: (userId: string, action: 'delete' | 'reactivate' | 'toggle-status') => void;
 }
 
 /**
@@ -150,13 +150,6 @@ export const UserTable: React.FC<UserTableProps> = ({
                         <MoreVertical className="h-4 w-4" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-40">
-                        <DropdownMenuItem
-                          onSelect={() => onUserAction?.(user.id, 'edit')}
-                          className="cursor-pointer"
-                        >
-                          <Edit className="mr-2 h-4 w-4" />
-                          <span>Editar</span>
-                        </DropdownMenuItem>
                         {user.statusLabel === 'Activo' ? (
                         <DropdownMenuItem
                           onSelect={() => onUserAction?.(user.id, 'delete')}

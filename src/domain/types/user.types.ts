@@ -40,7 +40,7 @@ export interface UserTableItem extends Omit<User, 'password'> {
 export interface UserTableProps {
   users: UserTableItem[];
   isLoading?: boolean;
-  onUserAction?: (userId: string, action: 'edit' | 'delete' | 'toggle-status') => void;
+  onUserAction?: (userId: string, action: 'delete' | 'reactivate' | 'toggle-status') => void;
 }
 
 export interface UserSearchBarProps {

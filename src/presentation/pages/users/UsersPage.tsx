@@ -189,17 +189,13 @@ const UsersPage: React.FC = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   /**
-   * Handler para acciones de usuario (editar, eliminar, reactivar, toggle estado)
+   * Handler para acciones de usuario (eliminar, reactivar, toggle estado)
    */
   const handleUserAction = (
     userId: string,
-    action: 'edit' | 'delete' | 'reactivate' | 'toggle-status'
+    action: 'delete' | 'reactivate' | 'toggle-status'
   ) => {
     switch (action) {
-      case 'edit':
-        // TODO: Implementar edición de usuario
-        showErrorToast('Funcionalidad en desarrollo', 'La edición de usuarios estará disponible pronto');
-        break;
       case 'delete':
         // Buscar el usuario en la lista para obtener su nombre
         const user = users.find((u) => u.id === userId);
