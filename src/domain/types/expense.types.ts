@@ -188,8 +188,9 @@ export interface ExpenseFormErrors {
 
 /**
  * Producto para selección en compra de mercancía
+ * Named ExpenseProduct to avoid conflict with Product from product.types.ts
  */
-export interface Product {
+export interface ExpenseProduct {
   id: string;
   name: string;
   description: string | null;

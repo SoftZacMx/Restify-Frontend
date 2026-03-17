@@ -77,6 +77,7 @@ export type {
   ExpenseFormErrors,
   EmployeeUser,
   ExpenseListItem,
+  ExpenseProduct,
 } from './expense.types';
 
 // Re-export order types
