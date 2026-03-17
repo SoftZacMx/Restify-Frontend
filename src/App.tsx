@@ -9,6 +9,7 @@ import { ErrorBoundary } from '@/presentation/components/ErrorBoundary';
 
 // Pages
 import LoginPage from '@/presentation/pages/auth/LoginPage';
+import RecoverPasswordPage from '@/presentation/pages/auth/RecoverPasswordPage';
 import DashboardPage from '@/presentation/pages/dashboard/DashboardPage';
 import OrdersPage from '@/presentation/pages/orders/OrdersPage';
 import PosPage from '@/presentation/pages/pos/PosPage';
@@ -53,6 +54,7 @@ function App() {
               <Routes>
                 {/* Auth routes */}
                 <Route path="/auth/login" element={<LoginPage />} />
+                <Route path="/auth/recover-password" element={<RecoverPasswordPage />} />
 
               {/* Protected routes */}
               <Route

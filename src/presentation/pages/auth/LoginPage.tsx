@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, UtensilsCrossed } from 'lucide-react';
@@ -138,12 +138,12 @@ export default function LoginPage() {
 
             {/* Forgot Password Link */}
             <div className="text-center pt-2">
-              <a
-                href="#"
+              <Link
+                to="/auth/recover-password"
                 className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-medium"
               >
                 ¿Olvidaste tu contraseña?
-              </a>
+              </Link>
             </div>
           </form>
         </CardContent>
