@@ -5,6 +5,7 @@ import type {
   ReportsApiResponse,
   ReportsSummaryResponse,
 } from '@/domain/types';
+import { normalizeCashFlowReportData } from '@/shared/utils/report-data.utils';
 
 const REPORTS_BASE = '/api/reports';
 
@@ -12,6 +13,8 @@ const REPORTS_BASE = '/api/reports';
  * Repository para generar reportes (GET /api/reports)
  * Query params: type (requerido), dateFrom, dateTo, page, pageSize.
  * Autenticación: cookie/header enviado por apiClient (withCredentials).
+ *
+ * Formato API: `{ success, data: BaseReportResponse<T> }` donde `data` incluye `type`, `generatedAt`, `filters` y `data` (payload del reporte).
  */
 export class ReportRepository {
   async generateReport<T = unknown>(params: GenerateReportParams): Promise<BaseReportResponse<T>> {
@@ -28,7 +31,13 @@ export class ReportRepository {
       throw new Error('Respuesta inválida del servidor de reportes');
     }
 
-    return body.data as BaseReportResponse<T>;
+    const envelope = body.data as BaseReportResponse<T>;
+
+    if (params.type === 'CASH_FLOW' && envelope?.data != null) {
+      envelope.data = normalizeCashFlowReportData(envelope.data) as T;
+    }
+
+    return envelope;
   }
 
   async getReportsSummary(params?: { dateFrom?: string; dateTo?: string }): Promise<ReportsSummaryResponse> {

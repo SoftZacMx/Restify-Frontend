@@ -31,6 +31,7 @@ const paymentPillClass: Record<number, string> = {
 
 export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) => {
   const { incomes, expenses, cashFlow } = data;
+  const bpm = incomes.byPaymentMethod ?? { cash: 0, transfer: 0, card: 0 };
   const statusConfig =
     cashFlow.status === 'POSITIVE'
       ? { variant: 'default' as const, label: 'Positivo', icon: TrendingUp, className: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800' }
@@ -54,9 +55,9 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
           <CardContent>
             <p className="text-2xl font-bold text-green-600 dark:text-green-400">{formatCurrency(incomes.totalIncomes)}</p>
             <div className="flex flex-wrap gap-1.5 mt-2">
-              <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">Efectivo {formatCurrency(incomes.byPaymentMethod.cash)}</span>
-              <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300">Transf. {formatCurrency(incomes.byPaymentMethod.transfer)}</span>
-              <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-violet-100 dark:bg-violet-900/40 text-violet-800 dark:text-violet-300">Tarjeta {formatCurrency(incomes.byPaymentMethod.card)}</span>
+              <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">Efectivo {formatCurrency(bpm.cash)}</span>
+              <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300">Transf. {formatCurrency(bpm.transfer)}</span>
+              <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-violet-100 dark:bg-violet-900/40 text-violet-800 dark:text-violet-300">Tarjeta {formatCurrency(bpm.card)}</span>
             </div>
           </CardContent>
         </Card>
