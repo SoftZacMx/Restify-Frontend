@@ -21,7 +21,7 @@ interface TableFormProps {
 }
 
 /**
- * Formulario de mesa: nombre libre (ej. 1, 1A, Terraza).
+ * Table create/edit form — free-text table name (e.g. 1, 1A, Terraza).
  */
 export const TableForm: React.FC<TableFormProps> = ({
   initialData = null,
@@ -97,7 +97,7 @@ export const TableForm: React.FC<TableFormProps> = ({
         await onSubmit(updateData);
       } else {
         if (!userId) {
-          throw new Error('El userId es requerido para crear una mesa');
+          throw new Error('userId is required to create a table');
         }
         const createData: CreateTableRequest = {
           name,
@@ -115,12 +115,17 @@ export const TableForm: React.FC<TableFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="tableName" className="text-sm font-medium">
+        <Label htmlFor="table-name-input" className="text-sm font-medium">
           Nombre de la mesa <span className="text-destructive">*</span>
         </Label>
         <Input
-          id="tableName"
+          id="table-name-input"
+          name="name"
           type="text"
+          inputMode="text"
+          autoComplete="off"
+          autoCorrect="off"
+          spellCheck={false}
           value={formData.name}
           onChange={(e) => handleChange('name', e.target.value)}
           placeholder="Ej: 1, 1A, 1B, Terraza..."
