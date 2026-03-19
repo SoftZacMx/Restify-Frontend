@@ -90,10 +90,13 @@ function escapeHtml(text: string): string {
 
 /**
  * Ticket cocina — Mismo diseño que ticket de venta: RESTIFY / COCINA, Orden #id, Mesa, pedido (PLATILLO, nombre, x 1, extras, nota).
- * Solo usa campos que ya devuelve el API: orderId, tableNumber, items.
+ * Solo usa campos que ya devuelve el API: orderId, tableName, items.
  */
 export function buildKitchenTicketHtml(data: KitchenTicketResponse): string {
-  const tableText = data.tableNumber != null ? `Mesa ${data.tableNumber}` : 'Sin mesa';
+  const tableText =
+    data.tableName != null && data.tableName.trim() !== ''
+      ? `Mesa ${data.tableName}`
+      : 'Sin mesa';
   const orderShortId = data.orderId.slice(-8).toUpperCase();
 
   let itemsHtml = '';
@@ -135,7 +138,10 @@ export function buildSaleTicketHtml(data: SaleTicketResponse): string {
   const parts = companyFull.split(/\s+/);
   const brandMain = parts[0] ?? 'Restify';
   const brandBranch = data.companyBranch?.trim() || (parts.length > 1 ? parts.slice(1).join(' ') : '');
-  const tableText = data.tableNumber != null ? `Mesa ${data.tableNumber}` : 'Sin mesa';
+  const tableText =
+    data.tableName != null && data.tableName.trim() !== ''
+      ? `Mesa ${data.tableName}`
+      : 'Sin mesa';
   const orderShortId = data.orderId.slice(-8).toUpperCase();
   const dateFormatted = new Date(data.date).toLocaleString('es-MX', {
     day: '2-digit',

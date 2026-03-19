@@ -13,8 +13,8 @@ import type {
 export interface OrderInfoDisplay {
   /** Origen/tipo: 'Local', 'Delivery', etc. */
   origin: string;
-  /** Mesa asignada (solo número) si aplica */
-  tableNumber?: number;
+  /** Nombre de mesa si aplica */
+  tableName?: string;
   /** Nombre del cliente si aplica */
   client?: string | null;
   /** Si viene de lista de órdenes (pago), info no editable */
@@ -62,7 +62,7 @@ export const OrderPaymentLayout: React.FC<OrderPaymentLayoutProps> = ({
 }) => {
   const subtitle = [
     orderInfo.orderId && `Orden ${formatOrderNumber(orderInfo.orderId)}`,
-    orderInfo.tableNumber != null && `Mesa ${orderInfo.tableNumber}`,
+    orderInfo.tableName != null && orderInfo.tableName !== '' && `Mesa ${orderInfo.tableName}`,
     orderInfo.client && orderInfo.client,
   ]
     .filter(Boolean)

@@ -20,7 +20,7 @@ export interface KitchenTicketOrderItem {
 /** Respuesta GET /api/orders/:order_id/ticket/kitchen-ticket */
 export interface KitchenTicketResponse {
   orderId: string;
-  tableNumber: number | null;
+  tableName: string | null;
   items: KitchenTicketOrderItem[];
 }
 
@@ -52,7 +52,7 @@ export interface SaleTicketResponse {
   companyWebsite?: string | null;
   orderId: string;
   date: string;
-  tableNumber: number | null;
+  tableName: string | null;
   client: string | null;
   note: string | null;
   items: SaleTicketOrderItem[];

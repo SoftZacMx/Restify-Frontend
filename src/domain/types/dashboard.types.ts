@@ -8,7 +8,7 @@ export interface DashboardOrderSummary {
   date: string;
   origin: string;
   tableId: string | null;
-  tableNumber?: number | null;
+  tableName?: string | null;
   status: boolean;
   delivered: boolean;
 }
@@ -31,7 +31,7 @@ export interface DashboardActiveOrders {
 
 export interface DashboardOccupiedTable {
   id: string;
-  numberTable: number;
+  name: string;
 }
 
 export interface DashboardOccupiedTables {

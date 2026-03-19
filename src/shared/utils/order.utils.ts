@@ -154,7 +154,7 @@ export const countOrderItems = (order: OrderResponse): number => {
  */
 export const getOrderLocationDisplay = (order: OrderResponse): string => {
   if (order.table) {
-    return `Mesa ${order.table.numberTable}`;
+    return `Mesa ${order.table.name}`;
   }
   if (order.origin === 'Delivery') {
     return 'Delivery';

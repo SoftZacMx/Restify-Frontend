@@ -109,7 +109,7 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
             <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
               <MapPin className="h-4 w-4 text-slate-400" />
               <span className="text-sm">
-                {order.table ? `Mesa ${order.table.numberTable}` : 'Sin mesa'}
+                {order.table ? `Mesa ${order.table.name}` : 'Sin mesa'}
               </span>
             </div>
             {order.client && (

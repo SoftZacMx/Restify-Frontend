@@ -94,10 +94,10 @@ export const TablesTable: React.FC<TablesTableProps> = ({
                       to={`/tables/${table.id}`}
                       className="text-slate-900 dark:text-white hover:text-primary transition-colors flex items-center gap-2"
                     >
-                      <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold">
-                        {table.numberTable}
+                      <span className="inline-flex items-center justify-center min-w-8 h-8 px-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs max-w-[120px] truncate">
+                        {table.name}
                       </span>
-                      <span>Mesa {table.numberTable}</span>
+                      <span className="truncate max-w-[180px]">Mesa {table.name}</span>
                     </Link>
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap">

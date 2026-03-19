@@ -3,14 +3,14 @@
 // ============================================
 
 export interface CreateTableRequest {
-  numberTable: number;
+  name: string;
   status?: boolean;
   availabilityStatus?: boolean;
   userId: string;
 }
 
 export interface UpdateTableRequest {
-  numberTable?: number;
+  name?: string;
   status?: boolean;
   availabilityStatus?: boolean;
 }
@@ -19,7 +19,8 @@ export interface ListTablesRequest {
   status?: boolean;
   availabilityStatus?: boolean;
   userId?: string;
-  numberTable?: number;
+  /** Filtro exacto por nombre de mesa */
+  name?: string;
 }
 
 // ============================================
@@ -28,7 +29,7 @@ export interface ListTablesRequest {
 
 export interface TableResponse {
   id: string;
-  numberTable: number;
+  name: string;
   userId: string;
   status: boolean;
   availabilityStatus: boolean;
@@ -53,10 +54,10 @@ export type TableFormData = Omit<CreateTableRequest, 'userId'>;
 export type TableEditFormData = UpdateTableRequest;
 
 // Para mostrar en listas/selectores (mesas disponibles)
-export type AvailableTableOption = Pick<TableResponse, 'id' | 'numberTable'>;
+export type AvailableTableOption = Pick<TableResponse, 'id' | 'name'>;
 
 // Para uso en Order
-export type TableForOrder = Pick<TableResponse, 'id' | 'numberTable' | 'availabilityStatus'>;
+export type TableForOrder = Pick<TableResponse, 'id' | 'name' | 'availabilityStatus'>;
 
 // Estado visual de la mesa
 export interface TableStatusInfo {
@@ -68,7 +69,7 @@ export interface TableStatusInfo {
 // Para mostrar en tablas
 export interface TableTableItem {
   id: string;
-  numberTable: number;
+  name: string;
   status: boolean;
   statusLabel: 'Activa' | 'Inactiva';
   availabilityStatus: boolean;
@@ -79,7 +80,7 @@ export interface TableTableItem {
 
 // Para errores de formulario
 export interface TableFormErrors {
-  numberTable?: string;
+  name?: string;
   status?: string;
   availabilityStatus?: string;
 }

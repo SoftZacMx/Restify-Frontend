@@ -30,8 +30,8 @@ export class TableRepository {
     if (filters?.userId) {
       params.userId = filters.userId;
     }
-    if (filters?.numberTable !== undefined) {
-      params.numberTable = String(filters.numberTable);
+    if (filters?.name !== undefined) {
+      params.name = filters.name;
     }
     
     const response = await apiClient.get('/api/tables', { params });

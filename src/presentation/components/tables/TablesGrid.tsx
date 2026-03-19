@@ -190,13 +190,13 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
               )} />
             </div>
 
-            {/* Número de mesa */}
+            {/* Nombre de mesa */}
             <div className="text-center">
               <span className={cn(
-                'text-2xl font-bold',
+                'text-lg font-bold px-1 break-words',
                 table.status ? 'opacity-100' : 'opacity-60'
               )}>
-                {table.numberTable}
+                {table.name}
               </span>
               <p className={cn(
                 'text-xs mt-1 font-medium',

@@ -20,7 +20,7 @@ export const SelectedTableCard: React.FC<SelectedTableCardProps> = ({
   onClick,
   className,
 }) => {
-  const tableLabel = `Mesa ${String(table.number).padStart(2, '0')}`;
+  const tableLabel = `Mesa ${table.name}`;
 
   return (
     <Card

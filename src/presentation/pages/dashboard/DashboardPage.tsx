@@ -95,7 +95,7 @@ const DashboardPage = () => {
   };
 
   const getTableDisplay = (order: DashboardOrderSummary) => {
-    if (order.tableNumber != null) return `Mesa ${order.tableNumber}`;
+    if (order.tableName != null && order.tableName !== '') return `Mesa ${order.tableName}`;
     return order.origin === 'local' ? 'Local' : order.origin || 'Sin mesa';
   };
 
@@ -185,7 +185,7 @@ const DashboardPage = () => {
           accent="blue"
           subtitle={
             occupiedTables.items.length > 0
-              ? `Mesas ${occupiedTables.items.map((t) => t.numberTable).join(', ')}`
+              ? `Mesas ${occupiedTables.items.map((t) => t.name).join(', ')}`
               : undefined
           }
         />

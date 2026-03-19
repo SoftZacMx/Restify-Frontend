@@ -134,7 +134,7 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
             ) : (
               tables.map((table) => (
                 <SelectItem key={table.id} value={table.id}>
-                  Mesa {table.numberTable}
+                  Mesa {table.name}
                 </SelectItem>
               ))
             )}

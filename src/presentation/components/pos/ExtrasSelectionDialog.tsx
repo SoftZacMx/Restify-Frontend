@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { SlidersHorizontal, X, UtensilsCrossed } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { Search, SlidersHorizontal, X, UtensilsCrossed } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -8,6 +8,7 @@ import {
   DialogClose,
 } from '@/presentation/components/ui/dialog';
 import { Button } from '@/presentation/components/ui/button';
+import { Input } from '@/presentation/components/ui/input';
 import { cn } from '@/shared/lib/utils';
 import type { PosProduct } from '@/domain/types';
 import type { Category } from '@/domain/types';
@@ -43,6 +44,18 @@ function groupExtrasByCategory(
   }));
 }
 
+function filterExtrasBySearch(extras: PosProduct[], query: string): PosProduct[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return extras;
+  return extras.filter((extra) => {
+    if (extra.name.toLowerCase().includes(q)) return true;
+    if (extra.description?.trim()) {
+      return extra.description.toLowerCase().includes(q);
+    }
+    return false;
+  });
+}
+
 /**
  * Diálogo independiente para elegir extras (Personaliza tu plato).
  * Se abre desde el diálogo de agregar producto al hacer clic en "Ver Extras Disponibles".
@@ -56,9 +69,13 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
   onApply,
 }) => {
   const [selectedExtras, setSelectedExtras] = useState<PosProduct[]>(initialSelectedExtras);
+  const [searchQuery, setSearchQuery] = useState('');
 
   React.useEffect(() => {
-    if (open) setSelectedExtras(initialSelectedExtras);
+    if (open) {
+      setSelectedExtras(initialSelectedExtras);
+      setSearchQuery('');
+    }
   }, [open, initialSelectedExtras]);
 
   const handleExtraToggle = (extra: PosProduct) => {
@@ -79,7 +96,15 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
   };
 
   const extrasTotal = selectedExtras.reduce((sum, e) => sum + e.price, 0);
-  const grouped = groupExtrasByCategory(availableExtras, categories);
+
+  const filteredExtras = useMemo(
+    () => filterExtrasBySearch(availableExtras, searchQuery),
+    [availableExtras, searchQuery]
+  );
+  const grouped = useMemo(
+    () => groupExtrasByCategory(filteredExtras, categories),
+    [filteredExtras, categories]
+  );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -94,11 +119,38 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
           <DialogClose />
         </DialogHeader>
 
+        {/* Search: filter extras by name (and description) as user types */}
+        <div className="shrink-0 px-6 pb-3 border-b border-slate-200 dark:border-slate-700">
+          <div className="relative">
+            <Search
+              className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none"
+              aria-hidden
+            />
+            <Input
+              id="extras-search-input"
+              name="extrasSearch"
+              type="search"
+              inputMode="search"
+              autoComplete="off"
+              spellCheck={false}
+              placeholder="Buscar extra por nombre..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 h-10"
+              aria-label="Buscar extras por nombre"
+            />
+          </div>
+        </div>
+
         {/* Lista de extras disponibles: ocupa el espacio central con scroll */}
         <div className="flex flex-col flex-1 min-h-0 overflow-y-auto px-6 py-4">
           <div className="space-y-5">
             {grouped.length === 0 ? (
-              <p className="text-sm text-slate-500 dark:text-slate-400">No hay extras disponibles</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                {availableExtras.length === 0
+                  ? 'No hay extras disponibles'
+                  : 'No hay extras que coincidan con la búsqueda'}
+              </p>
             ) : (
               grouped.map(({ categoryName, extras: items }) => (
                 <div key={categoryName}>

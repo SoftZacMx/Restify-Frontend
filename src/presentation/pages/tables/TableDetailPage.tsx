@@ -109,12 +109,12 @@ const TableDetailPage: React.FC = () => {
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xl">
-              {table.numberTable}
+            <span className="inline-flex items-center justify-center min-w-12 max-w-[140px] min-h-12 px-2 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-lg text-center break-words">
+              {table.name}
             </span>
             <div>
               <h1 className="text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white">
-                Mesa {table.numberTable}
+                Mesa {table.name}
               </h1>
               <p className="text-sm text-slate-500 dark:text-slate-400">
                 Editar información de la mesa
@@ -153,7 +153,7 @@ const TableDetailPage: React.FC = () => {
                 <div className="flex flex-col items-center justify-center py-6 space-y-3">
                   <div
                     className={cn(
-                      'w-20 h-20 rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-lg',
+                      'w-20 min-h-20 max-w-[200px] rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg px-2 py-2 text-center break-words',
                       !table.status
                         ? 'bg-gray-400'
                         : table.availabilityStatus
@@ -161,7 +161,7 @@ const TableDetailPage: React.FC = () => {
                           : 'bg-red-500'
                     )}
                   >
-                    {table.numberTable}
+                    {table.name}
                   </div>
                   <Badge
                     className={cn(

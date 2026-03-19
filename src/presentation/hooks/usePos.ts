@@ -50,7 +50,7 @@ const mapMenuItemToPosProduct = (menuItem: MenuItemResponse): PosProduct => ({
  */
 const mapTableResponseToTable = (tableResponse: TableResponse): Table => ({
   id: tableResponse.id,
-  number: tableResponse.numberTable,
+  name: tableResponse.name,
   capacity: 4, // El backend no maneja capacidad, usar valor por defecto
   isAvailable: tableResponse.status && tableResponse.availabilityStatus,
   location: undefined, // El backend no maneja ubicación
