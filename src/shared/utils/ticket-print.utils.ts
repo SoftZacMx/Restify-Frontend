@@ -18,25 +18,25 @@ const BASE_STYLES = `
   @page { size: ${TICKET_WIDTH_MM}mm auto; margin: 0; }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; width: ${TICKET_WIDTH_MM}mm; overflow-wrap: break-word; word-break: break-word; }
-  body { padding: 2mm 1.5mm; font-family: Arial, sans-serif; font-size: 9pt; }
+  body { padding: 2mm 1.5mm; font-family: Arial, sans-serif; font-size: 7pt; }
   .ticket { width: 100%; max-width: ${TICKET_WIDTH_MM}mm; overflow: hidden; }
-  .rule { border: none; border-top: 1px solid #000; margin: 6px 0; }
-  .head { font-size: 12pt; font-weight: bold; text-align: center; line-height: 1.3; margin-bottom: 2px; }
-  .head-sub { font-size: 10pt; text-align: center; margin: 2px 0; }
-  .label { font-size: 8pt; font-weight: bold; text-transform: uppercase; color: #333; margin-bottom: 1px; }
-  .row { font-size: 9pt; line-height: 1.3; margin: 3px 0; display: flex; justify-content: space-between; align-items: baseline; gap: 4px; }
+  .rule { border: none; border-top: 1px solid #000; margin: 3px 0; }
+  .head { font-size: 8pt; font-weight: bold; text-align: center; line-height: 1.3; margin-bottom: 1px; }
+  .head-sub { font-size: 7pt; text-align: center; margin: 1px 0; }
+  .label { font-size: 6pt; font-weight: bold; text-transform: uppercase; color: #333; margin-bottom: 1px; }
+  .row { font-size: 7pt; line-height: 1.3; margin: 2px 0; display: flex; justify-content: space-between; align-items: baseline; gap: 4px; }
   .row-desc { flex: 1; min-width: 0; overflow-wrap: break-word; word-break: break-word; }
   .row-amt { flex-shrink: 0; text-align: right; font-variant-numeric: tabular-nums; }
-  .line { font-size: 9pt; line-height: 1.3; margin: 3px 0; }
-  .extra-row { font-size: 8pt; line-height: 1.3; margin: 2px 0 2px 8px; display: flex; justify-content: space-between; align-items: baseline; gap: 4px; }
+  .line { font-size: 7pt; line-height: 1.3; margin: 2px 0; }
+  .extra-row { font-size: 6pt; line-height: 1.3; margin: 1px 0 1px 6px; display: flex; justify-content: space-between; align-items: baseline; gap: 4px; }
   .extra-desc { flex: 1; min-width: 0; overflow-wrap: break-word; }
   .extra-amt { flex-shrink: 0; text-align: right; font-variant-numeric: tabular-nums; }
-  .note-line { font-size: 8pt; line-height: 1.3; margin: 2px 0 2px 8px; font-style: italic; }
-  .item-block { margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px dashed #000; }
+  .note-line { font-size: 6pt; line-height: 1.3; margin: 1px 0 1px 6px; font-style: italic; }
+  .item-block { margin-bottom: 4px; padding-bottom: 3px; border-bottom: 1px dashed #000; }
   .item-block:last-of-type { border-bottom: none; }
-  .totals-section .row { margin: 3px 0; }
-  .total-final { font-size: 11pt; font-weight: bold; margin-top: 6px; padding-top: 4px; border-top: 2px solid #000; }
-  .foot { text-align: center; margin-top: 8px; padding-top: 6px; border-top: 1px solid #000; font-size: 9pt; }
+  .totals-section .row { margin: 2px 0; }
+  .total-final { font-size: 8pt; font-weight: bold; margin-top: 3px; padding-top: 2px; border-top: 2px solid #000; }
+  .foot { text-align: center; margin-top: 4px; padding-top: 3px; border-top: 1px solid #000; font-size: 7pt; }
   .bold { font-weight: bold; }
   @media print {
     html, body { width: ${TICKET_WIDTH_MM}mm; }
@@ -46,39 +46,39 @@ const BASE_STYLES = `
 
 /** Estilos específicos del ticket de venta (diseño RESTIFY / DELIYUNOS) */
 const SALE_TICKET_STYLES = `
-  .ticket-sale .brand-main { font-family: Georgia, 'Times New Roman', serif; font-size: 14pt; font-weight: bold; font-style: italic; text-align: center; letter-spacing: 0.02em; margin-bottom: 2px; }
-  .ticket-sale .brand-branch { font-size: 16pt; font-weight: bold; text-align: center; font-family: Arial, sans-serif; margin-bottom: 6px; }
-  .ticket-sale .company-contact { font-size: 8pt; text-align: left; color: #333; line-height: 1.4; margin-bottom: 4px; }
-  .ticket-sale .ticket-title { font-size: 10pt; font-weight: bold; text-align: center; text-transform: uppercase; margin: 4px 0 2px; }
-  .ticket-sale .ticket-id { font-size: 11pt; font-weight: bold; text-align: center; margin: 2px 0; }
-  .ticket-sale .ticket-datetime { font-size: 8pt; text-align: center; margin: 2px 0; }
-  .ticket-sale .ticket-table { font-size: 10pt; font-weight: bold; text-align: center; margin: 2px 0 6px; }
-  .ticket-sale .consumo-header { font-size: 8pt; font-weight: bold; text-transform: uppercase; margin: 6px 0 4px; }
-  .ticket-sale .item-platillo { display: flex; justify-content: space-between; align-items: baseline; font-size: 9pt; font-weight: bold; text-transform: uppercase; margin-bottom: 2px; }
-  .ticket-sale .item-name { font-size: 9pt; margin: 2px 0; overflow-wrap: break-word; }
-  .ticket-sale .item-qty { font-size: 8pt; margin-bottom: 4px; }
-  .ticket-sale .dash { border: none; border-top: 1px dashed #000; margin: 4px 0; }
-  .ticket-sale .totals-line { display: flex; justify-content: space-between; font-size: 9pt; margin: 3px 0; }
-  .ticket-sale .totals-total { display: flex; justify-content: space-between; font-size: 12pt; font-weight: bold; text-transform: uppercase; margin-top: 6px; padding-top: 4px; border-top: 2px solid #000; }
-  .ticket-sale .pago-estado { font-size: 9pt; font-weight: bold; margin: 4px 0; }
-  .ticket-sale .foot-thanks { font-family: Georgia, 'Times New Roman', serif; font-size: 10pt; font-style: italic; text-align: center; margin: 6px 0 3px; }
-  .ticket-sale .foot-web { font-size: 8pt; color: #888; text-align: center; }
+  .ticket-sale .brand-main { font-family: Georgia, 'Times New Roman', serif; font-size: 9pt; font-weight: bold; font-style: italic; text-align: center; letter-spacing: 0.02em; margin-bottom: 1px; }
+  .ticket-sale .brand-branch { font-size: 10pt; font-weight: bold; text-align: center; font-family: Arial, sans-serif; margin-bottom: 3px; }
+  .ticket-sale .company-contact { font-size: 6pt; text-align: left; color: #333; line-height: 1.3; margin-bottom: 2px; }
+  .ticket-sale .ticket-title { font-size: 7pt; font-weight: bold; text-align: center; text-transform: uppercase; margin: 2px 0 1px; }
+  .ticket-sale .ticket-id { font-size: 8pt; font-weight: bold; text-align: center; margin: 1px 0; }
+  .ticket-sale .ticket-datetime { font-size: 6pt; text-align: center; margin: 1px 0; }
+  .ticket-sale .ticket-table { font-size: 7pt; font-weight: bold; text-align: center; margin: 1px 0 3px; }
+  .ticket-sale .consumo-header { font-size: 6pt; font-weight: bold; text-transform: uppercase; margin: 3px 0 2px; }
+  .ticket-sale .item-platillo { display: flex; justify-content: space-between; align-items: baseline; font-size: 7pt; font-weight: bold; text-transform: uppercase; margin-bottom: 1px; }
+  .ticket-sale .item-name { font-size: 7pt; margin: 1px 0; overflow-wrap: break-word; }
+  .ticket-sale .item-qty { font-size: 6pt; margin-bottom: 2px; }
+  .ticket-sale .dash { border: none; border-top: 1px dashed #000; margin: 2px 0; }
+  .ticket-sale .totals-line { display: flex; justify-content: space-between; font-size: 7pt; margin: 2px 0; }
+  .ticket-sale .totals-total { display: flex; justify-content: space-between; font-size: 9pt; font-weight: bold; text-transform: uppercase; margin-top: 3px; padding-top: 2px; border-top: 2px solid #000; }
+  .ticket-sale .pago-estado { font-size: 7pt; font-weight: bold; margin: 2px 0; }
+  .ticket-sale .foot-thanks { font-family: Georgia, 'Times New Roman', serif; font-size: 7pt; font-style: italic; text-align: center; margin: 3px 0 2px; }
+  .ticket-sale .foot-web { font-size: 6pt; color: #888; text-align: center; }
 `;
 
 /** Estilos ticket cocina (mismo diseño que venta: brand, rules, ítems con PLATILLO) */
 const KITCHEN_TICKET_STYLES = `
-  .ticket-kitchen .brand-main { font-family: Georgia, 'Times New Roman', serif; font-size: 14pt; font-weight: bold; font-style: italic; text-align: center; letter-spacing: 0.02em; margin-bottom: 2px; }
-  .ticket-kitchen .brand-branch { font-size: 16pt; font-weight: bold; text-align: center; font-family: Arial, sans-serif; margin-bottom: 6px; }
-  .ticket-kitchen .ticket-title { font-size: 10pt; font-weight: bold; text-align: center; text-transform: uppercase; margin: 4px 0 2px; }
-  .ticket-kitchen .ticket-id { font-size: 11pt; font-weight: bold; text-align: center; margin: 2px 0; }
-  .ticket-kitchen .ticket-table { font-size: 10pt; font-weight: bold; text-align: center; margin: 2px 0 6px; }
-  .ticket-kitchen .pedido-header { font-size: 8pt; font-weight: bold; text-transform: uppercase; margin: 6px 0 4px; }
-  .ticket-kitchen .item-platillo { font-size: 9pt; font-weight: bold; text-transform: uppercase; margin-bottom: 2px; }
-  .ticket-kitchen .item-name { font-size: 9pt; margin: 2px 0; overflow-wrap: break-word; }
-  .ticket-kitchen .item-qty { font-size: 8pt; margin-bottom: 3px; }
-  .ticket-kitchen .item-extras { font-size: 8pt; margin: 2px 0 2px 8px; }
-  .ticket-kitchen .note-line { font-size: 8pt; font-style: italic; margin: 2px 0 2px 8px; }
-  .ticket-kitchen .item-block { margin-bottom: 6px; padding-bottom: 5px; border-bottom: 1px dashed #000; }
+  .ticket-kitchen .brand-main { font-family: Georgia, 'Times New Roman', serif; font-size: 9pt; font-weight: bold; font-style: italic; text-align: center; letter-spacing: 0.02em; margin-bottom: 1px; }
+  .ticket-kitchen .brand-branch { font-size: 10pt; font-weight: bold; text-align: center; font-family: Arial, sans-serif; margin-bottom: 3px; }
+  .ticket-kitchen .ticket-title { font-size: 7pt; font-weight: bold; text-align: center; text-transform: uppercase; margin: 2px 0 1px; }
+  .ticket-kitchen .ticket-id { font-size: 8pt; font-weight: bold; text-align: center; margin: 1px 0; }
+  .ticket-kitchen .ticket-table { font-size: 7pt; font-weight: bold; text-align: center; margin: 1px 0 3px; }
+  .ticket-kitchen .pedido-header { font-size: 6pt; font-weight: bold; text-transform: uppercase; margin: 3px 0 2px; }
+  .ticket-kitchen .item-platillo { font-size: 7pt; font-weight: bold; text-transform: uppercase; margin-bottom: 1px; }
+  .ticket-kitchen .item-name { font-size: 7pt; margin: 1px 0; overflow-wrap: break-word; }
+  .ticket-kitchen .item-qty { font-size: 6pt; margin-bottom: 2px; }
+  .ticket-kitchen .item-extras { font-size: 6pt; margin: 1px 0 1px 6px; }
+  .ticket-kitchen .note-line { font-size: 6pt; font-style: italic; margin: 1px 0 1px 6px; }
+  .ticket-kitchen .item-block { margin-bottom: 4px; padding-bottom: 3px; border-bottom: 1px dashed #000; }
   .ticket-kitchen .item-block:last-of-type { border-bottom: none; }
 `;
 
