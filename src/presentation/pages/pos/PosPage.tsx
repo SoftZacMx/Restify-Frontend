@@ -70,6 +70,9 @@ const PosPage = () => {
     cartItems,
     cartState,
     paymentState,
+    cashAmount,
+    cardAmount,
+    transferAmount,
     selectedMethod1,
     selectedMethod2,
     showSecondPaymentMethod,
@@ -221,7 +224,7 @@ const PosPage = () => {
       tip: 0, // Por ahora no hay propina en el POS
       origin: mapOrderTypeToOrigin(orderType),
       client: orderType === 'TAKEOUT' ? customerName || null : null,
-      paymentDiffer: false, // Por ahora no hay pago diferido
+      paymentDiffer: !!(selectedMethod1 && selectedMethod2),
       note: null, // Por ahora no hay notas generales
       orderItems,
     };
@@ -391,14 +394,34 @@ const PosPage = () => {
           }
         }
       } else {
-        // Pago dividido (dos métodos): PUT updateOrder (sin endpoint /pay para split)
-        const orderRequest = buildCreateOrderRequest();
-        const updateRequest = {
-          status: true,
-          paymentMethod: orderRequest?.paymentMethod ?? null,
-          delivered: true,
-        };
-        await orderService.updateOrder(orderIdToProcess, updateRequest);
+        // Pago dividido: POST /api/orders/:id/pay crea Payment + PaymentDifferentiation con cada método
+        if (!selectedMethod1 || !selectedMethod2) {
+          showErrorToast('Error', 'Selecciona dos métodos de pago para el pago dividido');
+          return;
+        }
+        const amount1 = orderService.getPaymentAmount(
+          selectedMethod1,
+          cashAmount,
+          cardAmount,
+          transferAmount
+        );
+        const amount2 = orderService.getPaymentAmount(
+          selectedMethod2,
+          cashAmount,
+          cardAmount,
+          transferAmount
+        );
+        const mapMethod = (m: PosPaymentMethod): 'CASH' | 'TRANSFER' | 'CARD_PHYSICAL' =>
+          m === 'CARD' ? 'CARD_PHYSICAL' : m;
+        const a1 = Math.round(amount1 * 100) / 100;
+        const a2 = Math.round(amount2 * 100) / 100;
+        const paySplitResult = await orderService.payOrder(orderIdToProcess, {
+          firstPayment: { amount: a1, paymentMethod: mapMethod(selectedMethod1) },
+          secondPayment: { amount: a2, paymentMethod: mapMethod(selectedMethod2) },
+        });
+        if (paySplitResult.tableReleased) {
+          queryClient.invalidateQueries({ queryKey: ['tables'] });
+        }
       }
 
       showSuccessToast('Orden procesada', 'La orden se ha procesado correctamente');
@@ -425,6 +448,11 @@ const PosPage = () => {
           ORDER_NOT_FOUND: 'Orden no encontrada',
           ORDER_ALREADY_PAID: 'Esta orden ya fue pagada',
           PAYMENT_AMOUNT_MISMATCH: 'El monto debe coincidir con el total de la orden',
+          SPLIT_PAYMENT_ALREADY_EXISTS: 'Esta orden ya tiene pago dividido registrado',
+          SPLIT_PAYMENT_INVALID_METHOD: 'Método de pago no válido para pago dividido',
+          SPLIT_PAYMENT_SAME_METHOD: 'Los dos métodos del pago dividido deben ser distintos',
+          SPLIT_PAYMENT_AMOUNT_EXCEEDS_TOTAL: 'La suma de los pagos supera el total de la orden',
+          SPLIT_PAYMENT_AMOUNT_MISMATCH: 'La suma de los pagos debe coincidir con el total de la orden',
         };
         showErrorToast('Error', messages[error.code] ?? error.message);
       } else if (error instanceof Error) {

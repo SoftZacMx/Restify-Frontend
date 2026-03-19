@@ -210,20 +210,33 @@ export interface ListOrdersResponse {
   pagination: { page: number; limit: number; total: number; totalPages: number };
 }
 
-/**
- * Request para POST /api/orders/:order_id/pay (guía payment-frontend-guide)
- */
-export interface PayOrderRequest {
+/** Pago único — POST /api/orders/:order_id/pay */
+export interface PayOrderSingleRequest {
   paymentMethod: 'CASH' | 'TRANSFER' | 'CARD_PHYSICAL';
   amount: number; // Debe coincidir con order.total (tolerancia 0.01)
   transferNumber?: string; // Opcional, solo para TRANSFER (máx 100 chars)
 }
 
+/** Pago dividido (dos métodos) — mismo endpoint */
+export interface PayOrderSplitRequest {
+  firstPayment: {
+    amount: number;
+    paymentMethod: 'CASH' | 'TRANSFER' | 'CARD_PHYSICAL';
+  };
+  secondPayment: {
+    amount: number;
+    paymentMethod: 'CASH' | 'TRANSFER' | 'CARD_PHYSICAL';
+  };
+}
+
+export type PayOrderRequest = PayOrderSingleRequest | PayOrderSplitRequest;
+
 /**
  * Respuesta de POST /api/orders/:order_id/pay
  */
 export interface PayOrderResult {
-  payment: {
+  /** Pago único */
+  payment?: {
     id: string;
     orderId: string;
     amount: number;
@@ -231,10 +244,26 @@ export interface PayOrderResult {
     paymentMethod: string;
     createdAt: string; // ISO 8601
   };
+  /** Pago dividido */
+  payments?: Array<{
+    id: string;
+    amount: number;
+    status: string;
+    paymentMethod: string;
+  }>;
+  paymentDifferentiation?: {
+    id: string;
+    orderId: string;
+    firstPaymentAmount: number;
+    firstPaymentMethod: string;
+    secondPaymentAmount: number;
+    secondPaymentMethod: string;
+  };
   order: {
     id: string;
     status: boolean; // true = pagada
-    paymentMethod: number | null; // 1: Cash, 2: Transfer, 3: Card
+    paymentMethod: number | null; // 1: Cash, 2: Transfer, 3: Card; null = dividido
+    delivered?: boolean;
   };
   tableReleased: boolean; // true si se liberó la mesa (Local + mesa asignada)
 }
