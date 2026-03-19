@@ -506,7 +506,7 @@ const PosPage = () => {
                     Orden {formatOrderNumber(loadedOrder.id)}
                   </p>
                   <p className="text-sm text-slate-600 dark:text-slate-300">
-                    {loadedOrder.table ? `Mesa ${loadedOrder.table.numberTable}` : loadedOrder.origin} 
+                    {loadedOrder.table ? `Mesa ${loadedOrder.table.name}` : loadedOrder.origin} 
                     {loadedOrder.client && ` • ${loadedOrder.client}`}
                   </p>
                 </div>
@@ -601,15 +601,15 @@ const PosPage = () => {
               isPaymentOnlyMode && loadedOrder
                 ? {
                     origin: loadedOrder.origin || (loadedOrder.tableId ? 'Local' : 'Para llevar'),
-                    tableNumber: loadedOrder.table?.numberTable,
+                    tableName: loadedOrder.table?.name,
                     client: loadedOrder.client,
                     isReadOnly: true,
                     orderId: loadedOrder.id,
                   }
                 : {
                     origin: orderType === 'DINE_IN' ? 'Local' : 'Para llevar',
-                    tableNumber: orderType === 'DINE_IN' && selectedTableId
-                      ? tables.find((t) => t.id === selectedTableId)?.number
+                    tableName: orderType === 'DINE_IN' && selectedTableId
+                      ? tables.find((t) => t.id === selectedTableId)?.name
                       : undefined,
                     client: orderType === 'TAKEOUT' ? customerName || null : null,
                     isReadOnly: false,

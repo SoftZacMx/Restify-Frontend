@@ -61,7 +61,7 @@ export {
   formatTableForDisplay,
   formatTablesForDisplay,
   getTableStatusInfo,
-  validateTableNumber,
+  validateTableName,
   getStatusBadgeClasses,
   getAvailabilityBadgeClasses,
 } from './table.utils';

@@ -6,7 +6,7 @@ import type { TableResponse, TableTableItem, TableStatusInfo } from '@/domain/ty
 export function formatTableForDisplay(table: TableResponse): TableTableItem {
   return {
     id: table.id,
-    numberTable: table.numberTable,
+    name: table.name,
     status: table.status,
     statusLabel: table.status ? 'Activa' : 'Inactiva',
     availabilityStatus: table.availabilityStatus,
@@ -59,23 +59,16 @@ export function getTableStatusInfo(table: TableResponse): TableStatusInfo {
 }
 
 /**
- * Valida el número de mesa
+ * Valida el nombre de mesa (texto no vacío, longitud razonable)
  */
-export function validateTableNumber(value: string | number): string | null {
-  const num = typeof value === 'string' ? parseInt(value, 10) : value;
-
-  if (isNaN(num)) {
-    return 'El número de mesa debe ser un valor numérico';
+export function validateTableName(value: string): string | null {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return 'El nombre de la mesa es requerido';
   }
-
-  if (!Number.isInteger(num)) {
-    return 'El número de mesa debe ser un entero';
+  if (trimmed.length > 64) {
+    return 'El nombre no puede exceder 64 caracteres';
   }
-
-  if (num <= 0) {
-    return 'El número de mesa debe ser mayor a 0';
-  }
-
   return null;
 }
 

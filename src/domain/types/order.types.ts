@@ -35,7 +35,8 @@ export type OrderOriginType = typeof OrderOrigins[keyof typeof OrderOrigins];
  */
 export interface Table {
   id: string;
-  number: number;
+  /** Nombre visible (ej. "1", "1A", "Terraza") */
+  name: string;
   capacity: number;
   isAvailable: boolean;
   location?: string;

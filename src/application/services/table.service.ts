@@ -50,8 +50,7 @@ export class TableService {
       return [];
     }
 
-    // Ordenar por número de mesa
-    return response.data.sort((a, b) => a.numberTable - b.numberTable);
+    return response.data.sort((a, b) => a.name.localeCompare(b.name, 'es', { sensitivity: 'base' }));
   }
 
   /**
@@ -127,20 +126,14 @@ export class TableService {
   private validateCreateTableData(data: CreateTableRequest): void {
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-    // Validar numberTable
-    if (data.numberTable === undefined || data.numberTable === null) {
-      throw new AppError('VALIDATION_ERROR', 'El número de mesa es requerido');
+    const name = data.name?.trim();
+    if (!name) {
+      throw new AppError('VALIDATION_ERROR', 'El nombre de la mesa es requerido');
+    }
+    if (name.length > 64) {
+      throw new AppError('VALIDATION_ERROR', 'El nombre no puede exceder 64 caracteres');
     }
 
-    if (!Number.isInteger(data.numberTable)) {
-      throw new AppError('VALIDATION_ERROR', 'El número de mesa debe ser un entero');
-    }
-
-    if (data.numberTable <= 0) {
-      throw new AppError('VALIDATION_ERROR', 'El número de mesa debe ser mayor a 0');
-    }
-
-    // Validar userId
     if (!data.userId) {
       throw new AppError('VALIDATION_ERROR', 'El userId es requerido');
     }
@@ -151,14 +144,13 @@ export class TableService {
   }
 
   private validateUpdateTableData(data: UpdateTableRequest): void {
-    // Validar numberTable si se proporciona
-    if (data.numberTable !== undefined) {
-      if (!Number.isInteger(data.numberTable)) {
-        throw new AppError('VALIDATION_ERROR', 'El número de mesa debe ser un entero');
+    if (data.name !== undefined) {
+      const name = data.name.trim();
+      if (!name) {
+        throw new AppError('VALIDATION_ERROR', 'El nombre de la mesa no puede estar vacío');
       }
-
-      if (data.numberTable <= 0) {
-        throw new AppError('VALIDATION_ERROR', 'El número de mesa debe ser mayor a 0');
+      if (name.length > 64) {
+        throw new AppError('VALIDATION_ERROR', 'El nombre no puede exceder 64 caracteres');
       }
     }
   }

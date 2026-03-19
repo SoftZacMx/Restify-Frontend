@@ -88,12 +88,12 @@ const TablesPage: React.FC = () => {
   const filteredTables = useMemo(() => {
     let result = [...tables];
 
-    // Filtro de búsqueda (número de mesa)
+    // Filtro de búsqueda (nombre de mesa)
     if (filters.search) {
       const searchTerm = filters.search.toLowerCase();
       result = result.filter((table) =>
-        table.numberTable.toString().includes(searchTerm) ||
-        `mesa ${table.numberTable}`.toLowerCase().includes(searchTerm)
+        table.name.toLowerCase().includes(searchTerm) ||
+        `mesa ${table.name}`.toLowerCase().includes(searchTerm)
       );
     }
 
@@ -119,7 +119,7 @@ const TablesPage: React.FC = () => {
     setFilters(newFilters);
   };
 
-  const [tableToDelete, setTableToDelete] = useState<{ id: string; numberTable: number } | null>(null);
+  const [tableToDelete, setTableToDelete] = useState<{ id: string; name: string } | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -137,7 +137,7 @@ const TablesPage: React.FC = () => {
       case 'delete':
         const table = tables.find((t) => t.id === tableId);
         if (table) {
-          setTableToDelete({ id: tableId, numberTable: table.numberTable });
+          setTableToDelete({ id: tableId, name: table.name });
           setIsDeleteDialogOpen(true);
         }
         break;
@@ -215,7 +215,7 @@ const TablesPage: React.FC = () => {
       await tableService.deleteTable(tableToDelete.id);
       showSuccessToast(
         'Mesa eliminada',
-        `La Mesa ${tableToDelete.numberTable} ha sido eliminada exitosamente`
+        `La mesa "${tableToDelete.name}" ha sido eliminada exitosamente`
       );
       await queryClient.invalidateQueries({ queryKey: ['tables'] });
       await refetch();
@@ -319,7 +319,7 @@ const TablesPage: React.FC = () => {
             <AlertDialogDescription>
               {tableToDelete && (
                 <>
-                  Estás a punto de eliminar la <strong className="text-slate-900 dark:text-white">Mesa {tableToDelete.numberTable}</strong>.
+                  Estás a punto de eliminar la mesa <strong className="text-slate-900 dark:text-white">{tableToDelete.name}</strong>.
                   <br />
                   <br />
                   Esta acción no se puede deshacer. Si la mesa tiene órdenes activas asociadas, no podrá ser eliminada.

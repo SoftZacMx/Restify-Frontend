@@ -10,7 +10,7 @@ import type {
   TableFormErrors,
 } from '@/domain/types';
 import { cn } from '@/shared/lib/utils';
-import { validateTableNumber } from '@/shared/utils/table.utils';
+import { validateTableName } from '@/shared/utils/table.utils';
 
 interface TableFormProps {
   initialData?: TableResponse | null;
@@ -21,9 +21,7 @@ interface TableFormProps {
 }
 
 /**
- * Componente TableForm reutilizable
- * Puede usarse tanto para crear como para editar mesas
- * Responsabilidad única: Renderizar y manejar el formulario de mesa
+ * Formulario de mesa: nombre libre (ej. 1, 1A, Terraza).
  */
 export const TableForm: React.FC<TableFormProps> = ({
   initialData = null,
@@ -35,52 +33,38 @@ export const TableForm: React.FC<TableFormProps> = ({
   const isEditMode = !!initialData;
 
   const [formData, setFormData] = useState({
-    numberTable: '',
+    name: '',
     status: true,
     availabilityStatus: true,
   });
 
   const [errors, setErrors] = useState<TableFormErrors>({});
 
-  // Cargar datos iniciales si estamos en modo edición
   useEffect(() => {
     if (initialData) {
       setFormData({
-        numberTable: String(initialData.numberTable),
+        name: initialData.name,
         status: initialData.status,
         availabilityStatus: initialData.availabilityStatus,
       });
     }
   }, [initialData]);
 
-  /**
-   * Valida el formulario
-   */
   const validateForm = (): boolean => {
     const newErrors: TableFormErrors = {};
-
-    // Validar número de mesa
-    const numberError = validateTableNumber(formData.numberTable);
-    if (numberError) {
-      newErrors.numberTable = numberError;
+    const nameError = validateTableName(formData.name);
+    if (nameError) {
+      newErrors.name = nameError;
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  /**
-   * Handler para cambios en los campos
-   */
-  const handleChange = (
-    field: keyof typeof formData,
-    value: string | boolean
-  ) => {
+  const handleChange = (field: keyof typeof formData, value: string | boolean) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
-    // Limpiar error del campo cuando el usuario empiece a escribir
     if (errors[field as keyof TableFormErrors]) {
       setErrors((prev) => ({
         ...prev,
@@ -89,9 +73,6 @@ export const TableForm: React.FC<TableFormProps> = ({
     }
   };
 
-  /**
-   * Handler para submit
-   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -100,13 +81,12 @@ export const TableForm: React.FC<TableFormProps> = ({
     }
 
     try {
-      const numberTable = parseInt(formData.numberTable, 10);
+      const name = formData.name.trim();
 
       if (isEditMode) {
-        // En modo edición, solo enviar campos que han cambiado
         const updateData: UpdateTableRequest = {};
-        if (numberTable !== initialData!.numberTable) {
-          updateData.numberTable = numberTable;
+        if (name !== initialData!.name) {
+          updateData.name = name;
         }
         if (formData.status !== initialData!.status) {
           updateData.status = formData.status;
@@ -116,12 +96,11 @@ export const TableForm: React.FC<TableFormProps> = ({
         }
         await onSubmit(updateData);
       } else {
-        // En modo creación, enviar todos los campos
         if (!userId) {
           throw new Error('El userId es requerido para crear una mesa');
         }
         const createData: CreateTableRequest = {
-          numberTable,
+          name,
           status: formData.status,
           availabilityStatus: formData.availabilityStatus,
           userId,
@@ -129,38 +108,34 @@ export const TableForm: React.FC<TableFormProps> = ({
         await onSubmit(createData);
       }
     } catch (error) {
-      // El error se maneja en el componente padre
       throw error;
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Número de Mesa */}
       <div className="space-y-2">
-        <Label htmlFor="numberTable" className="text-sm font-medium">
-          Número de Mesa <span className="text-destructive">*</span>
+        <Label htmlFor="tableName" className="text-sm font-medium">
+          Nombre de la mesa <span className="text-destructive">*</span>
         </Label>
         <Input
-          id="numberTable"
-          type="number"
-          value={formData.numberTable}
-          onChange={(e) => handleChange('numberTable', e.target.value)}
-          placeholder="Ej: 1, 2, 3..."
-          className={cn(errors.numberTable && 'border-destructive')}
-          min="1"
-          step="1"
+          id="tableName"
+          type="text"
+          value={formData.name}
+          onChange={(e) => handleChange('name', e.target.value)}
+          placeholder="Ej: 1, 1A, 1B, Terraza..."
+          className={cn(errors.name && 'border-destructive')}
+          maxLength={64}
           disabled={isLoading}
         />
-        {errors.numberTable && (
-          <p className="text-sm text-destructive">{errors.numberTable}</p>
+        {errors.name && (
+          <p className="text-sm text-destructive">{errors.name}</p>
         )}
         <p className="text-xs text-slate-500 dark:text-slate-400">
-          Ingresa un número entero positivo para identificar la mesa
+          Identificador único para la mesa (letras, números o ambos). Máximo 64 caracteres.
         </p>
       </div>
 
-      {/* Estado */}
       <div className="flex items-center justify-between space-x-2 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
         <div className="space-y-0.5">
           <Label htmlFor="status" className="text-sm font-medium">
@@ -180,7 +155,6 @@ export const TableForm: React.FC<TableFormProps> = ({
         />
       </div>
 
-      {/* Disponibilidad */}
       <div className="flex items-center justify-between space-x-2 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
         <div className="space-y-0.5">
           <Label htmlFor="availabilityStatus" className="text-sm font-medium">
@@ -200,7 +174,6 @@ export const TableForm: React.FC<TableFormProps> = ({
         />
       </div>
 
-      {/* Indicador de estados */}
       <div className="rounded-lg bg-slate-50 dark:bg-slate-800/50 p-4 space-y-2">
         <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
           Estado actual de la mesa:
@@ -226,7 +199,6 @@ export const TableForm: React.FC<TableFormProps> = ({
         </div>
       </div>
 
-      {/* Botones */}
       <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
         <Button
           type="button"

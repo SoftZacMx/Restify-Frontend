@@ -9,16 +9,16 @@ import type { Table, Category, PosProduct } from '@/domain/types';
  * Mesas disponibles del restaurante
  */
 export const AVAILABLE_TABLES: Table[] = [
-  { id: '1', number: 1, capacity: 2, isAvailable: true, location: 'Interior' },
-  { id: '2', number: 2, capacity: 4, isAvailable: true, location: 'Interior' },
-  { id: '3', number: 3, capacity: 4, isAvailable: true, location: 'Interior' },
-  { id: '4', number: 4, capacity: 6, isAvailable: true, location: 'Interior' },
-  { id: '5', number: 5, capacity: 2, isAvailable: true, location: 'Terraza' },
-  { id: '6', number: 6, capacity: 4, isAvailable: true, location: 'Terraza' },
-  { id: '7', number: 7, capacity: 4, isAvailable: false, location: 'Terraza' },
-  { id: '8', number: 8, capacity: 8, isAvailable: true, location: 'Interior' },
-  { id: '9', number: 9, capacity: 2, isAvailable: true, location: 'Interior' },
-  { id: '10', number: 10, capacity: 4, isAvailable: true, location: 'Terraza' },
+  { id: '1', name: '1', capacity: 2, isAvailable: true, location: 'Interior' },
+  { id: '2', name: '2', capacity: 4, isAvailable: true, location: 'Interior' },
+  { id: '3', name: '3', capacity: 4, isAvailable: true, location: 'Interior' },
+  { id: '4', name: '4', capacity: 6, isAvailable: true, location: 'Interior' },
+  { id: '5', name: '5', capacity: 2, isAvailable: true, location: 'Terraza' },
+  { id: '6', name: '6', capacity: 4, isAvailable: true, location: 'Terraza' },
+  { id: '7', name: '7', capacity: 4, isAvailable: false, location: 'Terraza' },
+  { id: '8', name: '8', capacity: 8, isAvailable: true, location: 'Interior' },
+  { id: '9', name: '9', capacity: 2, isAvailable: true, location: 'Interior' },
+  { id: '10', name: '10', capacity: 4, isAvailable: true, location: 'Terraza' },
 ];
 
 /**

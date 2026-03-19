@@ -64,7 +64,7 @@ export const OrderOriginCard: React.FC<OrderOriginCardProps> = ({
                     Mesa seleccionada
                   </p>
                   <p className="text-lg font-bold text-slate-900 dark:text-white mt-0.5">
-                    Mesa {String(selectedTable.number).padStart(2, '0')}
+                    Mesa {selectedTable.name}
                   </p>
                   {selectedTable.location?.trim() && (
                     <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
