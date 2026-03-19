@@ -31,6 +31,8 @@ export class ReportRepository {
       throw new Error('Respuesta inválida del servidor de reportes');
     }
 
+    console.log('[generateReport] Respuesta de la API:', body);
+
     const envelope = body.data as BaseReportResponse<T>;
 
     if (params.type === 'CASH_FLOW' && envelope?.data != null) {
