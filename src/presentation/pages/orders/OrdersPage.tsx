@@ -151,6 +151,14 @@ const OrdersPage: React.FC = () => {
     return sortedOrders.slice(start, start + itemsPerPage);
   }, [sortedOrders, currentPage, itemsPerPage]);
 
+  const tableNameById = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const t of tables) {
+      m.set(t.id, t.name);
+    }
+    return m;
+  }, [tables]);
+
   // Mostrar error si la carga falla
   React.useEffect(() => {
     if (ordersError) {
@@ -398,6 +406,7 @@ const OrdersPage: React.FC = () => {
         <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
           <OrdersGrid
             orders={paginatedOrders}
+            tableNameById={tableNameById}
             isLoading={isLoadingOrders}
             error={ordersError instanceof Error ? ordersError.message : null}
             onViewDetails={handleViewDetails}

@@ -28,13 +28,17 @@ import {
   formatOrderNumber,
   formatOrderTime,
   formatCurrency,
-  getOrderLocationDisplay,
+  getOrderOriginLabel,
+  getOrderTableDisplayName,
   getPaymentMethodIcon,
+  isOrderLocalOrigin,
 } from '@/shared/utils/order.utils';
 import { cn } from '@/shared/utils';
 
 interface OrderCardProps {
   order: OrderResponse;
+  /** id mesa → nombre (lista cargada en Órdenes; el listado API no trae `table` anidada). */
+  tableNameById?: Map<string, string>;
   onViewDetails: (orderId: string) => void;
   onMarkDelivered?: (orderId: string) => void;
   onProcessPayment?: (orderId: string) => void;
@@ -49,6 +53,7 @@ interface OrderCardProps {
  */
 export const OrderCard: React.FC<OrderCardProps> = ({
   order,
+  tableNameById,
   onViewDetails,
   onMarkDelivered,
   onProcessPayment,
@@ -58,7 +63,9 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   onPrintKitchenTicket,
 }) => {
   const navigate = useNavigate();
-  const location = getOrderLocationDisplay(order);
+  const originLabel = getOrderOriginLabel(order);
+  const tableName =
+    isOrderLocalOrigin(order) ? getOrderTableDisplayName(order, tableNameById) : null;
   const paymentIcon = getPaymentMethodIcon(order.paymentMethod);
 
   // Navegar al POS para ver/editar la orden (modo edición: permite modificar datos e ítems)
@@ -104,10 +111,15 @@ export const OrderCard: React.FC<OrderCardProps> = ({
 
       <CardContent className="pb-3">
         <div className="space-y-2">
-          {/* Ubicación */}
-          <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-            <MapPin className="h-4 w-4 text-slate-400" />
-            <span className="text-sm font-medium">{location}</span>
+          {/* Origen + mesa (solo Local con mesa asignada) */}
+          <div className="flex items-start gap-2 text-slate-600 dark:text-slate-300">
+            <MapPin className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />
+            <div className="flex flex-col gap-0.5 min-w-0">
+              <span className="text-sm font-medium">{originLabel}</span>
+              {tableName ? (
+                <span className="text-xs text-slate-500 dark:text-slate-400">Mesa {tableName}</span>
+              ) : null}
+            </div>
           </div>
 
           {/* Cliente */}

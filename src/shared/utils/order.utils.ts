@@ -165,6 +165,33 @@ export const getOrderLocationDisplay = (order: OrderResponse): string => {
   return order.origin || 'Sin mesa';
 };
 
+/** Etiqueta del origen para la tarjeta (solo tipo de servicio, sin mesa). */
+export const getOrderOriginLabel = (order: OrderResponse): string => {
+  const o = (order.origin || '').trim();
+  if (!o) return '—';
+  if (o === 'Pickup') return 'Para llevar';
+  return o;
+};
+
+/** Origen comida en local (mesa / salón). */
+export const isOrderLocalOrigin = (order: OrderResponse): boolean => {
+  return (order.origin || '').trim().toLowerCase() === 'local';
+};
+
+/**
+ * Nombre de mesa para mostrar: relación `order.table`, o mapa id→nombre desde la lista de mesas.
+ */
+export const getOrderTableDisplayName = (
+  order: OrderResponse,
+  tableNameById?: Map<string, string>
+): string | null => {
+  if (order.table?.name) return order.table.name.trim();
+  if (order.tableId && tableNameById?.has(order.tableId)) {
+    return tableNameById.get(order.tableId)!.trim();
+  }
+  return null;
+};
+
 /**
  * Item de orden formateado para la tabla/lista
  */

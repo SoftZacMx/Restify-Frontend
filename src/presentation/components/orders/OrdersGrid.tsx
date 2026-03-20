@@ -5,6 +5,8 @@ import type { OrderResponse } from '@/domain/types';
 
 interface OrdersGridProps {
   orders: OrderResponse[];
+  /** Mapa mesa id → nombre para mostrar en órdenes locales */
+  tableNameById?: Map<string, string>;
   isLoading?: boolean;
   error?: string | null;
   onViewDetails: (orderId: string) => void;
@@ -21,6 +23,7 @@ interface OrdersGridProps {
  */
 export const OrdersGrid: React.FC<OrdersGridProps> = ({
   orders,
+  tableNameById,
   isLoading,
   error,
   onViewDetails,
@@ -77,6 +80,7 @@ export const OrdersGrid: React.FC<OrdersGridProps> = ({
         <div key={order.id} className="min-w-0">
           <OrderCard
             order={order}
+            tableNameById={tableNameById}
             onViewDetails={onViewDetails}
             onMarkDelivered={onMarkDelivered}
             onProcessPayment={onProcessPayment}
