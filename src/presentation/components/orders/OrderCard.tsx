@@ -64,6 +64,9 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   const navigate = useNavigate();
   const originLabel = getOrderOriginLabel(order);
   const mesaLine = getLocalOrderMesaLine(order, tableNameById);
+  const orderNumberLabel = formatOrderNumber(order.id);
+  /** Origen local: mesa destacada arriba y # de orden debajo del pin (intercambiado respecto al resto). */
+  const isLocalWithMesaBlock = mesaLine != null;
   const paymentIcon = getPaymentMethodIcon(order.paymentMethod);
 
   // Navegar al POS para ver/editar la orden (modo edición: permite modificar datos e ítems)
@@ -95,8 +98,8 @@ export const OrderCard: React.FC<OrderCardProps> = ({
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-lg font-bold text-slate-900 dark:text-white">
-              {formatOrderNumber(order.id)}
+            <span className="text-lg font-bold text-slate-900 dark:text-white min-w-0 break-all">
+              {isLocalWithMesaBlock ? mesaLine : orderNumberLabel}
             </span>
             <OrderStatusBadge order={order} />
           </div>
@@ -109,14 +112,14 @@ export const OrderCard: React.FC<OrderCardProps> = ({
 
       <CardContent className="pb-3">
         <div className="space-y-2">
-          {/* Origen + mesa (origen Local: siempre línea de mesa con nombre si aplica) */}
+          {/* Origen + # orden (en local el # va aquí; la mesa va en el encabezado) */}
           <div className="flex items-start gap-2 text-slate-600 dark:text-slate-300">
             <MapPin className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />
             <div className="flex flex-col gap-0.5 min-w-0">
               <span className="text-sm font-medium">{originLabel}</span>
-              {mesaLine != null ? (
+              {isLocalWithMesaBlock ? (
                 <span className="text-sm text-slate-700 dark:text-slate-200 font-medium">
-                  {mesaLine}
+                  {orderNumberLabel}
                 </span>
               ) : null}
             </div>
