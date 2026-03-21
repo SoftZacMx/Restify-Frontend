@@ -1,12 +1,13 @@
 /**
- * Utilidades para imprimir tickets (58mm, letra grande para legibilidad)
+ * Utilidades para imprimir tickets (58mm de ancho, letra grande para legibilidad).
+ * Solo se fija el ancho (58mm); el alto crece con el contenido (rollo, sin tope en CSS).
  * Guía: prompts/tickets-frontend-guide.md
  * Diseño ticket de venta: RESTIFY / DELIYUNOS, contacto, TICKET DE VENTA #id, consumo, totales, pago, gracias.
  */
 
 import type { KitchenTicketResponse, SaleTicketResponse } from '@/domain/types/ticket.types';
 
-/** Ancho papel térmico en mm */
+/** Ancho del papel térmico en mm (el alto no se limita aquí). */
 const TICKET_WIDTH_MM = 58;
 
 /** Formato moneda ticket: MX$0.00 */
@@ -15,11 +16,12 @@ function ticketCurrency(amount: number): string {
 }
 
 const BASE_STYLES = `
+  /* @page: ancho 58mm; alto auto = según contenido (sin altura máxima en CSS). */
   @page { size: ${TICKET_WIDTH_MM}mm auto; margin: 0; }
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; width: ${TICKET_WIDTH_MM}mm; overflow-wrap: break-word; word-break: break-word; }
-  body { padding: 2mm 1.5mm; font-family: Arial, sans-serif; font-size: 7pt; }
-  .ticket { width: 100%; max-width: ${TICKET_WIDTH_MM}mm; overflow: hidden; }
+  html, body { margin: 0; padding: 0; width: ${TICKET_WIDTH_MM}mm; min-height: auto; height: auto; overflow-wrap: break-word; word-break: break-word; }
+  body { padding: 2mm 1.5mm; font-family: Arial, sans-serif; font-size: 8pt; }
+  .ticket { width: 100%; max-width: ${TICKET_WIDTH_MM}mm; overflow-x: hidden; }
   .rule { border: none; border-top: 1px solid #000; margin: 3px 0; }
   .head { font-size: 8pt; font-weight: bold; text-align: center; line-height: 1.3; margin-bottom: 1px; }
   .head-sub { font-size: 7pt; text-align: center; margin: 1px 0; }
@@ -32,7 +34,7 @@ const BASE_STYLES = `
   .extra-desc { flex: 1; min-width: 0; overflow-wrap: break-word; }
   .extra-amt { flex-shrink: 0; text-align: right; font-variant-numeric: tabular-nums; }
   .note-line { font-size: 6pt; line-height: 1.3; margin: 1px 0 1px 6px; font-style: italic; }
-  .item-block { margin-bottom: 4px; padding-bottom: 3px; border-bottom: 1px dashed #000; }
+  .item-block { margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px dashed #000; }
   .item-block:last-of-type { border-bottom: none; }
   .totals-section .row { margin: 2px 0; }
   .total-final { font-size: 8pt; font-weight: bold; margin-top: 3px; padding-top: 2px; border-top: 2px solid #000; }
@@ -78,7 +80,7 @@ const KITCHEN_TICKET_STYLES = `
   .ticket-kitchen .item-qty { font-size: 6pt; margin-bottom: 2px; }
   .ticket-kitchen .item-extras { font-size: 6pt; margin: 1px 0 1px 6px; }
   .ticket-kitchen .note-line { font-size: 6pt; font-style: italic; margin: 1px 0 1px 6px; }
-  .ticket-kitchen .item-block { margin-bottom: 4px; padding-bottom: 3px; border-bottom: 1px dashed #000; }
+  .ticket-kitchen .item-block { margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px dashed #000; }
   .ticket-kitchen .item-block:last-of-type { border-bottom: none; }
 `;
 
