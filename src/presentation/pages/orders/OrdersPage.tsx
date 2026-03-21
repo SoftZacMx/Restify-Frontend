@@ -84,7 +84,8 @@ const OrdersPage: React.FC = () => {
   const { data: tables = [], isLoading: isLoadingTables } = useQuery({
     queryKey: ['tables-for-filter'],
     queryFn: async () => {
-      return await tableService.listTables({ status: true });
+      // Todas las mesas: el listado de órdenes no trae `table` anidada; hace falta el nombre aunque la mesa esté inactiva en catálogo.
+      return await tableService.listTables();
     },
     staleTime: 60000, // 1 minuto
   });

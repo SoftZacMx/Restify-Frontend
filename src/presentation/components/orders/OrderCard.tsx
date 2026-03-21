@@ -29,9 +29,8 @@ import {
   formatOrderTime,
   formatCurrency,
   getOrderOriginLabel,
-  getOrderTableDisplayName,
+  getLocalOrderMesaLine,
   getPaymentMethodIcon,
-  isOrderLocalOrigin,
 } from '@/shared/utils/order.utils';
 import { cn } from '@/shared/utils';
 
@@ -64,8 +63,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
 }) => {
   const navigate = useNavigate();
   const originLabel = getOrderOriginLabel(order);
-  const tableName =
-    isOrderLocalOrigin(order) ? getOrderTableDisplayName(order, tableNameById) : null;
+  const mesaLine = getLocalOrderMesaLine(order, tableNameById);
   const paymentIcon = getPaymentMethodIcon(order.paymentMethod);
 
   // Navegar al POS para ver/editar la orden (modo edición: permite modificar datos e ítems)
@@ -111,13 +109,15 @@ export const OrderCard: React.FC<OrderCardProps> = ({
 
       <CardContent className="pb-3">
         <div className="space-y-2">
-          {/* Origen + mesa (solo Local con mesa asignada) */}
+          {/* Origen + mesa (origen Local: siempre línea de mesa con nombre si aplica) */}
           <div className="flex items-start gap-2 text-slate-600 dark:text-slate-300">
             <MapPin className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />
             <div className="flex flex-col gap-0.5 min-w-0">
               <span className="text-sm font-medium">{originLabel}</span>
-              {tableName ? (
-                <span className="text-xs text-slate-500 dark:text-slate-400">Mesa {tableName}</span>
+              {mesaLine != null ? (
+                <span className="text-sm text-slate-700 dark:text-slate-200 font-medium">
+                  {mesaLine}
+                </span>
               ) : null}
             </div>
           </div>

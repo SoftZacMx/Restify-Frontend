@@ -169,6 +169,7 @@ export const getOrderLocationDisplay = (order: OrderResponse): string => {
 export const getOrderOriginLabel = (order: OrderResponse): string => {
   const o = (order.origin || '').trim();
   if (!o) return '—';
+  if (o.toLowerCase() === 'local') return 'Local';
   if (o === 'Pickup') return 'Para llevar';
   return o;
 };
@@ -190,6 +191,21 @@ export const getOrderTableDisplayName = (
     return tableNameById.get(order.tableId)!.trim();
   }
   return null;
+};
+
+/**
+ * Texto de mesa para la card cuando el origen es local (siempre una línea: nombre o Sin mesa).
+ * `null` si el origen no es local.
+ */
+export const getLocalOrderMesaLine = (
+  order: OrderResponse,
+  tableNameById?: Map<string, string>
+): string | null => {
+  if (!isOrderLocalOrigin(order)) return null;
+  const name = getOrderTableDisplayName(order, tableNameById);
+  if (name) return `Mesa ${name}`;
+  if (order.tableId) return 'Mesa';
+  return 'Sin mesa';
 };
 
 /**
