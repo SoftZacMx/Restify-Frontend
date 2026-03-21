@@ -30,11 +30,12 @@ const BASE_STYLES = `
   .row-desc { flex: 1; min-width: 0; overflow-wrap: break-word; word-break: break-word; }
   .row-amt { flex-shrink: 0; text-align: right; font-variant-numeric: tabular-nums; }
   .line { font-size: 7pt; line-height: 1.3; margin: 2px 0; }
-  .extra-row { font-size: 6pt; line-height: 1.3; margin: 1px 0 1px 6px; display: flex; justify-content: space-between; align-items: baseline; gap: 4px; }
-  .extra-desc { flex: 1; min-width: 0; overflow-wrap: break-word; }
-  .extra-amt { flex-shrink: 0; text-align: right; font-variant-numeric: tabular-nums; }
-  .note-line { font-size: 6pt; line-height: 1.3; margin: 1px 0 1px 6px; font-style: italic; }
-  .item-block { margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px dashed #000; }
+  .note-line { font-size: 6pt; line-height: 1.3; margin: 2px 0 0 0; font-style: italic; text-align: left; }
+  .item-block { margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px dashed #000; text-align: left; }
+  .item-name { font-size: 7pt; font-weight: bold; text-align: left; margin: 0 0 2px 0; overflow-wrap: break-word; }
+  .item-qty { font-size: 6pt; text-align: left; margin: 0 0 2px 0; }
+  .item-extras { font-size: 6pt; line-height: 1.35; text-align: left; margin: 1px 0; overflow-wrap: break-word; }
+  .item-line-price { font-size: 7pt; font-weight: bold; text-align: left; margin: 2px 0 0 0; font-variant-numeric: tabular-nums; }
   .item-block:last-of-type { border-bottom: none; }
   .totals-section .row { margin: 2px 0; }
   .total-final { font-size: 8pt; font-weight: bold; margin-top: 3px; padding-top: 2px; border-top: 2px solid #000; }
@@ -56,18 +57,17 @@ const SALE_TICKET_STYLES = `
   .ticket-sale .ticket-datetime { font-size: 6pt; text-align: center; margin: 1px 0; }
   .ticket-sale .ticket-table { font-size: 7pt; font-weight: bold; text-align: center; margin: 1px 0 3px; }
   .ticket-sale .consumo-header { font-size: 6pt; font-weight: bold; text-transform: uppercase; margin: 3px 0 2px; }
-  .ticket-sale .item-platillo { display: flex; justify-content: space-between; align-items: baseline; font-size: 7pt; font-weight: bold; text-transform: uppercase; margin-bottom: 1px; }
-  .ticket-sale .item-name { font-size: 7pt; margin: 1px 0; overflow-wrap: break-word; }
-  .ticket-sale .item-qty { font-size: 6pt; margin-bottom: 2px; }
   .ticket-sale .dash { border: none; border-top: 1px dashed #000; margin: 2px 0; }
-  .ticket-sale .totals-line { display: flex; justify-content: space-between; font-size: 7pt; margin: 2px 0; }
-  .ticket-sale .totals-total { display: flex; justify-content: space-between; font-size: 9pt; font-weight: bold; text-transform: uppercase; margin-top: 3px; padding-top: 2px; border-top: 2px solid #000; }
-  .ticket-sale .pago-estado { font-size: 7pt; font-weight: bold; margin: 2px 0; }
-  .ticket-sale .foot-thanks { font-family: Georgia, 'Times New Roman', serif; font-size: 7pt; font-style: italic; text-align: center; margin: 3px 0 2px; }
-  .ticket-sale .foot-web { font-size: 6pt; color: #888; text-align: center; }
+  /* Desde subtotal: totales, pago y pie centrados */
+  .ticket-sale .ticket-sale-footer { text-align: center; }
+  .ticket-sale .ticket-sale-footer .totals-line { display: flex; justify-content: center; align-items: baseline; gap: 8px; flex-wrap: wrap; font-size: 7pt; margin: 2px 0; }
+  .ticket-sale .ticket-sale-footer .totals-total { display: flex; justify-content: center; align-items: baseline; gap: 10px; flex-wrap: wrap; font-size: 9pt; font-weight: bold; text-transform: uppercase; margin-top: 3px; padding-top: 2px; border-top: 2px solid #000; }
+  .ticket-sale .ticket-sale-footer .pago-estado { font-size: 7pt; font-weight: bold; margin: 2px 0; text-align: center; }
+  .ticket-sale .ticket-sale-footer .foot-thanks { font-family: Georgia, 'Times New Roman', serif; font-size: 7pt; font-style: italic; text-align: center; margin: 3px 0 2px; }
+  .ticket-sale .ticket-sale-footer .foot-web { font-size: 6pt; color: #888; text-align: center; }
 `;
 
-/** Estilos ticket cocina (mismo diseño que venta: brand, rules, ítems con PLATILLO) */
+/** Estilos ticket cocina (mismo orden de ítems que venta: nombre, cantidad, extras, nota) */
 const KITCHEN_TICKET_STYLES = `
   .ticket-kitchen .brand-main { font-family: Georgia, 'Times New Roman', serif; font-size: 9pt; font-weight: bold; font-style: italic; text-align: center; letter-spacing: 0.02em; margin-bottom: 1px; }
   .ticket-kitchen .brand-branch { font-size: 10pt; font-weight: bold; text-align: center; font-family: Arial, sans-serif; margin-bottom: 3px; }
@@ -75,11 +75,6 @@ const KITCHEN_TICKET_STYLES = `
   .ticket-kitchen .ticket-id { font-size: 8pt; font-weight: bold; text-align: center; margin: 1px 0; }
   .ticket-kitchen .ticket-table { font-size: 7pt; font-weight: bold; text-align: center; margin: 1px 0 3px; }
   .ticket-kitchen .pedido-header { font-size: 6pt; font-weight: bold; text-transform: uppercase; margin: 3px 0 2px; }
-  .ticket-kitchen .item-platillo { font-size: 7pt; font-weight: bold; text-transform: uppercase; margin-bottom: 1px; }
-  .ticket-kitchen .item-name { font-size: 7pt; margin: 1px 0; overflow-wrap: break-word; }
-  .ticket-kitchen .item-qty { font-size: 6pt; margin-bottom: 2px; }
-  .ticket-kitchen .item-extras { font-size: 6pt; margin: 1px 0 1px 6px; }
-  .ticket-kitchen .note-line { font-size: 6pt; font-style: italic; margin: 1px 0 1px 6px; }
   .ticket-kitchen .item-block { margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px dashed #000; }
   .ticket-kitchen .item-block:last-of-type { border-bottom: none; }
 `;
@@ -91,7 +86,7 @@ function escapeHtml(text: string): string {
 }
 
 /**
- * Ticket cocina — Mismo diseño que ticket de venta: RESTIFY / COCINA, Orden #id, Mesa, pedido (PLATILLO, nombre, x 1, extras, nota).
+ * Ticket cocina — RESTIFY / COCINA, Orden #id, Mesa; cada línea: nombre, cantidad, extras, nota.
  * Solo usa campos que ya devuelve el API: orderId, tableName, items.
  */
 export function buildKitchenTicketHtml(data: KitchenTicketResponse): string {
@@ -104,9 +99,8 @@ export function buildKitchenTicketHtml(data: KitchenTicketResponse): string {
   let itemsHtml = '';
   for (const item of data.items) {
     itemsHtml += '<div class="item-block">';
-    itemsHtml += '<div class="item-platillo">PLATILLO</div>';
     itemsHtml += `<div class="item-name">${escapeHtml(item.name)}</div>`;
-    itemsHtml += `<div class="item-qty">x ${item.quantity}</div>`;
+    itemsHtml += `<div class="item-qty">Cantidad: ${item.quantity}</div>`;
     if (item.extras?.length) {
       for (const ex of item.extras) {
         itemsHtml += `<div class="item-extras">• ${escapeHtml(ex.name)} × ${ex.quantity}</div>`;
@@ -166,15 +160,14 @@ export function buildSaleTicketHtml(data: SaleTicketResponse): string {
   let itemsHtml = '';
   for (const item of data.items) {
     itemsHtml += '<div class="item-block">';
-    itemsHtml += `<div class="item-platillo"><span>PLATILLO</span><span>${ticketCurrency(item.lineTotal)}</span></div>`;
     itemsHtml += `<div class="item-name">${escapeHtml(item.name)}</div>`;
-    itemsHtml += `<div class="item-qty">x ${item.quantity}</div>`;
+    itemsHtml += `<div class="item-qty">Cantidad: ${item.quantity}</div>`;
     if (item.extras?.length) {
       for (const ex of item.extras) {
-        const extraCost = ex.price * ex.quantity;
-        itemsHtml += `<div class="extra-row"><span class="extra-desc">• ${escapeHtml(ex.name)} × ${ex.quantity}</span><span class="extra-amt">${ticketCurrency(extraCost)}</span></div>`;
+        itemsHtml += `<div class="item-extras">• ${escapeHtml(ex.name)} × ${ex.quantity}</div>`;
       }
     }
+    itemsHtml += `<div class="item-line-price">${ticketCurrency(item.lineTotal)}</div>`;
     if (item.note?.trim()) {
       itemsHtml += `<div class="note-line">Nota: ${escapeHtml(item.note.trim())}</div>`;
     }
@@ -199,6 +192,7 @@ export function buildSaleTicketHtml(data: SaleTicketResponse): string {
   <div class="consumo-header">Consumo (producto y costo por línea)</div>
   ${itemsHtml}
   <hr class="rule" />
+  <div class="ticket-sale-footer">
   <div class="totals-line"><span>SUBTOTAL</span><span>${ticketCurrency(data.subtotal)}</span></div>
   <div class="totals-line"><span>IVA ${ivaPercent}%</span><span>${ticketCurrency(data.iva)}</span></div>
   ${data.tip > 0 ? `<div class="totals-line"><span>PROPINA</span><span>${ticketCurrency(data.tip)}</span></div>` : ''}
@@ -209,6 +203,7 @@ export function buildSaleTicketHtml(data: SaleTicketResponse): string {
   <hr class="rule" />
   <div class="foot-thanks">¡Gracias por su compra!</div>
   <div class="foot-web">Visite ${escapeHtml(website)}</div>
+  </div>
 </div>
 </body></html>`;
 }
