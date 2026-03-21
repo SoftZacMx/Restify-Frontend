@@ -85,15 +85,25 @@ function escapeHtml(text: string): string {
   return el.innerHTML;
 }
 
+/** Mesa solo en orden local; otras órdenes → "Para llevar". Sin `origin` (API antigua) se asume local. */
+function buildTableLocationLine(tableName: string | null | undefined, origin?: string | null): string {
+  const raw = origin === undefined || origin === null ? '' : String(origin).trim();
+  const isLocal = raw === '' || raw.toLowerCase() === 'local';
+  if (!isLocal) {
+    return 'Para llevar';
+  }
+  if (tableName != null && tableName.trim() !== '') {
+    return `Mesa ${tableName.trim()}`;
+  }
+  return 'Sin mesa';
+}
+
 /**
  * Ticket cocina — RESTIFY / COCINA, Orden #id, Mesa; cada línea: nombre, cantidad, extras, nota.
  * Solo usa campos que ya devuelve el API: orderId, tableName, items.
  */
 export function buildKitchenTicketHtml(data: KitchenTicketResponse): string {
-  const tableText =
-    data.tableName != null && data.tableName.trim() !== ''
-      ? `Mesa ${data.tableName}`
-      : 'Sin mesa';
+  const tableText = buildTableLocationLine(data.tableName, data.origin);
   const orderShortId = data.orderId.slice(-8).toUpperCase();
 
   let itemsHtml = '';
@@ -134,10 +144,7 @@ export function buildSaleTicketHtml(data: SaleTicketResponse): string {
   const parts = companyFull.split(/\s+/);
   const brandMain = parts[0] ?? 'Restify';
   const brandBranch = data.companyBranch?.trim() || (parts.length > 1 ? parts.slice(1).join(' ') : '');
-  const tableText =
-    data.tableName != null && data.tableName.trim() !== ''
-      ? `Mesa ${data.tableName}`
-      : 'Sin mesa';
+  const tableText = buildTableLocationLine(data.tableName, data.origin);
   const orderShortId = data.orderId.slice(-8).toUpperCase();
   const dateFormatted = new Date(data.date).toLocaleString('es-MX', {
     day: '2-digit',
