@@ -1,6 +1,7 @@
 import { companyRepository } from '@/infrastructure/api/repositories/company.repository';
 import type { CompanyResponse, UpsertCompanyRequest } from '@/domain/types';
 import { AppError } from '@/domain/errors';
+import { mergeTicketPrintConfig } from '@/shared/utils/ticket-print-config';
 
 export class CompanyService {
   /**
@@ -13,7 +14,11 @@ export class CompanyService {
         return null;
       }
       console.log('[Company Service] company data (for form):', response.data);
-      return response.data;
+      const row = response.data;
+      return {
+        ...row,
+        ticketConfig: row.ticketConfig ?? mergeTicketPrintConfig(undefined),
+      };
     } catch (error: unknown) {
       if (error instanceof AppError && error.code === 'COMPANY_NOT_FOUND') {
         return null;

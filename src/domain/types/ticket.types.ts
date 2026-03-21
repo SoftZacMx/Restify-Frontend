@@ -3,6 +3,8 @@
  * Kitchen ticket (cocina) y Sale ticket (cliente)
  */
 
+import type { ResolvedTicketPrintConfig } from '@/shared/utils/ticket-print-config';
+
 /** Extra en ticket de cocina (solo nombre y cantidad) */
 export interface KitchenTicketExtraItem {
   name: string;
@@ -24,6 +26,8 @@ export interface KitchenTicketResponse {
   origin?: string;
   tableName: string | null;
   items: KitchenTicketOrderItem[];
+  /** Config resuelta desde API (empresa); si falta, el cliente aplica defaults */
+  printConfig?: ResolvedTicketPrintConfig;
 }
 
 /** Extra en ticket de venta (cliente): nombre, cantidad, precio */
@@ -66,4 +70,5 @@ export interface SaleTicketResponse {
   total: number;
   paymentMethod: string;
   delivered: boolean;
+  printConfig?: ResolvedTicketPrintConfig;
 }

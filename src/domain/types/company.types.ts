@@ -2,6 +2,8 @@
  * Tipos para el módulo de configuración de la compañía
  */
 
+import type { ResolvedTicketPrintConfig } from '@/shared/utils/ticket-print-config';
+
 export interface CompanyResponse {
   id: string;
   name: string;
@@ -14,6 +16,8 @@ export interface CompanyResponse {
   logoUrl: string | null;
   startOperations: string | null;
   endOperations: string | null;
+  /** Config de tickets (fusionada con defaults en API) */
+  ticketConfig?: ResolvedTicketPrintConfig;
   createdAt: string;
   updatedAt: string;
 }
@@ -29,4 +33,5 @@ export interface UpsertCompanyRequest {
   logoUrl?: string | null;
   startOperations?: string | null;
   endOperations?: string | null;
+  ticketConfig?: ResolvedTicketPrintConfig | null;
 }
