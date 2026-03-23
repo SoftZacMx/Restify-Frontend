@@ -11,6 +11,7 @@ import type {
   OrderItemInput,
   OrderItemExtraInput,
   ListOrdersRequest,
+  ListOrdersResponse,
   PayOrderRequest,
   PayOrderResult,
   OrderType,
@@ -599,37 +600,52 @@ export class OrderService {
   }
 
   /**
-   * Lista órdenes con filtros opcionales del backend.
-   * La respuesta mantiene la estructura del backend: { data: Order[], pagination }.
+   * Lista órdenes con filtros y paginación del backend.
+   * Devuelve datos y metadatos de paginación (total, totalPages, etc.).
    */
-  async listOrders(filters?: ListOrdersRequest): Promise<OrderResponse[]> {
+  async listOrders(
+    filters?: ListOrdersRequest
+  ): Promise<{
+    orders: OrderResponse[];
+    pagination: ListOrdersResponse['pagination'];
+  }> {
     const response = await orderRepository.listOrders(filters);
     if (!response.success || response.data == null) {
       throw new Error('No se pudieron obtener las órdenes');
     }
-    const orders = response.data.data;
-    return Array.isArray(orders) ? orders : [];
+    const payload = response.data;
+    const orders = Array.isArray(payload.data) ? payload.data : [];
+    const pagination = payload.pagination ?? {
+      page: filters?.page ?? 1,
+      limit: filters?.limit ?? 20,
+      total: orders.length,
+      totalPages: 1,
+    };
+    return { orders, pagination };
   }
 
   /**
    * Obtiene órdenes pendientes (no pagadas)
    */
   async getPendingOrders(): Promise<OrderResponse[]> {
-    return await this.listOrders({ status: false });
+    const { orders } = await this.listOrders({ status: false, page: 1, limit: 100 });
+    return orders;
   }
 
   /**
    * Obtiene órdenes pendientes de una mesa
    */
   async getPendingOrdersByTable(tableId: string): Promise<OrderResponse[]> {
-    return await this.listOrders({ tableId, status: false });
+    const { orders } = await this.listOrders({ tableId, status: false, page: 1, limit: 100 });
+    return orders;
   }
 
   /**
    * Obtiene órdenes de un usuario/mesero
    */
   async getOrdersByUser(userId: string, status?: boolean): Promise<OrderResponse[]> {
-    return await this.listOrders({ userId, status });
+    const { orders } = await this.listOrders({ userId, status, page: 1, limit: 100 });
+    return orders;
   }
 
   /**

@@ -395,3 +395,15 @@ export const filterOrdersClient = (
 
   return filtered;
 };
+
+/**
+ * Filtros que aún dependen del cliente (búsqueda texto, entregada, completada con doble condición).
+ * En ese modo se pide hasta 100 órdenes al API y se pagina en cliente.
+ */
+export const orderListNeedsClientSideFiltering = (filters: OrderViewFilters): boolean => {
+  return (
+    Boolean(filters.search?.trim()) ||
+    filters.status === 'delivered' ||
+    filters.status === 'completed'
+  );
+};

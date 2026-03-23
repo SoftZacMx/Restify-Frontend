@@ -28,6 +28,7 @@ import {
   getDefaultOrderFiltersForToday,
   convertViewFiltersToApiFilters,
   filterOrdersClient,
+  orderListNeedsClientSideFiltering,
 } from '@/shared/utils/order.utils';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
@@ -47,7 +48,8 @@ const OrdersPage: React.FC = () => {
   const [filters, setFilters] = useState<OrderViewFilters>(() => getDefaultOrderFiltersForToday());
   const [showFilters, setShowFilters] = useState(false); // Por defecto oculto
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  /** Alineado con el default del API (20); el selector puede cambiar page/limit en la petición. */
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   // Estado de modales
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
@@ -63,22 +65,36 @@ const OrdersPage: React.FC = () => {
   // Convertir filtros de vista a filtros de API
   const apiFilters = useMemo(() => convertViewFiltersToApiFilters(filters), [filters]);
 
-  // Query para obtener órdenes
+  const needsClientSideFiltering = useMemo(() => orderListNeedsClientSideFiltering(filters), [filters]);
+
+  // Query para obtener órdenes (paginación en servidor salvo búsqueda / estados solo-cliente)
   const {
-    data: orders = [],
+    data: listPayload,
     isLoading: isLoadingOrders,
     error: ordersError,
     refetch: refetchOrders,
   } = useQuery({
-    queryKey: ['orders', apiFilters],
+    queryKey: ['orders', apiFilters, currentPage, itemsPerPage, needsClientSideFiltering],
     queryFn: async () => {
-      const orders = await orderService.listOrders(apiFilters);
-      console.log('[OrdersPage] Órdenes del backend:', orders);
-      return orders;
+      if (needsClientSideFiltering) {
+        return orderService.listOrders({
+          ...apiFilters,
+          page: 1,
+          limit: 100,
+        });
+      }
+      return orderService.listOrders({
+        ...apiFilters,
+        page: currentPage,
+        limit: itemsPerPage,
+      });
     },
     staleTime: 10000, // 10 segundos
     retry: 1,
   });
+
+  const ordersFromApi = listPayload?.orders ?? [];
+  const serverPagination = listPayload?.pagination;
 
   // Query para obtener mesas (para filtros)
   const { data: tables = [], isLoading: isLoadingTables } = useQuery({
@@ -122,11 +138,10 @@ const OrdersPage: React.FC = () => {
     return detailOrder;
   }, [detailOrder, detailOrderTable]);
 
-  // Filtrar órdenes en cliente (para búsqueda y estados especiales)
+  // Filtrar órdenes en cliente (búsqueda texto, entregada, completada fina)
   const filteredOrders = useMemo(() => {
-    const list = Array.isArray(orders) ? orders : [];
-    return filterOrdersClient(list, filters);
-  }, [orders, filters]);
+    return filterOrdersClient(ordersFromApi, filters);
+  }, [ordersFromApi, filters]);
 
   // Ordenar por fecha más reciente
   const sortedOrders = useMemo(() => {
@@ -135,22 +150,54 @@ const OrdersPage: React.FC = () => {
     );
   }, [filteredOrders]);
 
-  // Paginación (por defecto 10 por página)
-  const paginationData: PaginationData = useMemo(() => {
-    const totalItems = sortedOrders.length;
-    const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+  /** Lista mostrada y metadatos de paginación (servidor o cliente según filtros). */
+  const { displayOrders, paginationData } = useMemo((): {
+    displayOrders: typeof sortedOrders;
+    paginationData: PaginationData;
+  } => {
+    if (needsClientSideFiltering) {
+      const totalItems = sortedOrders.length;
+      const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+      const start = (currentPage - 1) * itemsPerPage;
+      const pageSlice = sortedOrders.slice(start, start + itemsPerPage);
+      return {
+        displayOrders: pageSlice,
+        paginationData: {
+          currentPage,
+          totalPages,
+          totalItems,
+          itemsPerPage,
+        },
+      };
+    }
+    const p = serverPagination;
+    if (!p) {
+      return {
+        displayOrders: sortedOrders,
+        paginationData: {
+          currentPage: 1,
+          totalPages: 1,
+          totalItems: sortedOrders.length,
+          itemsPerPage,
+        },
+      };
+    }
     return {
-      currentPage,
-      totalPages,
-      totalItems,
-      itemsPerPage,
+      displayOrders: sortedOrders,
+      paginationData: {
+        currentPage: p.page,
+        totalPages: p.totalPages,
+        totalItems: p.total,
+        itemsPerPage: p.limit,
+      },
     };
-  }, [sortedOrders.length, currentPage, itemsPerPage]);
-
-  const paginatedOrders = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return sortedOrders.slice(start, start + itemsPerPage);
-  }, [sortedOrders, currentPage, itemsPerPage]);
+  }, [
+    needsClientSideFiltering,
+    sortedOrders,
+    currentPage,
+    itemsPerPage,
+    serverPagination,
+  ]);
 
   const tableNameById = useMemo(() => {
     const m = new Map<string, string>();
@@ -202,11 +249,11 @@ const OrdersPage: React.FC = () => {
 
   // Handler para eliminar orden
   const handleDeleteOrder = useCallback((orderId: string) => {
-    const order = orders.find((o) => o.id === orderId);
+    const order = ordersFromApi.find((o) => o.id === orderId);
     if (order) {
       setOrderToDelete(order);
     }
-  }, [orders]);
+  }, [ordersFromApi]);
 
   // Imprimir ticket cliente (sale-ticket)
   const handlePrintClientTicket = useCallback(async (orderId: string) => {
@@ -294,12 +341,13 @@ const OrdersPage: React.FC = () => {
     setCurrentPage(1);
   }, []);
 
-  // Contar órdenes por estado (solo pendientes y pagadas)
+  // Contadores según la vista actual (página o subconjunto filtrado en cliente)
   const orderCounts = useMemo(() => {
-    const pending = orders.filter((o) => !o.status).length;
-    const paid = orders.filter((o) => o.status).length;
-    return { pending, paid, total: orders.length };
-  }, [orders]);
+    const list = displayOrders;
+    const pending = list.filter((o) => !o.status).length;
+    const paid = list.filter((o) => o.status).length;
+    return { pending, paid, total: paginationData.totalItems };
+  }, [displayOrders, paginationData.totalItems]);
 
   return (
     <MainLayout>
@@ -312,7 +360,7 @@ const OrdersPage: React.FC = () => {
               Órdenes
             </h1>
             <p className="text-slate-500 dark:text-slate-400 mt-1">
-              {orderCounts.total} órdenes en total • {orderCounts.pending} pendientes
+              {orderCounts.total} órdenes en el listado • {orderCounts.pending} pendientes en esta vista
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -406,7 +454,7 @@ const OrdersPage: React.FC = () => {
         {/* Grid de órdenes con paginación */}
         <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
           <OrdersGrid
-            orders={paginatedOrders}
+            orders={displayOrders}
             tableNameById={tableNameById}
             isLoading={isLoadingOrders}
             error={ordersError instanceof Error ? ordersError.message : null}
@@ -418,11 +466,11 @@ const OrdersPage: React.FC = () => {
             onPrintClientTicket={handlePrintClientTicket}
             onPrintKitchenTicket={handlePrintKitchenTicket}
           />
-          {!isLoadingOrders && !ordersError && sortedOrders.length > 0 && (
+          {!isLoadingOrders && !ordersError && paginationData.totalItems > 0 && (
             <OrderPagination
               pagination={paginationData}
               onPageChange={handlePageChange}
-              pageSizeOptions={[10, 25, 50]}
+              pageSizeOptions={[10, 20, 25, 50]}
               onPageSizeChange={handlePageSizeChange}
             />
           )}

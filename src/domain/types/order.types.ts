@@ -202,6 +202,9 @@ export interface ListOrdersRequest {
   origin?: string; // Filtrar por origen
   dateFrom?: string; // Fecha inicio (ISO string)
   dateTo?: string; // Fecha fin (ISO string)
+  /** Paginación servidor (GET /api/orders). Por defecto API usa page=1, limit=20. */
+  page?: number;
+  limit?: number;
 }
 
 /** Respuesta de GET /api/orders: mismo formato que el backend (data + pagination) */

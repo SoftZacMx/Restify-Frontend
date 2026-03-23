@@ -7,7 +7,11 @@ import { ThemeProvider } from '@/presentation/contexts/theme.context';
 import { SidebarProvider } from '@/presentation/contexts/sidebar.context';
 import OrdersPage from './OrdersPage';
 
-const mockListOrders = vi.fn().mockResolvedValue([]);
+const emptyListResult = {
+  orders: [] as unknown[],
+  pagination: { page: 1, limit: 20, total: 0, totalPages: 1 },
+};
+const mockListOrders = vi.fn().mockResolvedValue(emptyListResult);
 const mockListTables = vi.fn().mockResolvedValue([]);
 const mockGetOrderById = vi.fn();
 const mockGetTableById = vi.fn();
@@ -67,7 +71,7 @@ function renderWithProviders(ui: ReactElement) {
 describe('OrdersPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockListOrders.mockResolvedValue([]);
+    mockListOrders.mockResolvedValue(emptyListResult);
     mockListTables.mockResolvedValue([]);
   });
 
