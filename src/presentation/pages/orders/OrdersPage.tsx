@@ -362,10 +362,7 @@ const OrdersPage: React.FC = () => {
               <FileText className="h-7 w-7" />
               Órdenes
             </h1>
-            <p className="text-slate-500 dark:text-slate-400 mt-1">
-              {orderCounts.totalInList} órdenes en el listado (paginado). Las tarjetas muestran totales de
-              pendientes y pagadas según rango de fechas y filtros, sin depender de la página.
-            </p>
+ 
           </div>
           <div className="flex items-center gap-3">
             {/* Indicador de conexión WebSocket */}
