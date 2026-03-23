@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from '@/presentation
 import type { PaginationData } from '@/domain/types';
 import { cn } from '@/shared/lib/utils';
 
-const DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50];
+const DEFAULT_PAGE_SIZE_OPTIONS = [15, 20, 25, 50, 100];
 
 interface OrderPaginationProps {
   pagination: PaginationData;
@@ -90,10 +90,10 @@ export const OrderPagination: React.FC<OrderPaginationProps> = ({
                 value={String(itemsPerPage)}
                 onValueChange={(v) => onPageSizeChange?.(Number(v))}
               >
-                <SelectTrigger className="h-9 w-[5rem]">
+                <SelectTrigger className="h-9 w-[4.5rem] min-w-[4.5rem] shrink-0">
                   <span>{itemsPerPage}</span>
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="max-h-[min(20rem,75vh)]">
                   {pageSizeOptions.map((size) => (
                     <SelectItem key={size} value={String(size)}>
                       {size}

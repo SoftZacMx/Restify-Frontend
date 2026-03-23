@@ -95,6 +95,8 @@ const OrdersPage: React.FC = () => {
 
   const ordersFromApi = listPayload?.orders ?? [];
   const serverPagination = listPayload?.pagination;
+  /** Totales pendientes/pagadas en el rango y filtros de API (no dependen de la página). */
+  const ordersSummary = listPayload?.summary;
 
   // Query para obtener mesas (para filtros)
   const { data: tables = [], isLoading: isLoadingTables } = useQuery({
@@ -341,13 +343,14 @@ const OrdersPage: React.FC = () => {
     setCurrentPage(1);
   }, []);
 
-  // Contadores según la vista actual (página o subconjunto filtrado en cliente)
+  /** Cards: totales globales del backend (fecha + filtros API). El subtítulo usa el total del listado paginado. */
   const orderCounts = useMemo(() => {
-    const list = displayOrders;
-    const pending = list.filter((o) => !o.status).length;
-    const paid = list.filter((o) => o.status).length;
-    return { pending, paid, total: paginationData.totalItems };
-  }, [displayOrders, paginationData.totalItems]);
+    return {
+      pending: ordersSummary?.totalOrdersPending ?? 0,
+      paid: ordersSummary?.totalOrdersPaid ?? 0,
+      totalInList: paginationData.totalItems,
+    };
+  }, [ordersSummary, paginationData.totalItems]);
 
   return (
     <MainLayout>
@@ -360,7 +363,8 @@ const OrdersPage: React.FC = () => {
               Órdenes
             </h1>
             <p className="text-slate-500 dark:text-slate-400 mt-1">
-              {orderCounts.total} órdenes en el listado • {orderCounts.pending} pendientes en esta vista
+              {orderCounts.totalInList} órdenes en el listado (paginado). Las tarjetas muestran totales de
+              pendientes y pagadas según rango de fechas y filtros, sin depender de la página.
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -403,18 +407,18 @@ const OrdersPage: React.FC = () => {
         )}
 
         {/* Contadores rápidos */}
-        <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4">
           <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 border border-yellow-200 dark:border-yellow-800">
             <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">
               {orderCounts.pending}
             </p>
-            <p className="text-sm text-yellow-600 dark:text-yellow-400">Pendientes</p>
+            <p className="text-sm text-yellow-600 dark:text-yellow-400">Pendientes (total)</p>
           </div>
           <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
             <p className="text-2xl font-bold text-green-700 dark:text-green-300">
               {orderCounts.paid}
             </p>
-            <p className="text-sm text-green-600 dark:text-green-400">Pagadas</p>
+            <p className="text-sm text-green-600 dark:text-green-400">Pagadas (total)</p>
           </div>
         </div>
 
@@ -470,7 +474,7 @@ const OrdersPage: React.FC = () => {
             <OrderPagination
               pagination={paginationData}
               onPageChange={handlePageChange}
-              pageSizeOptions={[10, 20, 25, 50]}
+              pageSizeOptions={[15, 20, 25, 50, 100]}
               onPageSizeChange={handlePageSizeChange}
             />
           )}

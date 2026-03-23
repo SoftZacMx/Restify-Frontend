@@ -207,10 +207,15 @@ export interface ListOrdersRequest {
   limit?: number;
 }
 
-/** Respuesta de GET /api/orders: mismo formato que el backend (data + pagination) */
+/** Respuesta de GET /api/orders: mismo formato que el backend (data + pagination + summary) */
 export interface ListOrdersResponse {
   data: OrderResponse[];
   pagination: { page: number; limit: number; total: number; totalPages: number };
+  /** Totales globales (mismo rango/fecha y filtros que el listado, sin filtro de estado del tab). */
+  summary: {
+    totalOrdersPending: number;
+    totalOrdersPaid: number;
+  };
 }
 
 /** Pago único — POST /api/orders/:order_id/pay */

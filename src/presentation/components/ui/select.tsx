@@ -104,16 +104,40 @@ const SelectContent = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, children, ...props }, ref) => {
   const { isOpen, containerRef } = React.useContext(SelectContext);
-  const [position, setPosition] = React.useState({ top: 0, left: 0, minWidth: 0 });
+  const [position, setPosition] = React.useState<{
+    top?: number;
+    left: number;
+    minWidth: number;
+    bottom?: number;
+    openUpwards: boolean;
+  }>({ left: 0, minWidth: 0, openUpwards: false });
 
   React.useLayoutEffect(() => {
     if (!isOpen || !containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    setPosition({
-      top: rect.bottom + 4,
-      left: rect.left,
-      minWidth: Math.max(rect.width, 128),
-    });
+    const minWidth = Math.max(rect.width, 128);
+    const gap = 4;
+    /** Altura máxima del panel (coherente con max-h en className) */
+    const maxPanel = Math.min(320, window.innerHeight * 0.75);
+    const spaceBelow = window.innerHeight - rect.bottom - gap;
+    const spaceAbove = rect.top - gap;
+    const openUpwards = spaceBelow < Math.min(maxPanel, 200) && spaceAbove > spaceBelow;
+
+    if (openUpwards) {
+      setPosition({
+        openUpwards: true,
+        left: rect.left,
+        minWidth,
+        bottom: window.innerHeight - rect.top + gap,
+      });
+    } else {
+      setPosition({
+        openUpwards: false,
+        top: rect.bottom + gap,
+        left: rect.left,
+        minWidth,
+      });
+    }
   }, [isOpen, containerRef]);
 
   if (!isOpen) return null;
@@ -123,14 +147,16 @@ const SelectContent = React.forwardRef<
       ref={ref}
       data-select-content
       className={cn(
-        'z-[100] max-h-[min(16rem,60vh)] min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-lg border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800',
+        'z-[9999] max-h-[min(20rem,75vh)] min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-lg border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800',
         className
       )}
       style={{
         position: 'fixed',
-        top: position.top,
         left: position.left,
         minWidth: position.minWidth,
+        ...(position.openUpwards
+          ? { bottom: position.bottom, top: 'auto' as const }
+          : { top: position.top, bottom: 'auto' as const }),
       }}
       {...props}
     >

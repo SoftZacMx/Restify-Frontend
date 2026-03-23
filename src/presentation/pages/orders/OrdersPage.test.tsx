@@ -10,6 +10,7 @@ import OrdersPage from './OrdersPage';
 const emptyListResult = {
   orders: [] as unknown[],
   pagination: { page: 1, limit: 20, total: 0, totalPages: 1 },
+  summary: { totalOrdersPending: 0, totalOrdersPaid: 0 },
 };
 const mockListOrders = vi.fn().mockResolvedValue(emptyListResult);
 const mockListTables = vi.fn().mockResolvedValue([]);

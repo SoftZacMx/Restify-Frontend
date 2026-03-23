@@ -608,6 +608,7 @@ export class OrderService {
   ): Promise<{
     orders: OrderResponse[];
     pagination: ListOrdersResponse['pagination'];
+    summary: ListOrdersResponse['summary'];
   }> {
     const response = await orderRepository.listOrders(filters);
     if (!response.success || response.data == null) {
@@ -621,7 +622,11 @@ export class OrderService {
       total: orders.length,
       totalPages: 1,
     };
-    return { orders, pagination };
+    const summary = payload.summary ?? {
+      totalOrdersPending: 0,
+      totalOrdersPaid: 0,
+    };
+    return { orders, pagination, summary };
   }
 
   /**

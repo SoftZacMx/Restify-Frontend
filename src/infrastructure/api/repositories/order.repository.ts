@@ -175,7 +175,7 @@ export class OrderRepository {
 
   /**
    * Lista órdenes con filtros opcionales.
-   * Devuelve la respuesta del backend tal cual: { data: { data: Order[], pagination } }.
+   * Devuelve la respuesta del backend tal cual: { data: { data, pagination, summary } }.
    */
   async listOrders(filters?: ListOrdersRequest): Promise<ApiResponse<ListOrdersResponse>> {
     try {
