@@ -42,6 +42,11 @@ export const useAuthStore = create<AuthState>()(
           token: null,
           isAuthenticated: false,
         });
+        // Clear subscription store on logout
+        try {
+          const { useSubscriptionStore } = require('./subscription.store');
+          useSubscriptionStore.getState().clear();
+        } catch { /* ignore if not loaded */ }
       },
       setUser: (user) => set({ user }),
     }),

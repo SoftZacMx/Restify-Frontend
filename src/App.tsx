@@ -31,6 +31,9 @@ import SettingsLayout from '@/presentation/components/layouts/SettingsLayout';
 import SettingsGeneralPage from '@/presentation/pages/settings/SettingsGeneralPage';
 import CompanyConfigPage from '@/presentation/pages/settings/company/CompanyConfigPage';
 import { PrivateRoute } from '@/presentation/components/PrivateRoute';
+import { SubscriptionGuard } from '@/presentation/components/subscription/SubscriptionGuard';
+import SubscriptionSuccessPage from '@/presentation/pages/subscription/SubscriptionSuccessPage';
+import SubscriptionCancelPage from '@/presentation/pages/subscription/SubscriptionCancelPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -56,12 +59,32 @@ function App() {
                 <Route path="/auth/login" element={<LoginPage />} />
                 <Route path="/auth/recover-password" element={<RecoverPasswordPage />} />
 
-              {/* Protected routes */}
+              {/* Subscription routes (no guard - need access without active subscription) */}
+              <Route
+                path="/subscription/success"
+                element={
+                  <PrivateRoute>
+                    <SubscriptionSuccessPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/subscription/cancel"
+                element={
+                  <PrivateRoute>
+                    <SubscriptionCancelPage />
+                  </PrivateRoute>
+                }
+              />
+
+              {/* Protected routes (with subscription guard) */}
               <Route
                 path="/dashboard"
                 element={
                   <PrivateRoute>
-                    <DashboardPage />
+                    <SubscriptionGuard>
+                      <DashboardPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -69,7 +92,9 @@ function App() {
                 path="/orders"
                 element={
                   <PrivateRoute>
-                    <OrdersPage />
+                    <SubscriptionGuard>
+                      <OrdersPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -77,7 +102,9 @@ function App() {
                 path="/pos"
                 element={
                   <PrivateRoute>
-                    <PosPage />
+                    <SubscriptionGuard>
+                      <PosPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -85,7 +112,9 @@ function App() {
                 path="/tables"
                 element={
                   <PrivateRoute>
-                    <TablesPage />
+                    <SubscriptionGuard>
+                      <TablesPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -93,7 +122,9 @@ function App() {
                 path="/tables/:tableId"
                 element={
                   <PrivateRoute>
-                    <TableDetailPage />
+                    <SubscriptionGuard>
+                      <TableDetailPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -101,7 +132,9 @@ function App() {
                 path="/menu"
                 element={
                   <PrivateRoute>
-                    <MenuPage />
+                    <SubscriptionGuard>
+                      <MenuPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -109,7 +142,9 @@ function App() {
                 path="/expenses"
                 element={
                   <PrivateRoute>
-                    <ExpensesPage />
+                    <SubscriptionGuard>
+                      <ExpensesPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -117,7 +152,9 @@ function App() {
                 path="/expenses/:expenseId"
                 element={
                   <PrivateRoute>
-                    <ExpenseDetailPage />
+                    <SubscriptionGuard>
+                      <ExpenseDetailPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -125,7 +162,9 @@ function App() {
                 path="/reports"
                 element={
                   <PrivateRoute>
-                    <ReportsPage />
+                    <SubscriptionGuard>
+                      <ReportsPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -133,7 +172,9 @@ function App() {
                 path="/users"
                 element={
                   <PrivateRoute>
-                    <UsersPage />
+                    <SubscriptionGuard>
+                      <UsersPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -141,7 +182,9 @@ function App() {
                 path="/users/:userId"
                 element={
                   <PrivateRoute>
-                    <UserDetailPage />
+                    <SubscriptionGuard>
+                      <UserDetailPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -149,7 +192,9 @@ function App() {
                 path="/products"
                 element={
                   <PrivateRoute>
-                    <ProductsPage />
+                    <SubscriptionGuard>
+                      <ProductsPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -157,7 +202,9 @@ function App() {
                 path="/products/:productId"
                 element={
                   <PrivateRoute>
-                    <ProductDetailPage />
+                    <SubscriptionGuard>
+                      <ProductDetailPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -165,7 +212,9 @@ function App() {
                 path="/menu/items"
                 element={
                   <PrivateRoute>
-                    <MenuItemsPage />
+                    <SubscriptionGuard>
+                      <MenuItemsPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -173,7 +222,9 @@ function App() {
                 path="/menu/items/:menuItemId"
                 element={
                   <PrivateRoute>
-                    <MenuItemDetailPage />
+                    <SubscriptionGuard>
+                      <MenuItemDetailPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -181,7 +232,9 @@ function App() {
                 path="/menu/categories"
                 element={
                   <PrivateRoute>
-                    <MenuCategoriesPage />
+                    <SubscriptionGuard>
+                      <MenuCategoriesPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -189,7 +242,9 @@ function App() {
                 path="/menu/categories/:categoryId"
                 element={
                   <PrivateRoute>
-                    <MenuCategoryDetailPage />
+                    <SubscriptionGuard>
+                      <MenuCategoryDetailPage />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               />
@@ -197,7 +252,9 @@ function App() {
                 path="/settings"
                 element={
                   <PrivateRoute>
-                    <SettingsLayout />
+                    <SubscriptionGuard>
+                      <SettingsLayout />
+                    </SubscriptionGuard>
                   </PrivateRoute>
                 }
               >

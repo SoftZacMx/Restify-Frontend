@@ -4,6 +4,7 @@ import { Sidebar } from './Sidebar';
 import { useSidebar } from '@/presentation/contexts/sidebar.context';
 import { Button } from '@/presentation/components/ui/button';
 import { cn } from '@/shared/lib/utils';
+import { SubscriptionBanner } from '@/presentation/components/subscription/SubscriptionBanner';
 
 /**
  * Props del componente MainLayout
@@ -63,6 +64,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
             {isMobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         )}
+        <SubscriptionBanner />
         {children}
       </main>
     </div>
