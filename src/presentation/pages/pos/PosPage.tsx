@@ -276,7 +276,7 @@ const PosPage = () => {
         menuItemId: item.productId, // El ID del POS corresponde a un MenuItem del backend
         quantity: item.quantity,
         price: item.basePrice, // Precio base del producto
-        note: null, // Por ahora no hay notas por item
+        note: item.note?.trim() || null,
         extras: extras.length > 0 ? extras : undefined,
       };
     });
