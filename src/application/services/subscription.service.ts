@@ -15,22 +15,22 @@ export class SubscriptionService {
 
   async getStatus(): Promise<SubscriptionStatusResponse> {
     const response = await this.repository.getStatus();
-    return response.data;
+    return response.data!;
   }
 
   async createCheckout(): Promise<CheckoutResponse> {
     const response = await this.repository.createCheckout();
-    return response.data;
+    return response.data!;
   }
 
   async cancel(): Promise<CancelSubscriptionResponse> {
     const response = await this.repository.cancel();
-    return response.data;
+    return response.data!;
   }
 
   async reactivate(): Promise<ReactivateSubscriptionResponse> {
     const response = await this.repository.reactivate();
-    return response.data;
+    return response.data!;
   }
 }
 

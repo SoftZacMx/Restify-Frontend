@@ -3,7 +3,6 @@ import { QRCodeSVG } from 'qrcode.react';
 import { X, CheckCircle, Loader2, AlertTriangle } from 'lucide-react';
 import { Button } from '@/presentation/components/ui/button';
 import { paymentService } from '@/application/services/payment.service';
-import type { PaymentStatus } from '@/domain/types/payment.types';
 
 interface QrPaymentModalProps {
   orderId: string;

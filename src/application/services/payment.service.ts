@@ -92,8 +92,9 @@ export class PaymentService {
   mapPosMethodToBackend(posMethod: PosPaymentMethod): PaymentMethodType {
     const mapping: Record<PosPaymentMethod, PaymentMethodType> = {
       CASH: 'CASH',
-      CARD: 'CARD_PHYSICAL', // Por defecto tarjeta física
+      CARD: 'CARD_PHYSICAL',
       TRANSFER: 'TRANSFER',
+      QR_MP: 'QR_MERCADO_PAGO',
     };
     return mapping[posMethod];
   }
@@ -106,6 +107,7 @@ export class PaymentService {
       CASH: 1,
       TRANSFER: 2,
       CARD: 3,
+      QR_MP: 4,
     };
     return mapping[posMethod];
   }
@@ -119,6 +121,7 @@ export class PaymentService {
       TRANSFER: 2,
       CARD_PHYSICAL: 3,
       CARD_STRIPE: 3,
+      QR_MERCADO_PAGO: 4,
     };
     return mapping[method];
   }
@@ -200,7 +203,7 @@ export class PaymentService {
     }
 
     const response = await paymentRepository.payWithQrMp({ orderId, userId });
-    return response.data;
+    return response.data!;
   }
 
   /**
@@ -208,7 +211,7 @@ export class PaymentService {
    */
   async getQrMpPaymentStatus(orderId: string): Promise<QrMpPaymentStatusResponse> {
     const response = await paymentRepository.getQrMpPaymentStatus(orderId);
-    return response.data;
+    return response.data!;
   }
 
   /**

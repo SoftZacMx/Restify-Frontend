@@ -489,7 +489,7 @@ const PosPage = () => {
           transferAmount
         );
         const mapMethod = (m: PosPaymentMethod): 'CASH' | 'TRANSFER' | 'CARD_PHYSICAL' =>
-          m === 'CARD' ? 'CARD_PHYSICAL' : m;
+          m === 'CARD' ? 'CARD_PHYSICAL' : m as 'CASH' | 'TRANSFER' | 'CARD_PHYSICAL';
         const a1 = Math.round(amount1 * 100) / 100;
         const a2 = Math.round(amount2 * 100) / 100;
         const paySplitResult = await orderService.payOrder(orderIdToProcess, {

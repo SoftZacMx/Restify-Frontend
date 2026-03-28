@@ -401,6 +401,7 @@ export class OrderService {
       CASH: 1,
       TRANSFER: 2,
       CARD: 3,
+      QR_MP: 4,
     };
     return mapping[method];
   }

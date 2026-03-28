@@ -232,7 +232,7 @@ export interface OrderTableItem {
   total: string;
   status: OrderStatusInfo;
   paymentMethod: string;
-  paymentMethodIcon: string;
+  paymentMethodIcon: React.ReactNode;
   origin: string;
   note: string | null;
   delivered: boolean;
