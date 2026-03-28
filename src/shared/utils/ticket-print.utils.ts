@@ -297,6 +297,36 @@ export function buildSaleTicketHtml(data: SaleTicketResponse, config?: ResolvedT
 </body></html>`;
 }
 
+/**
+ * Genera un QR como data URL (base64 PNG) para insertar en HTML de impresión
+ */
+export async function generateQrDataUrl(url: string): Promise<string> {
+  const QRCode = await import('qrcode');
+  return QRCode.toDataURL(url, { width: 200, margin: 1 });
+}
+
+/**
+ * Ticket de venta con QR de pago (Mercado Pago)
+ * Reutiliza el ticket de venta normal y agrega el QR al final
+ */
+export async function buildSaleTicketWithQrHtml(
+  data: SaleTicketResponse,
+  qrDataUrl: string,
+  config?: ResolvedTicketPrintConfig
+): Promise<string> {
+  const baseHtml = buildSaleTicketHtml(data, config);
+
+  const qrSection = `
+  <div style="text-align: center; margin-top: 6px; padding-top: 4px; border-top: 1px dashed #000;">
+    <div style="font-weight: bold; font-size: 9pt; margin-bottom: 4px;">ESCANEA PARA PAGAR</div>
+    <img src="${qrDataUrl}" style="width: 45mm; height: 45mm;" />
+    <div style="font-size: 7pt; margin-top: 3px; color: #666;">Mercado Pago</div>
+  </div>`;
+
+  // Insertar antes del cierre de </div></body>
+  return baseHtml.replace('</div>\n</body>', `${qrSection}\n</div>\n</body>`);
+}
+
 export function printTicketHtml(html: string): void {
   const iframe = document.createElement('iframe');
   iframe.style.position = 'fixed';
@@ -316,11 +346,27 @@ export function printTicketHtml(html: string): void {
   doc.write(html);
   doc.close();
 
-  iframe.contentWindow?.focus();
-  iframe.contentWindow?.print();
-  setTimeout(() => {
-    if (document.body.contains(iframe)) {
-      document.body.removeChild(iframe);
-    }
-  }, 1000);
+  // Esperar a que las imágenes carguen antes de imprimir (ej: QR base64)
+  const images = doc.querySelectorAll('img');
+  const imagePromises = Array.from(images).map(
+    (img) =>
+      new Promise<void>((resolve) => {
+        if (img.complete) {
+          resolve();
+        } else {
+          img.onload = () => resolve();
+          img.onerror = () => resolve();
+        }
+      })
+  );
+
+  Promise.all(imagePromises).then(() => {
+    iframe.contentWindow?.focus();
+    iframe.contentWindow?.print();
+    setTimeout(() => {
+      if (document.body.contains(iframe)) {
+        document.body.removeChild(iframe);
+      }
+    }, 1000);
+  });
 }

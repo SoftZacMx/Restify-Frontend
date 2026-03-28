@@ -138,7 +138,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
             <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
               <CreditCard className="h-4 w-4 text-slate-400" />
               <span className="text-sm">
-                {paymentIcon} {order.paymentMethod === 1 ? 'Efectivo' : order.paymentMethod === 2 ? 'Transferencia' : order.paymentMethod === 3 ? 'Tarjeta' : 'Pago dividido'}
+                {paymentIcon} {order.paymentMethod === 1 ? 'Efectivo' : order.paymentMethod === 2 ? 'Transferencia' : order.paymentMethod === 3 ? 'Tarjeta' : order.paymentMethod === 4 ? 'Mercado Pago' : 'Pago dividido'}
               </span>
             </div>
           )}

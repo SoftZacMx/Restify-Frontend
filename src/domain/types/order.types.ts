@@ -9,7 +9,7 @@ export type OrderType = 'DINE_IN' | 'TAKEOUT';
 
 export type OrderStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
 
-export type PosPaymentMethod = 'CASH' | 'CARD' | 'TRANSFER';
+export type PosPaymentMethod = 'CASH' | 'CARD' | 'TRANSFER' | 'QR_MP';
 
 /**
  * Modo del punto de venta (estado de UI)

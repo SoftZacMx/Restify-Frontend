@@ -31,6 +31,7 @@ import {
   orderListNeedsClientSideFiltering,
 } from '@/shared/utils/order.utils';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
+import { usePaymentSound } from '@/presentation/hooks/usePaymentSound';
 import { AppError } from '@/domain/errors';
 
 /**
@@ -40,6 +41,7 @@ import { AppError } from '@/domain/errors';
 const OrdersPage: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { playSuccess } = usePaymentSound();
 
   // Estado de conexión WebSocket
   const { isConnected, connectionId } = useWebSocketContext();
@@ -320,6 +322,7 @@ const OrdersPage: React.FC = () => {
     queryClient.invalidateQueries({ queryKey: ['orders'] });
     queryClient.invalidateQueries({ queryKey: ['tables-for-filter'] });
     setOrderForSplitPayment(null);
+    playSuccess();
     showSuccessToast('Pago dividido procesado', 'La orden ha sido pagada con dos métodos');
   }, [queryClient]);
 

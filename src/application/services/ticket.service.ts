@@ -8,6 +8,8 @@ import { ticketRepository } from '@/infrastructure/api/repositories/ticket.repos
 import {
   buildKitchenTicketHtml,
   buildSaleTicketHtml,
+  buildSaleTicketWithQrHtml,
+  generateQrDataUrl,
   printTicketHtml,
 } from '@/shared/utils/ticket-print.utils';
 
@@ -43,6 +45,15 @@ export class TicketService {
   async printSaleTicket(orderId: string): Promise<void> {
     const data = await this.getSaleTicket(orderId);
     const html = buildSaleTicketHtml(data);
+    printTicketHtml(html);
+  }
+  /**
+   * Obtiene el ticket de venta con QR de pago de Mercado Pago y dispara impresión
+   */
+  async printSaleTicketWithQr(orderId: string, qrUrl: string): Promise<void> {
+    const data = await this.getSaleTicket(orderId);
+    const qrDataUrl = await generateQrDataUrl(qrUrl);
+    const html = await buildSaleTicketWithQrHtml(data, qrDataUrl);
     printTicketHtml(html);
   }
 }

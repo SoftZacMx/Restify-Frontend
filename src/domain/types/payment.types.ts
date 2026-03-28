@@ -8,7 +8,7 @@
 /**
  * Métodos de pago soportados por el backend
  */
-export type PaymentMethodType = 'CASH' | 'TRANSFER' | 'CARD_PHYSICAL' | 'CARD_STRIPE';
+export type PaymentMethodType = 'CASH' | 'TRANSFER' | 'CARD_PHYSICAL' | 'CARD_STRIPE' | 'QR_MERCADO_PAGO';
 
 /**
  * Estados de pago
@@ -31,7 +31,7 @@ export type RefundStatus = 'PENDING' | 'PROCESSING' | 'SUCCEEDED' | 'FAILED' | '
 /**
  * Gateways de pago
  */
-export type PaymentGateway = 'STRIPE' | 'PAYPAL' | 'CASH';
+export type PaymentGateway = 'STRIPE' | 'PAYPAL' | 'CASH' | 'MERCADO_PAGO';
 
 /**
  * Valor numérico del método de pago para órdenes
@@ -40,6 +40,7 @@ export const PaymentMethodNumber = {
   CASH: 1,
   TRANSFER: 2,
   CARD: 3,
+  QR_MP: 4,
 } as const;
 
 export type PaymentMethodNumberType = typeof PaymentMethodNumber[keyof typeof PaymentMethodNumber];
@@ -91,6 +92,34 @@ export interface PayOrderWithSplitPaymentRequest {
   orderId: string; // UUID de la orden
   firstPayment: SplitPaymentPart;
   secondPayment: SplitPaymentPart;
+}
+
+/**
+ * Request para pagar con QR de Mercado Pago
+ */
+export interface PayOrderWithQrMpRequest {
+  orderId: string;
+  userId: string;
+  connectionId?: string | null;
+}
+
+/**
+ * Respuesta de pago con QR de Mercado Pago
+ */
+export interface QrMpPaymentResponse {
+  paymentId: string;
+  preferenceId: string;
+  initPoint: string;
+  expiresAt: string;
+}
+
+/**
+ * Respuesta del estado del pago QR
+ */
+export interface QrMpPaymentStatusResponse {
+  paymentId: string;
+  status: PaymentStatus;
+  gatewayTransactionId: string | null;
 }
 
 /**
@@ -256,6 +285,7 @@ export const PosPaymentMethodToBackend: Record<string, PaymentMethodType> = {
   CASH: 'CASH',
   CARD: 'CARD_PHYSICAL', // Por defecto tarjeta física, puede cambiar a CARD_STRIPE
   TRANSFER: 'TRANSFER',
+  QR_MP: 'QR_MERCADO_PAGO',
 };
 
 /**
@@ -265,6 +295,7 @@ export const PaymentMethodNumberToString: Record<number, PaymentMethodType> = {
   1: 'CASH',
   2: 'TRANSFER',
   3: 'CARD_PHYSICAL',
+  4: 'QR_MERCADO_PAGO',
 };
 
 /**
@@ -275,4 +306,5 @@ export const PaymentMethodStringToNumber: Record<string, number> = {
   TRANSFER: 2,
   CARD_PHYSICAL: 3,
   CARD_STRIPE: 3, // Ambos tipos de tarjeta usan el mismo número
+  QR_MERCADO_PAGO: 4,
 };

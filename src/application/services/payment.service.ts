@@ -10,6 +10,8 @@ import type {
   PaymentResponse,
   StripePaymentResponse,
   SplitPaymentResponse,
+  QrMpPaymentResponse,
+  QrMpPaymentStatusResponse,
   CreateRefundRequest,
   RefundResponse,
   PaymentFormErrors,
@@ -186,6 +188,27 @@ export class PaymentService {
       connectionId,
     };
     return await paymentRepository.payWithCardStripe(data);
+  }
+
+  /**
+   * Inicia pago con QR de Mercado Pago
+   */
+  async payWithQrMp(orderId: string, userId: string): Promise<QrMpPaymentResponse> {
+    const validation = this.validatePaymentData(orderId, 1);
+    if (!validation.isValid) {
+      throw new Error(Object.values(validation.errors).join(', '));
+    }
+
+    const response = await paymentRepository.payWithQrMp({ orderId, userId });
+    return response.data;
+  }
+
+  /**
+   * Obtiene estado del pago QR de Mercado Pago
+   */
+  async getQrMpPaymentStatus(orderId: string): Promise<QrMpPaymentStatusResponse> {
+    const response = await paymentRepository.getQrMpPaymentStatus(orderId);
+    return response.data;
   }
 
   /**

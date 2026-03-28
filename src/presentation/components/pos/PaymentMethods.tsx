@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { DollarSign, CreditCard, Building2, Check, RotateCw } from 'lucide-react';
+import { SiMercadopago } from 'react-icons/si';
 import { Button } from '@/presentation/components/ui/button';
 import { Input } from '@/presentation/components/ui/input';
 import { Label } from '@/presentation/components/ui/label';
@@ -24,7 +25,8 @@ interface PaymentMethodsProps {
 const PAYMENT_METHODS: { value: PosPaymentMethod; label: string; shortLabel: string; icon: React.ReactNode }[] = [
   { value: 'CASH', label: 'Efectivo', shortLabel: 'Efectivo', icon: <DollarSign className="h-5 w-5" /> },
   { value: 'CARD', label: 'Tarjeta', shortLabel: 'Tarjeta', icon: <CreditCard className="h-5 w-5" /> },
-  { value: 'TRANSFER', label: 'Transferencia', shortLabel: 'Transferencia', icon: <Building2 className="h-5 w-5" /> },
+  { value: 'TRANSFER', label: 'Transferencia', shortLabel: 'Transfer.', icon: <Building2 className="h-5 w-5" /> },
+  { value: 'QR_MP', label: 'Mercado Pago', shortLabel: 'Mercado Pago', icon: <SiMercadopago className="h-5 w-5" /> },
 ];
 
 /**
@@ -144,8 +146,8 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
         })}
       </div>
 
-      {/* Amount Received (cuando el método es Efectivo) */}
-      {selectedMethod1 && (
+      {/* Amount Received (no aplica para QR MP — se paga el total completo) */}
+      {selectedMethod1 && selectedMethod1 !== 'QR_MP' && (
         <div className="space-y-2 mb-4">
           <Label htmlFor="amount1" className="text-slate-600 dark:text-slate-300">
             Monto recibido

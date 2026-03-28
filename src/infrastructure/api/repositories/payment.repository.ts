@@ -5,12 +5,15 @@ import type {
   PayOrderWithCardPhysicalRequest,
   PayOrderWithCardStripeRequest,
   PayOrderWithSplitPaymentRequest,
+  PayOrderWithQrMpRequest,
   ConfirmStripePaymentRequest,
   ListPaymentsRequest,
   PaymentResponse,
   StripePaymentResponse,
   SplitPaymentResponse,
   PaymentSessionResponse,
+  QrMpPaymentResponse,
+  QrMpPaymentStatusResponse,
   CreateRefundRequest,
   ProcessStripeRefundRequest,
   ListRefundsRequest,
@@ -92,6 +95,30 @@ export class PaymentRepository {
       const { orderId, firstPayment, secondPayment } = data;
       const body = { firstPayment, secondPayment };
       const response = await apiClient.post(`/api/orders/${orderId}/pay`, body);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * Inicia pago con QR de Mercado Pago
+   */
+  async payWithQrMp(data: PayOrderWithQrMpRequest): Promise<ApiResponse<QrMpPaymentResponse>> {
+    try {
+      const response = await apiClient.post('/api/payments/qr-mercado-pago', data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * Obtiene el estado del pago QR de Mercado Pago
+   */
+  async getQrMpPaymentStatus(orderId: string): Promise<ApiResponse<QrMpPaymentStatusResponse>> {
+    try {
+      const response = await apiClient.get(`/api/payments/qr-mercado-pago/${orderId}`);
       return response.data;
     } catch (error) {
       throw error;

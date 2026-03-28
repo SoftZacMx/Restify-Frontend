@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ShoppingCart, Receipt, ArrowLeft, Loader2, Search } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { usePos } from '@/presentation/hooks/usePos';
+import { usePaymentSound } from '@/presentation/hooks/usePaymentSound';
 import { OrderOriginCard } from '@/presentation/components/pos/OrderOriginCard';
 import { TableSelectionDialog } from '@/presentation/components/pos/TableSelectionDialog';
 import { CategoryFilter } from '@/presentation/components/pos/CategoryFilter';
@@ -31,6 +32,7 @@ import type {
 import { OrderOrigins } from '@/domain/types';
 import { formatOrderNumber } from '@/shared/utils/order.utils';
 import { AppError } from '@/domain/errors';
+import { paymentService } from '@/application/services/payment.service';
 
 /**
  * Página del Punto de Venta (POS)
@@ -47,6 +49,7 @@ const PosPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { playSuccess } = usePaymentSound();
   const urlMode = searchParams.get('mode');
   const orderId = searchParams.get('orderId') || undefined;
 
@@ -122,6 +125,80 @@ const PosPage = () => {
   const [isSavingOrder, setIsSavingOrder] = React.useState(false);
   const [isTableDialogOpen, setIsTableDialogOpen] = React.useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = React.useState(false);
+  const [isWaitingQrPayment, setIsWaitingQrPayment] = React.useState(false);
+  const qrPollingRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Limpiar polling al desmontar
+  React.useEffect(() => {
+    return () => {
+      if (qrPollingRef.current) clearInterval(qrPollingRef.current);
+    };
+  }, []);
+
+  // Interceptar selección de método de pago: si es QR_MP, imprimir ticket con QR + polling
+  const handleMethod1ChangeWithQr = (method: PosPaymentMethod | null) => {
+    if (method === 'QR_MP') {
+      const orderIdToProcess = savedOrder?.id || loadedOrder?.id;
+      if (!orderIdToProcess) {
+        showErrorToast('Error', 'Debes guardar la orden antes de pagar con QR');
+        return;
+      }
+      if (!user?.id) {
+        showErrorToast('Error', 'No se pudo obtener el usuario');
+        return;
+      }
+
+      // Iniciar flujo QR: crear pago → imprimir ticket con QR → polling
+      (async () => {
+        setIsProcessingPayment(true);
+        try {
+          // 1. Crear pago QR en MP
+          const qrResult = await paymentService.payWithQrMp(orderIdToProcess, user.id);
+
+          // 2. Imprimir ticket con QR
+          try {
+            await ticketService.printSaleTicketWithQr(orderIdToProcess, qrResult.initPoint);
+          } catch (ticketError) {
+            console.error('Error al imprimir ticket con QR:', ticketError);
+            showErrorToast('Ticket no impreso', 'El QR se generó pero no se pudo imprimir el ticket');
+          }
+
+          setIsProcessingPayment(false);
+          setIsWaitingQrPayment(true);
+
+          // 3. Polling cada 3 segundos
+          qrPollingRef.current = setInterval(async () => {
+            try {
+              const status = await paymentService.getQrMpPaymentStatus(orderIdToProcess);
+              if (status.status === 'SUCCEEDED') {
+                if (qrPollingRef.current) clearInterval(qrPollingRef.current);
+                setIsWaitingQrPayment(false);
+                playSuccess();
+                showSuccessToast('Pago QR exitoso', 'La orden se ha pagado correctamente');
+                queryClient.invalidateQueries({ queryKey: ['orders'] });
+                queryClient.invalidateQueries({ queryKey: ['tables'] });
+                resetPos();
+                setSavedOrder(null);
+                setValidationErrors({});
+                if (loadedOrder) navigate('/orders');
+              } else if (status.status === 'FAILED' || status.status === 'CANCELED') {
+                if (qrPollingRef.current) clearInterval(qrPollingRef.current);
+                setIsWaitingQrPayment(false);
+                showErrorToast('Pago fallido', 'El pago QR fue rechazado o cancelado');
+              }
+            } catch {
+              // Ignorar errores de polling
+            }
+          }, 3000);
+        } catch (error: any) {
+          setIsProcessingPayment(false);
+          showErrorToast('Error al generar QR', error.message || 'No se pudo crear el pago QR');
+        }
+      })();
+      return;
+    }
+    handleMethod1Change(method);
+  };
 
   const selectedTable = selectedTableId
     ? tables.find((t) => t.id === selectedTableId)
@@ -424,6 +501,7 @@ const PosPage = () => {
         }
       }
 
+      playSuccess();
       showSuccessToast('Orden procesada', 'La orden se ha procesado correctamente');
       queryClient.invalidateQueries({ queryKey: ['orders'] });
 
@@ -516,8 +594,14 @@ const PosPage = () => {
   return (
     <MainLayout>
       <LoadingOverlay
-        open={isSavingOrder || isProcessingPayment}
-        message={isProcessingPayment ? 'Procesando pago...' : 'Guardando orden...'}
+        open={isSavingOrder || isProcessingPayment || isWaitingQrPayment}
+        message={
+          isWaitingQrPayment
+            ? 'Esperando pago QR... El ticket fue impreso con el código QR'
+            : isProcessingPayment
+              ? 'Generando QR de pago...'
+              : 'Guardando orden...'
+        }
       />
       <div className="space-y-6 p-6 bg-slate-50 dark:bg-slate-900 min-h-screen">
         {/* Banner de orden cargada */}
@@ -657,7 +741,7 @@ const PosPage = () => {
             showSecondPaymentMethod={showSecondPaymentMethod}
             onShowSecondPaymentMethodChange={setShowSecondPaymentMethod}
             onPaymentAmountChange={handlePaymentAmountChange}
-            onMethod1Change={handleMethod1Change}
+            onMethod1Change={handleMethod1ChangeWithQr}
             onMethod2Change={handleMethod2Change}
             onProcessPayment={handleProcessPayment}
             isProcessPaymentEnabled={isPaymentButtonEnabled() && !isProcessingPayment}
@@ -804,6 +888,23 @@ const PosPage = () => {
           error={tablesError}
           disabled={!!(loadedOrder && loadedOrder.origin === OrderOrigins.LOCAL)}
         />
+
+        {/* Botón cancelar espera QR */}
+        {isWaitingQrPayment && (
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+            <Button
+              variant="outline"
+              className="bg-white dark:bg-slate-800 shadow-lg"
+              onClick={() => {
+                if (qrPollingRef.current) clearInterval(qrPollingRef.current);
+                setIsWaitingQrPayment(false);
+                showErrorToast('Cancelado', 'Se canceló la espera del pago QR');
+              }}
+            >
+              Cancelar espera de pago
+            </Button>
+          </div>
+        )}
       </div>
     </MainLayout>
   );

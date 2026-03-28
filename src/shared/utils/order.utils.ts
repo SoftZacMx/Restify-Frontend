@@ -2,8 +2,10 @@
  * Utilidades para formatear y procesar órdenes
  */
 
+import React from 'react';
 import type { OrderResponse } from '@/domain/types';
 import { formatCurrency } from './currency.utils';
+import { SiMercadopago } from 'react-icons/si';
 
 /**
  * Información de estado de una orden para UI
@@ -70,6 +72,8 @@ export const getPaymentMethodName = (method: number | null): string => {
       return 'Transferencia';
     case 3:
       return 'Tarjeta';
+    case 4:
+      return 'Mercado Pago';
     case null:
       return 'Pago dividido';
     default:
@@ -80,7 +84,7 @@ export const getPaymentMethodName = (method: number | null): string => {
 /**
  * Obtiene el icono del método de pago
  */
-export const getPaymentMethodIcon = (method: number | null): string => {
+export const getPaymentMethodIcon = (method: number | null): React.ReactNode => {
   switch (method) {
     case 1:
       return '💵';
@@ -88,6 +92,8 @@ export const getPaymentMethodIcon = (method: number | null): string => {
       return '🏦';
     case 3:
       return '💳';
+    case 4:
+      return React.createElement(SiMercadopago, { className: 'inline-block h-4 w-4 text-[#00b1ea]' });
     case null:
       return '➗';
     default:
