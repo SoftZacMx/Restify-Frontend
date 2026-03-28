@@ -679,7 +679,6 @@ const PosPage = () => {
                 onSaveOrder={handleSaveOrder}
                 onContinueToPayment={handleContinueToPayment}
               />
-            </div>
           </div>
 
           {/* Botón flotante del carrito — solo móvil */}
@@ -755,6 +754,7 @@ const PosPage = () => {
               </div>
             </div>
           )}
+          </div>
         </>
         )}
 

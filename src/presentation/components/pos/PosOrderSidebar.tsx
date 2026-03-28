@@ -92,8 +92,7 @@ export function PosOrderSidebar({
         <Button
           onClick={onSaveOrder}
           disabled={cartItems.length === 0 || !isOrderValid || isSavingOrder}
-          className="w-full shadow-md hover:shadow-lg transition-all"
-          variant="outline"
+          className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl transition-all"
           size="lg"
         >
           {isSavingOrder
