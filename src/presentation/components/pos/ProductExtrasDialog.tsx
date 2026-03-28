@@ -103,6 +103,18 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
             <DialogClose className="rounded-lg p-1.5 -mr-1" />
           </DialogHeader>
 
+          {/* Botón Agregar al Carrito fijo arriba */}
+          <div className="shrink-0 px-5 py-3 border-b border-slate-200 dark:border-slate-700">
+            <Button
+              onClick={handleAddToCart}
+              className="w-full h-12 text-base font-semibold rounded-lg bg-primary hover:bg-primary/90"
+              size="lg"
+            >
+              <ShoppingCart className="h-5 w-5 mr-2" />
+              Agregar al Carrito — ${itemSubtotal.toFixed(2)}
+            </Button>
+          </div>
+
           <div className="flex flex-col flex-1 min-h-0 overflow-y-auto">
             {/* Imagen del producto: tamaño fijo, no se compacta */}
             <div className="shrink-0 w-full h-44 bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center overflow-hidden">
@@ -248,16 +260,6 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
                   </span>
                 </div>
               </div>
-
-              <Button
-                onClick={handleAddToCart}
-                className="w-full h-12 text-base font-semibold rounded-lg bg-primary hover:bg-primary/90"
-                size="lg"
-              >
-                <ShoppingCart className="h-5 w-5 mr-2" />
-                Agregar al Carrito
-              </Button>
-
 
             </div>
           </div>

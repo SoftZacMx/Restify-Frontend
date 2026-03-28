@@ -747,27 +747,14 @@ const PosPage = () => {
 
             {/* 3. Guardar orden - siempre visible, deshabilitado si no hay ítems */}
             <div className="space-y-3 shrink-0">
-              {loadedOrder ? (
-                <Button
-                  onClick={handleSaveOrder}
-                  disabled={cartItems.length === 0 || !isOrderValid() || isSavingOrder}
-                  className="w-full shadow-md hover:shadow-lg transition-all"
-                  variant="outline"
-                  size="lg"
-                >
-                  {isSavingOrder ? 'Guardando...' : 'Guardar Cambios'}
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleSaveOrder}
-                  disabled={cartItems.length === 0 || !isOrderValid() || isSavingOrder}
-                  className="w-full shadow-md hover:shadow-lg transition-all"
-                  variant="outline"
-                  size="lg"
-                >
-                  {isSavingOrder ? 'Guardando...' : 'Guardar Orden'}
-                </Button>
-              )}
+              <Button
+                onClick={handleSaveOrder}
+                disabled={cartItems.length === 0 || !isOrderValid() || isSavingOrder}
+                className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl transition-all"
+                size="lg"
+              >
+                {isSavingOrder ? 'Guardando...' : loadedOrder ? 'Guardar Cambios' : 'Guardar Orden'}
+              </Button>
               {savedOrder && !savedOrder.status && (
                 <Button
                   onClick={handleContinueToPayment}
