@@ -129,7 +129,6 @@ const PosPage = () => {
   const [isProcessingPayment, setIsProcessingPayment] = React.useState(false);
   const [isWaitingQrPayment, setIsWaitingQrPayment] = React.useState(false);
   const [paymentSuccessData, setPaymentSuccessData] = React.useState<PaymentSuccessData | null>(null);
-  const [isPrintingReceipt, setIsPrintingReceipt] = React.useState(false);
   const qrPollingRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Limpiar polling al desmontar
@@ -609,27 +608,11 @@ const PosPage = () => {
       <MainLayout>
         <PaymentSuccessView
           data={paymentSuccessData}
-          isPrinting={isPrintingReceipt}
-          onPrintReceipt={async () => {
-            setIsPrintingReceipt(true);
-            try {
-              await ticketService.printSaleTicket(paymentSuccessData.orderId);
-            } catch {
-              showErrorToast('Error', 'No se pudo imprimir el ticket.');
-            } finally {
-              setIsPrintingReceipt(false);
-            }
-          }}
-          onNextOrder={() => {
+          onRedirect={() => {
             setPaymentSuccessData(null);
             resetPos();
             setSavedOrder(null);
             setValidationErrors({});
-          }}
-          onGoToDashboard={() => {
-            setPaymentSuccessData(null);
-            resetPos();
-            setSavedOrder(null);
             navigate('/orders');
           }}
         />

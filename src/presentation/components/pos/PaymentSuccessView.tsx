@@ -1,6 +1,5 @@
-import React from 'react';
-import { CheckCircle, Printer, ArrowRight, LayoutDashboard } from 'lucide-react';
-import { Button } from '@/presentation/components/ui/button';
+import React, { useEffect } from 'react';
+import { CheckCircle, Loader2 } from 'lucide-react';
 import { getPaymentMethodName } from '@/shared/utils/order.utils';
 
 export interface PaymentSuccessData {
@@ -13,19 +12,18 @@ export interface PaymentSuccessData {
 
 interface PaymentSuccessViewProps {
   data: PaymentSuccessData;
-  onPrintReceipt: () => void;
-  onNextOrder: () => void;
-  onGoToDashboard: () => void;
-  isPrinting?: boolean;
+  onRedirect: () => void;
 }
 
 export const PaymentSuccessView: React.FC<PaymentSuccessViewProps> = ({
   data,
-  onPrintReceipt,
-  onNextOrder,
-  onGoToDashboard,
-  isPrinting = false,
+  onRedirect,
 }) => {
+  useEffect(() => {
+    const timer = setTimeout(onRedirect, 3000);
+    return () => clearTimeout(timer);
+  }, [onRedirect]);
+
   const orderShortId = `#${data.orderId.slice(-8).toUpperCase()}`;
   const dateObj = new Date(data.date);
   const formattedDate = dateObj.toLocaleDateString('es-MX', {
@@ -110,34 +108,11 @@ export const PaymentSuccessView: React.FC<PaymentSuccessViewProps> = ({
         </div>
       </div>
 
-      {/* Actions */}
-      <div className="w-full max-w-md flex gap-3 mb-6">
-        <Button
-          onClick={onPrintReceipt}
-          disabled={isPrinting}
-          variant="outline"
-          className="flex-1 h-12 rounded-xl"
-        >
-          <Printer className="h-4 w-4 mr-2" />
-          {isPrinting ? 'Imprimiendo...' : 'Imprimir Ticket'}
-        </Button>
-        <Button
-          onClick={onNextOrder}
-          className="flex-1 h-12 rounded-xl bg-primary hover:bg-primary/90"
-        >
-          Siguiente Orden
-          <ArrowRight className="h-4 w-4 ml-2" />
-        </Button>
+      {/* Redirecting indicator */}
+      <div className="flex items-center gap-2 text-sm text-slate-400 dark:text-slate-500">
+        <Loader2 className="h-4 w-4 animate-spin" />
+        Redirigiendo a órdenes...
       </div>
-
-      {/* Dashboard link */}
-      <button
-        onClick={onGoToDashboard}
-        className="flex items-center gap-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
-      >
-        <LayoutDashboard className="h-4 w-4" />
-        Volver a Ordenes
-      </button>
     </div>
   );
 };
