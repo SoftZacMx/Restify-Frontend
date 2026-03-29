@@ -12,6 +12,7 @@ import { ProductGrid } from '@/presentation/components/pos/ProductGrid';
 import { ProductExtrasDialog } from '@/presentation/components/pos/ProductExtrasDialog';
 import { Cart } from '@/presentation/components/pos/Cart';
 import { OrderPaymentLayout } from '@/presentation/components/pos/OrderPaymentLayout';
+import { PaymentSuccessView, type PaymentSuccessData } from '@/presentation/components/pos/PaymentSuccessView';
 import { Button } from '@/presentation/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card';
 import { Input } from '@/presentation/components/ui/input';
@@ -22,6 +23,7 @@ import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { useAuthStore } from '@/presentation/store/auth.store';
 import { orderService } from '@/application/services/order.service';
 import { ticketService } from '@/application/services/ticket.service';
+import { companyService } from '@/application/services/company.service';
 import type {
   OrderFormErrors,
   PosMode,
@@ -126,6 +128,8 @@ const PosPage = () => {
   const [isTableDialogOpen, setIsTableDialogOpen] = React.useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = React.useState(false);
   const [isWaitingQrPayment, setIsWaitingQrPayment] = React.useState(false);
+  const [paymentSuccessData, setPaymentSuccessData] = React.useState<PaymentSuccessData | null>(null);
+  const [isPrintingReceipt, setIsPrintingReceipt] = React.useState(false);
   const qrPollingRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Limpiar polling al desmontar
@@ -174,13 +178,18 @@ const PosPage = () => {
                 if (qrPollingRef.current) clearInterval(qrPollingRef.current);
                 setIsWaitingQrPayment(false);
                 playSuccess();
-                showSuccessToast('Pago QR exitoso', 'La orden se ha pagado correctamente');
                 queryClient.invalidateQueries({ queryKey: ['orders'] });
                 queryClient.invalidateQueries({ queryKey: ['tables'] });
-                resetPos();
-                setSavedOrder(null);
-                setValidationErrors({});
-                if (loadedOrder) navigate('/orders');
+
+                // Show payment success view
+                const company = await companyService.getCompany().catch(() => null);
+                setPaymentSuccessData({
+                  orderId: orderIdToProcess,
+                  date: savedOrder?.date || new Date().toISOString(),
+                  total: savedOrder?.total || 0,
+                  paymentMethod: 4,
+                  companyName: company?.name,
+                });
               } else if (status.status === 'FAILED' || status.status === 'CANCELED') {
                 if (qrPollingRef.current) clearInterval(qrPollingRef.current);
                 setIsWaitingQrPayment(false);
@@ -502,23 +511,26 @@ const PosPage = () => {
       }
 
       playSuccess();
-      showSuccessToast('Orden procesada', 'La orden se ha procesado correctamente');
       queryClient.invalidateQueries({ queryKey: ['orders'] });
 
-      // Lanzar diálogo de impresión del ticket de venta (cliente) tras pago exitoso
-      try {
-        await ticketService.printSaleTicket(orderIdToProcess);
-      } catch (ticketError) {
-        console.error('Error al imprimir ticket:', ticketError);
-        showErrorToast('Ticket no impreso', 'El pago fue exitoso pero no se pudo abrir el ticket para imprimir.');
-      }
+      // Determine payment method number
+      const pmNumber = selectedMethod1 === 'CASH' ? 1
+        : selectedMethod1 === 'TRANSFER' ? 2
+        : selectedMethod1 === 'CARD' ? 3
+        : selectedMethod1 === 'QR_MP' ? 4
+        : (selectedMethod2 ? null : 1);
 
-      resetPos();
-      setSavedOrder(null);
-      setValidationErrors({});
-      if (loadedOrder) {
-        navigate('/orders');
-      }
+      // Show payment success view
+      const company = await companyService.getCompany().catch(() => null);
+      setPaymentSuccessData({
+        orderId: orderIdToProcess,
+        date: savedOrder?.date || loadedOrder?.date || new Date().toISOString(),
+        total: savedOrder?.total || loadedOrder?.total || 0,
+        paymentMethod: pmNumber,
+        companyName: company?.name,
+      });
+
+      setIsProcessingPayment(false);
     } catch (error) {
       console.error('Error al procesar pago:', error);
       if (error instanceof AppError) {
@@ -587,6 +599,40 @@ const PosPage = () => {
             </Button>
           </div>
         </div>
+      </MainLayout>
+    );
+  }
+
+  // Payment success view
+  if (paymentSuccessData) {
+    return (
+      <MainLayout>
+        <PaymentSuccessView
+          data={paymentSuccessData}
+          isPrinting={isPrintingReceipt}
+          onPrintReceipt={async () => {
+            setIsPrintingReceipt(true);
+            try {
+              await ticketService.printSaleTicket(paymentSuccessData.orderId);
+            } catch {
+              showErrorToast('Error', 'No se pudo imprimir el ticket.');
+            } finally {
+              setIsPrintingReceipt(false);
+            }
+          }}
+          onNextOrder={() => {
+            setPaymentSuccessData(null);
+            resetPos();
+            setSavedOrder(null);
+            setValidationErrors({});
+          }}
+          onGoToDashboard={() => {
+            setPaymentSuccessData(null);
+            resetPos();
+            setSavedOrder(null);
+            navigate('/orders');
+          }}
+        />
       </MainLayout>
     );
   }

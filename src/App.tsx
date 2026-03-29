@@ -34,6 +34,7 @@ import { PrivateRoute } from '@/presentation/components/PrivateRoute';
 import { SubscriptionGuard } from '@/presentation/components/subscription/SubscriptionGuard';
 import SubscriptionSuccessPage from '@/presentation/pages/subscription/SubscriptionSuccessPage';
 import SubscriptionCancelPage from '@/presentation/pages/subscription/SubscriptionCancelPage';
+import PaymentResultPage from '@/presentation/pages/payment/PaymentResultPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -58,6 +59,11 @@ function App() {
                 {/* Auth routes */}
                 <Route path="/auth/login" element={<LoginPage />} />
                 <Route path="/auth/recover-password" element={<RecoverPasswordPage />} />
+
+              {/* Payment result routes (public - customer redirected from MP after QR scan) */}
+              <Route path="/payment/success" element={<PaymentResultPage />} />
+              <Route path="/payment/failure" element={<PaymentResultPage />} />
+              <Route path="/payment/pending" element={<PaymentResultPage />} />
 
               {/* Subscription routes (no guard - need access without active subscription) */}
               <Route
