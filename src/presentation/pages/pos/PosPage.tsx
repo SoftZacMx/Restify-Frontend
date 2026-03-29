@@ -185,8 +185,8 @@ const PosPage = () => {
                 const company = await companyService.getCompany().catch(() => null);
                 setPaymentSuccessData({
                   orderId: orderIdToProcess,
-                  date: savedOrder?.date || new Date().toISOString(),
-                  total: savedOrder?.total || 0,
+                  date: savedOrder?.date || loadedOrder?.date || new Date().toISOString(),
+                  total: paymentState.total,
                   paymentMethod: 4,
                   companyName: company?.name,
                 });
@@ -525,7 +525,7 @@ const PosPage = () => {
       setPaymentSuccessData({
         orderId: orderIdToProcess,
         date: savedOrder?.date || loadedOrder?.date || new Date().toISOString(),
-        total: savedOrder?.total || loadedOrder?.total || 0,
+        total: paymentState.total,
         paymentMethod: pmNumber,
         companyName: company?.name,
       });
