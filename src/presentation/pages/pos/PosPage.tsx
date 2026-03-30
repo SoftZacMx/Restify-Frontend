@@ -519,15 +519,24 @@ const PosPage = () => {
         : selectedMethod1 === 'QR_MP' ? 4
         : (selectedMethod2 ? null : 1);
 
-      // Show payment success view
-      const company = await companyService.getCompany().catch(() => null);
-      setPaymentSuccessData({
-        orderId: orderIdToProcess,
-        date: savedOrder?.date || loadedOrder?.date || new Date().toISOString(),
-        total: paymentState.total,
-        paymentMethod: pmNumber,
-        companyName: company?.name,
-      });
+      if (selectedMethod1 === 'QR_MP') {
+        // Show payment success view only for Mercado Pago QR
+        const company = await companyService.getCompany().catch(() => null);
+        setPaymentSuccessData({
+          orderId: orderIdToProcess,
+          date: savedOrder?.date || loadedOrder?.date || new Date().toISOString(),
+          total: paymentState.total,
+          paymentMethod: pmNumber,
+          companyName: company?.name,
+        });
+      } else {
+        // For other payment methods, show toast and redirect
+        showSuccessToast('Pago exitoso', 'La orden ha sido pagada correctamente');
+        resetPos();
+        setSavedOrder(null);
+        setValidationErrors({});
+        navigate('/orders');
+      }
 
       setIsProcessingPayment(false);
     } catch (error) {

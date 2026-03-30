@@ -8,8 +8,8 @@ import { test, expect } from '@playwright/test';
 test.describe('Orders', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/login');
-    await page.getByLabel(/email/i).fill('admin@restify.com');
-    await page.getByLabel(/contraseña/i).fill('Restify123!');
+    await page.getByLabel(/email/i).fill('karinaorlaz@hotmail.com');
+    await page.getByLabel(/contraseña/i).fill('Miklo2708');
     await page.getByRole('button', { name: /iniciar sesión/i }).click();
     await expect(page).toHaveURL(/\/(dashboard|pos)/, { timeout: 15_000 });
   });
