@@ -29,6 +29,8 @@ import { showErrorToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
 import { cn } from '@/shared/lib/utils';
 
+const expenseService = new ExpenseService();
+
 /**
  * Página de Detalle de Gasto
  * Muestra toda la información del gasto. Si es tipo MERCHANDISE (compra de mercancía), muestra la tabla de ítems.
@@ -38,8 +40,6 @@ const ExpenseDetailPage: React.FC = () => {
   const { expenseId } = useParams<{ expenseId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const expenseService = new ExpenseService();
-
   const expenseFromState = (location.state as { expense?: Expense } | null)?.expense;
 
   const {

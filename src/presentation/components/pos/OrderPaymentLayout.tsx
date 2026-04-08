@@ -1,6 +1,7 @@
 import React from 'react';
 import { Receipt, UtensilsCrossed } from 'lucide-react';
 import { PaymentMethods } from '@/presentation/components/pos/PaymentMethods';
+import { PosPaymentProvider } from '@/presentation/contexts/pos-payment.context';
 import { formatOrderNumber } from '@/shared/utils/order.utils';
 import type {
   OrderItem,
@@ -11,15 +12,10 @@ import type {
 } from '@/domain/types';
 
 export interface OrderInfoDisplay {
-  /** Origen/tipo: 'Local', 'Delivery', etc. */
   origin: string;
-  /** Nombre de mesa si aplica */
   tableName?: string;
-  /** Nombre del cliente si aplica */
   client?: string | null;
-  /** Si viene de lista de órdenes (pago), info no editable */
   isReadOnly?: boolean;
-  /** ID de la orden para mostrar en header (ej. "Orden #ABC12345") */
   orderId?: string;
 }
 
@@ -42,7 +38,6 @@ interface OrderPaymentLayoutProps {
 
 /**
  * Vista de pago tipo Checkout: header (Checkout + orden), izquierda Order Summary, derecha Payment Method.
- * UI alineada con diseño de referencia (botones horizontales, Amount Received, Change to Return, etc.).
  */
 export const OrderPaymentLayout: React.FC<OrderPaymentLayoutProps> = ({
   orderInfo,
@@ -149,19 +144,21 @@ export const OrderPaymentLayout: React.FC<OrderPaymentLayoutProps> = ({
 
         {/* Columna derecha: Payment Method */}
         <div className="p-6 flex flex-col">
-          <PaymentMethods
-            paymentState={paymentState}
-            errors={paymentErrors}
-            selectedMethod1={selectedMethod1}
-            selectedMethod2={selectedMethod2}
-            showSecondPaymentMethod={showSecondPaymentMethod}
-            onShowSecondPaymentMethodChange={onShowSecondPaymentMethodChange}
-            onPaymentAmountChange={onPaymentAmountChange}
-            onMethod1Change={onMethod1Change}
-            onMethod2Change={onMethod2Change}
-            onProcessPayment={onProcessPayment}
-            isProcessPaymentEnabled={isProcessPaymentEnabled}
-          />
+          <PosPaymentProvider value={{
+            paymentState,
+            errors: paymentErrors,
+            selectedMethod1,
+            selectedMethod2,
+            showSecondPaymentMethod,
+            onShowSecondPaymentMethodChange,
+            onPaymentAmountChange,
+            onMethod1Change,
+            onMethod2Change,
+            onProcessPayment,
+            isProcessPaymentEnabled,
+          }}>
+            <PaymentMethods />
+          </PosPaymentProvider>
         </div>
       </div>
     </div>

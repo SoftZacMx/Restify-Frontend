@@ -13,7 +13,6 @@ export class CompanyService {
       if (!response.success || !response.data) {
         return null;
       }
-      console.log('[Company Service] company data (for form):', response.data);
       const row = response.data;
       return {
         ...row,

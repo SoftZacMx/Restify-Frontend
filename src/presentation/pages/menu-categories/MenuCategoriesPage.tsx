@@ -1,84 +1,69 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Plus } from 'lucide-react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { Button } from '@/presentation/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/presentation/components/ui/dialog';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/presentation/components/ui/alert-dialog';
+import { ConfirmDialog } from '@/presentation/components/ui/confirm-dialog';
 import { MenuCategorySearchBar } from '@/presentation/components/menu-categories/MenuCategorySearchBar';
 import { MenuCategoryTable } from '@/presentation/components/menu-categories/MenuCategoryTable';
 import { Pagination } from '@/presentation/components/ui/pagination';
 import { CreateMenuCategoryForm } from '@/presentation/components/menu-categories/CreateMenuCategoryForm';
+import { useCrudList } from '@/presentation/hooks/useCrudList';
 import { menuCategoryService } from '@/application/services';
-import type { MenuCategoryTableFilters, PaginationData, CreateMenuCategoryRequest } from '@/domain/types';
+import type { MenuCategoryTableFilters, CreateMenuCategoryRequest, MenuCategoryResponse } from '@/domain/types';
 import { formatCategoriesForTable } from '@/shared/utils/menu-category.utils';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
 
-/**
- * Página de Categorías de Menú
- * Responsabilidad: Orquestar los componentes de la página de categorías
- * Cumple SRP: Solo maneja el estado y la lógica de la página
- */
+const filterAdapter = (filters: MenuCategoryTableFilters) => {
+  const api: { status?: boolean; search?: string } = {};
+  if (filters.status && filters.status !== 'all') api.status = filters.status === 'active';
+  if (filters.search) api.search = filters.search;
+  return api;
+};
 
-const PAGE_SIZE_OPTIONS = [10, 20, 50];
-const DEFAULT_ITEMS_PER_PAGE = 10;
+const clientFilter = (data: MenuCategoryResponse[], filters: MenuCategoryTableFilters) => {
+  let result = data;
+  if (filters.search) {
+    const q = filters.search.toLowerCase();
+    result = result.filter((c) => c.name.toLowerCase().includes(q));
+  }
+  if (filters.status && filters.status !== 'all') {
+    const isActive = filters.status === 'active';
+    result = result.filter((c) => c.status === isActive);
+  }
+  return result;
+};
 
 const MenuCategoriesPage: React.FC = () => {
-  const [filters, setFilters] = useState<MenuCategoryTableFilters>({
-    search: '',
-    status: undefined,
-  });
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isCreatingCategory, setIsCreatingCategory] = useState(false);
-
-  const queryClient = useQueryClient();
-
-  // Preparar filtros para la API
-  const apiFilters = useMemo(() => {
-    const apiFilters: {
-      status?: boolean;
-      search?: string;
-    } = {};
-
-    if (filters.status && filters.status !== 'all') {
-      apiFilters.status = filters.status === 'active';
-    }
-
-    if (filters.search) {
-      apiFilters.search = filters.search;
-    }
-
-    return apiFilters;
-  }, [filters]);
-
-  // Query para obtener categorías de la API
   const {
-    data: categories = [],
+    rawData: categories,
+    paginatedData,
     isLoading,
     error,
     refetch,
-  } = useQuery({
-    queryKey: ['menuCategories', apiFilters],
-    queryFn: async () => {
-      return await menuCategoryService.listMenuCategories(apiFilters);
-    },
-    staleTime: 30000,
-    retry: 1,
+    filters,
+    setFilters,
+    paginationData,
+    pageSizeOptions,
+    handlePageChange,
+    handlePageSizeChange,
+    isCreateModalOpen,
+    setIsCreateModalOpen,
+    isCreating,
+    setIsCreating,
+    deleteDialog,
+    invalidate,
+  } = useCrudList<MenuCategoryResponse, MenuCategoryTableFilters>({
+    queryKey: 'menuCategories',
+    queryFn: (apiFilters) => menuCategoryService.listMenuCategories(apiFilters),
+    initialFilters: { search: '', status: undefined },
+    filterAdapter,
+    clientFilter,
   });
 
-  // Mostrar error si la carga falla
+  const [isDeleting, setIsDeleting] = useState(false);
+
   React.useEffect(() => {
     if (error) {
       if (error instanceof AppError) {
@@ -89,126 +74,31 @@ const MenuCategoriesPage: React.FC = () => {
     }
   }, [error]);
 
-  /**
-   * Filtra categorías según los filtros aplicados (filtrado en cliente como fallback)
-   */
-  const filteredCategories = useMemo(() => {
-    let result = [...categories];
+  const tableCategories = useMemo(() => formatCategoriesForTable(paginatedData), [paginatedData]);
 
-    // Filtro de búsqueda (nombre)
-    if (filters.search) {
-      const searchLower = filters.search.toLowerCase();
-      result = result.filter((category) =>
-        category.name.toLowerCase().includes(searchLower)
-      );
-    }
-
-    // Filtro de estado
-    if (filters.status && filters.status !== 'all') {
-      const isActive = filters.status === 'active';
-      result = result.filter((category) => category.status === isActive);
-    }
-
-    return result;
-  }, [categories, filters]);
-
-  /**
-   * Calcula datos de paginación
-   */
-  const paginationData: PaginationData = useMemo(() => {
-    const totalItems = filteredCategories.length;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-    return {
-      currentPage,
-      totalPages: totalPages || 1,
-      totalItems,
-      itemsPerPage,
-    };
-  }, [filteredCategories.length, currentPage, itemsPerPage]);
-
-  /**
-   * Obtiene categorías para la página actual
-   */
-  const paginatedCategories = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return filteredCategories.slice(startIndex, endIndex);
-  }, [filteredCategories, currentPage, itemsPerPage]);
-
-  /**
-   * Convierte categorías a formato de tabla
-   */
-  const tableCategories = useMemo(() => {
-    return formatCategoriesForTable(paginatedCategories);
-  }, [paginatedCategories]);
-
-  /**
-   * Handler para cambios en filtros
-   */
-  const handleFiltersChange = (newFilters: MenuCategoryTableFilters) => {
-    setFilters(newFilters);
-    setCurrentPage(1);
-  };
-
-  /**
-   * Handler para cambio de página
-   */
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handlePageSizeChange = (pageSize: number) => {
-    setItemsPerPage(pageSize);
-    setCurrentPage(1);
-  };
-
-  const [categoryToDelete, setCategoryToDelete] = useState<{ id: string; name: string } | null>(null);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  /**
-   * Handler para acciones de categoría (editar, eliminar, toggle estado)
-   */
-  const handleCategoryAction = (
-    categoryId: string,
-    action: 'edit' | 'delete' | 'toggle-status'
-  ) => {
+  const handleCategoryAction = useCallback((categoryId: string, action: 'edit' | 'delete' | 'toggle-status') => {
     switch (action) {
       case 'edit':
         window.location.href = `/menu/categories/${categoryId}`;
         break;
-      case 'delete':
-        const category = categories.find((c) => c.id === categoryId);
-        if (category) {
-          setCategoryToDelete({ id: categoryId, name: category.name });
-          setIsDeleteDialogOpen(true);
-        }
+      case 'delete': {
+        const cat = categories.find((c) => c.id === categoryId);
+        if (cat) deleteDialog.open(cat);
         break;
+      }
       case 'toggle-status':
         handleToggleStatus(categoryId);
         break;
     }
-  };
+  }, [categories, deleteDialog]);
 
-  /**
-   * Handler para cambiar estado de la categoría
-   */
   const handleToggleStatus = async (categoryId: string) => {
     try {
-      const category = categories.find((c) => c.id === categoryId);
-      if (!category) return;
-
-      await menuCategoryService.updateMenuCategory(categoryId, {
-        status: !category.status,
-      });
-
-      showSuccessToast(
-        'Estado actualizado',
-        `La categoría ha sido ${!category.status ? 'activada' : 'desactivada'} exitosamente`
-      );
-      await queryClient.invalidateQueries({ queryKey: ['menuCategories'] });
+      const cat = categories.find((c) => c.id === categoryId);
+      if (!cat) return;
+      await menuCategoryService.updateMenuCategory(categoryId, { status: !cat.status });
+      showSuccessToast('Estado actualizado', `La categoría ha sido ${!cat.status ? 'activada' : 'desactivada'} exitosamente`);
+      invalidate();
       await refetch();
     } catch (error) {
       if (error instanceof AppError) {
@@ -219,20 +109,13 @@ const MenuCategoriesPage: React.FC = () => {
     }
   };
 
-  /**
-   * Handler para confirmar eliminación
-   */
   const handleConfirmDelete = async () => {
-    if (!categoryToDelete) return;
-
+    if (!deleteDialog.data) return;
     setIsDeleting(true);
     try {
-      await menuCategoryService.deleteMenuCategory(categoryToDelete.id);
-      showSuccessToast(
-        'Categoría eliminada',
-        `La categoría "${categoryToDelete.name}" ha sido eliminada exitosamente`
-      );
-      await queryClient.invalidateQueries({ queryKey: ['menuCategories'] });
+      await menuCategoryService.deleteMenuCategory(deleteDialog.data.id);
+      showSuccessToast('Categoría eliminada', `La categoría "${deleteDialog.data.name}" ha sido eliminada exitosamente`);
+      invalidate();
       await refetch();
     } catch (error) {
       if (error instanceof AppError) {
@@ -242,35 +125,17 @@ const MenuCategoriesPage: React.FC = () => {
       }
     } finally {
       setIsDeleting(false);
-      setIsDeleteDialogOpen(false);
-      setCategoryToDelete(null);
+      deleteDialog.close();
     }
   };
 
-  /**
-   * Handler para abrir modal de creación
-   */
-  const handleNewCategory = () => {
-    setIsCreateModalOpen(true);
-  };
-
-  /**
-   * Handler para cerrar modal de creación
-   */
-  const handleCloseCreateModal = () => {
-    setIsCreateModalOpen(false);
-  };
-
-  /**
-   * Handler para crear categoría
-   */
-  const handleCreateCategory = async (categoryData: CreateMenuCategoryRequest) => {
-    setIsCreatingCategory(true);
+  const handleCreateCategory = async (data: CreateMenuCategoryRequest) => {
+    setIsCreating(true);
     try {
-      await menuCategoryService.createMenuCategory(categoryData);
+      await menuCategoryService.createMenuCategory(data);
       setIsCreateModalOpen(false);
       showSuccessToast('Categoría creada exitosamente', 'La nueva categoría ha sido agregada al sistema');
-      await queryClient.invalidateQueries({ queryKey: ['menuCategories'] });
+      invalidate();
       await refetch();
     } catch (error) {
       if (error instanceof AppError) {
@@ -280,92 +145,49 @@ const MenuCategoriesPage: React.FC = () => {
       }
       throw error;
     } finally {
-      setIsCreatingCategory(false);
+      setIsCreating(false);
     }
   };
 
   return (
     <MainLayout>
       <div className="flex flex-wrap justify-between items-center gap-4 px-4 py-2">
-        <h1 className="text-3xl lg:text-4xl font-black text-slate-800 dark:text-white leading-tight tracking-tight">
-          Categorías
-        </h1>
-        <Button
-          onClick={handleNewCategory}
-          className="flex items-center justify-center gap-2 min-w-[84px] cursor-pointer overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-sm hover:bg-primary/90 transition-colors"
-        >
+        <h1 className="text-3xl lg:text-4xl font-black text-slate-800 dark:text-white leading-tight tracking-tight">Categorías</h1>
+        <Button onClick={() => setIsCreateModalOpen(true)} className="flex items-center justify-center gap-2 min-w-[84px] cursor-pointer overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-sm hover:bg-primary/90 transition-colors">
           <Plus className="h-4 w-4" />
           <span className="truncate">Nueva Categoría</span>
         </Button>
       </div>
 
-      <MenuCategorySearchBar
-        filters={filters}
-        onFiltersChange={handleFiltersChange}
-      />
-
-      <MenuCategoryTable
-        categories={tableCategories}
-        isLoading={isLoading}
-        onCategoryAction={handleCategoryAction}
-      />
+      <MenuCategorySearchBar filters={filters} onFiltersChange={setFilters} />
+      <MenuCategoryTable categories={tableCategories} isLoading={isLoading} onCategoryAction={handleCategoryAction} />
 
       {paginationData.totalItems > 0 && (
         <Pagination
-          currentPage={paginationData.currentPage}
-          totalPages={paginationData.totalPages}
-          totalItems={paginationData.totalItems}
-          itemsPerPage={paginationData.itemsPerPage}
-          itemsLabel="categorías"
-          pageSizeOptions={PAGE_SIZE_OPTIONS}
-          onPageChange={handlePageChange}
-          onPageSizeChange={handlePageSizeChange}
+          currentPage={paginationData.currentPage} totalPages={paginationData.totalPages}
+          totalItems={paginationData.totalItems} itemsPerPage={paginationData.itemsPerPage}
+          itemsLabel="categorías" pageSizeOptions={pageSizeOptions}
+          onPageChange={handlePageChange} onPageSizeChange={handlePageSizeChange}
         />
       )}
 
-      {/* Modal de Creación de Categoría */}
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
         <DialogContent className="!max-w-[500px] w-[90vw] max-h-[90vh] overflow-y-auto">
           <DialogClose />
-          <DialogHeader>
-            <DialogTitle>Crear Nueva Categoría</DialogTitle>
-          </DialogHeader>
-          <CreateMenuCategoryForm
-            onSubmit={handleCreateCategory}
-            onCancel={handleCloseCreateModal}
-            isLoading={isCreatingCategory}
-          />
+          <DialogHeader><DialogTitle>Crear Nueva Categoría</DialogTitle></DialogHeader>
+          <CreateMenuCategoryForm onSubmit={handleCreateCategory} onCancel={() => setIsCreateModalOpen(false)} isLoading={isCreating} />
         </DialogContent>
       </Dialog>
 
-      {/* Dialog de Confirmación de Eliminación */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar categoría?</AlertDialogTitle>
-            <AlertDialogDescription>
-              {categoryToDelete && (
-                <>
-                  Estás a punto de eliminar la categoría <strong className="text-slate-900 dark:text-white">{categoryToDelete.name}</strong>.
-                  <br />
-                  <br />
-                  Esta acción no se puede deshacer. Si hay platillos asociados a esta categoría, quedarán sin categoría.
-                </>
-              )}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Cancelar</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleConfirmDelete}
-              disabled={isDeleting}
-              className="bg-red-600 hover:bg-red-700 text-white"
-            >
-              {isDeleting ? 'Eliminando...' : 'Eliminar'}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmDialog
+        open={deleteDialog.isOpen}
+        onClose={deleteDialog.close}
+        title="¿Eliminar categoría?"
+        description={deleteDialog.data && (<>Estás a punto de eliminar la categoría <strong className="text-slate-900 dark:text-white">{deleteDialog.data.name}</strong>.<br /><br />Esta acción no se puede deshacer. Si hay platillos asociados, quedarán sin categoría.</>)}
+        confirmLabel="Eliminar"
+        isLoading={isDeleting}
+        onConfirm={handleConfirmDelete}
+      />
     </MainLayout>
   );
 };

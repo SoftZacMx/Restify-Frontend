@@ -21,15 +21,11 @@ import { OrderDetailDialog } from '@/presentation/components/orders/OrderDetailD
 import { SplitPaymentDialog } from '@/presentation/components/orders/SplitPaymentDialog';
 import { ConnectionIndicator } from '@/presentation/components/websocket/ConnectionIndicator';
 import { useWebSocketContext } from '@/presentation/contexts/websocket.context';
+import { useOrderFilters } from '@/presentation/hooks/useOrderFilters';
+import { useDialogState } from '@/presentation/hooks/useDialogState';
 import { orderService, tableService, ticketService } from '@/application/services';
 import type { OrderResponse, PaginationData } from '@/domain/types';
-import {
-  type OrderViewFilters,
-  getDefaultOrderFiltersForToday,
-  convertViewFiltersToApiFilters,
-  filterOrdersClient,
-  orderListNeedsClientSideFiltering,
-} from '@/shared/utils/order.utils';
+import { filterOrdersClient } from '@/shared/utils/order.utils';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { usePaymentSound } from '@/presentation/hooks/usePaymentSound';
 import { AppError } from '@/domain/errors';
@@ -46,28 +42,29 @@ const OrdersPage: React.FC = () => {
   // Estado de conexión WebSocket
   const { isConnected, connectionId } = useWebSocketContext();
 
-  // Estado de filtros (por defecto: órdenes del día de hoy)
-  const [filters, setFilters] = useState<OrderViewFilters>(() => getDefaultOrderFiltersForToday());
-  const [showFilters, setShowFilters] = useState(false); // Por defecto oculto
-  const [currentPage, setCurrentPage] = useState(1);
-  /** Alineado con el default del API (20); el selector puede cambiar page/limit en la petición. */
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  // Filtros y paginación
+  const {
+    filters,
+    showFilters,
+    currentPage,
+    itemsPerPage,
+    apiFilters,
+    needsClientSideFiltering,
+    handleFiltersChange,
+    handlePageChange,
+    handlePageSizeChange,
+    toggleFilters,
+  } = useOrderFilters();
 
   // Estado de modales
-  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
-  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
-  const [orderToDelete, setOrderToDelete] = useState<OrderResponse | null>(null);
-  const [orderForSplitPayment, setOrderForSplitPayment] = useState<OrderResponse | null>(null);
+  const detailDialog = useDialogState<string>();        // data = orderId
+  const deleteDialog = useDialogState<OrderResponse>();
+  const splitPaymentDialog = useDialogState<OrderResponse>();
 
   // Estado de operaciones
   const [_isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPrintingTicket, setIsPrintingTicket] = useState(false);
-
-  // Convertir filtros de vista a filtros de API
-  const apiFilters = useMemo(() => convertViewFiltersToApiFilters(filters), [filters]);
-
-  const needsClientSideFiltering = useMemo(() => orderListNeedsClientSideFiltering(filters), [filters]);
 
   // Query para obtener órdenes (paginación en servidor salvo búsqueda / estados solo-cliente)
   const {
@@ -112,12 +109,12 @@ const OrdersPage: React.FC = () => {
 
   // Orden completa para el diálogo de detalle (mesa, items, extras)
   const { data: detailOrder = null, isLoading: isLoadingDetailOrder } = useQuery({
-    queryKey: ['order', selectedOrderId],
+    queryKey: ['order', detailDialog.data],
     queryFn: async () => {
-      if (!selectedOrderId) return null;
-      return await orderService.getOrderById(selectedOrderId);
+      if (!detailDialog.data) return null;
+      return await orderService.getOrderById(detailDialog.data);
     },
-    enabled: !!selectedOrderId && isDetailDialogOpen,
+    enabled: !!detailDialog.data && detailDialog.isOpen,
     staleTime: 0,
   });
 
@@ -128,7 +125,7 @@ const OrdersPage: React.FC = () => {
       if (!detailOrder?.tableId) return null;
       return await tableService.getTableById(detailOrder.tableId);
     },
-    enabled: !!detailOrder?.tableId && !detailOrder?.table && isDetailDialogOpen,
+    enabled: !!detailOrder?.tableId && !detailOrder?.table && detailDialog.isOpen,
     staleTime: 60000,
   });
 
@@ -224,9 +221,8 @@ const OrdersPage: React.FC = () => {
 
   // Handler para ver detalles: abrir diálogo y cargar orden completa (mesa, items, extras)
   const handleViewDetails = useCallback((orderId: string) => {
-    setSelectedOrderId(orderId);
-    setIsDetailDialogOpen(true);
-  }, []);
+    detailDialog.open(orderId);
+  }, [detailDialog]);
 
   // Handler para marcar como entregada
   const handleMarkDelivered = useCallback(async (orderId: string) => {
@@ -255,9 +251,9 @@ const OrdersPage: React.FC = () => {
   const handleDeleteOrder = useCallback((orderId: string) => {
     const order = ordersFromApi.find((o) => o.id === orderId);
     if (order) {
-      setOrderToDelete(order);
+      deleteDialog.open(order);
     }
-  }, [ordersFromApi]);
+  }, [ordersFromApi, deleteDialog]);
 
   // Imprimir ticket cliente (sale-ticket)
   const handlePrintClientTicket = useCallback(async (orderId: string) => {
@@ -293,14 +289,14 @@ const OrdersPage: React.FC = () => {
 
   // Confirmar eliminación
   const confirmDelete = useCallback(async () => {
-    if (!orderToDelete) return;
+    if (!deleteDialog.data) return;
 
     setIsDeleting(true);
     try {
-      await orderService.deleteOrder(orderToDelete.id);
+      await orderService.deleteOrder(deleteDialog.data.id);
       showSuccessToast('Orden eliminada', 'La orden ha sido eliminada correctamente');
       queryClient.invalidateQueries({ queryKey: ['orders'] });
-      setOrderToDelete(null);
+      deleteDialog.close();
     } catch (error) {
       if (error instanceof AppError) {
         showErrorToast('Error', error.message);
@@ -310,18 +306,18 @@ const OrdersPage: React.FC = () => {
     } finally {
       setIsDeleting(false);
     }
-  }, [orderToDelete, queryClient]);
+  }, [deleteDialog.data, queryClient]);
 
   // Handler para abrir pago dividido (desde card o detalle)
   const handleSplitPayment = useCallback((order: OrderResponse) => {
-    setOrderForSplitPayment(order);
-  }, []);
+    splitPaymentDialog.open(order);
+  }, [splitPaymentDialog]);
 
   // Éxito de pago dividido: invalidar órdenes y mesas, cerrar diálogo, toast
   const handleSplitPaymentSuccess = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ['orders'] });
     queryClient.invalidateQueries({ queryKey: ['tables-for-filter'] });
-    setOrderForSplitPayment(null);
+    splitPaymentDialog.close();
     playSuccess();
     showSuccessToast('Pago dividido procesado', 'La orden ha sido pagada con dos métodos');
   }, [queryClient]);
@@ -330,21 +326,6 @@ const OrdersPage: React.FC = () => {
   const handleNewOrder = useCallback(() => {
     navigate('/pos');
   }, [navigate]);
-
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
-
-  const handlePageSizeChange = useCallback((pageSize: number) => {
-    setItemsPerPage(pageSize);
-    setCurrentPage(1);
-  }, []);
-
-  const handleFiltersChange = useCallback((newFilters: OrderViewFilters) => {
-    setFilters(newFilters);
-    setCurrentPage(1);
-  }, []);
 
   /** Cards: totales globales del backend (fecha + filtros API). El subtítulo usa el total del listado paginado. */
   const orderCounts = useMemo(() => {
@@ -427,7 +408,7 @@ const OrdersPage: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setShowFilters((prev) => !prev)}
+            onClick={toggleFilters}
             className="gap-2"
           >
             <Filter className="h-4 w-4" />
@@ -483,11 +464,8 @@ const OrdersPage: React.FC = () => {
         {/* Diálogo de detalle (solo ver info; acciones en la card) */}
         <OrderDetailDialog
           order={orderForDetailDialog}
-          open={isDetailDialogOpen}
-          onClose={() => {
-            setIsDetailDialogOpen(false);
-            setSelectedOrderId(null);
-          }}
+          open={detailDialog.isOpen}
+          onClose={detailDialog.close}
           isLoading={isLoadingDetailOrder}
           onSplitPayment={handleSplitPayment}
           onPrintClientTicket={handlePrintClientTicket}
@@ -497,16 +475,16 @@ const OrdersPage: React.FC = () => {
 
         {/* Diálogo de pago dividido (dos métodos) */}
         <SplitPaymentDialog
-          order={orderForSplitPayment}
-          open={!!orderForSplitPayment}
-          onClose={() => setOrderForSplitPayment(null)}
+          order={splitPaymentDialog.data}
+          open={!!splitPaymentDialog.data}
+          onClose={() => splitPaymentDialog.close()}
           onSuccess={handleSplitPaymentSuccess}
         />
 
         {/* Diálogo de confirmación de eliminación */}
         <AlertDialog
-          open={!!orderToDelete}
-          onOpenChange={(open) => !open && setOrderToDelete(null)}
+          open={!!deleteDialog.data}
+          onOpenChange={(open) => !open && deleteDialog.close()}
         >
           <AlertDialogContent>
             <AlertDialogHeader>
@@ -514,7 +492,7 @@ const OrdersPage: React.FC = () => {
               <AlertDialogDescription>
                 Estás a punto de eliminar la orden{' '}
                 <strong className="text-slate-900 dark:text-white">
-                  #{orderToDelete?.id.slice(-8).toUpperCase()}
+                  #{deleteDialog.data?.id.slice(-8).toUpperCase()}
                 </strong>
                 .
                 <br />

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { BarChart3, LayoutDashboard, FileText } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { LoadingOverlay } from '@/presentation/components/ui/loading-overlay';
@@ -38,6 +38,8 @@ function getLast30Days(): { dateFrom: string; dateTo: string } {
 
 type ViewMode = 'summary' | 'document';
 
+const reportService = new ReportService();
+
 const ReportsPage = () => {
   const { dateFrom: defaultFrom, dateTo: defaultTo } = getDefaultDateRange();
   const { dateFrom: summaryFrom, dateTo: summaryTo } = getLast30Days();
@@ -53,19 +55,16 @@ const ReportsPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingSummary, setIsLoadingSummary] = useState(false);
 
-  const reportService = new ReportService();
-
-  const handleGenerate = async () => {
+  const handleGenerate = useCallback(async () => {
     if (!filters.type) return;
     setIsLoading(true);
     setReport(null);
     try {
-      const params = {
+      const result = await reportService.generateReport({
         type: filters.type,
         dateFrom: filters.dateFrom || undefined,
         dateTo: filters.dateTo || undefined,
-      };
-      const result = await reportService.generateReport(params);
+      });
       setReport(result);
     } catch (error) {
       if (error instanceof AppError) {
@@ -76,9 +75,9 @@ const ReportsPage = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [filters]);
 
-  const handleLoadSummary = async () => {
+  const handleLoadSummary = useCallback(async () => {
     setIsLoadingSummary(true);
     setSummaryData(null);
     try {
@@ -96,7 +95,7 @@ const ReportsPage = () => {
     } finally {
       setIsLoadingSummary(false);
     }
-  };
+  }, [summaryFilters]);
 
   return (
     <MainLayout>

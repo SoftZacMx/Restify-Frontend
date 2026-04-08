@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { DollarSign, CreditCard, Building2, Check, RotateCw } from 'lucide-react';
 import { SiMercadopago } from 'react-icons/si';
 import { Button } from '@/presentation/components/ui/button';
@@ -6,21 +6,8 @@ import { Input } from '@/presentation/components/ui/input';
 import { Label } from '@/presentation/components/ui/label';
 import { Switch } from '@/presentation/components/ui/switch';
 import { cn } from '@/shared/lib/utils';
-import type { PaymentState, OrderFormErrors, PosPaymentMethod } from '@/domain/types';
-
-interface PaymentMethodsProps {
-  paymentState: PaymentState;
-  errors: OrderFormErrors;
-  selectedMethod1: PosPaymentMethod | null;
-  selectedMethod2: PosPaymentMethod | null;
-  showSecondPaymentMethod: boolean;
-  onShowSecondPaymentMethodChange: (show: boolean) => void;
-  onPaymentAmountChange: (method: PosPaymentMethod, amount: number) => void;
-  onMethod1Change: (method: PosPaymentMethod | null) => void;
-  onMethod2Change: (method: PosPaymentMethod | null) => void;
-  onProcessPayment?: () => void;
-  isProcessPaymentEnabled?: boolean;
-}
+import { usePosPaymentContext } from '@/presentation/contexts/pos-payment.context';
+import type { PosPaymentMethod } from '@/domain/types';
 
 const PAYMENT_METHODS: { value: PosPaymentMethod; label: string; shortLabel: string; icon: React.ReactNode }[] = [
   { value: 'CASH', label: 'Efectivo', shortLabel: 'Efectivo', icon: <DollarSign className="h-5 w-5" /> },
@@ -31,20 +18,22 @@ const PAYMENT_METHODS: { value: PosPaymentMethod; label: string; shortLabel: str
 
 /**
  * Vista de métodos de pago tipo Checkout: botones horizontales, Amount Received, Change to Return, Split, Process.
+ * Consume el estado de pago desde PosPaymentContext.
  */
-export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
-  paymentState,
-  errors,
-  selectedMethod1,
-  selectedMethod2,
-  showSecondPaymentMethod,
-  onShowSecondPaymentMethodChange,
-  onPaymentAmountChange,
-  onMethod1Change,
-  onMethod2Change,
-  onProcessPayment,
-  isProcessPaymentEnabled = false,
-}) => {
+export const PaymentMethods: React.FC = () => {
+  const {
+    paymentState,
+    errors,
+    selectedMethod1,
+    selectedMethod2,
+    showSecondPaymentMethod,
+    onShowSecondPaymentMethodChange,
+    onPaymentAmountChange,
+    onMethod1Change,
+    onMethod2Change,
+    onProcessPayment,
+    isProcessPaymentEnabled,
+  } = usePosPaymentContext();
   const getAmount = (method: PosPaymentMethod | null): number => {
     if (!method) return 0;
     switch (method) {
@@ -108,14 +97,14 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
     }
   }, [amount2, selectedMethod2]);
 
-  const handleAmountChange = (method: PosPaymentMethod, value: string) => {
+  const handleAmountChange = useCallback((method: PosPaymentMethod, value: string) => {
     const amount = roundTo2Decimals(parseFloat(parseAmountFromInput(value)) || 0);
     if ((method === 'CARD' || method === 'TRANSFER') && amount > paymentState.total) {
       onPaymentAmountChange(method, roundTo2Decimals(paymentState.total));
     } else {
       onPaymentAmountChange(method, amount);
     }
-  };
+  }, [paymentState.total, onPaymentAmountChange]);
 
   return (
     <div className="flex flex-col h-full">
@@ -131,6 +120,8 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
             <button
               key={method.value}
               type="button"
+              aria-pressed={isSelected}
+              aria-label={`Pagar con ${method.label}`}
               onClick={() => onMethod1Change(isSelected ? selectedMethod1 : method.value)}
               className={cn(
                 'flex-1 flex flex-col items-center justify-center gap-2 py-4 px-3 rounded-xl border-2 transition-colors',
@@ -229,6 +220,8 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
                 <button
                   key={method.value}
                   type="button"
+                  aria-pressed={isSelected}
+                  aria-label={`Segundo pago con ${method.label}`}
                   onClick={() => onMethod2Change(isSelected ? null : method.value)}
                   className={cn(
                     'flex-1 flex flex-col items-center justify-center gap-2 py-4 px-3 rounded-xl border-2 transition-colors',

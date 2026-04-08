@@ -15,6 +15,8 @@ import { UserStatistics } from '@/presentation/components/users/UserStatistics';
 import { EditUserForm } from '@/presentation/components/users/EditUserForm';
 import type { UpdateUserRequest } from '@/domain/types';
 
+const userService = new UserService();
+
 /**
  * Página de Detalle de Usuario
  * Muestra información completa de un usuario específico
@@ -22,7 +24,6 @@ import type { UpdateUserRequest } from '@/domain/types';
 const UserDetailPage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
-  const userService = new UserService();
   const queryClient = useQueryClient();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);

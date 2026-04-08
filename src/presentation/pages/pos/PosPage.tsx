@@ -1,28 +1,24 @@
 import React from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { ShoppingCart, Receipt, ArrowLeft, Loader2, Search } from 'lucide-react';
+import { Loader2, Receipt, ArrowLeft } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
-import { usePos } from '@/presentation/hooks/usePos';
+import { usePos, useQrPaymentFlow } from '@/presentation/hooks/pos';
 import { usePaymentSound } from '@/presentation/hooks/usePaymentSound';
-import { OrderOriginCard } from '@/presentation/components/pos/OrderOriginCard';
+import { PosOrderBanner } from '@/presentation/components/pos/PosOrderBanner';
+import { PosHeader } from '@/presentation/components/pos/PosHeader';
+import { PosProductSection } from '@/presentation/components/pos/PosProductSection';
+import { PosOrderSidebar } from '@/presentation/components/pos/PosOrderSidebar';
 import { TableSelectionDialog } from '@/presentation/components/pos/TableSelectionDialog';
-import { CategoryFilter } from '@/presentation/components/pos/CategoryFilter';
-import { ProductGrid } from '@/presentation/components/pos/ProductGrid';
 import { ProductExtrasDialog } from '@/presentation/components/pos/ProductExtrasDialog';
-import { Cart } from '@/presentation/components/pos/Cart';
 import { OrderPaymentLayout } from '@/presentation/components/pos/OrderPaymentLayout';
-import { PaymentSuccessView, type PaymentSuccessData } from '@/presentation/components/pos/PaymentSuccessView';
+import { PaymentSuccessView } from '@/presentation/components/pos/PaymentSuccessView';
 import { Button } from '@/presentation/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card';
-import { Input } from '@/presentation/components/ui/input';
-import { Badge } from '@/presentation/components/ui/badge';
 import { LoadingOverlay } from '@/presentation/components/ui/loading-overlay';
 // Ya no usamos PRODUCT_CATEGORIES, ahora cargamos categorías del backend
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { useAuthStore } from '@/presentation/store/auth.store';
 import { orderService } from '@/application/services/order.service';
-import { ticketService } from '@/application/services/ticket.service';
 import { companyService } from '@/application/services/company.service';
 import type {
   OrderFormErrors,
@@ -32,9 +28,7 @@ import type {
   CreateOrderResponse,
 } from '@/domain/types';
 import { OrderOrigins } from '@/domain/types';
-import { formatOrderNumber } from '@/shared/utils/order.utils';
 import { AppError } from '@/domain/errors';
-import { paymentService } from '@/application/services/payment.service';
 
 /**
  * Página del Punto de Venta (POS)
@@ -127,86 +121,30 @@ const PosPage = () => {
   const [isSavingOrder, setIsSavingOrder] = React.useState(false);
   const [isTableDialogOpen, setIsTableDialogOpen] = React.useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = React.useState(false);
-  const [isWaitingQrPayment, setIsWaitingQrPayment] = React.useState(false);
-  const [paymentSuccessData, setPaymentSuccessData] = React.useState<PaymentSuccessData | null>(null);
-  const qrPollingRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Limpiar polling al desmontar
-  React.useEffect(() => {
-    return () => {
-      if (qrPollingRef.current) clearInterval(qrPollingRef.current);
-    };
-  }, []);
+  // Flujo de pago QR
+  const {
+    isProcessingQr,
+    isWaitingQrPayment,
+    paymentSuccessData,
+    setPaymentSuccessData,
+    startQrPayment,
+    cancelQrPayment,
+  } = useQrPaymentFlow({
+    orderId: savedOrder?.id || loadedOrder?.id,
+    userId: user?.id,
+    orderDate: savedOrder?.date || loadedOrder?.date,
+    paymentTotal: paymentState.total,
+  });
 
-  // Interceptar selección de método de pago: si es QR_MP, imprimir ticket con QR + polling
-  const handleMethod1ChangeWithQr = (method: PosPaymentMethod | null) => {
+  // Interceptar selección de método de pago: si es QR_MP, delegar al hook
+  const handleMethod1ChangeWithQr = React.useCallback((method: PosPaymentMethod | null) => {
     if (method === 'QR_MP') {
-      const orderIdToProcess = savedOrder?.id || loadedOrder?.id;
-      if (!orderIdToProcess) {
-        showErrorToast('Error', 'Debes guardar la orden antes de pagar con QR');
-        return;
-      }
-      if (!user?.id) {
-        showErrorToast('Error', 'No se pudo obtener el usuario');
-        return;
-      }
-
-      // Iniciar flujo QR: crear pago → imprimir ticket con QR → polling
-      (async () => {
-        setIsProcessingPayment(true);
-        try {
-          // 1. Crear pago QR en MP
-          const qrResult = await paymentService.payWithQrMp(orderIdToProcess, user.id);
-
-          // 2. Imprimir ticket con QR
-          try {
-            await ticketService.printSaleTicketWithQr(orderIdToProcess, qrResult.initPoint);
-          } catch (ticketError) {
-            console.error('Error al imprimir ticket con QR:', ticketError);
-            showErrorToast('Ticket no impreso', 'El QR se generó pero no se pudo imprimir el ticket');
-          }
-
-          setIsProcessingPayment(false);
-          setIsWaitingQrPayment(true);
-
-          // 3. Polling cada 3 segundos
-          qrPollingRef.current = setInterval(async () => {
-            try {
-              const status = await paymentService.getQrMpPaymentStatus(orderIdToProcess);
-              if (status.status === 'SUCCEEDED') {
-                if (qrPollingRef.current) clearInterval(qrPollingRef.current);
-                setIsWaitingQrPayment(false);
-                playSuccess();
-                queryClient.invalidateQueries({ queryKey: ['orders'] });
-                queryClient.invalidateQueries({ queryKey: ['tables'] });
-
-                // Show payment success view
-                const company = await companyService.getCompany().catch(() => null);
-                setPaymentSuccessData({
-                  orderId: orderIdToProcess,
-                  date: savedOrder?.date || loadedOrder?.date || new Date().toISOString(),
-                  total: paymentState.total,
-                  paymentMethod: 4,
-                  companyName: company?.name,
-                });
-              } else if (status.status === 'FAILED' || status.status === 'CANCELED') {
-                if (qrPollingRef.current) clearInterval(qrPollingRef.current);
-                setIsWaitingQrPayment(false);
-                showErrorToast('Pago fallido', 'El pago QR fue rechazado o cancelado');
-              }
-            } catch {
-              // Ignorar errores de polling
-            }
-          }, 3000);
-        } catch (error: any) {
-          setIsProcessingPayment(false);
-          showErrorToast('Error al generar QR', error.message || 'No se pudo crear el pago QR');
-        }
-      })();
+      startQrPayment();
       return;
     }
     handleMethod1Change(method);
-  };
+  }, [startQrPayment, handleMethod1Change]);
 
   const selectedTable = selectedTableId
     ? tables.find((t) => t.id === selectedTableId)
@@ -632,11 +570,11 @@ const PosPage = () => {
   return (
     <MainLayout>
       <LoadingOverlay
-        open={isSavingOrder || isProcessingPayment || isWaitingQrPayment}
+        open={isSavingOrder || isProcessingPayment || isProcessingQr || isWaitingQrPayment}
         message={
           isWaitingQrPayment
             ? 'Esperando pago QR... El ticket fue impreso con el código QR'
-            : isProcessingPayment
+            : isProcessingQr
               ? 'Generando QR de pago...'
               : 'Guardando orden...'
         }
@@ -644,105 +582,17 @@ const PosPage = () => {
       <div className="space-y-6 p-6 bg-slate-50 dark:bg-slate-900 min-h-screen">
         {/* Banner de orden cargada */}
         {loadedOrder && (
-          <div className={`rounded-lg p-4 mb-4 border ${
-            loadedOrder.status 
-              ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' 
-              : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800'
-          }`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div>
-                  <p className="font-semibold text-slate-900 dark:text-white">
-                    Orden {formatOrderNumber(loadedOrder.id)}
-                  </p>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">
-                    {loadedOrder.table ? `Mesa ${loadedOrder.table.name}` : loadedOrder.origin} 
-                    {loadedOrder.client && ` • ${loadedOrder.client}`}
-                  </p>
-                </div>
-                <Badge className={loadedOrder.status 
-                  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' 
-                  : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
-                }>
-                  {loadedOrder.status ? 'Pagada' : 'Pendiente'}
-                </Badge>
-                {loadedOrder.delivered && (
-                  <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-                    Entregada
-                  </Badge>
-                )}
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="text-right">
-                  <p className="text-2xl font-bold text-slate-900 dark:text-white">
-                    ${loadedOrder.total.toFixed(2)}
-                  </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    {loadedOrder.orderItems?.length || 0} items
-                  </p>
-                </div>
-                <Button variant="outline" size="sm" onClick={() => navigate('/orders')}>
-                  <ArrowLeft className="h-4 w-4 mr-1" />
-                  Volver
-                </Button>
-              </div>
-            </div>
-          </div>
+          <PosOrderBanner order={loadedOrder} onBack={() => navigate('/orders')} />
         )}
 
-        {/* Header mejorado */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-lg">
-              {posMode === 'ORDER_BUILDING' ? (
-                <ShoppingCart className="h-6 w-6 text-white" />
-              ) : (
-                <Receipt className="h-6 w-6 text-white" />
-              )}
-            </div>
-                <div>
-                  <div className="flex items-center gap-3">
-                    <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
-                      {loadedOrder 
-                        ? `Orden ${formatOrderNumber(loadedOrder.id)}` 
-                        : posMode === 'ORDER_BUILDING' 
-                          ? 'Crear/Editar Orden' 
-                          : 'Procesar Pago'
-                      }
-                    </h1>
-                    {!(posMode === 'ORDER_BUILDING' && !loadedOrder && !isPaymentOnlyMode) && (
-                      <Badge
-                        variant={posMode === 'ORDER_BUILDING' ? 'default' : 'secondary'}
-                        className="text-sm px-3 py-1"
-                      >
-                        {isPaymentOnlyMode 
-                          ? 'Pago' 
-                          : loadedOrder && posMode === 'ORDER_BUILDING' 
-                            ? 'Edición' 
-                            : loadedOrder 
-                              ? 'Visualización' 
-                              : 'Pago'}
-                      </Badge>
-                    )}
-                  </div>
-              {(currentOrderId || loadedOrder) && (
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-2">
-                  <span className="font-medium">
-                    ID: {loadedOrder?.id || currentOrderId}
-                  </span>
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="flex gap-2">
-            {posMode === 'PAYMENT_PROCESSING' && !loadedOrder && !isPaymentOnlyMode && (
-              <Button variant="outline" onClick={handleBackToEdit} className="gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Volver a Editar
-              </Button>
-            )}
-          </div>
-        </div>
+        {/* Header */}
+        <PosHeader
+          posMode={posMode}
+          loadedOrder={loadedOrder}
+          currentOrderId={currentOrderId}
+          isPaymentOnlyMode={isPaymentOnlyMode}
+          onBackToEdit={handleBackToEdit}
+        />
 
         {/* Modo pago: layout 50% resumen orden / 50% pago (sin espacio en blanco) */}
         {posMode === 'PAYMENT_PROCESSING' && cartItems.length > 0 && (
@@ -786,122 +636,45 @@ const PosPage = () => {
           />
         )}
 
-        {/* Modo creación/edición: grid productos + carrito - ambas columnas mismo alto, todo el espacio en productos con overflow */}
+        {/* Modo creación/edición: grid productos + carrito */}
         {posMode === 'ORDER_BUILDING' && (
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch h-[calc(100vh)] min-h-[420px]">
-          {/* Columna izquierda - Productos: un poco más ancha que la derecha, todo el alto, contenido con overflow */}
-          <div className="lg:col-span-3 flex flex-col min-h-0 h-full">
-            {!isPaymentOnlyMode && (
-              <Card className="flex flex-col flex-1 min-h-0 overflow-hidden">
-                <CardHeader className="shrink-0">
-                  <CardTitle>Productos</CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col flex-1 min-h-0 gap-4 p-4 pt-0 overflow-hidden">
-                  <div className="relative shrink-0">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500 pointer-events-none" />
-                    <Input
-                      type="search"
-                      placeholder="Buscar platos, categorías o ingredientes..."
-                      value={productSearch}
-                      onChange={(e) => setProductSearch(e.target.value)}
-                      className="pl-9"
-                      aria-label="Buscar productos"
-                    />
-                  </div>
-                  <CategoryFilter
-                    categories={categories}
-                    selectedCategoryId={selectedCategoryId}
-                    onCategorySelect={handleCategorySelect}
-                  />
-                  <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-                    <ProductGrid
-                      products={filteredProducts}
-                      onProductSelect={handleProductSelect}
-                      isLoading={isLoadingProducts}
-                      error={productsError}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-          </div>
+          {!isPaymentOnlyMode && (
+            <PosProductSection
+              productSearch={productSearch}
+              onProductSearchChange={setProductSearch}
+              categories={categories}
+              selectedCategoryId={selectedCategoryId}
+              onCategorySelect={handleCategorySelect}
+              filteredProducts={filteredProducts}
+              onProductSelect={handleProductSelect}
+              isLoading={isLoadingProducts}
+              error={productsError}
+            />
+          )}
 
-          {/* Columna derecha - Cards siempre visibles (carrito, origen, guardar) */}
-          <div className="flex md:col-span-2 flex-col gap-6 min-h-0 h-full overflow-hidden">
-            {/* 1. Carrito - siempre visible (vacío o con ítems), ocupa el espacio restante con overflow */}
-            <div className="min-h-0 flex-1 flex flex-col overflow-hidden">
-              <Cart
-                items={cartItems}
-                onRemoveItem={handleRemoveItem}
-                readOnly={false}
-                className="h-full"
-              />
-            </div>
-
-            {/* 2. Origen de la orden (tipo + mesa o nombre cliente) - siempre visible */}
-            {!isPaymentOnlyMode && (
-              <OrderOriginCard
-                orderType={orderType}
-                onOrderTypeChange={(type) => {
-                  handleOrderTypeChange(type);
-                  if (type === 'DINE_IN') setIsTableDialogOpen(true);
-                }}
-                selectedTable={selectedTable}
-                onSelectTableClick={() => setIsTableDialogOpen(true)}
-                customerName={customerName}
-                onCustomerNameChange={handleCustomerNameChange}
-                validationErrors={{
-                  tableId: validationErrors.tableId,
-                  customerName: validationErrors.customerName,
-                }}
-              />
-            )}
-
-            {/* Total del carrito (visible antes de guardar para validar en E2E) */}
-            {cartItems.length > 0 && (
-              <div className="flex justify-between items-center py-2 px-3 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shrink-0">
-                <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Total</span>
-                <span className="text-lg font-bold text-primary" data-testid="cart-total" aria-label={`Total de la orden ${cartState.total.toFixed(2)}`}>
-                  ${cartState.total.toFixed(2)}
-                </span>
-              </div>
-            )}
-
-            {/* 3. Guardar orden - siempre visible, deshabilitado si no hay ítems */}
-            <div className="space-y-3 shrink-0">
-              {loadedOrder ? (
-                <Button
-                  onClick={handleSaveOrder}
-                  disabled={cartItems.length === 0 || !isOrderValid() || isSavingOrder}
-                  className="w-full shadow-md hover:shadow-lg transition-all"
-                  variant="outline"
-                  size="lg"
-                >
-                  {isSavingOrder ? 'Guardando...' : 'Guardar Cambios'}
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleSaveOrder}
-                  disabled={cartItems.length === 0 || !isOrderValid() || isSavingOrder}
-                  className="w-full shadow-md hover:shadow-lg transition-all"
-                  variant="outline"
-                  size="lg"
-                >
-                  {isSavingOrder ? 'Guardando...' : 'Guardar Orden'}
-                </Button>
-              )}
-              {savedOrder && !savedOrder.status && (
-                <Button
-                  onClick={handleContinueToPayment}
-                  disabled={cartItems.length === 0 || !isOrderValid()}
-                  className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl transition-all"
-                  size="lg"
-                >
-                  Continuar al Pago
-                </Button>
-              )}
-            </div>
-          </div>
+          <PosOrderSidebar
+            cartItems={cartItems}
+            cartState={cartState}
+            onRemoveItem={handleRemoveItem}
+            orderType={orderType}
+            onOrderTypeChange={handleOrderTypeChange}
+            selectedTable={selectedTable}
+            onSelectTableClick={() => setIsTableDialogOpen(true)}
+            customerName={customerName}
+            onCustomerNameChange={handleCustomerNameChange}
+            validationErrors={{
+              tableId: validationErrors.tableId,
+              customerName: validationErrors.customerName,
+            }}
+            isPaymentOnlyMode={isPaymentOnlyMode}
+            isOrderValid={isOrderValid()}
+            isSavingOrder={isSavingOrder}
+            hasLoadedOrder={!!loadedOrder}
+            savedOrder={savedOrder}
+            onSaveOrder={handleSaveOrder}
+            onContinueToPayment={handleContinueToPayment}
+          />
         </div>
         )}
 
@@ -934,8 +707,7 @@ const PosPage = () => {
               variant="outline"
               className="bg-white dark:bg-slate-800 shadow-lg"
               onClick={() => {
-                if (qrPollingRef.current) clearInterval(qrPollingRef.current);
-                setIsWaitingQrPayment(false);
+                cancelQrPayment();
                 showErrorToast('Cancelado', 'Se canceló la espera del pago QR');
               }}
             >
