@@ -440,7 +440,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
               <span className="font-medium" data-testid="expense-form-subtotal">{formatCurrency(parseFloat(subtotal || '0'))}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-slate-600 dark:text-slate-400">IVA (19%):</span>
+              <span className="text-slate-600 dark:text-slate-400">IVA:</span>
               <span className="font-medium" data-testid="expense-form-iva">{formatCurrency(parseFloat(iva || '0'))}</span>
             </div>
             <div className="flex justify-between border-t border-slate-200 pt-2 dark:border-slate-700">

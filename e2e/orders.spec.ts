@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { E2E_USER } from './config';
 
 /**
  * E2E orders page.
@@ -8,8 +9,8 @@ import { test, expect } from '@playwright/test';
 test.describe('Orders', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/login');
-    await page.getByLabel(/email/i).fill('karinaorlaz@hotmail.com');
-    await page.getByLabel(/contraseña/i).fill('Miklo2708');
+    await page.getByLabel(/email/i).fill(E2E_USER.email);
+    await page.getByLabel(/contraseña/i).fill(E2E_USER.password);
     await page.getByRole('button', { name: /iniciar sesión/i }).click();
     await expect(page).toHaveURL(/\/(dashboard|pos)/, { timeout: 15_000 });
   });

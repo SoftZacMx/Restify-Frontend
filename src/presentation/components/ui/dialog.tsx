@@ -52,7 +52,7 @@ const Dialog = ({ open, onOpenChange, children }: DialogProps) => {
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         {/* Backdrop */}
         <div
-          className="fixed inset-0 bg-black/50 dark:bg-black/70"
+          className="fixed inset-0 bg-black/50 dark:bg-black/85"
           onClick={() => onOpenChange(false)}
         />
         {/* Dialog Content */}

@@ -48,6 +48,7 @@ export const UserForm: React.FC<UserFormProps> = ({
     handleSubmit,
     watch,
     setValue,
+    setError,
     formState: { errors },
   } = useForm<UserFormValues>({
     resolver: zodResolver(userFormSchema),
@@ -76,6 +77,16 @@ export const UserForm: React.FC<UserFormProps> = ({
   const passwordStrengthTextColor = getPasswordStrengthTextColor(password);
 
   const onFormSubmit = async (data: UserFormValues) => {
+    // Validación condicional de password (requerida en creación, min 8 si se proporciona)
+    if (!isEditMode && !data.password) {
+      setError('password', { message: 'La contraseña es requerida' });
+      return;
+    }
+    if (data.password && data.password.length < 8) {
+      setError('password', { message: 'La contraseña debe tener al menos 8 caracteres' });
+      return;
+    }
+
     const phoneDigits = data.phone?.replace(/\D/g, '') || '';
     const phoneValue = phoneDigits.length === PHONE_DIGITS ? phoneDigits : (data.phone?.trim() || null);
 

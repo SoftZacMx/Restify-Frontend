@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@/presentation/contexts/theme.context';
@@ -50,12 +51,20 @@ function renderWithProviders(ui: ReactElement) {
   );
 }
 
-function fillCreateForm() {
-  fireEvent.change(screen.getByLabelText(/^nombre\s*\*/i), { target: { value: 'María' } });
-  fireEvent.change(screen.getByLabelText(/^apellido\s*\*/i), { target: { value: 'González' } });
-  fireEvent.change(screen.getByLabelText(/^email\s*\*/i), { target: { value: 'maria@test.com' } });
-  const password = document.getElementById('password') as HTMLInputElement;
-  fireEvent.change(password, { target: { value: 'SecurePass123!' } });
+async function fillCreateForm(user: ReturnType<typeof userEvent.setup>) {
+  const nameInput = screen.getByLabelText(/^nombre\s*\*/i);
+  const lastNameInput = screen.getByLabelText(/^apellido\s*\*/i);
+  const emailInput = screen.getByLabelText(/^email\s*\*/i);
+  const passwordInput = document.getElementById('password') as HTMLInputElement;
+
+  await user.clear(nameInput);
+  await user.type(nameInput, 'María');
+  await user.clear(lastNameInput);
+  await user.type(lastNameInput, 'González');
+  await user.clear(emailInput);
+  await user.type(emailInput, 'maria@test.com');
+  await user.clear(passwordInput);
+  await user.type(passwordInput, 'SecurePass123!');
 }
 
 describe('UsersPage (integración)', () => {
@@ -77,10 +86,11 @@ describe('UsersPage (integración)', () => {
   });
 
   it('abre el modal de crear usuario al hacer clic en Nuevo Usuario', async () => {
+    const user = userEvent.setup();
     renderWithProviders(<UsersPage />);
     await screen.findByRole('heading', { name: /usuarios/i });
 
-    fireEvent.click(screen.getByRole('button', { name: /nuevo usuario/i }));
+    await user.click(screen.getByRole('button', { name: /nuevo usuario/i }));
 
     expect(screen.getByRole('heading', { name: /crear nuevo usuario/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/^nombre\s*\*/i)).toBeInTheDocument();
@@ -89,12 +99,13 @@ describe('UsersPage (integración)', () => {
   });
 
   it('cierra el modal al hacer clic en Cancelar', async () => {
+    const user = userEvent.setup();
     renderWithProviders(<UsersPage />);
     await screen.findByRole('heading', { name: /usuarios/i });
-    fireEvent.click(screen.getByRole('button', { name: /nuevo usuario/i }));
+    await user.click(screen.getByRole('button', { name: /nuevo usuario/i }));
     expect(screen.getByRole('heading', { name: /crear nuevo usuario/i })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: /cancelar/i }));
+    await user.click(screen.getByRole('button', { name: /cancelar/i }));
 
     await waitFor(() => {
       expect(screen.queryByRole('heading', { name: /crear nuevo usuario/i })).not.toBeInTheDocument();
@@ -103,12 +114,13 @@ describe('UsersPage (integración)', () => {
   });
 
   it('llama a createUser y cierra el modal al enviar el formulario con datos válidos', async () => {
+    const user = userEvent.setup();
     renderWithProviders(<UsersPage />);
     await screen.findByRole('heading', { name: /usuarios/i });
-    fireEvent.click(screen.getByRole('button', { name: /nuevo usuario/i }));
+    await user.click(screen.getByRole('button', { name: /nuevo usuario/i }));
 
-    fillCreateForm();
-    fireEvent.click(screen.getByRole('button', { name: /guardar usuario/i }));
+    await fillCreateForm(user);
+    await user.click(screen.getByRole('button', { name: /guardar usuario/i }));
 
     await waitFor(() => {
       expect(mocks.createUser).toHaveBeenCalledTimes(1);

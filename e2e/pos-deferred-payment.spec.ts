@@ -1,5 +1,6 @@
 
 import { test, expect } from '@playwright/test';
+import { E2E_USER } from './config';
 
 /**
  * E2E POS - Pago diferido (pago dividido).
@@ -11,8 +12,8 @@ test.describe('POS - Pago diferido (dividido)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/login');
     await expect(page.getByRole('button', { name: /iniciar sesión/i })).toBeVisible({ timeout: 10_000 });
-    await page.getByLabel(/email/i).fill('admin@restify.com');
-    await page.getByLabel(/contraseña/i).fill('Restify123!');
+    await page.getByLabel(/email/i).fill(E2E_USER.email);
+    await page.getByLabel(/contraseña/i).fill(E2E_USER.password);
     await page.getByRole('button', { name: /iniciar sesión/i }).click();
     await expect(page).toHaveURL(/\/(dashboard|pos)/, { timeout: 20_000 });
   });

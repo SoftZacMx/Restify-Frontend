@@ -106,7 +106,7 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
             </span>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todos los estados</SelectItem>
+            <SelectItem value="all">Todo</SelectItem>
             <SelectItem value="pending">Pendientes</SelectItem>
             <SelectItem value="delivered">Entregadas</SelectItem>
             <SelectItem value="paid">Pagadas</SelectItem>

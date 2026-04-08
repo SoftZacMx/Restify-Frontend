@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@/presentation/contexts/theme.context';
@@ -88,12 +89,13 @@ describe('UserDetailPage (integración)', () => {
   });
 
   it('abre el modal de edición al hacer clic en Editar Usuario', async () => {
+    const user = userEvent.setup();
     renderWithProviders(<UserDetailPage />);
     await waitFor(() => {
       expect(screen.getByRole('heading', { name: /ana lópez martínez/i })).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /editar usuario/i }));
+    await user.click(screen.getByRole('button', { name: /editar usuario/i }));
 
     expect(screen.getByRole('heading', { name: /editar usuario/i })).toBeInTheDocument();
     await waitFor(() => {
@@ -105,14 +107,15 @@ describe('UserDetailPage (integración)', () => {
   });
 
   it('cierra el modal al hacer clic en Cancelar', async () => {
+    const user = userEvent.setup();
     renderWithProviders(<UserDetailPage />);
     await waitFor(() => {
       expect(screen.getByRole('heading', { name: /ana lópez martínez/i })).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByRole('button', { name: /editar usuario/i }));
+    await user.click(screen.getByRole('button', { name: /editar usuario/i }));
     expect(screen.getByRole('heading', { name: /editar usuario/i })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: /cancelar/i }));
+    await user.click(screen.getByRole('button', { name: /cancelar/i }));
 
     await waitFor(() => {
       expect(screen.queryByRole('heading', { name: /editar usuario/i })).not.toBeInTheDocument();
@@ -121,17 +124,20 @@ describe('UserDetailPage (integración)', () => {
   });
 
   it('llama a updateUser y cierra el modal al guardar cambios', async () => {
+    const user = userEvent.setup();
     renderWithProviders(<UserDetailPage />);
     await waitFor(() => {
       expect(screen.getByRole('heading', { name: /ana lópez martínez/i })).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByRole('button', { name: /editar usuario/i }));
+    await user.click(screen.getByRole('button', { name: /editar usuario/i }));
 
     await waitFor(() => {
       expect(screen.getByDisplayValue('Ana')).toBeInTheDocument();
     });
-    fireEvent.change(screen.getByLabelText(/^nombre\s*\*/i), { target: { value: 'Ana María' } });
-    fireEvent.click(screen.getByRole('button', { name: /actualizar usuario/i }));
+    const nameInput = screen.getByLabelText(/^nombre\s*\*/i);
+    await user.clear(nameInput);
+    await user.type(nameInput, 'Ana María');
+    await user.click(screen.getByRole('button', { name: /actualizar usuario/i }));
 
     await waitFor(() => {
       expect(mocks.updateUser).toHaveBeenCalledWith('user-1', expect.objectContaining({ name: 'Ana María' }));

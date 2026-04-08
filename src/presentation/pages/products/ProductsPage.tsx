@@ -201,7 +201,7 @@ const ProductsPage: React.FC = () => {
         )}
 
         <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="w-full md:w-[38vw] max-h-[90vh] overflow-y-auto">
             <DialogClose />
             <DialogHeader>
               <DialogTitle>Crear Nuevo Producto</DialogTitle>

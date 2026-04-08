@@ -12,7 +12,8 @@ export interface SelectProps {
 
 const SelectContext = React.createContext<{
   value?: string;
-  onValueChange?: (value: string) => void;
+  label?: string;
+  onValueChange?: (value: string, label: string) => void;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -24,13 +25,15 @@ const SelectContext = React.createContext<{
 
 const Select = ({ value, defaultValue, onValueChange, children }: SelectProps) => {
   const [internalValue, setInternalValue] = React.useState(defaultValue || value);
+  const [internalLabel, setInternalLabel] = React.useState('');
   const [isOpen, setIsOpen] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
 
-  const handleValueChange = (newValue: string) => {
+  const handleValueChange = (newValue: string, newLabel: string) => {
     setInternalValue(newValue);
+    setInternalLabel(newLabel);
     onValueChange?.(newValue);
-    setIsOpen(false); // Cerrar el dropdown al seleccionar
+    setIsOpen(false);
   };
 
   React.useEffect(() => {
@@ -59,7 +62,7 @@ const Select = ({ value, defaultValue, onValueChange, children }: SelectProps) =
   }, [isOpen]);
 
   return (
-    <SelectContext.Provider value={{ value: internalValue, onValueChange: handleValueChange, isOpen, setIsOpen, containerRef }}>
+    <SelectContext.Provider value={{ value: internalValue, label: internalLabel, onValueChange: handleValueChange, isOpen, setIsOpen, containerRef }}>
       <div className="relative" data-select-container ref={containerRef}>
         {children}
       </div>
@@ -95,8 +98,8 @@ const SelectTrigger = React.forwardRef<
 SelectTrigger.displayName = 'SelectTrigger';
 
 const SelectValue = ({ placeholder, children }: { placeholder?: string; children?: React.ReactNode }) => {
-  const { value } = React.useContext(SelectContext);
-  return <span>{children ?? value ?? placeholder}</span>;
+  const { label, value } = React.useContext(SelectContext);
+  return <span>{children ?? (label || value) ?? placeholder}</span>;
 };
 
 const SelectContent = React.forwardRef<
@@ -175,12 +178,17 @@ const SelectItem = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement> & { value: string }
 >(({ className, children, value, ...props }, ref) => {
   const { onValueChange, value: selectedValue } = React.useContext(SelectContext);
+  const itemRef = React.useRef<HTMLDivElement>(null);
 
   const isSelected = selectedValue === value;
 
   return (
     <div
-      ref={ref}
+      ref={(node) => {
+        (itemRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        if (typeof ref === 'function') ref(node);
+        else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      }}
       className={cn(
         'relative flex w-full cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700 focus:bg-slate-100 dark:focus:bg-slate-700',
         isSelected && 'bg-slate-100 dark:bg-slate-700',
@@ -188,7 +196,8 @@ const SelectItem = React.forwardRef<
       )}
       onClick={(e) => {
         e.stopPropagation();
-        onValueChange?.(value);
+        const label = itemRef.current?.textContent ?? '';
+        onValueChange?.(value, label);
       }}
       {...props}
     >

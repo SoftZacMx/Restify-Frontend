@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { E2E_USER } from './config';
 
 /**
  * E2E login flow.
@@ -17,8 +18,8 @@ test.describe('Login', () => {
   test('user can log in and reach dashboard or POS', async ({ page }) => {
     await page.goto('/auth/login');
 
-    await page.getByLabel(/email/i).fill('admin@restify.com');
-    await page.getByLabel(/contraseña/i).fill('Restify123!');
+    await page.getByLabel(/email/i).fill(E2E_USER.email);
+    await page.getByLabel(/contraseña/i).fill(E2E_USER.password);
     await page.getByRole('button', { name: /iniciar sesión/i }).click();
 
     await expect(page).toHaveURL(/\/(dashboard|pos)/, { timeout: 15_000 });
