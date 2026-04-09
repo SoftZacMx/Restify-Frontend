@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSubscriptionStore } from '@/presentation/store/subscription.store';
 import SubscriptionBlockedPage from '@/presentation/pages/subscription/SubscriptionBlockedPage';
 
@@ -7,15 +7,20 @@ interface SubscriptionGuardProps {
 }
 
 export const SubscriptionGuard = ({ children }: SubscriptionGuardProps) => {
-  const { status, isLoading, fetchStatus } = useSubscriptionStore();
+  const { status, error, fetchStatus } = useSubscriptionStore();
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (!status) {
-      fetchStatus();
-    }
-  }, [status, fetchStatus]);
+    let cancelled = false;
+    setIsReady(false);
+    fetchStatus().finally(() => {
+      if (!cancelled) setIsReady(true);
+    });
+    return () => { cancelled = true; };
+  }, [fetchStatus]);
 
-  if (isLoading || !status) {
+  // Mientras no termine el fetch, mostrar spinner (children NUNCA se monta antes)
+  if (!isReady) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-900">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
@@ -23,7 +28,8 @@ export const SubscriptionGuard = ({ children }: SubscriptionGuardProps) => {
     );
   }
 
-  if (!status.isActive) {
+  // Fail closed: si hay error, no hay status, o no está activa → bloquear
+  if (error || !status || !status.isActive) {
     return <SubscriptionBlockedPage />;
   }
 

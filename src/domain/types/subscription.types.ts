@@ -1,5 +1,14 @@
 export type SubscriptionStatus = 'ACTIVE' | 'PAST_DUE' | 'CANCELED' | 'EXPIRED' | 'TRIALING';
 
+export type BillingPeriod = 'MONTHLY' | 'ANNUAL';
+
+export interface SubscriptionPlan {
+  id: string;
+  name: string;
+  billingPeriod: BillingPeriod;
+  price: number;
+}
+
 export interface SubscriptionStatusResponse {
   exists: boolean;
   status: SubscriptionStatus | null;
@@ -7,6 +16,7 @@ export interface SubscriptionStatusResponse {
   cancelAtPeriodEnd: boolean;
   isActive: boolean;
   daysRemaining: number | null;
+  plan: SubscriptionPlan | null;
 }
 
 export interface CheckoutResponse {
@@ -23,9 +33,4 @@ export interface CancelSubscriptionResponse {
 export interface ReactivateSubscriptionResponse {
   message: string;
   cancelAtPeriodEnd: boolean;
-}
-
-export interface CreateCheckoutRequest {
-  email: string;
-  businessName: string;
 }

@@ -1,5 +1,6 @@
 import { SubscriptionRepository, subscriptionRepository as defaultRepo } from '@/infrastructure/api/repositories/subscription.repository';
 import type {
+  SubscriptionPlan,
   SubscriptionStatusResponse,
   CheckoutResponse,
   CancelSubscriptionResponse,
@@ -13,13 +14,18 @@ export class SubscriptionService {
     this.repository = repository ?? defaultRepo;
   }
 
+  async getPlans(): Promise<SubscriptionPlan[]> {
+    const response = await this.repository.getPlans();
+    return response.data!;
+  }
+
   async getStatus(): Promise<SubscriptionStatusResponse> {
     const response = await this.repository.getStatus();
     return response.data!;
   }
 
-  async createCheckout(): Promise<CheckoutResponse> {
-    const response = await this.repository.createCheckout();
+  async createCheckout(planId: string): Promise<CheckoutResponse> {
+    const response = await this.repository.createCheckout(planId);
     return response.data!;
   }
 

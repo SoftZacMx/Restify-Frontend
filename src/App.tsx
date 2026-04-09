@@ -65,7 +65,12 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
-      retry: 1,
+      retry: (failureCount, error: any) => {
+        // No reintentar 401 (no auth) ni 403 (subscription expirada / forbidden)
+        const status = error?.statusCode ?? error?.status;
+        if (status === 401 || status === 403) return false;
+        return failureCount < 1;
+      },
     },
   },
 });

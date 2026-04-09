@@ -5,6 +5,12 @@ import { useAuthStore } from '@/presentation/store/auth.store';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
+// Callback para notificar suscripción expirada (registrado por el store para evitar dependencia circular)
+let onSubscriptionExpired: (() => void) | null = null;
+export function registerSubscriptionExpiredCallback(cb: () => void) {
+  onSubscriptionExpired = cb;
+}
+
 /**
  * Cliente HTTP base configurado con interceptors
  * Maneja autenticación y errores globalmente.
@@ -42,6 +48,11 @@ apiClient.interceptors.response.use(
     // Handle 401 (Unauthorized) - redirect to login
     if (appError.statusCode === 401 || appError.code === 'UNAUTHORIZED' || appError.code === 'TOKEN_EXPIRED') {
       window.location.href = '/auth/login';
+    }
+
+    // Handle 403 por suscripción expirada
+    if (appError.code === 'SUBSCRIPTION_EXPIRED' || appError.code === 'SUBSCRIPTION_REQUIRED') {
+      onSubscriptionExpired?.();
     }
 
     return Promise.reject(appError);

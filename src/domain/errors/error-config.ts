@@ -323,6 +323,20 @@ export const ERROR_CONFIG = {
   },
 
   // ============================================
+  // Subscription Errors
+  // ============================================
+  SUBSCRIPTION_EXPIRED: {
+    message: 'Tu suscripción ha vencido',
+    statusCode: 403,
+    category: 'BUSINESS',
+  },
+  SUBSCRIPTION_REQUIRED: {
+    message: 'Se requiere una suscripción activa',
+    statusCode: 403,
+    category: 'BUSINESS',
+  },
+
+  // ============================================
   // Network & Client Errors (Frontend specific)
   // ============================================
   NETWORK_ERROR: {

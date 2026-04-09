@@ -1,6 +1,7 @@
 import apiClient from '../client';
 import type { ApiResponse } from '@/domain/types';
 import type {
+  SubscriptionPlan,
   SubscriptionStatusResponse,
   CheckoutResponse,
   CancelSubscriptionResponse,
@@ -8,6 +9,15 @@ import type {
 } from '@/domain/types/subscription.types';
 
 export class SubscriptionRepository {
+  async getPlans(): Promise<ApiResponse<SubscriptionPlan[]>> {
+    try {
+      const response = await apiClient.get('/api/subscription/plans');
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getStatus(): Promise<ApiResponse<SubscriptionStatusResponse>> {
     try {
       const response = await apiClient.get('/api/subscription/status');
@@ -17,9 +27,9 @@ export class SubscriptionRepository {
     }
   }
 
-  async createCheckout(): Promise<ApiResponse<CheckoutResponse>> {
+  async createCheckout(planId: string): Promise<ApiResponse<CheckoutResponse>> {
     try {
-      const response = await apiClient.post('/api/subscription/checkout');
+      const response = await apiClient.post('/api/subscription/checkout', { planId });
       return response.data;
     } catch (error) {
       throw error;
