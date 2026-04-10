@@ -36,6 +36,7 @@ const MenuCategoryDetailPage = lazy(() => import('@/presentation/pages/menu-cate
 const SettingsLayout = lazy(() => import('@/presentation/components/layouts/SettingsLayout'));
 const SettingsGeneralPage = lazy(() => import('@/presentation/pages/settings/SettingsGeneralPage'));
 const CompanyConfigPage = lazy(() => import('@/presentation/pages/settings/company/CompanyConfigPage'));
+const PaymentConfigPage = lazy(() => import('@/presentation/pages/settings/payments/PaymentConfigPage'));
 const SubscriptionSuccessPage = lazy(() => import('@/presentation/pages/subscription/SubscriptionSuccessPage'));
 const SubscriptionCancelPage = lazy(() => import('@/presentation/pages/subscription/SubscriptionCancelPage'));
 const PaymentResultPage = lazy(() => import('@/presentation/pages/payment/PaymentResultPage'));
@@ -140,6 +141,7 @@ function App() {
                       >
                         <Route index element={<Navigate to="/settings/company" replace />} />
                         <Route path="company" element={<CompanyConfigPage />} />
+                        <Route path="payments" element={<PaymentConfigPage />} />
                         <Route path="general" element={<SettingsGeneralPage />} />
                       </Route>
 
