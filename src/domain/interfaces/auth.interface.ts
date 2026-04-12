@@ -8,6 +8,7 @@ export interface IAuthRepository {
   login(credentials: LoginRequest): Promise<ApiResponse<LoginResponse>>;
   verifyUser(email: string): Promise<ApiResponse<{ email: string }>>;
   setPassword(userId: string, password: string): Promise<ApiResponse<void>>;
+  recoverPassword(userId: string, password: string): Promise<ApiResponse<void>>;
   logout(): Promise<ApiResponse<{ message: string }>>;
 }
 

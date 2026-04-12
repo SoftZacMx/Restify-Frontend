@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { Loader2, Receipt, ArrowLeft } from 'lucide-react';
+import { Loader2, Receipt, ArrowLeft, ShoppingCart, X } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { usePos, useQrPaymentFlow } from '@/presentation/hooks/pos';
 import { usePaymentSound } from '@/presentation/hooks/usePaymentSound';
@@ -116,6 +116,7 @@ const PosPage = () => {
     orderId,
   });
 
+  const [isCartSheetOpen, setIsCartSheetOpen] = useState(false);
   const [validationErrors, setValidationErrors] = React.useState<OrderFormErrors>({});
   const [savedOrder, setSavedOrder] = React.useState<CreateOrderResponse | null>(null);
   const [isSavingOrder, setIsSavingOrder] = React.useState(false);
@@ -638,44 +639,123 @@ const PosPage = () => {
 
         {/* Modo creación/edición: grid productos + carrito */}
         {posMode === 'ORDER_BUILDING' && (
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch h-[calc(100vh)] min-h-[420px]">
-          {!isPaymentOnlyMode && (
-            <PosProductSection
-              productSearch={productSearch}
-              onProductSearchChange={setProductSearch}
-              categories={categories}
-              selectedCategoryId={selectedCategoryId}
-              onCategorySelect={handleCategorySelect}
-              filteredProducts={filteredProducts}
-              onProductSelect={handleProductSelect}
-              isLoading={isLoadingProducts}
-              error={productsError}
-            />
-          )}
+        <>
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch h-[calc(100vh)] min-h-[420px]">
+            {!isPaymentOnlyMode && (
+              <PosProductSection
+                productSearch={productSearch}
+                onProductSearchChange={setProductSearch}
+                categories={categories}
+                selectedCategoryId={selectedCategoryId}
+                onCategorySelect={handleCategorySelect}
+                filteredProducts={filteredProducts}
+                onProductSelect={handleProductSelect}
+                isLoading={isLoadingProducts}
+                error={productsError}
+              />
+            )}
 
-          <PosOrderSidebar
-            cartItems={cartItems}
-            cartState={cartState}
-            onRemoveItem={handleRemoveItem}
-            orderType={orderType}
-            onOrderTypeChange={handleOrderTypeChange}
-            selectedTable={selectedTable}
-            onSelectTableClick={() => setIsTableDialogOpen(true)}
-            customerName={customerName}
-            onCustomerNameChange={handleCustomerNameChange}
-            validationErrors={{
-              tableId: validationErrors.tableId,
-              customerName: validationErrors.customerName,
-            }}
-            isPaymentOnlyMode={isPaymentOnlyMode}
-            isOrderValid={isOrderValid()}
-            isSavingOrder={isSavingOrder}
-            hasLoadedOrder={!!loadedOrder}
-            savedOrder={savedOrder}
-            onSaveOrder={handleSaveOrder}
-            onContinueToPayment={handleContinueToPayment}
-          />
-        </div>
+            {/* Sidebar visible solo en desktop */}
+            <div className="hidden lg:flex lg:col-span-2 lg:flex-col lg:min-h-0 lg:h-full">
+              <PosOrderSidebar
+                cartItems={cartItems}
+                cartState={cartState}
+                onRemoveItem={handleRemoveItem}
+                orderType={orderType}
+                onOrderTypeChange={handleOrderTypeChange}
+                selectedTable={selectedTable}
+                onSelectTableClick={() => setIsTableDialogOpen(true)}
+                customerName={customerName}
+                onCustomerNameChange={handleCustomerNameChange}
+                validationErrors={{
+                  tableId: validationErrors.tableId,
+                  customerName: validationErrors.customerName,
+                }}
+                isPaymentOnlyMode={isPaymentOnlyMode}
+                isOrderValid={isOrderValid()}
+                isSavingOrder={isSavingOrder}
+                hasLoadedOrder={!!loadedOrder}
+                savedOrder={savedOrder}
+                onSaveOrder={handleSaveOrder}
+                onContinueToPayment={handleContinueToPayment}
+              />
+            </div>
+          </div>
+
+          {/* Botón flotante del carrito — solo móvil */}
+          <button
+            type="button"
+            onClick={() => setIsCartSheetOpen(true)}
+            className="lg:hidden fixed bottom-6 right-6 z-40 flex items-center gap-2 bg-primary text-primary-foreground px-5 py-3 rounded-full shadow-xl hover:shadow-2xl transition-all"
+          >
+            <ShoppingCart className="h-5 w-5" />
+            {cartItems.length > 0 && (
+              <>
+                <span className="font-semibold">{cartItems.length} {cartItems.length === 1 ? 'item' : 'items'}</span>
+                <span className="text-sm opacity-90">— ${cartState.total.toFixed(2)}</span>
+              </>
+            )}
+            {cartItems.length === 0 && <span className="font-semibold">Carrito</span>}
+          </button>
+
+          {/* Bottom sheet del carrito — solo móvil */}
+          {isCartSheetOpen && (
+            <div className="lg:hidden fixed inset-0 z-50">
+              {/* Overlay */}
+              <div
+                className="absolute inset-0 bg-black/50"
+                onClick={() => setIsCartSheetOpen(false)}
+              />
+              {/* Panel */}
+              <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] bg-white dark:bg-slate-900 rounded-t-2xl shadow-2xl flex flex-col animate-in slide-in-from-bottom duration-300">
+                {/* Handle + close */}
+                <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-slate-200 dark:border-slate-700 shrink-0">
+                  <div className="flex items-center gap-2">
+                    <ShoppingCart className="h-5 w-5 text-primary" />
+                    <span className="font-semibold text-slate-900 dark:text-white">
+                      Carrito ({cartItems.length})
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsCartSheetOpen(false)}
+                    className="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  >
+                    <X className="h-5 w-5 text-slate-500" />
+                  </button>
+                </div>
+                {/* Contenido del sidebar dentro del sheet */}
+                <div className="flex-1 overflow-y-auto p-4">
+                  <PosOrderSidebar
+                    cartItems={cartItems}
+                    cartState={cartState}
+                    onRemoveItem={handleRemoveItem}
+                    orderType={orderType}
+                    onOrderTypeChange={handleOrderTypeChange}
+                    selectedTable={selectedTable}
+                    onSelectTableClick={() => {
+                      setIsCartSheetOpen(false);
+                      setIsTableDialogOpen(true);
+                    }}
+                    customerName={customerName}
+                    onCustomerNameChange={handleCustomerNameChange}
+                    validationErrors={{
+                      tableId: validationErrors.tableId,
+                      customerName: validationErrors.customerName,
+                    }}
+                    isPaymentOnlyMode={isPaymentOnlyMode}
+                    isOrderValid={isOrderValid()}
+                    isSavingOrder={isSavingOrder}
+                    hasLoadedOrder={!!loadedOrder}
+                    savedOrder={savedOrder}
+                    onSaveOrder={handleSaveOrder}
+                    onContinueToPayment={handleContinueToPayment}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </>
         )}
 
         {/* Diálogo de extras */}

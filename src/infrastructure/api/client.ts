@@ -45,8 +45,11 @@ apiClient.interceptors.response.use(
   (error) => {
     const appError = handleApiError(error);
 
-    // Handle 401 (Unauthorized) - redirect to login
-    if (appError.statusCode === 401 || appError.code === 'UNAUTHORIZED' || appError.code === 'TOKEN_EXPIRED') {
+    // Handle 401 (Unauthorized) - redirect to login solo si NO es un endpoint de auth
+    // Los 401 en /api/auth/ son respuestas esperadas (password incorrecto, validación, etc.)
+    const requestUrl = error?.config?.url || '';
+    const isAuthEndpoint = requestUrl.includes('/api/auth/');
+    if (!isAuthEndpoint && (appError.statusCode === 401 || appError.code === 'UNAUTHORIZED' || appError.code === 'TOKEN_EXPIRED')) {
       window.location.href = '/auth/login';
     }
 

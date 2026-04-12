@@ -72,6 +72,17 @@ export class AuthService {
   }
 
   /**
+   * Recuperación de contraseña (público, sin autenticación)
+   */
+  async recoverPassword(userId: string, password: string): Promise<ApiResponse<void>> {
+    if (!userId || !password) {
+      throw AppError.create('MISSING_REQUIRED_FIELD', 'UserId y password son requeridos');
+    }
+
+    return this.authRepository.recoverPassword(userId, password);
+  }
+
+  /**
    * Cierra sesión del usuario
    * El backend limpia la cookie HttpOnly automáticamente
    */

@@ -1,7 +1,6 @@
 import React from 'react';
-import { Search, Calendar, CreditCard } from 'lucide-react';
+import { Search, Calendar, CreditCard, Wrench, Zap, Building2, Package, Banknote, FileText, type LucideIcon } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
-import { Label } from '@/presentation/components/ui/label';
 import { Button } from '@/presentation/components/ui/button';
 import {
   Select,
@@ -10,7 +9,7 @@ import {
   SelectTrigger,
 } from '@/presentation/components/ui/select';
 import type { ExpenseTableFilters, ExpenseType, PaymentMethod } from '@/domain/types';
-import { getExpenseTypeLabel, getPaymentMethodLabel } from '@/shared/utils';
+import { getPaymentMethodLabel } from '@/shared/utils';
 
 interface ExpenseFiltersProps {
   filters: ExpenseTableFilters;
@@ -66,7 +65,14 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
     return filters.paymentMethod?.toString() || 'all';
   };
 
-  const expenseTypes: ExpenseType[] = ['SERVICE_BUSINESS', 'UTILITY', 'RENT', 'MERCHANDISE', 'SALARY', 'OTHER'];
+  const expenseTypes: { value: ExpenseType; title: string; icon: LucideIcon }[] = [
+    { value: 'SERVICE_BUSINESS', title: 'Servicios del negocio', icon: Wrench },
+    { value: 'UTILITY', title: 'Servicios públicos', icon: Zap },
+    { value: 'RENT', title: 'Renta', icon: Building2 },
+    { value: 'MERCHANDISE', title: 'Compra de mercancía', icon: Package },
+    { value: 'SALARY', title: 'Salarios', icon: Banknote },
+    { value: 'OTHER', title: 'Otros', icon: FileText },
+  ];
   const paymentMethods: PaymentMethod[] = [1, 2, 3];
 
   return (
@@ -89,8 +95,36 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
         </label>
       </div>
 
-      {/* Category Filters */}
-      <div className="flex flex-wrap gap-2">
+      {/* Category Filters — select en móvil, pills en desktop */}
+      <div className="md:hidden">
+        <Select value={getCurrentTypeValue()} onValueChange={handleTypeChange}>
+          <SelectTrigger className="h-9 w-full rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-sm font-medium">
+            {(() => {
+              const selected = expenseTypes.find((t) => t.value === getCurrentTypeValue());
+              if (!selected) return <span>Todos los tipos</span>;
+              const Icon = selected.icon;
+              return (
+                <span className="flex items-center gap-2">
+                  <Icon className="h-3.5 w-3.5" />
+                  {selected.title}
+                </span>
+              );
+            })()}
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos los tipos</SelectItem>
+            {expenseTypes.map(({ value, title, icon: Icon }) => (
+              <SelectItem key={value} value={value}>
+                <span className="flex items-center gap-2">
+                  <Icon className="h-3.5 w-3.5" />
+                  {title}
+                </span>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="hidden md:flex gap-2 pb-1">
         <Button
           variant={getCurrentTypeValue() === 'all' ? 'default' : 'outline'}
           size="sm"
@@ -99,65 +133,62 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
         >
           Todos
         </Button>
-        {expenseTypes.map((type) => (
+        {expenseTypes.map(({ value, title, icon: Icon }) => (
           <Button
-            key={type}
-            variant={getCurrentTypeValue() === type ? 'default' : 'outline'}
+            key={value}
+            variant={getCurrentTypeValue() === value ? 'default' : 'outline'}
             size="sm"
-            onClick={() => handleTypeChange(type)}
-            className="rounded-full"
+            onClick={() => handleTypeChange(value)}
+            className="rounded-full gap-1.5"
           >
-            {getExpenseTypeLabel(type)}
+            <Icon className="h-3.5 w-3.5" />
+            {title}
           </Button>
         ))}
       </div>
 
-      {/* Método de pago y rango de fechas en una misma fila */}
-      <div className="flex flex-wrap items-center gap-3">
-        <Select value={getCurrentPaymentMethodValue()} onValueChange={handlePaymentMethodChange}>
-          <SelectTrigger className="h-12 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal min-w-[180px]">
-            <div className="flex items-center gap-2">
-              <CreditCard className="h-4 w-4" />
-              <span>
-                {filters.paymentMethod && filters.paymentMethod !== 'all'
-                  ? getPaymentMethodLabel(filters.paymentMethod as 1 | 2 | 3)
-                  : 'Método de pago'}
-              </span>
-            </div>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todos los métodos</SelectItem>
-            {paymentMethods.map((method) => (
-              <SelectItem key={method} value={method.toString()}>
-                {getPaymentMethodLabel(method)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      {/* Método de pago */}
+      <Select value={getCurrentPaymentMethodValue()} onValueChange={handlePaymentMethodChange}>
+        <SelectTrigger className="h-9 rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-sm font-medium w-full md:w-auto gap-1.5 px-3">
+          <CreditCard className="h-3.5 w-3.5 shrink-0" />
+          <span className="truncate">
+            {filters.paymentMethod && filters.paymentMethod !== 'all'
+              ? getPaymentMethodLabel(filters.paymentMethod as 1 | 2 | 3)
+              : 'Método de pago'}
+          </span>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">Todos los métodos</SelectItem>
+          {paymentMethods.map((method) => (
+            <SelectItem key={method} value={method.toString()}>
+              {getPaymentMethodLabel(method)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
 
-        <Calendar className="h-4 w-4 text-slate-500 dark:text-slate-400 shrink-0" />
-        <div className="flex items-center gap-2">
-          <Label htmlFor="dateFrom" className="text-xs text-slate-500 dark:text-slate-400 shrink-0 whitespace-nowrap">
-            Desde
-          </Label>
+      {/* Rango de fechas — columna en móvil, fila en desktop */}
+      <div className="flex flex-col md:flex-row items-center gap-2">
+        <div className="flex items-center gap-2 w-full md:w-auto">
+          <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+          <span className="text-xs text-slate-500 dark:text-slate-400 shrink-0">Desde</span>
           <Input
             id="dateFrom"
             type="date"
             value={filters.dateFrom ?? ''}
             onChange={handleDateFromChange}
-            className="h-10 min-w-[140px] rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700"
+            className="h-9 flex-1 md:w-[140px] rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-sm px-2"
           />
         </div>
-        <div className="flex items-center gap-2">
-          <Label htmlFor="dateTo" className="text-xs text-slate-500 dark:text-slate-400 shrink-0 whitespace-nowrap">
-            Hasta
-          </Label>
+        <div className="flex items-center gap-2 w-full md:w-auto">
+          <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0 md:hidden" />
+          <span className="text-xs text-slate-500 dark:text-slate-400 shrink-0">Hasta</span>
           <Input
             id="dateTo"
             type="date"
             value={filters.dateTo ?? ''}
             onChange={handleDateToChange}
-            className="h-10 min-w-[140px] rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700"
+            className="h-9 flex-1 md:w-[140px] rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-sm px-2"
           />
         </div>
       </div>

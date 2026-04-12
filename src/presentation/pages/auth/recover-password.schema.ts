@@ -6,8 +6,13 @@ export const verifyEmailSchema = z.object({
 
 export const resetPasswordSchema = z
   .object({
-    password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
-    confirmPassword: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
+    password: z.string()
+      .min(8, 'Mínimo 8 caracteres')
+      .regex(/[a-z]/, 'Debe incluir al menos una minúscula')
+      .regex(/[A-Z]/, 'Debe incluir al menos una mayúscula')
+      .regex(/\d/, 'Debe incluir al menos un número')
+      .regex(/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/, 'Debe incluir al menos un carácter especial'),
+    confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Las contraseñas no coinciden',

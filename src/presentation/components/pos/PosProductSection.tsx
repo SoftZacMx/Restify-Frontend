@@ -35,14 +35,14 @@ export function PosProductSection({
           <CardTitle>Productos</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col flex-1 min-h-0 gap-4 p-4 pt-0 overflow-hidden">
-          <div className="relative shrink-0">
+          <div className="relative shrink-0 sticky top-0 z-10 bg-card pb-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500 pointer-events-none" />
             <Input
               type="search"
               placeholder="Buscar platos, categorías o ingredientes..."
               value={productSearch}
               onChange={(e) => onProductSearchChange(e.target.value)}
-              className="pl-9"
+              className="pl-9 shadow-none border-slate-200 dark:border-slate-600"
               aria-label="Buscar productos"
             />
           </div>
@@ -51,7 +51,7 @@ export function PosProductSection({
             selectedCategoryId={selectedCategoryId}
             onCategorySelect={onCategorySelect}
           />
-          <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+          <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin">
             <ProductGrid
               products={filteredProducts}
               onProductSelect={onProductSelect}

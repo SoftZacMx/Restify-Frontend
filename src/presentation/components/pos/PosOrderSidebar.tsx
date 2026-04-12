@@ -50,7 +50,7 @@ export function PosOrderSidebar({
   onContinueToPayment,
 }: PosOrderSidebarProps) {
   return (
-    <div className="flex md:col-span-2 flex-col gap-6 min-h-0 h-full overflow-hidden">
+    <div className="flex flex-col gap-6 min-h-0 h-full overflow-hidden">
       {/* Carrito */}
       <div className="min-h-0 flex-1 flex flex-col overflow-hidden">
         <Cart

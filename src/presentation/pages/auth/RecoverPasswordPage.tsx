@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff, UtensilsCrossed, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Eye, EyeOff, UtensilsCrossed, ArrowLeft, CheckCircle2, Check } from 'lucide-react';
 import { authService } from '@/application/services/auth.service';
 import { AppError } from '@/domain/errors';
 import { Button } from '@/presentation/components/ui/button';
@@ -16,6 +16,7 @@ import {
   type VerifyEmailFormData,
   type ResetPasswordFormData,
 } from './recover-password.schema';
+import { PasswordRequirements, passwordsMatch } from '@/presentation/components/ui/password-requirements';
 
 type Step = 'verify-email' | 'reset-password';
 
@@ -36,7 +37,12 @@ export default function RecoverPasswordPage() {
 
   const passwordForm = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
+    mode: 'onChange',
   });
+
+  const watchPassword = passwordForm.watch('password') || '';
+  const watchConfirmPassword = passwordForm.watch('confirmPassword') || '';
+  const doPasswordsMatch = passwordsMatch(watchPassword, watchConfirmPassword);
 
   const onVerifyEmail = async (data: VerifyEmailFormData) => {
     setIsLoading(true);
@@ -66,7 +72,7 @@ export default function RecoverPasswordPage() {
     setError(null);
 
     try {
-      const response = await authService.setPassword(userId, data.password);
+      const response = await authService.recoverPassword(userId, data.password);
 
       if (response.success) {
         setSuccess(true);
@@ -205,7 +211,7 @@ export default function RecoverPasswordPage() {
                   <Input
                     id="password"
                     {...passwordForm.register('password')}
-                    placeholder="Mínimo 6 caracteres"
+                    placeholder="Ingresa tu nueva contraseña"
                     type={showPassword ? 'text' : 'password'}
                     className={`pr-10 ${passwordForm.formState.errors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                   />
@@ -218,9 +224,7 @@ export default function RecoverPasswordPage() {
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
-                {passwordForm.formState.errors.password && (
-                  <span className="text-red-500 text-sm">{passwordForm.formState.errors.password.message}</span>
-                )}
+                <PasswordRequirements password={watchPassword} />
               </div>
 
               <div className="space-y-2">
@@ -233,7 +237,13 @@ export default function RecoverPasswordPage() {
                     {...passwordForm.register('confirmPassword')}
                     placeholder="Repite la contraseña"
                     type={showConfirmPassword ? 'text' : 'password'}
-                    className={`pr-10 ${passwordForm.formState.errors.confirmPassword ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                    className={`pr-10 ${
+                      watchConfirmPassword.length > 0 && !doPasswordsMatch
+                        ? 'border-red-500 focus-visible:ring-red-500'
+                        : doPasswordsMatch
+                        ? 'border-green-500 focus-visible:ring-green-500'
+                        : ''
+                    }`}
                   />
                   <button
                     type="button"
@@ -244,8 +254,14 @@ export default function RecoverPasswordPage() {
                     {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
-                {passwordForm.formState.errors.confirmPassword && (
-                  <span className="text-red-500 text-sm">{passwordForm.formState.errors.confirmPassword.message}</span>
+                {watchConfirmPassword.length > 0 && !doPasswordsMatch && (
+                  <span className="text-red-500 text-xs">Las contraseñas no coinciden</span>
+                )}
+                {doPasswordsMatch && (
+                  <span className="text-green-600 dark:text-green-400 text-xs flex items-center gap-1">
+                    <Check className="h-3.5 w-3.5" />
+                    Las contraseñas coinciden
+                  </span>
                 )}
               </div>
 

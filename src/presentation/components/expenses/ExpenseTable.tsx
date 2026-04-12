@@ -84,8 +84,69 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
 
   return (
     <div className="px-4 py-5">
-      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark">
-        <div className="overflow-x-auto">
+      {/* Vista cards en móvil */}
+      <div className="flex flex-col gap-3 md:hidden">
+        {expenses.map((expense) => (
+          <div
+            key={expense.id}
+            className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 p-4"
+          >
+            <div className="flex items-start justify-between gap-2 mb-2">
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-sm text-slate-900 dark:text-slate-100 truncate">
+                  {expense.title || '-'}
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  {formatExpenseDate(expense.date)}
+                </p>
+              </div>
+              <span className="text-sm font-bold text-slate-900 dark:text-slate-100 shrink-0">
+                {formatCurrency(expense.total)}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Badge
+                  className={cn(
+                    'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border-0',
+                    getExpenseTypeBadgeColor(expense.type)
+                  )}
+                >
+                  {expense.typeLabel}
+                </Badge>
+                <span className="text-xs text-slate-400 dark:text-slate-500">
+                  {expense.paymentMethodLabel}
+                </span>
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="p-1.5 rounded-full text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                  <MoreVertical className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-40">
+                  <DropdownMenuItem
+                    onSelect={() => onExpenseAction?.(expense.id, 'view')}
+                    className="cursor-pointer"
+                  >
+                    <Eye className="mr-2 h-4 w-4" />
+                    <span>Ver detalle</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => onExpenseAction?.(expense.id, 'delete')}
+                    className="cursor-pointer text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    <span>Eliminar</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Vista tabla en desktop */}
+      <div className="hidden md:block overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark">
+        <div className="overflow-x-auto scrollbar-thin">
           <Table>
             <TableHeader>
               <TableRow className="bg-slate-50 dark:bg-slate-800/50">

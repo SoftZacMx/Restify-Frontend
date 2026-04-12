@@ -38,14 +38,25 @@ export class AuthRepository {
   }
 
   /**
-   * Establece nueva contraseña para un usuario
+   * Establece nueva contraseña para un usuario (requiere autenticación)
    */
   async setPassword(userId: string, password: string): Promise<ApiResponse<void>> {
     try {
       const response = await apiClient.post(`/api/auth/set-password/${userId}`, { password });
       return response.data;
     } catch (error) {
-      // Error ya convertido a AppError por el interceptor
+      throw error;
+    }
+  }
+
+  /**
+   * Recuperación de contraseña (público, sin autenticación)
+   */
+  async recoverPassword(userId: string, password: string): Promise<ApiResponse<void>> {
+    try {
+      const response = await apiClient.post(`/api/auth/recover-password/${userId}`, { password });
+      return response.data;
+    } catch (error) {
       throw error;
     }
   }

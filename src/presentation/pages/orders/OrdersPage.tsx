@@ -340,32 +340,40 @@ const OrdersPage: React.FC = () => {
     <MainLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <FileText className="h-7 w-7" />
-              Órdenes
-            </h1>
- 
-          </div>
-          <div className="flex items-center gap-3">
-            {/* Indicador de conexión WebSocket */}
+        <div className="flex items-center justify-between gap-2">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <FileText className="h-7 w-7 hidden sm:block" />
+            Órdenes
+          </h1>
+          <div className="flex items-center gap-2">
             <ConnectionIndicator
               isConnected={isConnected}
               connectionId={connectionId}
-              showLabel
+              showLabel={false}
             />
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => refetchOrders()}
+              disabled={isLoadingOrders}
+              title="Actualizar"
+              className="sm:hidden"
+            >
+              <RefreshCw className={`h-4 w-4 ${isLoadingOrders ? 'animate-spin' : ''}`} />
+            </Button>
             <Button
               variant="outline"
               onClick={() => refetchOrders()}
               disabled={isLoadingOrders}
+              className="hidden sm:inline-flex"
             >
-              <RefreshCw
-                className={`h-4 w-4 mr-2 ${isLoadingOrders ? 'animate-spin' : ''}`}
-              />
+              <RefreshCw className={`h-4 w-4 mr-2 ${isLoadingOrders ? 'animate-spin' : ''}`} />
               Actualizar
             </Button>
-            <Button onClick={handleNewOrder}>
+            <Button onClick={handleNewOrder} size="icon" className="sm:hidden" title="Nueva Orden">
+              <Plus className="h-5 w-5" />
+            </Button>
+            <Button onClick={handleNewOrder} className="hidden sm:inline-flex">
               <Plus className="h-4 w-4 mr-2" />
               Nueva Orden
             </Button>
@@ -388,18 +396,18 @@ const OrdersPage: React.FC = () => {
         )}
 
         {/* Contadores rápidos */}
-          <div className="grid grid-cols-2 gap-4">
-          <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 border border-yellow-200 dark:border-yellow-800">
-            <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg px-3 py-2.5 border border-yellow-200 dark:border-yellow-800 flex items-center gap-3">
+            <span className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">
               {orderCounts.pending}
-            </p>
-            <p className="text-sm text-yellow-600 dark:text-yellow-400">Pendientes (total)</p>
+            </span>
+            <span className="text-xs text-yellow-600 dark:text-yellow-400 leading-tight">Pendientes</span>
           </div>
-          <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
-            <p className="text-2xl font-bold text-green-700 dark:text-green-300">
+          <div className="bg-green-50 dark:bg-green-900/20 rounded-lg px-3 py-2.5 border border-green-200 dark:border-green-800 flex items-center gap-3">
+            <span className="text-2xl font-bold text-green-700 dark:text-green-300">
               {orderCounts.paid}
-            </p>
-            <p className="text-sm text-green-600 dark:text-green-400">Pagadas (total)</p>
+            </span>
+            <span className="text-xs text-green-600 dark:text-green-400 leading-tight">Pagadas</span>
           </div>
         </div>
 
