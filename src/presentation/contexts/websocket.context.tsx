@@ -12,6 +12,7 @@ import { showSuccessToast, showInfoToast, showWarningToast } from '@/shared/util
 import type {
   UseWebSocketReturn,
   OrderNotificationData,
+  OnlineOrderNotificationData,
   WebSocketErrorData,
 } from '@/domain/types';
 
@@ -76,6 +77,18 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     showWarningToast('Orden Cancelada', `Orden #${orderNumber} fue cancelada`);
   }, [queryClient]);
 
+  const handleOrderNewOnline = useCallback((data: OnlineOrderNotificationData) => {
+    queryClient.invalidateQueries({ queryKey: ['orders'] });
+
+    const type = data.orderType === 'DELIVERY' ? 'Domicilio' : 'Recolección';
+    showInfoToast(
+      '🔔 Nuevo pedido online',
+      `${data.customerName} — ${type} — $${data.total.toFixed(2)}`
+    );
+
+    playOnlineOrderSound();
+  }, [queryClient]);
+
   // ============ HANDLER DE ERRORES ============
 
   const handleError = useCallback((error: WebSocketErrorData) => {
@@ -100,6 +113,7 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     onOrderUpdated: handleOrderUpdated,
     onOrderDelivered: handleOrderDelivered,
     onOrderCanceled: handleOrderCanceled,
+    onOrderNewOnline: handleOrderNewOnline,
     onError: handleError,
     onConnectionChange: handleConnectionChange,
   });
@@ -138,5 +152,37 @@ function playNotificationSound() {
     }
   } catch {
     // Silenciar fallo de reproducción
+  }
+}
+
+/**
+ * Sonido llamativo para nuevo pedido online (3 tonos ascendentes)
+ */
+function playOnlineOrderSound() {
+  try {
+    const ctx = new AudioContext();
+    const now = ctx.currentTime;
+
+    const notes = [
+      { freq: 587.33, start: 0, duration: 0.15 },     // D5
+      { freq: 739.99, start: 0.15, duration: 0.15 },   // F#5
+      { freq: 880.00, start: 0.30, duration: 0.30 },   // A5
+    ];
+
+    notes.forEach(({ freq, start, duration }) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, now + start);
+      gain.gain.linearRampToValueAtTime(0.4, now + start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + start + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + start);
+      osc.stop(now + start + duration);
+    });
+  } catch {
+    // Silenciar fallo de audio
   }
 }

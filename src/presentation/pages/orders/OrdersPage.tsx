@@ -242,6 +242,32 @@ const OrdersPage: React.FC = () => {
     }
   }, [queryClient]);
 
+  // Handler para actualizar estado de entrega (órdenes online)
+  const handleUpdateDeliveryStatus = useCallback(async (orderId: string, status: 'PREPARING' | 'READY' | 'ON_THE_WAY' | 'DELIVERED') => {
+    try {
+      await orderService.updateDeliveryStatus(orderId, status);
+      const labels: Record<string, string> = {
+        PREPARING: 'Preparando',
+        READY: 'Listo',
+        ON_THE_WAY: 'En camino',
+        DELIVERED: 'Entregado',
+      };
+      showSuccessToast('Estado actualizado', `Orden marcada como: ${labels[status]}`);
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      // Refresh detail dialog
+      if (detailDialog.isOpen) {
+        queryClient.invalidateQueries({ queryKey: ['order', orderId] });
+      }
+    } catch (error) {
+      console.error('[DeliveryStatus] Error:', error);
+      if (error instanceof AppError) {
+        showErrorToast('Error', error.message);
+      } else {
+        showErrorToast('Error', 'No se pudo actualizar el estado de entrega');
+      }
+    }
+  }, [queryClient, detailDialog]);
+
   // Handler para procesar pago: navega al POS en modo pago (solo sección de pago, info readonly)
   const handleProcessPayment = useCallback((orderId: string) => {
     navigate(`/pos?orderId=${orderId}&mode=pay`);
@@ -479,6 +505,7 @@ const OrdersPage: React.FC = () => {
           onPrintClientTicket={handlePrintClientTicket}
           onPrintKitchenTicket={handlePrintKitchenTicket}
           isPrintingTicket={isPrintingTicket}
+          onUpdateDeliveryStatus={handleUpdateDeliveryStatus}
         />
 
         {/* Diálogo de pago dividido (dos métodos) */}

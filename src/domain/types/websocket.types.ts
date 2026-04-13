@@ -64,6 +64,17 @@ export interface OrderNotificationData {
 }
 
 /**
+ * Datos de notificación de nuevo pedido online
+ */
+export interface OnlineOrderNotificationData {
+  orderId: string;
+  customerName: string;
+  orderType: 'DELIVERY' | 'PICKUP';
+  total: number;
+  createdAt: string;
+}
+
+/**
  * Datos de pago en notificación
  */
 export interface PaymentNotificationData {
@@ -108,6 +119,7 @@ export interface UseWebSocketOptions {
   onOrderUpdated?: (data: OrderNotificationData) => void;
   onOrderDelivered?: (data: OrderNotificationData) => void;
   onOrderCanceled?: (data: OrderNotificationData) => void;
+  onOrderNewOnline?: (data: OnlineOrderNotificationData) => void;
   onPaymentConfirmed?: (data: PaymentNotificationData) => void;
   onPaymentFailed?: (data: PaymentNotificationData) => void;
   onPaymentPending?: (data: PaymentNotificationData) => void;

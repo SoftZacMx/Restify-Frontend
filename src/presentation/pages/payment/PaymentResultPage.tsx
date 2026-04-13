@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircle, XCircle, Clock } from 'lucide-react';
 
 type PaymentResultStatus = 'success' | 'failure' | 'pending';
@@ -27,9 +27,19 @@ const config: Record<PaymentResultStatus, { icon: React.ReactNode; title: string
 
 const PaymentResultPage: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const statusParam = searchParams.get('status') as PaymentResultStatus | null;
   const status: PaymentResultStatus = statusParam && config[statusParam] ? statusParam : 'success';
   const { icon, title, description, bg } = config[status];
+
+  // Si hay un trackingToken de pedido público, redirigir a la página de seguimiento
+  useEffect(() => {
+    const trackingToken = localStorage.getItem('publicOrderTrackingToken');
+    if (trackingToken) {
+      localStorage.removeItem('publicOrderTrackingToken');
+      navigate(`/public/pedido/${trackingToken}`, { replace: true });
+    }
+  }, [navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 px-4">

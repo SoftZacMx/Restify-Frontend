@@ -207,6 +207,18 @@ export class OrderRepository {
   }
 
   /**
+   * Actualiza el estado de entrega de una orden online
+   */
+  async updateDeliveryStatus(orderId: string, status: 'PREPARING' | 'READY' | 'ON_THE_WAY' | 'DELIVERED'): Promise<ApiResponse<any>> {
+    try {
+      const response = await apiClient.put(`/api/orders/${orderId}/delivery-status`, { status });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
    * Obtiene órdenes pendientes de una mesa
    */
   async getOrdersByTable(tableId: string, status?: boolean): Promise<ApiResponse<OrderResponse[]>> {

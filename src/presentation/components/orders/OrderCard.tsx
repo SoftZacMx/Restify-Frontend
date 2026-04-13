@@ -12,8 +12,10 @@ import {
   Receipt,
   UtensilsCrossed,
   CheckCircle,
+  Globe,
 } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader } from '@/presentation/components/ui/card';
+import { Badge } from '@/presentation/components/ui/badge';
 import { Button } from '@/presentation/components/ui/button';
 import {
   DropdownMenu,
@@ -31,6 +33,7 @@ import {
   getOrderOriginLabel,
   getLocalOrderMesaLine,
   getPaymentMethodIcon,
+  isOnlineOrder,
 } from '@/shared/utils/order.utils';
 import { cn } from '@/shared/utils';
 

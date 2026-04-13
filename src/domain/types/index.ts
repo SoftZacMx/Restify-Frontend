@@ -250,6 +250,7 @@ export type {
   WebSocketMessage,
   OrderNotificationData,
   OrderNotificationOrderData,
+  OnlineOrderNotificationData,
   PaymentNotificationData,
   WebSocketErrorData,
   ConnectionAckData,

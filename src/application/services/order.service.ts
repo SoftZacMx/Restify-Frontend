@@ -601,6 +601,13 @@ export class OrderService {
   }
 
   /**
+   * Actualiza el estado de entrega de una orden online
+   */
+  async updateDeliveryStatus(orderId: string, status: 'PREPARING' | 'READY' | 'ON_THE_WAY' | 'DELIVERED'): Promise<void> {
+    await orderRepository.updateDeliveryStatus(orderId, status);
+  }
+
+  /**
    * Lista órdenes con filtros y paginación del backend.
    * Devuelve datos y metadatos de paginación (total, totalPages, etc.).
    */

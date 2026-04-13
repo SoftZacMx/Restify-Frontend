@@ -177,7 +177,15 @@ export const getOrderOriginLabel = (order: OrderResponse): string => {
   if (!o) return '—';
   if (o.toLowerCase() === 'local') return 'Local';
   if (o === 'Pickup') return 'Para llevar';
+  if (o === 'online-delivery') return 'Online - Domicilio';
+  if (o === 'online-pickup') return 'Online - Recolección';
   return o;
+};
+
+/** Indica si la orden es de origen online (pedido público). */
+export const isOnlineOrder = (order: OrderResponse): boolean => {
+  const o = (order.origin || '').trim();
+  return o === 'online-delivery' || o === 'online-pickup';
 };
 
 /** Origen comida en local (mesa / salón). */

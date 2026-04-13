@@ -352,7 +352,15 @@ export interface OrderResponse {
   client: string | null;
   paymentDiffer: boolean;
   note: string | null;
-  userId: string;
+  userId: string | null;
+  customerName: string | null;
+  customerPhone: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  deliveryAddress: string | null;
+  scheduledAt: string | null;
+  trackingToken: string | null;
+  deliveryStatus: string | null;
   createdAt: string;
   updatedAt: string;
   orderItems?: OrderItemResponse[];

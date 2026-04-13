@@ -9,6 +9,7 @@ import type {
   UseWebSocketOptions,
   UseWebSocketReturn,
   OrderNotificationData,
+  OnlineOrderNotificationData,
   PaymentNotificationData,
   WebSocketErrorData,
   ConnectionAckData,
@@ -38,6 +39,7 @@ export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
     onOrderUpdated,
     onOrderDelivered,
     onOrderCanceled,
+    onOrderNewOnline,
     onPaymentConfirmed,
     onPaymentFailed,
     onPaymentPending,
@@ -113,6 +115,10 @@ export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
 
     socket.on('order_canceled', (message: WebSocketMessage<OrderNotificationData>) => {
       onOrderCanceled?.(message.data);
+    });
+
+    socket.on('order_new_online', (message: WebSocketMessage<OnlineOrderNotificationData>) => {
+      onOrderNewOnline?.(message.data);
     });
 
     socket.on('payment_confirmed', (message: WebSocketMessage<PaymentNotificationData>) => {

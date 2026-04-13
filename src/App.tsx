@@ -40,6 +40,9 @@ const PaymentConfigPage = lazy(() => import('@/presentation/pages/settings/payme
 const SubscriptionSuccessPage = lazy(() => import('@/presentation/pages/subscription/SubscriptionSuccessPage'));
 const SubscriptionCancelPage = lazy(() => import('@/presentation/pages/subscription/SubscriptionCancelPage'));
 const PaymentResultPage = lazy(() => import('@/presentation/pages/payment/PaymentResultPage'));
+const PublicMenuPage = lazy(() => import('@/presentation/pages/public-menu/PublicMenuPage'));
+const PublicCheckoutPage = lazy(() => import('@/presentation/pages/public-checkout/PublicCheckoutPage'));
+const PublicOrderTrackingPage = lazy(() => import('@/presentation/pages/public-tracking/PublicOrderTrackingPage'));
 
 // Protected routes config (PrivateRoute + SubscriptionGuard)
 const protectedRoutes: { path: string; element: React.ReactNode }[] = [
@@ -91,6 +94,11 @@ function App() {
                       {/* Auth routes */}
                       <Route path="/auth/login" element={<LoginPage />} />
                       <Route path="/auth/recover-password" element={<RecoverPasswordPage />} />
+
+                      {/* Public routes (no auth, no subscription guard) */}
+                      <Route path="/public/menu" element={<PublicMenuPage />} />
+                      <Route path="/public/checkout" element={<PublicCheckoutPage />} />
+                      <Route path="/public/pedido/:trackingToken" element={<PublicOrderTrackingPage />} />
 
                       {/* Payment result routes (public - customer redirected from MP after QR scan) */}
                       <Route path="/payment/success" element={<PaymentResultPage />} />
