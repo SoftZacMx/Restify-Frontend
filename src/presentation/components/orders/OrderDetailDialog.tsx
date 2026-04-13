@@ -9,7 +9,6 @@ import {
   Loader2,
   Receipt,
   UtensilsCrossed,
-  Globe,
   Phone,
   Navigation,
   ChevronDown,

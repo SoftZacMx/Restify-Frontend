@@ -101,7 +101,6 @@ const PublicOrderTrackingPage = () => {
               const stepOriginalIndex = getStepIndex(step.key);
               const isCompleted = stepOriginalIndex < currentIndex;
               const isCurrent = stepOriginalIndex === currentIndex;
-              const isPending = stepOriginalIndex > currentIndex;
               const isLast = idx === steps.length - 1;
 
               return (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Clock, Loader2 } from 'lucide-react';
 import { PublicLayout } from '@/presentation/components/layouts/PublicLayout';
