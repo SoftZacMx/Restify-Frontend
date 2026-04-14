@@ -38,6 +38,11 @@ export class SubscriptionService {
     const response = await this.repository.reactivate();
     return response.data!;
   }
+
+  async verifyCheckout(sessionId: string): Promise<{ status: string; verified: boolean }> {
+    const response = await this.repository.verifyCheckout(sessionId);
+    return response.data!;
+  }
 }
 
 export const subscriptionService = new SubscriptionService();

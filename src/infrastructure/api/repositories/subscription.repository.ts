@@ -53,6 +53,15 @@ export class SubscriptionRepository {
       throw error;
     }
   }
+
+  async verifyCheckout(sessionId: string): Promise<ApiResponse<{ status: string; verified: boolean }>> {
+    try {
+      const response = await apiClient.post('/api/subscription/verify-checkout', { sessionId });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export const subscriptionRepository = new SubscriptionRepository();
