@@ -13,10 +13,7 @@ export class AuthRepository {
    */
   async login(credentials: LoginRequest): Promise<ApiResponse<LoginResponse>> {
     try {
-      // El backend actualmente requiere un rol en la URL, pero no lo usa realmente
-      // Usamos 'user' como valor por defecto ya que el backend obtiene el rol de la BD
-      // TODO: Actualizar backend para eliminar el parámetro :rol de la ruta
-      const response = await apiClient.post('/api/auth/login/user', credentials);
+      const response = await apiClient.post('/api/auth/login', credentials);
       return response.data;
     } catch (error) {
       // Error ya convertido a AppError por el interceptor
