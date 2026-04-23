@@ -80,6 +80,9 @@ export {
   countOrderItems,
   getOrderLocationDisplay,
   defaultOrderFilters,
+  getTodayDateString,
+  getLocalDayBoundsUtc,
+  getDefaultOrderFiltersForToday,
   convertViewFiltersToApiFilters,
   filterOrdersClient,
 } from './order.utils';

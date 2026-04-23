@@ -17,22 +17,25 @@ import type {
   ReportsSummaryResponse,
 } from '@/domain/types';
 import { showErrorToast } from '@/shared/utils/toast';
+import { getTodayDateString } from '@/shared/utils';
+import { APP_TIMEZONE } from '@/shared/constants';
+import { formatInTimeZone } from 'date-fns-tz';
 import { AppError } from '@/domain/errors';
 
 function getDefaultDateRange(): { dateFrom: string; dateTo: string } {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  const dateTo = `${year}-${month}-${day}`;
-  const dateFrom = `${year}-${month}-01`;
-  return { dateFrom, dateTo };
+  const today = getTodayDateString();
+  const dateFrom = `${today.slice(0, 7)}-01`;
+  return { dateFrom, dateTo: today };
 }
 
 function getLast30Days(): { dateFrom: string; dateTo: string } {
   const now = new Date();
-  const to = now.toISOString().slice(0, 10);
-  const from = new Date(now.getTime() - 29 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const to = getTodayDateString();
+  const from = formatInTimeZone(
+    new Date(now.getTime() - 29 * 24 * 60 * 60 * 1000),
+    APP_TIMEZONE,
+    'yyyy-MM-dd'
+  );
   return { dateFrom: from, dateTo: to };
 }
 
@@ -196,7 +199,7 @@ const ReportsPage = () => {
             <div className="py-4">
               <div className="px-4 mb-3 flex flex-wrap items-center gap-2 text-sm">
                 <span className="rounded-full bg-slate-200/80 dark:bg-slate-700/80 px-3 py-1 text-slate-600 dark:text-slate-300">
-                  Generado: {new Date(report.generatedAt).toLocaleString('es-MX')}
+                  Generado: {new Date(report.generatedAt).toLocaleString('es-MX', { timeZone: APP_TIMEZONE })}
                 </span>
                 {report.filters.dateFrom && report.filters.dateTo && (
                   <span className="rounded-full bg-primary/10 dark:bg-primary/20 px-3 py-1 text-primary font-medium">

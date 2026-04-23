@@ -1,4 +1,6 @@
 import type { User, UserRole, UserTableItem } from '@/domain/types';
+import { formatInTimeZone } from 'date-fns-tz';
+import { APP_TIMEZONE } from '@/shared/constants';
 
 /**
  * Mapeo de roles a etiquetas en español
@@ -41,16 +43,12 @@ export const getFullName = (user: User): string => {
  */
 export const formatDate = (date: Date | string): string => {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
+
   if (isNaN(dateObj.getTime())) {
     return 'Fecha inválida';
   }
 
-  const day = dateObj.getDate().toString().padStart(2, '0');
-  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
-  const year = dateObj.getFullYear();
-
-  return `${day}/${month}/${year}`;
+  return formatInTimeZone(dateObj, APP_TIMEZONE, 'dd/MM/yyyy');
 };
 
 /**

@@ -13,6 +13,7 @@ import { AppError } from '@/domain/errors';
 import { EditProductForm } from '@/presentation/components/products/EditProductForm';
 import type { UpdateProductRequest, ProductResponse } from '@/domain/types';
 import { cn } from '@/shared/lib/utils';
+import { APP_TIMEZONE } from '@/shared/constants';
 
 /**
  * Página de Detalle de Producto
@@ -188,6 +189,7 @@ const ProductDetailPage: React.FC = () => {
                     day: '2-digit',
                     month: 'long',
                     year: 'numeric',
+                    timeZone: APP_TIMEZONE,
                   })}
                 </p>
               </div>
@@ -200,6 +202,7 @@ const ProductDetailPage: React.FC = () => {
                     day: '2-digit',
                     month: 'long',
                     year: 'numeric',
+                    timeZone: APP_TIMEZONE,
                     hour: '2-digit',
                     minute: '2-digit',
                   })}
@@ -214,6 +217,7 @@ const ProductDetailPage: React.FC = () => {
                     day: '2-digit',
                     month: 'long',
                     year: 'numeric',
+                    timeZone: APP_TIMEZONE,
                     hour: '2-digit',
                     minute: '2-digit',
                   })}

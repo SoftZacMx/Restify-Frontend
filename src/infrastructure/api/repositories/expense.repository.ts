@@ -7,6 +7,7 @@ import type {
   ExpenseTableFilters,
   ListExpensesResult,
 } from '@/domain/types';
+import { getLocalDayBoundsUtc } from '@/shared/utils';
 
 /** Base path: probar /api/expenses; si falla 404, usar /api/expense (singular) para el resto de la sesión */
 const EXPENSE_BASE_PLURAL = '/api/expenses';
@@ -35,8 +36,8 @@ export class ExpenseRepository {
     if (filters?.paymentMethod != null && filters.paymentMethod !== 'all') {
       params.paymentMethod = Number(filters.paymentMethod);
     }
-    if (filters?.dateFrom) params.dateFrom = filters.dateFrom;
-    if (filters?.dateTo) params.dateTo = filters.dateTo;
+    if (filters?.dateFrom) params.dateFrom = getLocalDayBoundsUtc(filters.dateFrom).dateFrom;
+    if (filters?.dateTo) params.dateTo = getLocalDayBoundsUtc(filters.dateTo).dateTo;
     if (filters?.page != null) params.page = String(filters.page);
     if (filters?.pageSize != null) params.pageSize = String(filters.pageSize);
 

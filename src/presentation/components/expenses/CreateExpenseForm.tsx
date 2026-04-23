@@ -14,6 +14,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { useAuthStore } from '@/presentation/store/auth.store';
+import { getTodayDateString } from '@/shared/utils';
 import { ProductRepository } from '@/infrastructure/api/repositories/product.repository';
 import { UserRepository } from '@/infrastructure/api/repositories/user.repository';
 import { Input } from '@/presentation/components/ui/input';
@@ -59,9 +60,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
   const { user } = useAuthStore();
   const [title, setTitle] = useState<string>('');
   const [expenseType, setExpenseType] = useState<ExpenseType | ''>('');
-  const [date, setDate] = useState<string>(
-    new Date().toISOString().split('T')[0]
-  );
+  const [date, setDate] = useState<string>(getTodayDateString());
   const [description, setDescription] = useState<string>('');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | ''>('');
   const [subtotal, setSubtotal] = useState<string>('0.00');

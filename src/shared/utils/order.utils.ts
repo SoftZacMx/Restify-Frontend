@@ -2,6 +2,8 @@
  * Utilidades para formatear y procesar órdenes
  */
 
+import { formatInTimeZone, fromZonedTime } from 'date-fns-tz';
+import { APP_TIMEZONE } from '@/shared/constants';
 import type { OrderResponse } from '@/domain/types';
 import { formatCurrency } from './currency.utils';
 
@@ -111,6 +113,7 @@ export const formatOrderDate = (dateString: string): string => {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
+    timeZone: APP_TIMEZONE,
   });
 };
 
@@ -122,6 +125,7 @@ export const formatOrderTime = (dateString: string): string => {
   return date.toLocaleTimeString('es-MX', {
     hour: '2-digit',
     minute: '2-digit',
+    timeZone: APP_TIMEZONE,
   });
 };
 
@@ -136,6 +140,7 @@ export const formatOrderDateTime = (dateString: string): string => {
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
+    timeZone: APP_TIMEZONE,
   });
 };
 
@@ -294,12 +299,22 @@ export const defaultOrderFilters: OrderViewFilters = {
 };
 
 /**
- * Fecha de hoy en formato YYYY-MM-DD (para inputs type="date" y filtros de API)
+ * Fecha de hoy en formato YYYY-MM-DD calculada en la zona horaria de la app.
  */
 export const getTodayDateString = (): string => {
-  const d = new Date();
-  return d.toISOString().slice(0, 10);
+  return formatInTimeZone(new Date(), APP_TIMEZONE, 'yyyy-MM-dd');
 };
+
+/**
+ * Convierte una fecha local YYYY-MM-DD a los instantes UTC
+ * que delimitan ese dia en la zona horaria de la app.
+ */
+export const getLocalDayBoundsUtc = (
+  localYmd: string
+): { dateFrom: string; dateTo: string } => ({
+  dateFrom: fromZonedTime(`${localYmd} 00:00:00.000`, APP_TIMEZONE).toISOString(),
+  dateTo: fromZonedTime(`${localYmd} 23:59:59.999`, APP_TIMEZONE).toISOString(),
+});
 
 /**
  * Filtros por defecto con fecha de hoy (órdenes del día al cargar)
@@ -350,13 +365,12 @@ export const convertViewFiltersToApiFilters = (
     apiFilters.origin = filters.origin;
   }
 
-  // Fechas en ISO 8601 (UTC). Sin zona en el string, el backend interpreta en UTC.
   if (filters.dateFrom) {
-    apiFilters.dateFrom = `${filters.dateFrom}T00:00:00.000Z`;
+    apiFilters.dateFrom = getLocalDayBoundsUtc(filters.dateFrom).dateFrom;
   }
 
   if (filters.dateTo) {
-    apiFilters.dateTo = `${filters.dateTo}T23:59:59.999Z`;
+    apiFilters.dateTo = getLocalDayBoundsUtc(filters.dateTo).dateTo;
   }
 
   return apiFilters;

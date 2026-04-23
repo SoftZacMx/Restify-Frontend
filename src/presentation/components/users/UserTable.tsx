@@ -18,6 +18,7 @@ import {
 } from '@/presentation/components/ui/dropdown-menu';
 import type { UserTableItem } from '@/domain/types';
 import { cn } from '@/shared/lib/utils';
+import { APP_TIMEZONE } from '@/shared/constants';
 
 interface UserTableProps {
   users: UserTableItem[];
@@ -140,6 +141,7 @@ export const UserTable: React.FC<UserTableProps> = ({
                       day: '2-digit',
                       month: '2-digit',
                       year: 'numeric',
+                      timeZone: APP_TIMEZONE,
                     })}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
