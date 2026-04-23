@@ -18,6 +18,7 @@ import {
 } from '@/presentation/components/ui/dropdown-menu';
 import type { ProductTableItem } from '@/domain/types';
 import { cn } from '@/shared/lib/utils';
+import { APP_TIMEZONE } from '@/shared/constants';
 
 interface ProductTableProps {
   products: ProductTableItem[];
@@ -122,6 +123,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
                       day: '2-digit',
                       month: '2-digit',
                       year: 'numeric',
+                      timeZone: APP_TIMEZONE,
                     })}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
@@ -129,6 +131,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
                       day: '2-digit',
                       month: '2-digit',
                       year: 'numeric',
+                      timeZone: APP_TIMEZONE,
                     })}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

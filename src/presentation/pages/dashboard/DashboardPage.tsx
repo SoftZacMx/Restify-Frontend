@@ -22,7 +22,8 @@ import { useAuthStore } from '@/presentation/store/auth.store';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { dashboardService } from '@/application/services';
 import type { DashboardOrderSummary } from '@/domain/types';
-import { formatCurrency } from '@/shared/utils';
+import { formatCurrency, getTodayDateString } from '@/shared/utils';
+import { APP_TIMEZONE } from '@/shared/constants';
 import { showErrorToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
 
@@ -75,7 +76,7 @@ const DashboardPage = () => {
   const formatOrderTime = (dateStr: string) => {
     try {
       const d = new Date(dateStr);
-      return d.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+      return d.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', timeZone: APP_TIMEZONE });
     } catch {
       return '—';
     }
@@ -214,8 +215,7 @@ const DashboardPage = () => {
                   </p>
                 ) : (
                   salesLast7Days.byDay.map((d) => {
-                    const isToday =
-                      d.date === new Date().toISOString().split('T')[0];
+                    const isToday = d.date === getTodayDateString();
                     const heightPct = Math.round((d.total / maxBarTotal) * 100);
                     return (
                       <Bar

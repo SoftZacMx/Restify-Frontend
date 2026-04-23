@@ -1,4 +1,5 @@
 import type { TableResponse, TableTableItem, TableStatusInfo } from '@/domain/types';
+import { APP_TIMEZONE } from '@/shared/constants';
 
 /**
  * Formatea una mesa para mostrar en la tabla
@@ -15,11 +16,13 @@ export function formatTableForDisplay(table: TableResponse): TableTableItem {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
+      timeZone: APP_TIMEZONE,
     }),
     updatedAt: new Date(table.updatedAt).toLocaleDateString('es-MX', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
+      timeZone: APP_TIMEZONE,
     }),
   };
 }

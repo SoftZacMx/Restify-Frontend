@@ -1,5 +1,6 @@
 import React from 'react';
 import type { User } from '@/domain/types';
+import { APP_TIMEZONE } from '@/shared/constants';
 
 interface UserPersonalInfoProps {
   user: User;
@@ -38,6 +39,7 @@ export const UserPersonalInfo: React.FC<UserPersonalInfoProps> = ({ user }) => {
               day: 'numeric',
               month: 'long',
               year: 'numeric',
+              timeZone: APP_TIMEZONE,
             })}
           </p>
         </div>

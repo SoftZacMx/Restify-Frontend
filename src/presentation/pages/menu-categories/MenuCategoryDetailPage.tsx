@@ -10,6 +10,7 @@ import { menuCategoryService } from '@/application/services';
 import type { UpdateMenuCategoryRequest } from '@/domain/types';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
+import { APP_TIMEZONE } from '@/shared/constants';
 
 /**
  * Página de Detalle/Edición de Categoría
@@ -167,6 +168,7 @@ const MenuCategoryDetailPage: React.FC = () => {
                       day: '2-digit',
                       month: 'long',
                       year: 'numeric',
+                      timeZone: APP_TIMEZONE,
                       hour: '2-digit',
                       minute: '2-digit',
                     })}
@@ -181,6 +183,7 @@ const MenuCategoryDetailPage: React.FC = () => {
                       day: '2-digit',
                       month: 'long',
                       year: 'numeric',
+                      timeZone: APP_TIMEZONE,
                       hour: '2-digit',
                       minute: '2-digit',
                     })}

@@ -1,4 +1,5 @@
 import type { ExpenseListItem, ExpenseTableItem, ExpenseType, PaymentMethod, UnitOfMeasure } from '@/domain/types';
+import { APP_TIMEZONE } from '@/shared/constants';
 
 /**
  * Obtiene la etiqueta en español para el tipo de gasto
@@ -96,6 +97,7 @@ export function formatExpenseDate(date: Date | string): string {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
+    timeZone: APP_TIMEZONE,
   }).format(dateObj);
 }
 
