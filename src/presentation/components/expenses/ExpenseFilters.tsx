@@ -1,7 +1,6 @@
 import React from 'react';
 import { Search, Calendar, CreditCard, Wrench, Zap, Building2, Package, Banknote, FileText, Wallet, type LucideIcon } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
-import { Button } from '@/presentation/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -72,7 +71,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
     { value: 'MERCHANDISE', title: 'Compra de mercancía', icon: Package },
     { value: 'SALARY', title: 'Salarios', icon: Banknote },
     { value: 'OTHER', title: 'Otros', icon: FileText },
-    { value: 'MERCADO_PAGO_FEE', title: 'Comisión MP', icon: Wallet },
+    { value: 'MERCADO_PAGO_FEE', title: 'Comisión Mercado Pago', icon: Wallet },
   ];
   const paymentMethods: PaymentMethod[] = [1, 2, 3];
 
@@ -125,27 +124,29 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
           </SelectContent>
         </Select>
       </div>
-      <div className="hidden md:flex gap-2 pb-1">
-        <Button
-          variant={getCurrentTypeValue() === 'all' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => handleTypeChange('all')}
-          className="rounded-full"
-        >
-          Todos
-        </Button>
-        {expenseTypes.map(({ value, title, icon: Icon }) => (
-          <Button
-            key={value}
-            variant={getCurrentTypeValue() === value ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => handleTypeChange(value)}
-            className="rounded-full gap-1.5"
-          >
-            <Icon className="h-3.5 w-3.5" />
-            {title}
-          </Button>
-        ))}
+      <div className="hidden md:block border-b border-slate-200 dark:border-slate-800 -mx-4 px-4">
+        <div className="flex items-stretch gap-6 overflow-x-auto scrollbar-thin">
+          {([{ value: 'all' as const, title: 'Todos' }, ...expenseTypes] as Array<{ value: string; title: string }>).map(({ value, title }) => {
+            const isActive = getCurrentTypeValue() === value;
+            return (
+              <button
+                key={value}
+                type="button"
+                onClick={() => handleTypeChange(value)}
+                className={`relative whitespace-nowrap pb-2.5 pt-1 text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'text-primary'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                }`}
+              >
+                {title}
+                {isActive && (
+                  <span className="pointer-events-none absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-primary" />
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Método de pago */}
