@@ -23,21 +23,25 @@ export interface BaseReportResponse<T = unknown> {
 }
 
 // CASH_FLOW
+export interface CashFlowExpenseBucket {
+  items: Array<{ id: string; date: string; total: number; type: string; description: string | null }>;
+  total: number;
+}
+
 export interface CashFlowReportData {
   incomes: {
     orders: Array<{ id: string; date: string; total: number; paymentMethod: number | null }>;
     totalIncomes: number;
-    byPaymentMethod: { cash: number; transfer: number; card: number };
+    byPaymentMethod: { cash: number; transfer: number; card: number; qrMercadoPago?: number };
   };
   expenses: {
-    businessServices: {
-      items: Array<{ id: string; date: string; total: number; type: string; description: string | null }>;
-      total: number;
-    };
-    merchandise: {
-      items: Array<{ id: string; date: string; total: number; description: string | null }>;
-      total: number;
-    };
+    businessServices: CashFlowExpenseBucket;
+    utility: CashFlowExpenseBucket;
+    rent: CashFlowExpenseBucket;
+    merchandise: CashFlowExpenseBucket;
+    salary: CashFlowExpenseBucket;
+    other: CashFlowExpenseBucket;
+    mercadoPagoFee: CashFlowExpenseBucket;
     employeeSalaries: { items: Array<{ id: string; date: string; amount: number }>; total: number };
     tips: { orders: Array<{ id: string; date: string; tip: number }>; total: number };
     totalExpenses: number;

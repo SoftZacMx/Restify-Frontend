@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrendingUp, TrendingDown, Scale, Receipt, Briefcase, Package } from 'lucide-react';
+import { TrendingUp, TrendingDown, Scale, Receipt, Briefcase, Package, Wallet, Zap, Building2, Users, FileText } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card';
 import {
   Table,
@@ -74,9 +74,32 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold text-red-600 dark:text-red-400">{formatCurrency(expenses.totalExpenses)}</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 space-x-1">
-              Servicios {formatCurrency(expenses.businessServices.total)} · Mercancía {formatCurrency(expenses.merchandise.total)} · Nómina {formatCurrency(expenses.employeeSalaries.total)} · Propinas {formatCurrency(expenses.tips.total)}
-            </p>
+            <div className="flex flex-wrap gap-1.5 mt-2 text-xs">
+              {expenses.businessServices.total > 0 && (
+                <span className="rounded-md px-2 py-0.5 font-medium bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">Servicios {formatCurrency(expenses.businessServices.total)}</span>
+              )}
+              {expenses.utility.total > 0 && (
+                <span className="rounded-md px-2 py-0.5 font-medium bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300">S. públicos {formatCurrency(expenses.utility.total)}</span>
+              )}
+              {expenses.rent.total > 0 && (
+                <span className="rounded-md px-2 py-0.5 font-medium bg-rose-100 dark:bg-rose-900/40 text-rose-800 dark:text-rose-300">Renta {formatCurrency(expenses.rent.total)}</span>
+              )}
+              {expenses.merchandise.total > 0 && (
+                <span className="rounded-md px-2 py-0.5 font-medium bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300">Mercancía {formatCurrency(expenses.merchandise.total)}</span>
+              )}
+              {(expenses.salary.total + expenses.employeeSalaries.total) > 0 && (
+                <span className="rounded-md px-2 py-0.5 font-medium bg-violet-100 dark:bg-violet-900/40 text-violet-800 dark:text-violet-300">Nómina {formatCurrency(expenses.salary.total + expenses.employeeSalaries.total)}</span>
+              )}
+              {expenses.mercadoPagoFee.total > 0 && (
+                <span className="rounded-md px-2 py-0.5 font-medium bg-cyan-100 dark:bg-cyan-900/40 text-cyan-800 dark:text-cyan-300">Comisión MP {formatCurrency(expenses.mercadoPagoFee.total)}</span>
+              )}
+              {expenses.other.total > 0 && (
+                <span className="rounded-md px-2 py-0.5 font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">Otros {formatCurrency(expenses.other.total)}</span>
+              )}
+              {expenses.tips.total > 0 && (
+                <span className="rounded-md px-2 py-0.5 font-medium bg-pink-100 dark:bg-pink-900/40 text-pink-800 dark:text-pink-300">Propinas {formatCurrency(expenses.tips.total)}</span>
+              )}
+            </div>
           </CardContent>
         </Card>
         <Card className="overflow-hidden border-l-4 border-l-primary bg-gradient-to-br from-white to-primary/5 dark:from-slate-800 dark:to-primary/10 shadow-md hover:shadow-lg transition-shadow">
@@ -206,6 +229,106 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
           </CardContent>
         </Card>
       </div>
+
+      {(expenses.utility.total > 0 ||
+        expenses.rent.total > 0 ||
+        expenses.salary.total > 0 ||
+        expenses.other.total > 0 ||
+        expenses.mercadoPagoFee.total > 0) && (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <ExpenseBucketCard
+            visible={expenses.utility.total > 0}
+            title="Servicios públicos"
+            icon={Zap}
+            iconClass="text-yellow-600 dark:text-yellow-400"
+            totalClass="bg-yellow-50 dark:bg-yellow-950/30 text-yellow-800 dark:text-yellow-200"
+            bucket={expenses.utility}
+          />
+          <ExpenseBucketCard
+            visible={expenses.rent.total > 0}
+            title="Renta"
+            icon={Building2}
+            iconClass="text-rose-600 dark:text-rose-400"
+            totalClass="bg-rose-50 dark:bg-rose-950/30 text-rose-800 dark:text-rose-200"
+            bucket={expenses.rent}
+          />
+          <ExpenseBucketCard
+            visible={expenses.salary.total > 0}
+            title="Salarios (gastos)"
+            icon={Users}
+            iconClass="text-violet-600 dark:text-violet-400"
+            totalClass="bg-violet-50 dark:bg-violet-950/30 text-violet-800 dark:text-violet-200"
+            bucket={expenses.salary}
+          />
+          <ExpenseBucketCard
+            visible={expenses.mercadoPagoFee.total > 0}
+            title="Comisión Mercado Pago"
+            icon={Wallet}
+            iconClass="text-cyan-600 dark:text-cyan-400"
+            totalClass="bg-cyan-50 dark:bg-cyan-950/30 text-cyan-800 dark:text-cyan-200"
+            bucket={expenses.mercadoPagoFee}
+          />
+          <ExpenseBucketCard
+            visible={expenses.other.total > 0}
+            title="Otros gastos"
+            icon={FileText}
+            iconClass="text-slate-600 dark:text-slate-400"
+            totalClass="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200"
+            bucket={expenses.other}
+          />
+        </div>
+      )}
     </div>
+  );
+};
+
+interface ExpenseBucketCardProps {
+  visible: boolean;
+  title: string;
+  icon: React.ComponentType<{ className?: string }>;
+  iconClass: string;
+  totalClass: string;
+  bucket: { items: Array<{ id: string; date: string; total: number }>; total: number };
+}
+
+const ExpenseBucketCard: React.FC<ExpenseBucketCardProps> = ({
+  visible,
+  title,
+  icon: Icon,
+  iconClass,
+  totalClass,
+  bucket,
+}) => {
+  if (!visible) return null;
+  return (
+    <Card className="shadow-md border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-base flex items-center gap-2">
+          <Icon className={`h-4 w-4 ${iconClass}`} />
+          {title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Fecha</TableHead>
+              <TableHead>Total</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {bucket.items.map((i) => (
+              <TableRow key={i.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                <TableCell>{formatExpenseDate(i.date)}</TableCell>
+                <TableCell className="font-medium">{formatCurrency(i.total)}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <p className={`text-sm font-semibold mt-3 rounded-lg px-3 py-2 ${totalClass}`}>
+          Total: {formatCurrency(bucket.total)}
+        </p>
+      </CardContent>
+    </Card>
   );
 };
