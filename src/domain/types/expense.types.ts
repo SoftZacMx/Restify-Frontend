@@ -2,7 +2,7 @@
  * Tipos relacionados con gastos (expenses)
  */
 
-export type ExpenseType = 'SERVICE_BUSINESS' | 'UTILITY' | 'RENT' | 'MERCHANDISE' | 'SALARY' | 'OTHER';
+export type ExpenseType = 'SERVICE_BUSINESS' | 'UTILITY' | 'RENT' | 'MERCHANDISE' | 'SALARY' | 'OTHER' | 'MERCADO_PAGO_FEE';
 
 export type PaymentMethod = 1 | 2 | 3; // 1: Cash, 2: Transfer, 3: Card
 
@@ -22,8 +22,11 @@ export interface Expense {
   iva: number;
   description: string | null;
   paymentMethod: PaymentMethod;
-  userId: string;
-  userName?: string; // Nombre del usuario que registró (viene del backend)
+  /** null cuando el gasto fue creado por el sistema (ej. comisiones de Mercado Pago). */
+  userId: string | null;
+  /** Vínculo opcional al Payment del que se derivó el gasto (ej. comisión MP). */
+  paymentId?: string | null;
+  userName?: string; // Nombre del usuario que registró (viene del backend); "Sistema" para gastos automáticos
   createdAt: Date | string;
   updatedAt: Date | string;
   user?: {
@@ -103,7 +106,7 @@ export interface ExpenseTableItem {
   total: number;
   paymentMethod: PaymentMethod;
   paymentMethodLabel: string;
-  userId: string;
+  userId: string | null;
   userName: string;
 }
 

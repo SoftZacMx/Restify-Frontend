@@ -11,6 +11,7 @@ import {
   Package,
   Banknote,
   FileText,
+  Wallet,
   type LucideIcon,
 } from 'lucide-react';
 import { useAuthStore } from '@/presentation/store/auth.store';
@@ -195,6 +196,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
     MERCHANDISE: Package,
     SALARY: Banknote,
     OTHER: FileText,
+    MERCADO_PAGO_FEE: Wallet,
   };
 
   const paymentMethods: PaymentMethod[] = [1, 2, 3];

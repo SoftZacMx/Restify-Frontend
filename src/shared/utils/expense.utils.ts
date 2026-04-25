@@ -12,6 +12,7 @@ export function getExpenseTypeLabel(type: ExpenseType): string {
     MERCHANDISE: 'Compra de mercancía',
     SALARY: 'Salarios',
     OTHER: 'Otros',
+    MERCADO_PAGO_FEE: 'Comisión Mercado Pago',
   };
   return labels[type] || type;
 }
@@ -27,6 +28,7 @@ export function getExpenseTypeBadgeColor(type: ExpenseType): string {
     MERCHANDISE: 'bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-300',
     SALARY: 'bg-violet-100 dark:bg-violet-900/50 text-violet-800 dark:text-violet-300',
     OTHER: 'bg-gray-100 dark:bg-gray-900/50 text-gray-800 dark:text-gray-300',
+    MERCADO_PAGO_FEE: 'bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-300',
   };
   return colors[type] || '';
 }
@@ -61,6 +63,9 @@ export function getPaymentMethodLabel(method: PaymentMethod): string {
  * Formatea un gasto para mostrar en la tabla
  */
 export function formatExpenseForTable(expense: ExpenseListItem): ExpenseTableItem {
+  const fallbackUserName = expense.userId
+    ? `Usuario ${expense.userId.substring(0, 8)}...`
+    : 'Sistema';
   return {
     id: expense.id,
     title: expense.title ?? expense.description ?? '—',
@@ -75,7 +80,7 @@ export function formatExpenseForTable(expense: ExpenseListItem): ExpenseTableIte
     userName:
       expense.userName ??
       (expense.user ? `${expense.user.name} ${expense.user.last_name}` : null) ??
-      `Usuario ${expense.userId.substring(0, 8)}...`,
+      fallbackUserName,
   };
 }
 

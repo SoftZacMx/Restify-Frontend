@@ -204,7 +204,9 @@ const ExpenseDetailPage: React.FC = () => {
                 <p className="text-base text-slate-900 dark:text-white mt-1">
                   {expense.user
                     ? `${expense.user.name} ${expense.user.last_name}`
-                    : `Usuario ${expense.userId.substring(0, 8)}...`}
+                    : expense.userId
+                      ? `Usuario ${expense.userId.substring(0, 8)}...`
+                      : 'Sistema'}
                 </p>
               </div>
             </div>

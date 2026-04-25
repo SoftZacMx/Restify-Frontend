@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Calendar, CreditCard, Wrench, Zap, Building2, Package, Banknote, FileText, type LucideIcon } from 'lucide-react';
+import { Search, Calendar, CreditCard, Wrench, Zap, Building2, Package, Banknote, FileText, Wallet, type LucideIcon } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
 import { Button } from '@/presentation/components/ui/button';
 import {
@@ -72,6 +72,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
     { value: 'MERCHANDISE', title: 'Compra de mercancía', icon: Package },
     { value: 'SALARY', title: 'Salarios', icon: Banknote },
     { value: 'OTHER', title: 'Otros', icon: FileText },
+    { value: 'MERCADO_PAGO_FEE', title: 'Comisión Mercado Pago', icon: Wallet },
   ];
   const paymentMethods: PaymentMethod[] = [1, 2, 3];
 
