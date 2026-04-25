@@ -28,6 +28,7 @@ import type { OrderResponse, PaginationData } from '@/domain/types';
 import { filterOrdersClient } from '@/shared/utils/order.utils';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { usePaymentSound } from '@/presentation/hooks/usePaymentSound';
+import { useAuthStore } from '@/presentation/store/auth.store';
 import { AppError } from '@/domain/errors';
 
 /**
@@ -38,6 +39,7 @@ const OrdersPage: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { playSuccess } = usePaymentSound();
+  const isAdmin = useAuthStore((state) => state.user?.rol === 'ADMIN');
 
   // Estado de conexión WebSocket
   const { isConnected, connectionId } = useWebSocketContext();
@@ -481,7 +483,7 @@ const OrdersPage: React.FC = () => {
             onMarkDelivered={handleMarkDelivered}
             onProcessPayment={handleProcessPayment}
             onSplitPayment={handleSplitPayment}
-            onDelete={handleDeleteOrder}
+            onDelete={isAdmin ? handleDeleteOrder : undefined}
             onPrintClientTicket={handlePrintClientTicket}
             onPrintKitchenTicket={handlePrintKitchenTicket}
           />

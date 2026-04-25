@@ -223,7 +223,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
                 Marcar entregada
               </DropdownMenuItem>
             )}
-            {!order.status && onDelete && (
+            {onDelete && (
               <>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
