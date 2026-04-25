@@ -1,5 +1,5 @@
-import React from 'react';
-import { Search, Calendar, CreditCard, Wrench, Zap, Building2, Package, Banknote, FileText, Wallet, type LucideIcon } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, Calendar, CreditCard, Wrench, Zap, Building2, Package, Banknote, FileText, Wallet, SlidersHorizontal, type LucideIcon } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
 import {
   Select,
@@ -24,6 +24,13 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
   filters,
   onFiltersChange,
 }) => {
+  const advancedFiltersCount =
+    (filters.paymentMethod && filters.paymentMethod !== 'all' ? 1 : 0) +
+    (filters.dateFrom ? 1 : 0) +
+    (filters.dateTo ? 1 : 0);
+  // Si ya hay filtros avanzados activos al montar, abrir el panel para que el usuario los vea.
+  const [showAdvanced, setShowAdvanced] = useState<boolean>(advancedFiltersCount > 0);
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onFiltersChange({
       ...filters,
@@ -77,9 +84,9 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
 
   return (
     <div className="space-y-4 px-4 py-3 border-b border-slate-200 dark:border-slate-800 overflow-x-visible min-w-0">
-      {/* Search Input */}
-      <div className="flex-grow">
-        <label className="flex flex-col min-w-40 h-12 w-full">
+      {/* Search Input + botón "Filtros" */}
+      <div className="flex items-stretch gap-2">
+        <label className="flex h-12 flex-1 min-w-0">
           <div className="flex w-full flex-1 items-stretch rounded-lg h-full bg-slate-100 dark:bg-slate-800">
             <div className="text-slate-500 dark:text-slate-400 flex items-center justify-center pl-4">
               <Search className="h-5 w-5" />
@@ -93,6 +100,25 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
             />
           </div>
         </label>
+        <button
+          type="button"
+          onClick={() => setShowAdvanced((v) => !v)}
+          aria-expanded={showAdvanced}
+          aria-controls="expense-advanced-filters"
+          className={`relative flex h-12 shrink-0 items-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors ${
+            showAdvanced
+              ? 'border-primary bg-primary/10 text-primary'
+              : 'border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700'
+          }`}
+        >
+          <SlidersHorizontal className="h-4 w-4" />
+          <span className="hidden sm:inline">Filtros</span>
+          {advancedFiltersCount > 0 && (
+            <span className="ml-0.5 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary px-1.5 text-xs font-semibold text-primary-foreground">
+              {advancedFiltersCount}
+            </span>
+          )}
+        </button>
       </div>
 
       {/* Category Filters — select en móvil, pills en desktop */}
@@ -149,51 +175,59 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
         </div>
       </div>
 
-      {/* Método de pago */}
-      <Select value={getCurrentPaymentMethodValue()} onValueChange={handlePaymentMethodChange}>
-        <SelectTrigger className="h-9 rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-sm font-medium w-full md:w-auto gap-1.5 px-3">
-          <CreditCard className="h-3.5 w-3.5 shrink-0" />
-          <span className="truncate">
-            {filters.paymentMethod && filters.paymentMethod !== 'all'
-              ? getPaymentMethodLabel(filters.paymentMethod as 1 | 2 | 3)
-              : 'Método de pago'}
-          </span>
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">Todos los métodos</SelectItem>
-          {paymentMethods.map((method) => (
-            <SelectItem key={method} value={method.toString()}>
-              {getPaymentMethodLabel(method)}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      {/* Filtros avanzados (método de pago + rango de fechas) — toggle desde botón "Filtros" */}
+      {showAdvanced && (
+        <div
+          id="expense-advanced-filters"
+          className="space-y-3 rounded-lg border border-slate-200 bg-slate-50/50 p-3 dark:border-slate-800 dark:bg-slate-800/30"
+        >
+          {/* Método de pago */}
+          <Select value={getCurrentPaymentMethodValue()} onValueChange={handlePaymentMethodChange}>
+            <SelectTrigger className="h-9 rounded-lg bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm font-medium w-full md:w-auto gap-1.5 px-3">
+              <CreditCard className="h-3.5 w-3.5 shrink-0" />
+              <span className="truncate">
+                {filters.paymentMethod && filters.paymentMethod !== 'all'
+                  ? getPaymentMethodLabel(filters.paymentMethod as 1 | 2 | 3)
+                  : 'Método de pago'}
+              </span>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todos los métodos</SelectItem>
+              {paymentMethods.map((method) => (
+                <SelectItem key={method} value={method.toString()}>
+                  {getPaymentMethodLabel(method)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-      {/* Rango de fechas — columna en móvil, fila en desktop */}
-      <div className="flex flex-col md:flex-row items-center gap-2">
-        <div className="flex items-center gap-2 w-full md:w-auto">
-          <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-          <span className="text-xs text-slate-500 dark:text-slate-400 shrink-0">Desde</span>
-          <Input
-            id="dateFrom"
-            type="date"
-            value={filters.dateFrom ?? ''}
-            onChange={handleDateFromChange}
-            className="h-9 flex-1 md:w-[140px] rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-sm px-2"
-          />
+          {/* Rango de fechas — columna en móvil, fila en desktop */}
+          <div className="flex flex-col md:flex-row items-center gap-2">
+            <div className="flex items-center gap-2 w-full md:w-auto">
+              <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+              <span className="text-xs text-slate-500 dark:text-slate-400 shrink-0">Desde</span>
+              <Input
+                id="dateFrom"
+                type="date"
+                value={filters.dateFrom ?? ''}
+                onChange={handleDateFromChange}
+                className="h-9 flex-1 md:w-[140px] rounded-lg bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-sm px-2"
+              />
+            </div>
+            <div className="flex items-center gap-2 w-full md:w-auto">
+              <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0 md:hidden" />
+              <span className="text-xs text-slate-500 dark:text-slate-400 shrink-0">Hasta</span>
+              <Input
+                id="dateTo"
+                type="date"
+                value={filters.dateTo ?? ''}
+                onChange={handleDateToChange}
+                className="h-9 flex-1 md:w-[140px] rounded-lg bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-sm px-2"
+              />
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-2 w-full md:w-auto">
-          <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0 md:hidden" />
-          <span className="text-xs text-slate-500 dark:text-slate-400 shrink-0">Hasta</span>
-          <Input
-            id="dateTo"
-            type="date"
-            value={filters.dateTo ?? ''}
-            onChange={handleDateToChange}
-            className="h-9 flex-1 md:w-[140px] rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-sm px-2"
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
 };
