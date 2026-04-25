@@ -58,3 +58,6 @@ export { CURRENCY_CODE, CURRENCY_LOCALE } from './currency.constants';
 
 // Input lengths (simple_input, extended_input, text_area)
 export { INPUT_LENGTH, getInputMaxLength, type InputLengthType } from './input.constants';
+
+// Application timezone (single source of truth for TZ conversions)
+export { APP_TIMEZONE } from './timezone.constants';

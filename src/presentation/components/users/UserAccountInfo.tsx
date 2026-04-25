@@ -2,6 +2,7 @@ import React from 'react';
 import { Badge } from '@/presentation/components/ui/badge';
 import type { User } from '@/domain/types';
 import { getRoleLabel, getStatusLabel } from '@/shared/utils';
+import { APP_TIMEZONE } from '@/shared/constants';
 
 interface UserAccountInfoProps {
   user: User;
@@ -49,6 +50,7 @@ export const UserAccountInfo: React.FC<UserAccountInfoProps> = ({ user }) => {
               day: 'numeric',
               month: 'long',
               year: 'numeric',
+              timeZone: APP_TIMEZONE,
             })}
           </p>
         </div>
@@ -59,6 +61,7 @@ export const UserAccountInfo: React.FC<UserAccountInfoProps> = ({ user }) => {
               day: 'numeric',
               month: 'long',
               year: 'numeric',
+              timeZone: APP_TIMEZONE,
             })}
           </p>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 
 interface TooltipProps {
@@ -12,28 +12,45 @@ interface TooltipProps {
  * Muestra un tooltip al hacer hover sobre el elemento hijo
  */
 export const Tooltip: React.FC<TooltipProps> = ({ children, content, side = 'right' }) => {
+  const triggerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [style, setStyle] = useState<React.CSSProperties>({});
 
-  const sideClasses = {
-    top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
-    bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
-    left: 'right-full top-1/2 -translate-y-1/2 mr-2',
-    right: 'left-full top-1/2 -translate-y-1/2 ml-2',
+  const computeStyle = (): React.CSSProperties => {
+    const el = triggerRef.current;
+    if (!el) return {};
+    const rect = el.getBoundingClientRect();
+    const gap = 8;
+    switch (side) {
+      case 'right':
+        return { top: rect.top + rect.height / 2, left: rect.right + gap, transform: 'translateY(-50%)' };
+      case 'left':
+        return { top: rect.top + rect.height / 2, left: rect.left - gap, transform: 'translate(-100%, -50%)' };
+      case 'top':
+        return { top: rect.top - gap, left: rect.left + rect.width / 2, transform: 'translate(-50%, -100%)' };
+      case 'bottom':
+        return { top: rect.bottom + gap, left: rect.left + rect.width / 2, transform: 'translate(-50%, 0)' };
+    }
+  };
+
+  const handleMouseEnter = () => {
+    setStyle(computeStyle());
+    setIsVisible(true);
   };
 
   return (
     <div
+      ref={triggerRef}
       className="relative inline-block"
-      onMouseEnter={() => setIsVisible(true)}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={() => setIsVisible(false)}
     >
       {children}
       {isVisible && (
         <div
-          className={cn(
-            'absolute z-50 px-2 py-1 text-xs font-medium text-white bg-slate-900 dark:bg-slate-700 rounded shadow-lg whitespace-nowrap',
-            sideClasses[side]
-          )}
+          role="tooltip"
+          className="fixed z-[100] px-2 py-1 text-xs font-medium text-white bg-slate-900 dark:bg-slate-700 rounded shadow-lg whitespace-nowrap pointer-events-none"
+          style={style}
         >
           {content}
           {/* Arrow */}
@@ -51,4 +68,3 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, content, side = 'rig
     </div>
   );
 };
-

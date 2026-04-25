@@ -12,6 +12,7 @@ import type { UpdateTableRequest } from '@/domain/types';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
 import { cn } from '@/shared/lib/utils';
+import { APP_TIMEZONE } from '@/shared/constants';
 
 /**
  * Página de Detalle/Edición de Mesa
@@ -222,6 +223,7 @@ const TableDetailPage: React.FC = () => {
                       day: '2-digit',
                       month: 'long',
                       year: 'numeric',
+                      timeZone: APP_TIMEZONE,
                       hour: '2-digit',
                       minute: '2-digit',
                     })}
@@ -236,6 +238,7 @@ const TableDetailPage: React.FC = () => {
                       day: '2-digit',
                       month: 'long',
                       year: 'numeric',
+                      timeZone: APP_TIMEZONE,
                       hour: '2-digit',
                       minute: '2-digit',
                     })}

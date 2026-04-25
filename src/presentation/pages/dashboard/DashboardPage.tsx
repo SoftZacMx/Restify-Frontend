@@ -21,8 +21,14 @@ import { SalesChart } from '@/presentation/components/dashboard/SalesChart';
 import { ActiveOrdersCard } from '@/presentation/components/dashboard/ActiveOrdersCard';
 import { RecentOrdersCard } from '@/presentation/components/dashboard/RecentOrdersCard';
 import { dashboardService } from '@/application/services';
+
 import { formatCurrency } from '@/shared/utils';
 import { getInitials, formatOrderTime, getTableDisplay } from '@/shared/utils/dashboard.utils';
+
+import type { DashboardOrderSummary } from '@/domain/types';
+import { formatCurrency, getTodayDateString } from '@/shared/utils';
+import { APP_TIMEZONE } from '@/shared/constants';
+
 import { showErrorToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
 
@@ -50,6 +56,44 @@ const DashboardPage = () => {
       }
     }
   }, [error]);
+
+
+  React.useEffect(() => {
+    if (dashboard) {
+      console.log('[Dashboard] Respuesta del API:', dashboard);
+    }
+  }, [dashboard]);
+
+  const getInitials = (name: string, lastName: string) => {
+    return `${name.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  };
+
+  const formatOrderTime = (dateStr: string) => {
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', timeZone: APP_TIMEZONE });
+    } catch {
+      return '—';
+    }
+  };
+
+  const getOrderStatusLabel = (order: DashboardOrderSummary) => {
+    if (order.status && order.delivered) return 'Completado';
+    if (order.status) return 'Pagado';
+    return 'Pendiente';
+  };
+
+  const getOrderStatusStyle = (order: DashboardOrderSummary) => {
+    if (order.status && order.delivered)
+      return 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400';
+    if (order.status) return 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400';
+    return 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400';
+  };
+
+  const getTableDisplay = (order: DashboardOrderSummary) => {
+    if (order.tableName != null && order.tableName !== '') return `Mesa ${order.tableName}`;
+    return order.origin === 'local' ? 'Local' : order.origin || 'Sin mesa';
+  };
 
   if (isLoading) {
     return (
@@ -123,9 +167,151 @@ const DashboardPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main: Chart + Active Orders + Recent */}
         <div className="lg:col-span-2 space-y-8">
-          <SalesChart salesLast7Days={salesLast7Days} />
-          <ActiveOrdersCard activeOrders={activeOrders} onOrderClick={handleOrderClick} />
-          <RecentOrdersCard orders={recentOrders} onOrderClick={handleOrderClick} />
+
+          {/* Chart: Ventas últimos 7 días */}
+          <Card className="border-slate-100 dark:border-slate-700 shadow-sm bg-white dark:bg-slate-800">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                Ventas de los últimos 7 días
+              </CardTitle>
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+                  {formatCurrency(salesLast7Days.total)}
+                </span>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64 flex items-end justify-between gap-2 pt-4 px-2">
+                {salesLast7Days.byDay.length === 0 ? (
+                  <p className="text-sm text-slate-500 dark:text-slate-400 w-full text-center py-8">
+                    Sin datos de ventas
+                  </p>
+                ) : (
+                  salesLast7Days.byDay.map((d) => {
+                    const isToday = d.date === getTodayDateString();
+                    const heightPct = Math.round((d.total / maxBarTotal) * 100);
+                    return (
+                      <Bar
+                        key={d.date}
+                        height={`${Math.max(heightPct, 8)}%`}
+                        day={DAY_NAMES_ES[d.day] ?? d.day}
+                        active={isToday}
+                        title={`${d.date}: ${formatCurrency(d.total)}`}
+                      />
+                    );
+                  })
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Órdenes activas */}
+          <Card className="border-slate-100 dark:border-slate-700 shadow-sm bg-white dark:bg-slate-800">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                Órdenes activas ({activeOrders.count})
+              </CardTitle>
+              <Link
+                to="/orders"
+                className="inline-flex items-center justify-center rounded-lg font-medium h-9 px-3 text-sm border border-border bg-background hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              >
+                Ver todas
+              </Link>
+            </CardHeader>
+            <CardContent>
+              {activeOrders.items.length === 0 ? (
+                <p className="text-sm text-slate-500 dark:text-slate-400 py-4 text-center">
+                  No hay órdenes activas
+                </p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm text-left">
+                    <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50/50 dark:bg-slate-700/50">
+                      <tr>
+                        <th className="px-4 py-3 font-medium rounded-l-lg">Orden</th>
+                        <th className="px-4 py-3 font-medium">Mesa</th>
+                        <th className="px-4 py-3 font-medium">Hora</th>
+                        <th className="px-4 py-3 font-medium text-right rounded-r-lg">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+                      {activeOrders.items.map((order) => (
+                        <tr
+                          key={order.id}
+                          className="hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer"
+                          onClick={() => navigate('/orders', { state: { openOrderId: order.id } })}
+                        >
+                          <td className="px-4 py-3 font-medium text-slate-900 dark:text-slate-100">
+                            #{order.id.slice(0, 8)}
+                          </td>
+                          <td className="px-4 py-3 text-slate-600 dark:text-slate-400">
+                            {getTableDisplay(order)}
+                          </td>
+                          <td className="px-4 py-3 text-slate-600 dark:text-slate-400">
+                            {formatOrderTime(order.date)}
+                          </td>
+                          <td className="px-4 py-3 text-right font-bold text-slate-900 dark:text-slate-100">
+                            {formatCurrency(order.total)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Órdenes recientes */}
+          <Card className="border-slate-100 dark:border-slate-700 shadow-sm bg-white dark:bg-slate-800">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                Órdenes recientes
+              </CardTitle>
+              <Link
+                to="/orders"
+                className="inline-flex items-center justify-center rounded-lg font-medium h-9 px-3 text-sm border border-border bg-background hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              >
+                Ver todas
+              </Link>
+            </CardHeader>
+            <CardContent>
+              {recentOrders.length === 0 ? (
+                <p className="text-sm text-slate-500 dark:text-slate-400 py-4 text-center">
+                  No hay órdenes recientes
+                </p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm text-left">
+                    <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50/50 dark:bg-slate-700/50">
+                      <tr>
+                        <th className="px-4 py-3 font-medium rounded-l-lg">Orden</th>
+                        <th className="px-4 py-3 font-medium">Mesa</th>
+                        <th className="px-4 py-3 font-medium">Estado</th>
+                        <th className="px-4 py-3 font-medium">Hora</th>
+                        <th className="px-4 py-3 font-medium text-right rounded-r-lg">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+                      {recentOrders.map((order) => (
+                        <DashboardOrderRow
+                          key={order.id}
+                          order={order}
+                          getTableDisplay={getTableDisplay}
+                          getOrderStatusLabel={getOrderStatusLabel}
+                          getOrderStatusStyle={getOrderStatusStyle}
+                          formatOrderTime={formatOrderTime}
+                          onRowClick={() =>
+                            navigate('/orders', { state: { openOrderId: order.id } })
+                          }
+                        />
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
 
         {/* Sidebar */}

@@ -18,6 +18,7 @@ import {
 } from '@/presentation/components/ui/dropdown-menu';
 import type { MenuCategoryTableItem } from '@/domain/types';
 import { cn } from '@/shared/lib/utils';
+import { APP_TIMEZONE } from '@/shared/constants';
 
 interface MenuCategoryTableProps {
   categories: MenuCategoryTableItem[];
@@ -111,6 +112,7 @@ export const MenuCategoryTable: React.FC<MenuCategoryTableProps> = ({
                       day: '2-digit',
                       month: '2-digit',
                       year: 'numeric',
+                      timeZone: APP_TIMEZONE,
                     })}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

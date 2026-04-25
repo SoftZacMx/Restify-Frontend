@@ -13,6 +13,7 @@ import { AppError } from '@/domain/errors';
 import { EditMenuItemForm } from '@/presentation/components/menu-items/EditMenuItemForm';
 import type { UpdateMenuItemRequest } from '@/domain/types';
 import { cn } from '@/shared/lib/utils';
+import { APP_TIMEZONE } from '@/shared/constants';
 
 /**
  * Página de Detalle de Platillo
@@ -187,6 +188,7 @@ const MenuItemDetailPage: React.FC = () => {
                     day: '2-digit',
                     month: 'long',
                     year: 'numeric',
+                    timeZone: APP_TIMEZONE,
                     hour: '2-digit',
                     minute: '2-digit',
                   })}
@@ -201,6 +203,7 @@ const MenuItemDetailPage: React.FC = () => {
                     day: '2-digit',
                     month: 'long',
                     year: 'numeric',
+                    timeZone: APP_TIMEZONE,
                     hour: '2-digit',
                     minute: '2-digit',
                   })}

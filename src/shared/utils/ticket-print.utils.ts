@@ -6,6 +6,7 @@
 import type { KitchenTicketResponse, SaleTicketResponse } from '@/domain/types/ticket.types';
 import type { ResolvedTicketPrintConfig } from '@/shared/utils/ticket-print-config';
 import { mergeTicketPrintConfig } from '@/shared/utils/ticket-print-config';
+import { APP_TIMEZONE } from '@/shared/constants';
 
 function ticketCurrency(amount: number): string {
   return `MX$${amount.toFixed(2)}`;
@@ -188,6 +189,7 @@ export function buildSaleTicketHtml(data: SaleTicketResponse, config?: ResolvedT
     hour: '2-digit',
     minute: '2-digit',
     hour12: true,
+    timeZone: APP_TIMEZONE,
   });
 
   const contactLines: string[] = [];
