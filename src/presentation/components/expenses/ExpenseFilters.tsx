@@ -72,7 +72,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
     { value: 'MERCHANDISE', title: 'Compra de mercancía', icon: Package },
     { value: 'SALARY', title: 'Salarios', icon: Banknote },
     { value: 'OTHER', title: 'Otros', icon: FileText },
-    { value: 'MERCADO_PAGO_FEE', title: 'Comisión Mercado Pago', icon: Wallet },
+    { value: 'MERCADO_PAGO_FEE', title: 'Comisión MP', icon: Wallet },
   ];
   const paymentMethods: PaymentMethod[] = [1, 2, 3];
 
