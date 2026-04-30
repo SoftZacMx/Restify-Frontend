@@ -50,11 +50,13 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
   });
 
   const name = watch('name');
-  const price = watch('price');
   const status = watch('status');
   const isExtra = watch('isExtra');
   const categoryId = watch('categoryId');
 
+  const [priceInput, setPriceInput] = useState(
+    initialData?.price ? initialData.price.toString() : ''
+  );
   const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
   const [categories, setCategories] = useState<MenuCategoryResponse[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
@@ -82,6 +84,7 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
     const parts = numericValue.split('.');
     if (parts.length > 2) return;
     if (parts[1] && parts[1].length > 2) return;
+    setPriceInput(numericValue);
     const numValue = numericValue === '' ? 0 : parseFloat(numericValue);
     setValue('price', isNaN(numValue) ? 0 : numValue, { shouldValidate: true });
   };
@@ -136,7 +139,8 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
           <Input
             id="price"
             type="text"
-            value={price === 0 ? '' : price.toString()}
+            inputMode="decimal"
+            value={priceInput}
             onChange={(e) => handlePriceChange(e.target.value)}
             placeholder="0.00"
             className={cn('pl-8', errors.price && 'border-destructive')}

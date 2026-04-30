@@ -5,7 +5,7 @@ export const menuItemFormSchema = z.object({
   price: z.number({ error: 'El precio es requerido' })
     .positive('El precio debe ser mayor a 0')
     .refine(
-      (val) => Number((val % 1).toFixed(10).length) <= 4,
+      (val) => Number(val.toFixed(2)) === val,
       'El precio puede tener máximo 2 decimales'
     ),
   status: z.boolean(),
@@ -14,3 +14,4 @@ export const menuItemFormSchema = z.object({
 });
 
 export type MenuItemFormValues = z.infer<typeof menuItemFormSchema>;
+//
