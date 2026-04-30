@@ -193,7 +193,7 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
         <p className="text-xs text-slate-500 dark:text-slate-400">Selecciona la categoría del menú a la que pertenece el platillo</p>
       </div>
 
-      <div className="flex items-center justify-between space-x-2 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-4">
+      <div className="flex items-center justify-between space-x-2 rounded-lg border  p-4">
         <div className="space-y-0.5">
           <Label htmlFor="isExtra" className="text-sm font-medium">Es un Extra</Label>
           <p className="text-xs text-slate-500 dark:text-slate-400">
