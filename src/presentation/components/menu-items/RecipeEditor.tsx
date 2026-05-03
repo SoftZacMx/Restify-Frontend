@@ -27,6 +27,11 @@ import type {
 
 interface RecipeEditorProps {
   menuItemId: string;
+  /**
+   * Indica si el MenuItem es un extra. Cambia el copy contextual: la receta del extra
+   * se descuenta cuando el extra se vende junto con un platillo principal.
+   */
+  isExtra?: boolean;
 }
 
 function generateRowId(): string {
@@ -46,7 +51,7 @@ function toDraft(
   };
 }
 
-export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId }) => {
+export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra = false }) => {
   const queryClient = useQueryClient();
 
   // Receta actual
@@ -232,11 +237,13 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId }) => {
   }
 
   // Productos disponibles para el dialog que está abierto.
+  // Pasamos `trackStock` para que el dialog pueda filtrar con `onlyTracked`.
   const pickerAvailableProducts = pickerRowId
     ? availableProductsForRow(pickerRowId).map((p) => ({
         id: p.id,
         name: p.name,
         status: p.status,
+        trackStock: p.trackStock ?? false,
       }))
     : [];
 
@@ -250,7 +257,9 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId }) => {
           <div>
             <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Receta</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400">
-              Ingredientes que se descuentan del stock al vender este platillo.
+              {isExtra
+                ? 'Ingredientes que se descuentan del stock cuando este extra se vende junto con un platillo.'
+                : 'Ingredientes que se descuentan del stock al vender este platillo.'}
             </p>
           </div>
         </div>
@@ -425,13 +434,17 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId }) => {
         </>
       )}
 
-      {/* Dialog de selección de producto (reusado del módulo de gastos) */}
+      {/* Dialog de selección de producto (reusado del módulo de gastos).
+          onlyTracked: la receta solo puede usar productos con tracking activado, sino al
+          venderse el platillo el ingrediente no descontaría stock (sería una receta decorativa). */}
       <SelectProductDialog
         open={pickerRowId !== null}
         onOpenChange={(open) => {
           if (!open) setPickerRowId(null);
         }}
         products={pickerAvailableProducts}
+        onlyTracked
+        emptyMessage="No hay productos con tracking activado. Activá tracking en la edición del producto para poder usarlo en una receta."
         onSelect={(product) => {
           if (pickerRowId) handleProductPicked(pickerRowId, product);
           setPickerRowId(null);

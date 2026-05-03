@@ -394,7 +394,8 @@ const MenuItemDetailPage: React.FC = () => {
               {menuItem.isExtra && (
                 <div className="rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-3">
                   <p className="text-xs text-blue-700 dark:text-blue-300">
-                    Este platillo es un <strong>extra</strong> — solo se vende como complemento.
+                    Este platillo es un <strong>extra</strong> — se vende como complemento de
+                    otros platillos. Su receta también descuenta stock al venderse.
                   </p>
                 </div>
               )}
@@ -403,9 +404,9 @@ const MenuItemDetailPage: React.FC = () => {
         </div>
 
         {/* Receta */}
-        {menuItemId && !menuItem.isExtra && (
+        {menuItemId && (
           <div className="mt-6">
-            <RecipeEditor menuItemId={menuItemId} />
+            <RecipeEditor menuItemId={menuItemId} isExtra={menuItem.isExtra} />
           </div>
         )}
       </div>

@@ -20,10 +20,12 @@ interface SelectProductDialogProps {
   onSelect: (product: ProductSelectionItemData) => void;
   /**
    * Si true, oculta los productos sin `trackStock=true`. Útil para flujos de stock
-   * (merma, ajuste) donde elegir un producto no trackeado no tiene sentido.
+   * (merma, ajuste, recetas) donde elegir un producto no trackeado no tiene sentido.
    * Si los items no traen `trackStock`, no filtra (no rompe el flujo de gastos).
    */
   onlyTracked?: boolean;
+  /** Mensaje custom para cuando la lista filtrada queda vacía. */
+  emptyMessage?: string;
 }
 
 /**
@@ -35,6 +37,7 @@ export const SelectProductDialog: React.FC<SelectProductDialogProps> = ({
   products,
   onSelect,
   onlyTracked = false,
+  emptyMessage,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<ProductSelectionItemData | null>(null);
@@ -93,6 +96,7 @@ export const SelectProductDialog: React.FC<SelectProductDialogProps> = ({
             products={filteredProducts}
             selectedId={selectedProduct?.id ?? null}
             onSelect={setSelectedProduct}
+            emptyMessage={emptyMessage}
           />
         </div>
 

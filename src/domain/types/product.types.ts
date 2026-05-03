@@ -33,6 +33,10 @@ export interface CreateProductRequest {
   description?: string | null;       // Opcional - Descripción (máx 1000 caracteres)
   status?: boolean;                  // Opcional - Estado activo/inactivo (default: true)
   userId: string;                    // REQUERIDO - UUID del usuario que crea el producto
+  // Stock config opcional desde la creación (Fase 7)
+  trackStock?: boolean;
+  unitOfMeasure?: UnitOfMeasure | null;
+  minStockAlert?: number | null;
 }
 
 /**

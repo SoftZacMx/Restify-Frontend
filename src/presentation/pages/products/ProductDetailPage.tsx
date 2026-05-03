@@ -232,8 +232,10 @@ const ProductDetailPage: React.FC = () => {
         {/* Configuración de Inventario (Fase 6.3) */}
         <div className="mt-8">
           <StockConfigSection
-            // Remontar cuando el producto se refresca — los useState reinicializan con los valores nuevos.
-            key={`stock-config-${product.id}-${product.updatedAt}`}
+            // Remontar cuando los valores reales cambian. Incluye los 3 campos en el key
+            // porque updatedAt no cambia al pasar de placeholderData (lista) a la respuesta
+            // real del fetch — los valores sí cambian, así que dependemos de ellos.
+            key={`stock-config-${product.id}-${String(product.trackStock ?? 'na')}-${product.unitOfMeasure ?? ''}-${product.minStockAlert ?? ''}-${product.updatedAt}`}
             initialTrackStock={product.trackStock ?? false}
             initialUnitOfMeasure={product.unitOfMeasure ?? null}
             initialMinStockAlert={product.minStockAlert ?? null}
