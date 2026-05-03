@@ -18,6 +18,12 @@ interface SelectProductDialogProps {
   onOpenChange: (open: boolean) => void;
   products: ProductSelectionItemData[];
   onSelect: (product: ProductSelectionItemData) => void;
+  /**
+   * Si true, oculta los productos sin `trackStock=true`. Útil para flujos de stock
+   * (merma, ajuste) donde elegir un producto no trackeado no tiene sentido.
+   * Si los items no traen `trackStock`, no filtra (no rompe el flujo de gastos).
+   */
+  onlyTracked?: boolean;
 }
 
 /**
@@ -28,18 +34,25 @@ export const SelectProductDialog: React.FC<SelectProductDialogProps> = ({
   onOpenChange,
   products,
   onSelect,
+  onlyTracked = false,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<ProductSelectionItemData | null>(null);
 
   const filteredProducts = useMemo(() => {
-    if (!searchQuery.trim()) return products;
+    let result = products;
+    if (onlyTracked) {
+      // Solo aplicar el filtro si al menos un item trae el campo (evita filtrar en flujos
+      // donde el caller no provee trackStock — ej. expenses).
+      const hasTrackStockInfo = result.some((p) => typeof p.trackStock === 'boolean');
+      if (hasTrackStockInfo) {
+        result = result.filter((p) => p.trackStock === true);
+      }
+    }
+    if (!searchQuery.trim()) return result;
     const q = searchQuery.trim().toLowerCase();
-    return products.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q)
-    );
-  }, [products, searchQuery]);
+    return result.filter((p) => p.name.toLowerCase().includes(q));
+  }, [products, searchQuery, onlyTracked]);
 
   useEffect(() => {
     if (open) {

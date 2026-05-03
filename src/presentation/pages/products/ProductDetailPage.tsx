@@ -7,11 +7,12 @@ import { Button } from '@/presentation/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/presentation/components/ui/dialog';
 import { Badge } from '@/presentation/components/ui/badge';
 import { Card } from '@/presentation/components/ui/card';
-import { productService } from '@/application/services';
+import { productService, stockService } from '@/application/services';
 import { showErrorToast, showSuccessToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
 import { EditProductForm } from '@/presentation/components/products/EditProductForm';
-import type { UpdateProductRequest, ProductResponse } from '@/domain/types';
+import { StockConfigSection } from '@/presentation/components/products/StockConfigSection';
+import type { UpdateProductRequest, ProductResponse, UpdateStockConfigRequest } from '@/domain/types';
 import { cn } from '@/shared/lib/utils';
 import { APP_TIMEZONE } from '@/shared/constants';
 
@@ -27,6 +28,7 @@ const ProductDetailPage: React.FC = () => {
   const queryClient = useQueryClient();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isSavingStockConfig, setIsSavingStockConfig] = useState(false);
 
   // Producto pasado por state al navegar desde la lista (evita loading inicial)
   const productFromState = (location.state as { product?: ProductResponse } | null)?.product;
@@ -225,6 +227,41 @@ const ProductDetailPage: React.FC = () => {
               </div>
             </div>
           </Card>
+        </div>
+
+        {/* Configuración de Inventario (Fase 6.3) */}
+        <div className="mt-8">
+          <StockConfigSection
+            // Remontar cuando el producto se refresca — los useState reinicializan con los valores nuevos.
+            key={`stock-config-${product.id}-${product.updatedAt}`}
+            initialTrackStock={product.trackStock ?? false}
+            initialUnitOfMeasure={product.unitOfMeasure ?? null}
+            initialMinStockAlert={product.minStockAlert ?? null}
+            isSaving={isSavingStockConfig}
+            onSave={async (config: UpdateStockConfigRequest) => {
+              if (!productId) return;
+              setIsSavingStockConfig(true);
+              try {
+                await stockService.updateStockConfig(productId, config);
+                showSuccessToast(
+                  'Configuración guardada',
+                  'La configuración de stock se actualizó correctamente'
+                );
+                // Refrescar producto y listados que dependen del stock.
+                await queryClient.invalidateQueries({ queryKey: ['product', productId] });
+                await queryClient.invalidateQueries({ queryKey: ['stock'] });
+                await refetch();
+              } catch (error) {
+                if (error instanceof AppError) {
+                  showErrorToast('Error al guardar configuración', error.message);
+                } else {
+                  showErrorToast('Error al guardar configuración', 'Ocurrió un error inesperado');
+                }
+              } finally {
+                setIsSavingStockConfig(false);
+              }
+            }}
+          />
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MoreVertical, Edit, Trash2 } from 'lucide-react';
+import { MoreVertical, Edit, Trash2, ChefHat, Package, AlertTriangle } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -16,9 +16,34 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/presentation/components/ui/dropdown-menu';
-import type { MenuItemTableItem } from '@/domain/types';
+import { Tooltip } from '@/presentation/components/ui/tooltip';
+import type { MenuItemTableItem, MenuItemStockMode } from '@/domain/types';
 import { cn } from '@/shared/lib/utils';
 import { APP_TIMEZONE } from '@/shared/constants';
+
+const STOCK_MODE_META: Record<
+  MenuItemStockMode,
+  { label: string; tooltip: string; className: string; Icon: typeof ChefHat }
+> = {
+  recipe: {
+    label: 'Receta',
+    tooltip: 'Tiene ingredientes cargados — descuenta stock al venderse',
+    className: 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300',
+    Icon: ChefHat,
+  },
+  direct: {
+    label: 'Directo',
+    tooltip: 'Vinculado a un producto único — descuenta 1 unidad al venderse',
+    className: 'bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300',
+    Icon: Package,
+  },
+  none: {
+    label: 'Sin tracking',
+    tooltip: 'No descuenta stock al venderse — falta configurar receta o producto vinculado',
+    className: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300',
+    Icon: AlertTriangle,
+  },
+};
 
 interface MenuItemTableProps {
   menuItems: MenuItemTableItem[];
@@ -80,6 +105,9 @@ export const MenuItemTable: React.FC<MenuItemTableProps> = ({
                   Es Extra
                 </TableHead>
                 <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Stock
+                </TableHead>
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Fecha de creación
                 </TableHead>
                 <TableHead className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
@@ -127,6 +155,25 @@ export const MenuItemTable: React.FC<MenuItemTableProps> = ({
                     >
                       {menuItem.isExtraLabel}
                     </Badge>
+                  </TableCell>
+                  <TableCell className="px-6 py-4 whitespace-nowrap">
+                    {(() => {
+                      const meta = STOCK_MODE_META[menuItem.stockMode];
+                      const StockIcon = meta.Icon;
+                      return (
+                        <Tooltip content={meta.tooltip}>
+                          <Badge
+                            className={cn(
+                              'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0',
+                              meta.className
+                            )}
+                          >
+                            <StockIcon className="h-3 w-3" />
+                            {meta.label}
+                          </Badge>
+                        </Tooltip>
+                      );
+                    })()}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
                     {new Date(menuItem.createdAt).toLocaleDateString('es-ES', {

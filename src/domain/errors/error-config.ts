@@ -146,6 +146,61 @@ export const ERROR_CONFIG = {
     statusCode: 400,
     category: 'BUSINESS',
   },
+  STOCK_LIST_FAILED: {
+    message: 'Error al listar el stock',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  STOCK_CONFIG_UPDATE_FAILED: {
+    message: 'No se pudo actualizar la configuración de stock',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  STOCK_WASTE_FAILED: {
+    message: 'No se pudo registrar la merma',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  STOCK_ADJUSTMENT_FAILED: {
+    message: 'No se pudo registrar el ajuste',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  STOCK_MOVEMENTS_LIST_FAILED: {
+    message: 'Error al cargar los movimientos',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  RECIPE_FETCH_FAILED: {
+    message: 'Error al cargar la receta',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  RECIPE_UPDATE_FAILED: {
+    message: 'No se pudo guardar la receta',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  INGREDIENT_NOT_FOUND: {
+    message: 'El ingrediente no está en la receta',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
+  INGREDIENT_ALREADY_EXISTS: {
+    message: 'El ingrediente ya está en la receta',
+    statusCode: 409,
+    category: 'BUSINESS',
+  },
+  DUPLICATE_INGREDIENT: {
+    message: 'Hay un producto repetido en la receta',
+    statusCode: 400,
+    category: 'VALIDATION',
+  },
+  RECIPE_NOT_ALLOWED_ON_DIRECT_ITEM: {
+    message: 'Este platillo está marcado como ítem directo. No puede tener receta.',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
   EXPENSE_NOT_FOUND: {
     message: 'Gasto no encontrado',
     statusCode: 404,

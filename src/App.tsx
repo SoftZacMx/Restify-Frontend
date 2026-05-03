@@ -29,6 +29,8 @@ const UsersPage = lazy(() => import('@/presentation/pages/users/UsersPage'));
 const UserDetailPage = lazy(() => import('@/presentation/pages/users/UserDetailPage'));
 const ProductsPage = lazy(() => import('@/presentation/pages/products/ProductsPage'));
 const ProductDetailPage = lazy(() => import('@/presentation/pages/products/ProductDetailPage'));
+const StockPage = lazy(() => import('@/presentation/pages/stock/StockPage'));
+const MovementsHistoryPage = lazy(() => import('@/presentation/pages/stock/MovementsHistoryPage'));
 const MenuItemsPage = lazy(() => import('@/presentation/pages/menu-items/MenuItemsPage'));
 const MenuItemDetailPage = lazy(() => import('@/presentation/pages/menu-items/MenuItemDetailPage'));
 const MenuCategoriesPage = lazy(() => import('@/presentation/pages/menu-categories/MenuCategoriesPage'));
@@ -59,6 +61,8 @@ const protectedRoutes: { path: string; element: React.ReactNode }[] = [
   { path: '/users/:userId', element: <UserDetailPage /> },
   { path: '/products', element: <ProductsPage /> },
   { path: '/products/:productId', element: <ProductDetailPage /> },
+  { path: '/stock', element: <StockPage /> },
+  { path: '/stock/products/:productId/movements', element: <MovementsHistoryPage /> },
   { path: '/menu/items', element: <MenuItemsPage /> },
   { path: '/menu/items/:menuItemId', element: <MenuItemDetailPage /> },
   { path: '/menu/categories', element: <MenuCategoriesPage /> },

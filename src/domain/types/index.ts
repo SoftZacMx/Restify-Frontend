@@ -196,6 +196,7 @@ export type {
   ListMenuItemsResponse,
   MenuItemTableFilters,
   MenuItemTableItem,
+  MenuItemStockMode,
   MenuItemTableProps,
   MenuItemSearchBarProps,
   MenuItemPaginationProps,
@@ -293,3 +294,33 @@ export type {
 
 // Re-export company types (configuración de la compañía)
 export type { CompanyResponse, UpsertCompanyRequest } from './company.types';
+
+// Re-export recipe types (recetas de MenuItem)
+export type {
+  RecipeIngredientResponse,
+  GetRecipeResponse,
+  ReplaceRecipeRequest,
+  AddRecipeItemRequest,
+  UpdateRecipeItemRequest,
+  RecipeIngredientDraft,
+} from './recipe.types';
+
+// Re-export stock types (inventario / gestión de stock)
+export type {
+  StockMovementType,
+  WasteReason,
+  StockSummaryResponse,
+  StockListApiFilters,
+  StockListFilters,
+  StockHealth,
+  StockTableItem,
+  UpdateStockConfigRequest,
+  RecordWasteRequest,
+  RecordAdjustmentRequest,
+  StockMovementResponse,
+  RecordMovementResult,
+  StockMovementListItem,
+  MovementsListApiFilters,
+  MovementsListFilters,
+  MovementTableItem,
+} from './stock.types';

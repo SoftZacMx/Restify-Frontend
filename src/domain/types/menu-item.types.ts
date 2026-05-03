@@ -18,6 +18,9 @@ export interface MenuItem {
   userId: string;                   // UUID del usuario propietario
   createdAt: string;                // ISO 8601 date string
   updatedAt: string;                // ISO 8601 date string
+  // Stock integration (Fase 7 — Bloque D) — opcionales por compat con respuestas viejas
+  productId?: string | null;        // Vinculado a un producto (modo "directo")
+  hasRecipe?: boolean;              // El platillo tiene ingredientes cargados
 }
 
 /**
@@ -67,6 +70,9 @@ export interface MenuItemResponse {
   userId: string;
   createdAt: string;                 // ISO 8601
   updatedAt: string;                 // ISO 8601
+  // Stock integration (Fase 7 — Bloque D)
+  productId?: string | null;
+  hasRecipe?: boolean;
 }
 
 // Aliases para claridad
@@ -88,6 +94,9 @@ export interface MenuItemTableFilters {
 /**
  * Datos para mostrar en la tabla de platillos
  */
+/** Estado de tracking de stock de un MenuItem en la lista. */
+export type MenuItemStockMode = 'recipe' | 'direct' | 'none';
+
 export interface MenuItemTableItem {
   id: string;
   name: string;
@@ -102,6 +111,8 @@ export interface MenuItemTableItem {
   updatedAt: string;
   userId: string;
   userName?: string;                 // Nombre del usuario propietario (opcional)
+  // Stock integration (Fase 7 — Bloque D)
+  stockMode: MenuItemStockMode;     // Derivado de productId/hasRecipe
 }
 
 /**
