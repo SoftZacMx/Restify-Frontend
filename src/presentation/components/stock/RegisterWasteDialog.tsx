@@ -16,7 +16,7 @@ import { Label } from '@/presentation/components/ui/label';
 import { Textarea } from '@/presentation/components/ui/textarea';
 import { SelectProductDialog } from '@/presentation/components/expenses/SelectProductDialog';
 import { cn } from '@/shared/lib/utils';
-import { formatUnit } from '@/shared/utils/stock.utils';
+import { formatUnit, getMovementReasonDescription } from '@/shared/utils/stock.utils';
 import type {
   RecordWasteRequest,
   StockTableItem,
@@ -34,12 +34,16 @@ const wasteSchema = z.object({
 
 type WasteFormValues = z.infer<typeof wasteSchema>;
 
-const REASON_OPTIONS: { value: WasteReason; label: string; Icon: typeof Trash2 }[] = [
-  { value: 'EXPIRED', label: 'Vencido', Icon: AlertTriangle },
-  { value: 'BROKEN', label: 'Roto / dañado', Icon: Trash2 },
-  { value: 'THEFT', label: 'Robo / faltante', Icon: ShieldAlert },
-  { value: 'OTHER', label: 'Otro', Icon: HelpCircle },
-];
+// Cada motivo trae el label centralizado en stock.utils (MOVEMENT_REASON_OPTIONS) +
+// el ícono que solo aplica acá (decoración del dialog).
+const WASTE_REASON_ICONS: Record<WasteReason, typeof Trash2> = {
+  EXPIRED: AlertTriangle,
+  BROKEN: Trash2,
+  THEFT: ShieldAlert,
+  OTHER: HelpCircle,
+};
+
+const WASTE_REASONS: WasteReason[] = ['EXPIRED', 'BROKEN', 'THEFT', 'OTHER'];
 
 interface RegisterWasteDialogProps {
   open: boolean;
@@ -81,15 +85,20 @@ export const RegisterWasteDialog: React.FC<RegisterWasteDialogProps> = ({
 
   const [isPickerOpen, setIsPickerOpen] = useState(false);
 
-  // Reset al abrir/cerrar para que arranque limpio (con el productId inicial si vino).
+  // Reset en cada transición de `open`:
+  //  - Al abrir: deja el form limpio (con el productId inicial si vino).
+  //  - Al cerrar: borra cualquier residuo del intento anterior (cancel, submit error, ESC, click fuera).
+  // Sin esto, si el owner abre, escribe, cancela y vuelve a abrir, vería el draft viejo
+  // por un instante antes del próximo reset.
   React.useEffect(() => {
-    if (open) {
-      reset({
-        productId: initialProductId ?? '',
-        quantity: undefined as unknown as number,
-        reason: undefined as unknown as WasteReason,
-        notes: '',
-      });
+    reset({
+      productId: open ? (initialProductId ?? '') : '',
+      quantity: undefined as unknown as number,
+      reason: undefined as unknown as WasteReason,
+      notes: '',
+    });
+    if (!open) {
+      setIsPickerOpen(false);
     }
   }, [open, initialProductId, reset]);
 
@@ -186,8 +195,10 @@ export const RegisterWasteDialog: React.FC<RegisterWasteDialogProps> = ({
                 control={control}
                 render={({ field }) => (
                   <div role="radiogroup" className="grid grid-cols-2 gap-2 mt-1">
-                    {REASON_OPTIONS.map(({ value, label, Icon }) => {
+                    {WASTE_REASONS.map((value) => {
                       const checked = field.value === value;
+                      const Icon = WASTE_REASON_ICONS[value];
+                      const label = getMovementReasonDescription(value);
                       return (
                         <button
                           key={value}

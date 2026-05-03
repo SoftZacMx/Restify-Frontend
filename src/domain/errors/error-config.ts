@@ -201,6 +201,11 @@ export const ERROR_CONFIG = {
     statusCode: 400,
     category: 'BUSINESS',
   },
+  INCOMPATIBLE_UNIT: {
+    message: 'La unidad ingresada no es compatible con la unidad del producto',
+    statusCode: 400,
+    category: 'VALIDATION',
+  },
   EXPENSE_NOT_FOUND: {
     message: 'Gasto no encontrado',
     statusCode: 404,

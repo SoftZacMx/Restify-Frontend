@@ -100,6 +100,8 @@ export interface StockMovementListItem {
   expenseItemId: string | null;
   orderItemId: string | null;
   userId: string | null;
+  /** Nombre legible del usuario que generó el movement (Nombre + Apellido). null si es del sistema. */
+  userName?: string | null;
   createdAt: string; // ISO
 }
 
@@ -130,6 +132,7 @@ export interface MovementTableItem {
   expenseItemId: string | null;
   orderItemId: string | null;
   userId: string | null;
+  userName?: string | null;
   createdAt: string;
 }
 

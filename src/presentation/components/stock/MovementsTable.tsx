@@ -11,7 +11,7 @@ import {
 import { Badge } from '@/presentation/components/ui/badge';
 import { cn } from '@/shared/lib/utils';
 import { APP_TIMEZONE } from '@/shared/constants';
-import { formatStockQuantity } from '@/shared/utils/stock.utils';
+import { formatStockQuantity, getMovementReasonDescription } from '@/shared/utils/stock.utils';
 import type {
   MovementTableItem,
   StockMovementType,
@@ -60,9 +60,11 @@ function formatSignedQuantity(qty: number, unit: UnitOfMeasure | null): string {
   return qty >= 0 ? `+${abs}` : `-${abs}`;
 }
 
-function shortUserId(userId: string | null): string {
-  if (!userId) return 'Sistema';
-  return `user-${userId.slice(0, 8)}`;
+function userDisplay(item: MovementTableItem): string {
+  if (item.userName) return item.userName;
+  if (!item.userId) return 'Sistema';
+  // Fallback si el backend no incluyó el nombre por algún motivo.
+  return `user-${item.userId.slice(0, 8)}`;
 }
 
 function originLabel(item: MovementTableItem): string {
@@ -172,18 +174,23 @@ export const MovementsTable: React.FC<MovementsTableProps> = ({
                       </span>
                     </TableCell>
                     <TableCell className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300 max-w-xs">
-                      <div className="truncate" title={[item.reason, item.notes].filter(Boolean).join(' — ')}>
-                        {item.reason ?? '—'}
-                        {item.notes && (
-                          <span className="text-xs text-slate-400 dark:text-slate-500"> · {item.notes}</span>
-                        )}
-                      </div>
+                      {(() => {
+                        const reasonText = getMovementReasonDescription(item.reason);
+                        return (
+                          <div className="truncate" title={[reasonText, item.notes].filter(Boolean).join(' — ')}>
+                            {reasonText || '—'}
+                            {item.notes && (
+                              <span className="text-xs text-slate-400 dark:text-slate-500"> · {item.notes}</span>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </TableCell>
                     <TableCell className="px-6 py-4 whitespace-nowrap text-xs text-slate-500 dark:text-slate-400">
                       {originLabel(item)}
                     </TableCell>
-                    <TableCell className="px-6 py-4 whitespace-nowrap text-xs text-slate-500 dark:text-slate-400 font-mono">
-                      {shortUserId(item.userId)}
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-xs text-slate-500 dark:text-slate-400">
+                      {userDisplay(item)}
                     </TableCell>
                   </TableRow>
                 );

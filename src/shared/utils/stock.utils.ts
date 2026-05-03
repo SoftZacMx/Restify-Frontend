@@ -37,6 +37,52 @@ const UNIT_NAME_BY_VALUE: Record<UnitOfMeasure, string> = UNIT_OPTIONS.reduce(
   {} as Record<UnitOfMeasure, string>
 );
 
+/**
+ * Opciones canónicas de motivos de movement de stock.
+ * `value`       → string que persiste el backend (ej. "EXPIRED", "order cancelled").
+ *                 Es lo que se manda/recibe a nivel API y queda guardado en DB.
+ * `description` → texto legible en español que se muestra al usuario.
+ *
+ * Centralizado para que toda la UI traduzca igual y los flujos que insertan motivos
+ * automáticos compartan el mismo vocabulario.
+ *
+ * Hay 3 grupos:
+ *  - Mermas (WASTE) — el owner elige uno desde el modal "Registrar merma".
+ *  - Reversas automáticas — backend los inserta (cancelar orden, editar items, etc).
+ *  - Ajustes manuales (ADJUSTMENT) — el owner escribe libre, NO entran acá; se muestra
+ *    el texto tal cual lo escribió.
+ */
+export const MOVEMENT_REASON_OPTIONS: { value: string; description: string }[] = [
+  // WASTE
+  { value: 'EXPIRED', description: 'Vencido' },
+  { value: 'BROKEN', description: 'Roto / dañado' },
+  { value: 'THEFT', description: 'Robo / faltante' },
+  { value: 'OTHER', description: 'Otro' },
+  // SALE_REVERSAL automáticos
+  { value: 'order cancelled', description: 'Orden cancelada' },
+  { value: 'order edited', description: 'Orden editada' },
+  // ADJUSTMENT automático (compensación al borrar un Expense MERCHANDISE)
+  { value: 'expense deleted', description: 'Gasto eliminado' },
+];
+
+/** Mapa rápido de value → description. */
+const REASON_DESCRIPTION_BY_VALUE: Record<string, string> = MOVEMENT_REASON_OPTIONS.reduce(
+  (acc, opt) => ({ ...acc, [opt.value]: opt.description }),
+  {} as Record<string, string>
+);
+
+/**
+ * Devuelve la descripción legible de un motivo de movement.
+ * Si el value no está en el catálogo (ej. ajuste manual con texto libre),
+ * devuelve el value tal cual — el owner ve lo que escribió.
+ */
+export const getMovementReasonDescription = (
+  value: string | null | undefined
+): string => {
+  if (!value) return '';
+  return REASON_DESCRIPTION_BY_VALUE[value] ?? value;
+};
+
 /** Devuelve el nombre largo de una unidad (ej. "Kilogramos"). */
 export const getUnitName = (unit: UnitOfMeasure | null | undefined): string => {
   if (!unit) return '';

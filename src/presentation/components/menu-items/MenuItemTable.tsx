@@ -38,8 +38,8 @@ const STOCK_MODE_META: Record<
     Icon: Package,
   },
   none: {
-    label: 'Sin seguimiento',
-    tooltip: 'No descuenta stock al venderse — falta configurar receta o producto vinculado',
+    label: 'Sin receta',
+    tooltip: 'No descuenta stock al venderse — falta cargar receta o vincular un producto',
     className: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300',
     Icon: AlertTriangle,
   },

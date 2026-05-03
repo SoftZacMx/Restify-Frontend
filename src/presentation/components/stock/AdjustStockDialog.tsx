@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { ArrowDown, ArrowUp, Minus, Package } from 'lucide-react';
+import { ArrowDown, ArrowUp, Minus, Package, AlertTriangle } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -189,6 +189,21 @@ export const AdjustStockDialog: React.FC<AdjustStockDialogProps> = ({
                   </strong>
                   )
                 </span>
+              </div>
+            )}
+
+            {/* Warning para ajustes positivos: deberían venir por compra de mercadería. */}
+            {diff != null && diff > 0 && selectedProduct && (
+              <div className="mt-2 flex items-start gap-2 text-sm rounded-md px-3 py-2 border bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-300">
+                <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-medium">Estás sumando producto al stock sin una compra asociada.</p>
+                  <p className="mt-1 text-xs">
+                    Si recibiste mercadería, registralo como{' '}
+                    <strong>gasto de mercancía</strong> para mantener trazabilidad contable.
+                    Solo usá ajuste positivo para inventario inicial o correcciones.
+                  </p>
+                </div>
               </div>
             )}
           </div>

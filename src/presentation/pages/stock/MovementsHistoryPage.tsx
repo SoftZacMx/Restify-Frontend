@@ -35,6 +35,7 @@ const toTableItem = (m: StockMovementListItem): MovementTableItem => ({
   expenseItemId: m.expenseItemId,
   orderItemId: m.orderItemId,
   userId: m.userId,
+  userName: m.userName ?? null,
   createdAt: m.createdAt,
 });
 
