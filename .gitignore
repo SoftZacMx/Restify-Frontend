@@ -43,3 +43,5 @@ test-results/
 
 # Cursor IDE (reglas/estado local; opcional)
 .cursor/
+
+.claude/
