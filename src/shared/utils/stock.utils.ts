@@ -12,7 +12,7 @@ import type {
 const UNIT_LABELS: Record<UnitOfMeasure, string> = {
   KG: 'kg',
   G: 'g',
-  L: 'l',
+  L: 'L',
   ML: 'ml',
   PCS: 'pcs',
   OTHER: 'u',
