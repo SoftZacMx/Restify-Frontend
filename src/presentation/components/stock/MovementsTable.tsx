@@ -1,5 +1,4 @@
 import React from 'react';
-import { ShoppingCart, Receipt, Trash2, Sliders, RotateCcw } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -11,49 +10,18 @@ import {
 import { Badge } from '@/presentation/components/ui/badge';
 import { cn } from '@/shared/lib/utils';
 import { APP_TIMEZONE } from '@/shared/constants';
-import { formatStockQuantity, getMovementReasonDescription } from '@/shared/utils/stock.utils';
-import type {
-  MovementTableItem,
-  StockMovementType,
-  UnitOfMeasure,
-} from '@/domain/types';
+import {
+  formatStockQuantity,
+  getMovementReasonDescription,
+  getMovementTypeOption,
+} from '@/shared/utils/stock.utils';
+import type { MovementTableItem, UnitOfMeasure } from '@/domain/types';
 
 interface MovementsTableProps {
   items: MovementTableItem[];
   unitOfMeasure: UnitOfMeasure | null;
   isLoading?: boolean;
 }
-
-const TYPE_META: Record<
-  StockMovementType,
-  { label: string; className: string; Icon: typeof ShoppingCart }
-> = {
-  PURCHASE: {
-    label: 'Compra',
-    className: 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300',
-    Icon: ShoppingCart,
-  },
-  SALE: {
-    label: 'Venta',
-    className: 'bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300',
-    Icon: Receipt,
-  },
-  WASTE: {
-    label: 'Merma',
-    className: 'bg-orange-100 dark:bg-orange-900/40 text-orange-800 dark:text-orange-300',
-    Icon: Trash2,
-  },
-  ADJUSTMENT: {
-    label: 'Ajuste',
-    className: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300',
-    Icon: Sliders,
-  },
-  SALE_REVERSAL: {
-    label: 'Reversa',
-    className: 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-300',
-    Icon: RotateCcw,
-  },
-};
 
 function formatSignedQuantity(qty: number, unit: UnitOfMeasure | null): string {
   const abs = formatStockQuantity(Math.abs(qty), unit);
@@ -131,15 +99,12 @@ export const MovementsTable: React.FC<MovementsTableProps> = ({
             </TableHeader>
             <TableBody>
               {items.map((item) => {
-                const meta = TYPE_META[item.type];
-                const Icon = meta.Icon;
+                const typeOption = getMovementTypeOption(item.type);
+                const Icon = typeOption.icon;
                 const isPositive = item.quantity > 0;
                 const isNegative = item.quantity < 0;
                 return (
-                  <TableRow
-                    key={item.id}
-                    className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
-                  >
+                  <TableRow key={item.id}>
                     <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300">
                       {new Date(item.createdAt).toLocaleString('es-ES', {
                         day: '2-digit',
@@ -153,12 +118,16 @@ export const MovementsTable: React.FC<MovementsTableProps> = ({
                     <TableCell className="px-6 py-4 whitespace-nowrap">
                       <Badge
                         className={cn(
-                          'inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0',
-                          meta.className
+                          'inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0 transition-colors',
+                          // Color base del tipo (verde/azul/naranja/etc) + hover con el
+                          // mismo color en variante más clara. tailwind-merge resuelve el
+                          // conflicto con el hover gris por defecto del Badge variant="default".
+                          typeOption.badgeClassName,
+                          typeOption.hoverClassName
                         )}
                       >
                         <Icon className="h-3 w-3" />
-                        {meta.label}
+                        {typeOption.description}
                       </Badge>
                     </TableCell>
                     <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-mono">

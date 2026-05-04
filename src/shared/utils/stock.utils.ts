@@ -1,7 +1,10 @@
+import type { LucideIcon } from 'lucide-react';
+import { ShoppingCart, Receipt, Trash2, Sliders, RotateCcw } from 'lucide-react';
 import type {
   StockSummaryResponse,
   StockTableItem,
   StockHealth,
+  StockMovementType,
   UnitOfMeasure,
 } from '@/domain/types';
 
@@ -82,6 +85,84 @@ export const getMovementReasonDescription = (
   if (!value) return '';
   return REASON_DESCRIPTION_BY_VALUE[value] ?? value;
 };
+
+/**
+ * Opción canónica de un tipo de movement (PURCHASE, SALE, etc.).
+ * Trae el value (enum del backend), texto singular para el badge en la tabla,
+ * texto plural para el filtro ("Compras"), ícono y clases de color del badge.
+ *
+ * Centralizado para que la tabla, los filtros y cualquier reporte usen el mismo
+ * vocabulario y los mismos íconos. Si en el futuro cambia "Reversa" por "Anulación"
+ * (o querés cambiar el color), se actualiza acá una sola vez.
+ */
+export interface MovementTypeOption {
+  value: StockMovementType;
+  description: string;       // singular — para badges y referencias en línea
+  descriptionPlural: string; // plural — para filtros tipo "Tipo: Compras"
+  icon: LucideIcon;          // ícono para badges/listas
+  badgeClassName: string;    // tailwind classes con dark mode incluido (color base "fuerte")
+  /**
+   * Clase para hover/focus en items interactivos (filas, opciones de select, etc).
+   * Mismo color base que el badge pero con opacidad reducida — el hover se siente
+   * "del mismo elemento" en vez de un gris neutro.
+   */
+  hoverClassName: string;
+}
+
+export const MOVEMENT_TYPE_OPTIONS: MovementTypeOption[] = [
+  {
+    value: 'PURCHASE',
+    description: 'Compra',
+    descriptionPlural: 'Compras',
+    icon: ShoppingCart,
+    badgeClassName: 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300',
+    hoverClassName: 'hover:bg-green-200 dark:hover:bg-green-900/60 focus:bg-green-200 dark:focus:bg-green-900/60',
+  },
+  {
+    value: 'SALE',
+    description: 'Venta',
+    descriptionPlural: 'Ventas',
+    icon: Receipt,
+    badgeClassName: 'bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300',
+    hoverClassName: 'hover:bg-blue-200 dark:hover:bg-blue-900/60 focus:bg-blue-200 dark:focus:bg-blue-900/60',
+  },
+  {
+    value: 'WASTE',
+    description: 'Merma',
+    descriptionPlural: 'Mermas',
+    icon: Trash2,
+    badgeClassName: 'bg-orange-100 dark:bg-orange-900/40 text-orange-800 dark:text-orange-300',
+    hoverClassName: 'hover:bg-orange-200 dark:hover:bg-orange-900/60 focus:bg-orange-200 dark:focus:bg-orange-900/60',
+  },
+  {
+    value: 'ADJUSTMENT',
+    description: 'Ajuste',
+    descriptionPlural: 'Ajustes',
+    icon: Sliders,
+    badgeClassName: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300',
+    hoverClassName: 'hover:bg-yellow-200 dark:hover:bg-yellow-900/60 focus:bg-yellow-200 dark:focus:bg-yellow-900/60',
+  },
+  {
+    value: 'SALE_REVERSAL',
+    description: 'Reversa',
+    descriptionPlural: 'Reversas',
+    icon: RotateCcw,
+    badgeClassName: 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-300',
+    hoverClassName: 'hover:bg-slate-300 dark:hover:bg-slate-600 focus:bg-slate-300 dark:focus:bg-slate-600',
+  },
+];
+
+/** Mapa rápido de value → option. */
+const TYPE_OPTION_BY_VALUE: Record<StockMovementType, MovementTypeOption> =
+  MOVEMENT_TYPE_OPTIONS.reduce(
+    (acc, opt) => ({ ...acc, [opt.value]: opt }),
+    {} as Record<StockMovementType, MovementTypeOption>
+  );
+
+/** Devuelve la opción completa de un tipo (con icon, colores y descriptions). */
+export const getMovementTypeOption = (
+  value: StockMovementType
+): MovementTypeOption => TYPE_OPTION_BY_VALUE[value];
 
 /** Devuelve el nombre largo de una unidad (ej. "Kilogramos"). */
 export const getUnitName = (unit: UnitOfMeasure | null | undefined): string => {

@@ -22,21 +22,24 @@ interface StockTableProps {
 
 const HEALTH_BADGE: Record<
   StockHealth,
-  { label: string; className: string; dotClassName: string }
+  { label: string; className: string; hoverClassName: string; dotClassName: string }
 > = {
   healthy: {
     label: 'OK',
     className: 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300',
+    hoverClassName: 'hover:bg-green-200 dark:hover:bg-green-900/60 focus:bg-green-200 dark:focus:bg-green-900/60',
     dotClassName: 'bg-green-500',
   },
   warning: {
     label: 'Cerca del mínimo',
     className: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300',
+    hoverClassName: 'hover:bg-yellow-200 dark:hover:bg-yellow-900/60 focus:bg-yellow-200 dark:focus:bg-yellow-900/60',
     dotClassName: 'bg-yellow-500',
   },
   critical: {
     label: 'Bajo mínimo',
     className: 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300',
+    hoverClassName: 'hover:bg-red-200 dark:hover:bg-red-900/60 focus:bg-red-200 dark:focus:bg-red-900/60',
     dotClassName: 'bg-red-500',
   },
 };
@@ -111,10 +114,7 @@ export const StockTable: React.FC<StockTableProps> = ({
                     : '—';
 
                 return (
-                  <TableRow
-                    key={item.productId}
-                    className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
-                  >
+                  <TableRow key={item.productId}>
                     <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex items-center gap-3">
                         <span
@@ -160,8 +160,9 @@ export const StockTable: React.FC<StockTableProps> = ({
                     <TableCell className="px-6 py-4 whitespace-nowrap">
                       <Badge
                         className={cn(
-                          'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0',
-                          badge.className
+                          'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0 transition-colors',
+                          badge.className,
+                          badge.hoverClassName
                         )}
                       >
                         {badge.label}

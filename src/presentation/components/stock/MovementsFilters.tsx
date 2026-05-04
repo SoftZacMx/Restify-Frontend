@@ -9,7 +9,9 @@ import {
   SelectValue,
 } from '@/presentation/components/ui/select';
 import { Button } from '@/presentation/components/ui/button';
-import { X } from 'lucide-react';
+import { X, ListFilter } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { MOVEMENT_TYPE_OPTIONS } from '@/shared/utils/stock.utils';
 import type { MovementsListFilters, StockMovementType } from '@/domain/types';
 
 interface MovementsFiltersProps {
@@ -17,13 +19,33 @@ interface MovementsFiltersProps {
   onFiltersChange: (filters: MovementsListFilters) => void;
 }
 
-const TYPE_OPTIONS: { value: StockMovementType | 'ALL'; label: string }[] = [
-  { value: 'ALL', label: 'Todos' },
-  { value: 'PURCHASE', label: 'Compras' },
-  { value: 'SALE', label: 'Ventas' },
-  { value: 'WASTE', label: 'Mermas' },
-  { value: 'ADJUSTMENT', label: 'Ajustes' },
-  { value: 'SALE_REVERSAL', label: 'Reversas' },
+/**
+ * Opciones del select del filtro: "Todos" + las 5 categorías centralizadas.
+ * El filtro usa `descriptionPlural` ("Compras" en plural), el value como string
+ * (con 'ALL' extra para "todos los tipos"), y reusa el ícono de cada tipo.
+ */
+interface FilterTypeOption {
+  value: StockMovementType | 'ALL';
+  label: string;
+  Icon: LucideIcon;
+  /** Hover/focus className: color base con opacidad reducida (centralizado en MOVEMENT_TYPE_OPTIONS). */
+  hoverClassName: string;
+}
+
+const FILTER_TYPE_OPTIONS: FilterTypeOption[] = [
+  {
+    value: 'ALL',
+    label: 'Todos',
+    Icon: ListFilter,
+    // "Todos" no tiene un tipo asociado → hover slate neutro.
+    hoverClassName: 'hover:bg-slate-100 dark:hover:bg-slate-700/50 focus:bg-slate-100 dark:focus:bg-slate-700/50',
+  },
+  ...MOVEMENT_TYPE_OPTIONS.map<FilterTypeOption>((opt) => ({
+    value: opt.value,
+    label: opt.descriptionPlural,
+    Icon: opt.icon,
+    hoverClassName: opt.hoverClassName,
+  })),
 ];
 
 export const MovementsFilters: React.FC<MovementsFiltersProps> = ({ filters, onFiltersChange }) => {
@@ -71,15 +93,31 @@ export const MovementsFilters: React.FC<MovementsFiltersProps> = ({ filters, onF
         >
           <SelectTrigger id="movType" className="h-10 min-w-[180px]">
             <SelectValue placeholder="Todos">
-              {TYPE_OPTIONS.find((o) => o.value === filters.type)?.label}
+              {(() => {
+                const sel = FILTER_TYPE_OPTIONS.find((o) => o.value === filters.type);
+                if (!sel) return null;
+                const TriggerIcon = sel.Icon;
+                return (
+                  <span className="flex items-center gap-2">
+                    <TriggerIcon className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                    {sel.label}
+                  </span>
+                );
+              })()}
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
-            {TYPE_OPTIONS.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </SelectItem>
-            ))}
+            {FILTER_TYPE_OPTIONS.map((opt) => {
+              const ItemIcon = opt.Icon;
+              return (
+                <SelectItem key={opt.value} value={opt.value}>
+                  <span className="flex items-center gap-2">
+                    <ItemIcon className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                    {opt.label}
+                  </span>
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
       </div>
