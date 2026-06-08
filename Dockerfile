@@ -11,6 +11,9 @@ RUN npm ci
 COPY . .
 # Crear .env vacío para evitar errores de Dokploy
 RUN touch .env
+# DIAGNÓSTICO: imprime el valor del build-arg en los logs de build.
+# Si sale vacío, el arg NO está llegando desde Dokploy.
+RUN echo ">>> VITE_API_BASE_URL en build = '$VITE_API_BASE_URL'"
 RUN npm run build
 # Serve con nginx
 FROM nginx:alpine
