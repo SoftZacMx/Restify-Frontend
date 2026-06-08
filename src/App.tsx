@@ -13,6 +13,7 @@ import { PageLoader } from '@/presentation/components/ui/PageLoader';
 
 // Auth pages (estáticas - son el entry point)
 import LoginPage from '@/presentation/pages/auth/LoginPage';
+import SignupPage from '@/presentation/pages/auth/SignupPage';
 import RecoverPasswordPage from '@/presentation/pages/auth/RecoverPasswordPage';
 
 // Lazy-loaded pages
@@ -93,6 +94,7 @@ function App() {
                     <Routes>
                       {/* Auth routes */}
                       <Route path="/auth/login" element={<LoginPage />} />
+                      <Route path="/auth/signup" element={<SignupPage />} />
                       <Route path="/auth/recover-password" element={<RecoverPasswordPage />} />
 
                       {/* Public routes (no auth, no subscription guard) */}

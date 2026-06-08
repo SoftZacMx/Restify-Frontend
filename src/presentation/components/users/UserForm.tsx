@@ -8,7 +8,10 @@ import { Label } from '@/presentation/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/presentation/components/ui/select';
 import { Switch } from '@/presentation/components/ui/switch';
 import { userFormSchema, type UserFormValues } from '@/shared/schemas/user.schema';
-import type { CreateUserRequest, UpdateUserRequest, UserRole, User } from '@/domain/types';
+import type { CreateUserRequest, UpdateUserRequest, User } from '@/domain/types';
+
+// Roles asignables desde el formulario de usuarios. OWNER se excluye: solo se crea vía signup.
+type AssignableRole = UserFormValues['rol'];
 import {
   getPasswordStrengthPercentage,
   getPasswordStrengthLabel,
@@ -20,7 +23,7 @@ import { INPUT_LENGTH } from '@/shared/constants';
 
 const PHONE_DIGITS = 10;
 
-const roleConfig: Record<UserRole, { label: string; Icon: React.ComponentType<{ className?: string }> }> = {
+const roleConfig: Record<AssignableRole, { label: string; Icon: React.ComponentType<{ className?: string }> }> = {
   WAITER: { label: 'Mesero', Icon: UtensilsCrossed },
   CHEF: { label: 'Cocinero', Icon: ChefHat },
   MANAGER: { label: 'Gerente', Icon: UserCog },
@@ -59,7 +62,8 @@ export const UserForm: React.FC<UserFormProps> = ({
       email: initialData?.email ?? '',
       phone: initialData?.phone ?? '',
       password: '',
-      rol: initialData?.rol ?? 'WAITER',
+      // OWNER no es asignable desde este formulario (solo se crea vía signup).
+      rol: initialData && initialData.rol !== 'OWNER' ? initialData.rol : 'WAITER',
       status: initialData?.status ?? true,
     },
   });
@@ -224,7 +228,7 @@ export const UserForm: React.FC<UserFormProps> = ({
             <Label htmlFor="rol" className="text-sm font-medium text-slate-800 dark:text-slate-200">
               Rol del usuario <span className="text-red-500">*</span>
             </Label>
-            <Select value={rol} onValueChange={(value) => setValue('rol', value as UserRole)}>
+            <Select value={rol} onValueChange={(value) => setValue('rol', value as AssignableRole)}>
               <SelectTrigger id="rol" className="h-11 rounded-lg">
                 <span className="flex items-center justify-between w-full gap-3">
                   <span>{roleConfig[rol].label}</span>
@@ -232,7 +236,7 @@ export const UserForm: React.FC<UserFormProps> = ({
                 </span>
               </SelectTrigger>
               <SelectContent>
-                {(Object.entries(roleConfig) as [UserRole, typeof roleConfig[UserRole]][]).map(([role, { label, Icon }]) => (
+                {(Object.entries(roleConfig) as [AssignableRole, typeof roleConfig[AssignableRole]][]).map(([role, { label, Icon }]) => (
                   <SelectItem key={role} value={role}>
                     <span className="flex items-center justify-between w-full gap-3">
                       <span>{label}</span>

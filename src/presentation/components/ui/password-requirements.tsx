@@ -10,14 +10,20 @@ const REQUIREMENTS = [
 
 interface PasswordRequirementsProps {
   password: string;
+  /** Si es false, oculta el requisito de carácter especial (ej. signup). Default true. */
+  requireSpecialChar?: boolean;
 }
 
-export function PasswordRequirements({ password }: PasswordRequirementsProps) {
+export function PasswordRequirements({ password, requireSpecialChar = true }: PasswordRequirementsProps) {
   if (!password) return null;
+
+  const requirements = requireSpecialChar
+    ? REQUIREMENTS
+    : REQUIREMENTS.filter((req) => req.label !== 'Un carácter especial');
 
   return (
     <ul className="space-y-1 mt-2">
-      {REQUIREMENTS.map((req) => {
+      {requirements.map((req) => {
         const met = req.test(password);
         return (
           <li key={req.label} className="flex items-center gap-2">

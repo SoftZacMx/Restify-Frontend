@@ -6,6 +6,7 @@ import { APP_TIMEZONE } from '@/shared/constants';
  * Mapeo de roles a etiquetas en español
  */
 const ROLE_LABELS: Record<UserRole, string> = {
+  OWNER: 'Propietario',
   ADMIN: 'Administrador',
   MANAGER: 'Gerente',
   WAITER: 'Mesero',

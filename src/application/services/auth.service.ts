@@ -1,5 +1,11 @@
 import type { IAuthRepository } from '@/domain/interfaces/auth.interface';
-import type { LoginRequest, LoginResponse, ApiResponse } from '@/domain/types';
+import type {
+  LoginRequest,
+  LoginResponse,
+  SignupRequest,
+  SignupResponse,
+  ApiResponse,
+} from '@/domain/types';
 import { AuthRepository } from '@/infrastructure/api/repositories/auth.repository';
 import { AppError } from '@/domain/errors';
 
@@ -37,6 +43,18 @@ export class AuthService {
     }
 
     return response;
+  }
+
+  /**
+   * Registro público: crea organización + owner + primera sucursal (una sola request).
+   * El backend setea la cookie HttpOnly y devuelve token + user.
+   */
+  async signup(data: SignupRequest): Promise<ApiResponse<SignupResponse>> {
+    if (!data.user?.email || !data.user?.password) {
+      throw AppError.create('MISSING_REQUIRED_FIELD', 'Email y contraseña son requeridos');
+    }
+
+    return this.authRepository.signup(data);
   }
 
   /**

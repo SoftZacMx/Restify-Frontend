@@ -72,6 +72,16 @@ export const ERROR_CONFIG = {
     statusCode: 400,
     category: 'VALIDATION',
   },
+  EMAIL_ALREADY_EXISTS: {
+    message: 'Ya existe una cuenta con este correo',
+    statusCode: 409,
+    category: 'VALIDATION',
+  },
+  TOO_MANY_REQUESTS: {
+    message: 'Demasiados intentos. Intenta de nuevo en unos minutos.',
+    statusCode: 429,
+    category: 'AUTH',
+  },
 
   // ============================================
   // Business Logic Errors

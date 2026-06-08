@@ -151,6 +151,8 @@ function mapStatusCodeToErrorCode(status: number, message?: string): AppError {
       return AppError.create('USER_NOT_FOUND', message);
     case 408:
       return AppError.create('TIMEOUT_ERROR', message);
+    case 429:
+      return AppError.create('TOO_MANY_REQUESTS', message);
     case 500:
       return AppError.create('INTERNAL_ERROR', message);
     case 502:

@@ -56,6 +56,7 @@ export const UserSearchBar: React.FC<UserSearchBarProps> = ({
   const getRoleLabel = (role?: UserRole | 'all'): string => {
     if (!role || role === 'all') return 'Rol';
     const labels: Record<UserRole, string> = {
+      OWNER: 'Propietario',
       ADMIN: 'Administrador',
       MANAGER: 'Gerente',
       WAITER: 'Mesero',

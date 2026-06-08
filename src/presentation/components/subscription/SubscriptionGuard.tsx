@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useSubscriptionStore } from '@/presentation/store/subscription.store';
-import SubscriptionBlockedPage from '@/presentation/pages/subscription/SubscriptionBlockedPage';
+import { useEffect, useState } from "react";
+import { useSubscriptionStore } from "@/presentation/store/subscription.store";
+import SubscriptionBlockedPage from "@/presentation/pages/subscription/SubscriptionBlockedPage";
 
 interface SubscriptionGuardProps {
   children: React.ReactNode;
@@ -16,7 +16,9 @@ export const SubscriptionGuard = ({ children }: SubscriptionGuardProps) => {
     fetchStatus().finally(() => {
       if (!cancelled) setIsReady(true);
     });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [fetchStatus]);
 
   // Mientras no termine el fetch, mostrar spinner (children NUNCA se monta antes)

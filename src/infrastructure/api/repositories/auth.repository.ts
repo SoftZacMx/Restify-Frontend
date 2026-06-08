@@ -1,5 +1,12 @@
 import apiClient from '../client';
-import type { LoginRequest, LoginResponse, ApiResponse } from '@/domain/types';
+import { publicApiClient } from '../public-client';
+import type {
+  LoginRequest,
+  LoginResponse,
+  SignupRequest,
+  SignupResponse,
+  ApiResponse,
+} from '@/domain/types';
 
 /**
  * Repository para operaciones de autenticación
@@ -14,6 +21,20 @@ export class AuthRepository {
   async login(credentials: LoginRequest): Promise<ApiResponse<LoginResponse>> {
     try {
       const response = await apiClient.post('/api/auth/login', credentials);
+      return response.data;
+    } catch (error) {
+      // Error ya convertido a AppError por el interceptor
+      throw error;
+    }
+  }
+
+  /**
+   * Registro público: crea organización + owner + primera sucursal.
+   * Endpoint público → usa publicApiClient (sin token). El backend setea la cookie HttpOnly.
+   */
+  async signup(data: SignupRequest): Promise<ApiResponse<SignupResponse>> {
+    try {
+      const response = await publicApiClient.post('/api/auth/signup', data);
       return response.data;
     } catch (error) {
       // Error ya convertido a AppError por el interceptor

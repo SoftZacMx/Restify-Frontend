@@ -18,6 +18,9 @@ const mockUser: User = {
   phone: '5511223344',
   status: true,
   rol: 'MANAGER',
+  organizationId: 'org-1',
+  mustChangePassword: false,
+  emailVerified: true,
   createdAt: new Date(),
   updatedAt: new Date(),
 };

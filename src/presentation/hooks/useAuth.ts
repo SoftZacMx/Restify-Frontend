@@ -1,6 +1,6 @@
 import { useAuthStore } from '../store/auth.store';
 import { authService } from '@/application/services/auth.service';
-import type { LoginRequest } from '@/domain/types';
+import type { LoginRequest, SignupRequest } from '@/domain/types';
 import { AppError } from '@/domain/errors';
 import { useState } from 'react';
 
@@ -40,6 +40,46 @@ export const useAuth = () => {
     }
   };
 
+  const signup = async (data: SignupRequest) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await authService.signup(data);
+
+      if (response.success && response.data) {
+        // El backend ya dejó la sesión iniciada (cookie HttpOnly). Poblamos el store.
+        // Tras un signup el usuario arranca con email sin verificar y sin cambio de contraseña forzado.
+        const { token, user } = response.data;
+        loginStore({
+          token,
+          user: {
+            id: user.id,
+            name: user.name,
+            last_name: user.last_name,
+            second_last_name: null,
+            email: user.email,
+            rol: user.rol,
+            organizationId: user.organizationId,
+            mustChangePassword: false,
+            emailVerified: false,
+          },
+        });
+        return { success: true };
+      } else {
+        const errorMessage = response.error?.message || 'Error al registrarse';
+        setError(errorMessage);
+        return { success: false, error: errorMessage };
+      }
+    } catch (err) {
+      const appError = err instanceof AppError ? err : AppError.create('UNKNOWN_ERROR', 'Error desconocido');
+      setError(appError.message);
+      return { success: false, error: appError.message, errorCode: appError.code };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const logout = async () => {
     setIsLoading(true);
     setError(null);
@@ -68,6 +108,7 @@ export const useAuth = () => {
     isLoading,
     error,
     login,
+    signup,
     logout,
     clearError: () => setError(null),
   };

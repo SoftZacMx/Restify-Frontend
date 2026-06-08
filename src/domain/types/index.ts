@@ -1,7 +1,7 @@
 // Base types and interfaces
 
 // User types
-export type UserRole = 'ADMIN' | 'MANAGER' | 'WAITER' | 'CHEF';
+export type UserRole = "OWNER" | "ADMIN" | "MANAGER" | "WAITER" | "CHEF";
 
 export interface User {
   id: string;
@@ -12,6 +12,10 @@ export interface User {
   phone: string | null;
   status: boolean;
   rol: UserRole;
+  // Multi-tenant (devueltos por login/signup)
+  organizationId: string;
+  mustChangePassword: boolean;
+  emailVerified: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -29,8 +33,51 @@ export interface LoginResponse {
     name: string;
     last_name: string;
     second_last_name: string | null;
+    email: string;
     rol: string;
+    organizationId: string;
+    mustChangePassword: boolean;
+    emailVerified: boolean;
   };
+}
+
+// Signup (registro público: crea organización + owner + primera sucursal)
+export interface SignupRequest {
+  user: {
+    email: string;
+    password: string;
+    name: string;
+    lastName: string;
+  };
+  organization: {
+    name: string;
+  };
+  branch: {
+    name: string;
+    state: string;
+    city: string;
+    street: string;
+    exteriorNumber: string;
+    phone: string;
+    rfc?: string | null;
+    startOperations?: string | null;
+    endOperations?: string | null;
+    timezone?: string;
+  };
+}
+
+export interface SignupResponse {
+  token: string;
+  user: {
+    id: string;
+    name: string;
+    last_name: string;
+    email: string;
+    rol: string;
+    organizationId: string;
+  };
+  organization: { id: string; name: string };
+  branch: { id: string; name: string };
 }
 
 // API Response types
@@ -56,7 +103,7 @@ export type {
   CreateUserRequest,
   UpdateUserRequest,
   UserFormErrors,
-} from './user.types';
+} from "./user.types";
 
 // Re-export expense types
 export type {
@@ -78,7 +125,7 @@ export type {
   EmployeeUser,
   ExpenseListItem,
   ExpenseProduct,
-} from './expense.types';
+} from "./expense.types";
 
 // Re-export order types
 export type {
@@ -110,10 +157,10 @@ export type {
   CartState,
   PaymentState,
   OrderFormErrors,
-} from './order.types';
+} from "./order.types";
 
-export { OrderOrigins } from './order.types';
-export type { OrderOriginType } from './order.types';
+export { OrderOrigins } from "./order.types";
+export type { OrderOriginType } from "./order.types";
 
 // Re-export dashboard types
 export type {
@@ -125,7 +172,7 @@ export type {
   DashboardOccupiedTables,
   DashboardResponse,
   DashboardApiResponse,
-} from './dashboard.types';
+} from "./dashboard.types";
 
 // Re-export payment types
 export type {
@@ -153,14 +200,14 @@ export type {
   RefundResponse,
   PaymentFormState,
   PaymentFormErrors,
-} from './payment.types';
+} from "./payment.types";
 
 export {
   PaymentMethodNumber,
   PosPaymentMethodToBackend,
   PaymentMethodNumberToString,
   PaymentMethodStringToNumber,
-} from './payment.types';
+} from "./payment.types";
 
 // Re-export product types (CRUD de productos)
 export type {
@@ -181,7 +228,7 @@ export type {
   ProductFormErrors,
   ProductFormData,
   ProductEditFormData,
-} from './product.types';
+} from "./product.types";
 
 // Re-export menu item types (CRUD de platillos)
 export type {
@@ -202,7 +249,7 @@ export type {
   MenuItemFormErrors,
   MenuItemFormData,
   MenuItemEditFormData,
-} from './menu-item.types';
+} from "./menu-item.types";
 
 // Re-export menu category types (CRUD de categorías)
 export type {
@@ -224,7 +271,7 @@ export type {
   MenuCategoryFormData,
   MenuCategoryEditFormData,
   CategorySelectOption,
-} from './menu-category.types';
+} from "./menu-category.types";
 
 // Re-export table types (CRUD de mesas)
 export type {
@@ -243,7 +290,7 @@ export type {
   TableStatusInfo,
   TableTableItem,
   TableFormErrors,
-} from './table.types';
+} from "./table.types";
 
 // Re-export WebSocket types (Notificaciones en tiempo real)
 export type {
@@ -257,9 +304,9 @@ export type {
   UseWebSocketOptions,
   UseWebSocketReturn,
   RegisterConnectionPayload,
-} from './websocket.types';
+} from "./websocket.types";
 
-export { WebSocketEventType } from './websocket.types';
+export { WebSocketEventType } from "./websocket.types";
 
 // Re-export ticket types (impresión kitchen-ticket / sale-ticket)
 export type {
@@ -269,7 +316,7 @@ export type {
   SaleTicketExtraItem,
   SaleTicketOrderItem,
   SaleTicketResponse,
-} from './ticket.types';
+} from "./ticket.types";
 
 // Re-export report types (GET /api/reports)
 export type {
@@ -289,7 +336,7 @@ export type {
   ReportsSummaryExpenseByCategory,
   ReportsSummaryDailyRow,
   ReportsSummaryResponse,
-} from './report.types';
+} from "./report.types";
 
 // Re-export company types (configuración de la compañía)
-export type { CompanyResponse, UpsertCompanyRequest } from './company.types';
+export type { CompanyResponse, UpsertCompanyRequest } from "./company.types";
