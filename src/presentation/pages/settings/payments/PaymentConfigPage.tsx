@@ -158,7 +158,7 @@ const PaymentConfigPage: React.FC = () => {
         </div>
         <p className="text-sm text-slate-500 dark:text-slate-400 max-w-2xl">
           Configura las credenciales de tu cuenta de Mercado Pago para recibir pagos con QR en
-          tu restaurante. Obtén estas credenciales desde tu panel de Mercado Pago en{' '}
+          tu negocio. Obtén estas credenciales desde tu panel de Mercado Pago en{' '}
           <span className="text-blue-500 dark:text-blue-400 font-medium">
             Credenciales {'>'} Credenciales de producción
           </span>.

@@ -123,7 +123,7 @@ export class OrderRepository {
 
   /**
    * Paga una orden (POST /api/orders/:order_id/pay)
-   * Backend crea el pago, actualiza la orden y libera la mesa si aplica.
+   * Backend crea el pago, actualiza la orden y libera la ubicación si aplica.
    */
   async payOrder(
     orderId: string,
@@ -219,7 +219,7 @@ export class OrderRepository {
   }
 
   /**
-   * Obtiene órdenes pendientes de una mesa
+   * Obtiene órdenes pendientes de una ubicación
    */
   async getOrdersByTable(tableId: string, status?: boolean): Promise<ApiResponse<OrderResponse[]>> {
     try {

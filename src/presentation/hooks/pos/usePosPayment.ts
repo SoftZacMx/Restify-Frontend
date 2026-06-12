@@ -180,7 +180,7 @@ export const usePosPayment = ({ cartState, paymentTotal, selectedTableId }: UseP
             try {
               await tableService.updateTable(selectedTableId, { availabilityStatus: true });
             } catch {
-              // Mesa: no se pudo actualizar estado
+              // Ubicación: no se pudo actualizar estado
             }
           }
 

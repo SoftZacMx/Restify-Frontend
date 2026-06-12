@@ -19,7 +19,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
             <UtensilsCrossed className="h-5 w-5 text-primary-foreground" />
           </div>
           <h1 className="text-lg font-bold text-slate-900 dark:text-white">
-            Menú
+            Catálogo
           </h1>
         </div>
       </header>

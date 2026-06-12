@@ -2,7 +2,7 @@ import type { TableResponse, TableTableItem, TableStatusInfo } from '@/domain/ty
 import { APP_TIMEZONE } from '@/shared/constants';
 
 /**
- * Formatea una mesa para mostrar en la tabla
+ * Formatea una ubicación para mostrar en la tabla
  */
 export function formatTableForDisplay(table: TableResponse): TableTableItem {
   return {
@@ -28,14 +28,14 @@ export function formatTableForDisplay(table: TableResponse): TableTableItem {
 }
 
 /**
- * Formatea un array de mesas para mostrar en la tabla
+ * Formatea un array de ubicaciones para mostrar en la tabla
  */
 export function formatTablesForDisplay(tables: TableResponse[]): TableTableItem[] {
   return tables.map(formatTableForDisplay);
 }
 
 /**
- * Obtiene información del estado visual de una mesa
+ * Obtiene información del estado visual de una ubicación
  */
 export function getTableStatusInfo(table: TableResponse): TableStatusInfo {
   if (!table.status) {
@@ -62,12 +62,12 @@ export function getTableStatusInfo(table: TableResponse): TableStatusInfo {
 }
 
 /**
- * Valida el nombre de mesa (texto no vacío, longitud razonable)
+ * Valida el nombre de ubicación (texto no vacío, longitud razonable)
  */
 export function validateTableName(value: string): string | null {
   const trimmed = value.trim();
   if (!trimmed) {
-    return 'El nombre de la mesa es requerido';
+    return 'El nombre de la ubicación es requerido';
   }
   if (trimmed.length > 64) {
     return 'El nombre no puede exceder 64 caracteres';

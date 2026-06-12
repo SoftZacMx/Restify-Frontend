@@ -48,7 +48,7 @@ const PublicMenuPage = () => {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
           <Input
             type="search"
-            placeholder="Buscar en el menú..."
+            placeholder="Buscar en el catálogo..."
             value={productSearch}
             onChange={(e) => setProductSearch(e.target.value)}
             className="pl-10 h-11 bg-white dark:bg-slate-800"

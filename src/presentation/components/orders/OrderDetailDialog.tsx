@@ -144,7 +144,7 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
                 {order.table && (
                   <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
                     <Package className="h-4 w-4 text-slate-400 shrink-0" />
-                    <span>Mesa {order.table.name}</span>
+                    <span>Ubicación {order.table.name}</span>
                   </div>
                 )}
                 <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
@@ -465,7 +465,7 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
                   className="w-full"
                 >
                   <UtensilsCrossed className="h-4 w-4 mr-2" />
-                  Ticket cocina
+                  Ticket operaciones
                 </Button>
               )}
               {!order.status && onSplitPayment && (

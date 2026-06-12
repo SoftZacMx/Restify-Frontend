@@ -5,7 +5,7 @@ import type { OrderResponse } from '@/domain/types';
 
 interface OrdersGridProps {
   orders: OrderResponse[];
-  /** Mapa mesa id → nombre para mostrar en órdenes locales */
+  /** Mapa ubicación id → nombre para mostrar en órdenes locales */
   tableNameById?: Map<string, string>;
   isLoading?: boolean;
   error?: string | null;

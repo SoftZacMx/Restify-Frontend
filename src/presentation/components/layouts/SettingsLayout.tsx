@@ -31,7 +31,7 @@ const PATH_TO_TITLE: Record<string, string> = {
 
 const PATH_TO_DESCRIPTION: Record<string, string> = {
   '/settings/general': 'Personaliza la apariencia y preferencias de la aplicación.',
-  '/settings/company': 'Administra la información general y legal de tu negocio en la plataforma RESTIFY.',
+  '/settings/company': 'Administra la información general y legal de tu negocio en la plataforma BIZFLOW.',
   '/settings/payments': 'Configura las credenciales de tus pasarelas de pago.',
 };
 

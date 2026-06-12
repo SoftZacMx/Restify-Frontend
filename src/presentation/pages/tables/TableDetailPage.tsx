@@ -15,8 +15,8 @@ import { cn } from '@/shared/lib/utils';
 import { APP_TIMEZONE } from '@/shared/constants';
 
 /**
- * Página de Detalle/Edición de Mesa
- * Responsabilidad: Mostrar y editar una mesa específica
+ * Página de Detalle/Edición de Ubicación
+ * Responsabilidad: Mostrar y editar una ubicación específica
  */
 const TableDetailPage: React.FC = () => {
   const { tableId } = useParams<{ tableId: string }>();
@@ -24,7 +24,7 @@ const TableDetailPage: React.FC = () => {
   const queryClient = useQueryClient();
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Query para obtener la mesa
+  // Query para obtener la ubicación
   const {
     data: table,
     isLoading,
@@ -32,7 +32,7 @@ const TableDetailPage: React.FC = () => {
   } = useQuery({
     queryKey: ['table', tableId],
     queryFn: async () => {
-      if (!tableId) throw new Error('ID de mesa no proporcionado');
+      if (!tableId) throw new Error('ID de ubicación no proporcionado');
       return await tableService.getTableById(tableId);
     },
     enabled: !!tableId,
@@ -40,7 +40,7 @@ const TableDetailPage: React.FC = () => {
   });
 
   /**
-   * Handler para actualizar la mesa
+   * Handler para actualizar la ubicación
    */
   const handleUpdateTable = async (tableData: UpdateTableRequest) => {
     if (!tableId) return;
@@ -48,7 +48,7 @@ const TableDetailPage: React.FC = () => {
     setIsUpdating(true);
     try {
       await tableService.updateTable(tableId, tableData);
-      showSuccessToast('Mesa actualizada', 'Los cambios se han guardado correctamente');
+      showSuccessToast('Ubicación actualizada', 'Los cambios se han guardado correctamente');
       // Invalidar queries relacionadas
       await queryClient.invalidateQueries({ queryKey: ['table', tableId] });
       await queryClient.invalidateQueries({ queryKey: ['tables'] });
@@ -76,7 +76,7 @@ const TableDetailPage: React.FC = () => {
       <MainLayout>
         <div className="px-4 py-8">
           <div className="text-center text-slate-500 dark:text-slate-400">
-            Cargando mesa...
+            Cargando ubicación...
           </div>
         </div>
       </MainLayout>
@@ -89,11 +89,11 @@ const TableDetailPage: React.FC = () => {
         <div className="px-4 py-8">
           <div className="text-center">
             <p className="text-red-500 dark:text-red-400 mb-4">
-              {error instanceof AppError ? error.message : 'No se pudo cargar la mesa'}
+              {error instanceof AppError ? error.message : 'No se pudo cargar la ubicación'}
             </p>
             <Button variant="outline" onClick={handleBack}>
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Volver a Mesas
+              Volver a Ubicaciones
             </Button>
           </div>
         </div>
@@ -115,10 +115,10 @@ const TableDetailPage: React.FC = () => {
             </span>
             <div>
               <h1 className="text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white">
-                Mesa {table.name}
+                Ubicación {table.name}
               </h1>
               <p className="text-sm text-slate-500 dark:text-slate-400">
-                Editar información de la mesa
+                Editar información de la ubicación
               </p>
             </div>
           </div>
@@ -130,7 +130,7 @@ const TableDetailPage: React.FC = () => {
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
-                <CardTitle>Información de la Mesa</CardTitle>
+                <CardTitle>Información de la Ubicación</CardTitle>
               </CardHeader>
               <CardContent>
                 <EditTableForm
@@ -145,7 +145,7 @@ const TableDetailPage: React.FC = () => {
 
           {/* Panel de información */}
           <div className="space-y-6">
-            {/* Estado visual de la mesa */}
+            {/* Estado visual de la ubicación */}
             <Card>
               <CardHeader>
                 <CardTitle>Estado Actual</CardTitle>

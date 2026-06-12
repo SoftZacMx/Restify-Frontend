@@ -37,8 +37,8 @@ import { AppError } from '@/domain/errors';
  * 
  * Parámetros de URL:
  * - mode: 'edit' | 'pay' | 'ORDER_BUILDING' | 'PAYMENT_PROCESSING' | 'view'
- *   - edit / view: editar orden (lista mesas, grid platos, info editable)
- *   - pay: solo pagar orden (solo mesa asignada, sin grid, info readonly, sección pago visible)
+ *   - edit / view: editar orden (lista ubicaciones, grid platos, info editable)
+ *   - pay: solo pagar orden (solo ubicación asignada, sin grid, info readonly, sección pago visible)
  * - orderId: ID de la orden a editar/pagar (opcional)
  */
 const PosPage = () => {
@@ -768,7 +768,7 @@ const PosPage = () => {
           categories={categories}
         />
 
-        {/* Diálogo de selección de mesa (solo tipo local) */}
+        {/* Diálogo de selección de ubicación (solo tipo local) */}
         <TableSelectionDialog
           open={isTableDialogOpen}
           onOpenChange={setIsTableDialogOpen}

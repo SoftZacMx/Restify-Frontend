@@ -21,8 +21,8 @@ import { INPUT_LENGTH } from '@/shared/constants';
 const PHONE_DIGITS = 10;
 
 const roleConfig: Record<UserRole, { label: string; Icon: React.ComponentType<{ className?: string }> }> = {
-  WAITER: { label: 'Mesero', Icon: UtensilsCrossed },
-  CHEF: { label: 'Cocinero', Icon: ChefHat },
+  WAITER: { label: 'Empleado', Icon: UtensilsCrossed },
+  CHEF: { label: 'Operario', Icon: ChefHat },
   MANAGER: { label: 'Gerente', Icon: UserCog },
   ADMIN: { label: 'Administrador', Icon: Shield },
 };

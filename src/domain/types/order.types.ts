@@ -31,7 +31,7 @@ export const OrderOrigins = {
 export type OrderOriginType = typeof OrderOrigins[keyof typeof OrderOrigins];
 
 /**
- * Mesa del restaurante (formato UI)
+ * Ubicación del restaurante (formato UI)
  */
 export interface Table {
   id: string;
@@ -149,7 +149,7 @@ export interface OrderItemInput {
  */
 export interface CreateOrderRequest {
   paymentMethod?: number; // 1: Cash, 2: Transfer, 3: Card (opcional, default: 1)
-  tableId?: string | null; // UUID de la mesa (opcional)
+  tableId?: string | null; // UUID de la ubicación (opcional)
   tip?: number; // Propina (default: 0)
   origin: string; // REQUERIDO - 'Local', 'Delivery', 'Order', etc. (máx 50 chars)
   client?: string | null; // Nombre del cliente (máx 200 chars)
@@ -197,7 +197,7 @@ export interface UpdateOrderRequest {
 export interface ListOrdersRequest {
   status?: boolean; // true = pagadas, false = pendientes
   userId?: string; // Filtrar por mesero
-  tableId?: string; // Filtrar por mesa
+  tableId?: string; // Filtrar por ubicación
   paymentMethod?: number; // 1, 2, o 3
   origin?: string; // Filtrar por origen
   dateFrom?: string; // Fecha inicio (ISO string)
@@ -273,7 +273,7 @@ export interface PayOrderResult {
     paymentMethod: number | null; // 1: Cash, 2: Transfer, 3: Card; null = dividido
     delivered?: boolean;
   };
-  tableReleased: boolean; // true si se liberó la mesa (Local + mesa asignada)
+  tableReleased: boolean; // true si se liberó la ubicación (Local + ubicación asignada)
 }
 
 // ============ TIPOS LEGACY (compatibilidad) ============

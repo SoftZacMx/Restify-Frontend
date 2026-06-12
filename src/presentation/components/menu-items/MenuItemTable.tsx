@@ -53,7 +53,7 @@ interface MenuItemTableProps {
 
 /**
  * Componente MenuItemTable
- * Responsabilidad única: Renderizar tabla de platillos
+ * Responsabilidad única: Renderizar tabla de productos
  * Cumple SRP: Solo maneja la presentación de datos en tabla
  */
 export const MenuItemTable: React.FC<MenuItemTableProps> = ({
@@ -66,7 +66,7 @@ export const MenuItemTable: React.FC<MenuItemTableProps> = ({
       <div className="px-4 py-5">
         <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark">
           <div className="p-8 text-center text-slate-500 dark:text-slate-400">
-            Cargando platillos...
+            Cargando productos...
           </div>
         </div>
       </div>
@@ -78,7 +78,7 @@ export const MenuItemTable: React.FC<MenuItemTableProps> = ({
       <div className="px-4 py-5">
         <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark">
           <div className="p-8 text-center text-slate-500 dark:text-slate-400">
-            No se encontraron platillos
+            No se encontraron productos
           </div>
         </div>
       </div>

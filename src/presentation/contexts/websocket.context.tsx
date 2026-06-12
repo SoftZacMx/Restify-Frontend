@@ -43,7 +43,7 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
 
     // Mostrar notificación
     const clientName = data.order.client || 'Cliente';
-    const tableInfo = data.order.tableId ? `Mesa asignada` : 'Para llevar';
+    const tableInfo = data.order.tableId ? `Ubicación asignada` : 'Para llevar';
     
     showInfoToast(
       'Nueva Orden',

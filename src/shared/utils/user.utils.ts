@@ -8,8 +8,8 @@ import { APP_TIMEZONE } from '@/shared/constants';
 const ROLE_LABELS: Record<UserRole, string> = {
   ADMIN: 'Administrador',
   MANAGER: 'Gerente',
-  WAITER: 'Mesero',
-  CHEF: 'Cocinero',
+  WAITER: 'Empleado',
+  CHEF: 'Operario',
 };
 
 /**

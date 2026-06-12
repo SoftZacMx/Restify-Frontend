@@ -164,7 +164,7 @@ export const usePos = (options?: UsePosOptions) => {
           try {
             await tableService.updateTable(orderBuilder.selectedTableId, { availabilityStatus: false });
           } catch {
-            // Mesa: no se pudo actualizar estado
+            // Ubicación: no se pudo actualizar estado
           }
         }
 
@@ -247,7 +247,7 @@ export const usePos = (options?: UsePosOptions) => {
     productsError: fetchData.productsError,
     availableExtras: fetchData.availableExtras,
 
-    // Estado de mesas del backend
+    // Estado de ubicaciones del backend
     tables: fetchData.tables,
     isLoadingTables: fetchData.isLoadingTables,
     tablesError: fetchData.tablesError,

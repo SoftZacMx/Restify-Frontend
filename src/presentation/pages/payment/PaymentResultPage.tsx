@@ -54,7 +54,7 @@ const PaymentResultPage: React.FC = () => {
           {description}
         </p>
         <p className="text-xs text-slate-400 dark:text-slate-500">
-          Restify
+          BizFlow
         </p>
       </div>
     </div>

@@ -14,7 +14,7 @@ interface ErrorBoundaryFallbackProps {
 export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({ onRetry }) => {
   useEffect(() => {
     const prev = document.title;
-    document.title = 'Error Boundary RESTIFY';
+    document.title = 'Error Boundary BIZFLOW';
     return () => {
       document.title = prev;
     };
@@ -76,7 +76,7 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({ on
 
       {/* Footer */}
       <footer className="py-4 text-center text-sm text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700/50">
-        © 2024 RESTIFY Admin Panel. Todos los derechos reservados.
+        © 2024 BIZFLOW Admin Panel. Todos los derechos reservados.
       </footer>
     </div>
   );

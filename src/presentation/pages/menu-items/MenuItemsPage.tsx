@@ -71,9 +71,9 @@ const MenuItemsPage: React.FC = () => {
   React.useEffect(() => {
     if (error) {
       if (error instanceof AppError) {
-        showErrorToast('Error al cargar platillos', error.message);
+        showErrorToast('Error al cargar productos', error.message);
       } else {
-        showErrorToast('Error al cargar platillos', 'No se pudieron obtener los platillos del servidor');
+        showErrorToast('Error al cargar productos', 'No se pudieron obtener los productos del servidor');
       }
     }
   }, [error]);
@@ -101,7 +101,7 @@ const MenuItemsPage: React.FC = () => {
       const item = menuItems.find((m) => m.id === menuItemId);
       if (!item) return;
       await menuItemService.updateMenuItem(menuItemId, { status: !item.status });
-      showSuccessToast('Estado actualizado', `El platillo ha sido ${!item.status ? 'activado' : 'desactivado'} exitosamente`);
+      showSuccessToast('Estado actualizado', `El producto ha sido ${!item.status ? 'activado' : 'desactivado'} exitosamente`);
       invalidate();
       await refetch();
     } catch (error) {
@@ -118,14 +118,14 @@ const MenuItemsPage: React.FC = () => {
     setIsDeleting(true);
     try {
       await menuItemService.deleteMenuItem(deleteDialog.data.id);
-      showSuccessToast('Platillo eliminado', `El platillo "${deleteDialog.data.name}" ha sido eliminado exitosamente`);
+      showSuccessToast('Producto eliminado', `El producto "${deleteDialog.data.name}" ha sido eliminado exitosamente`);
       invalidate();
       await refetch();
     } catch (error) {
       if (error instanceof AppError) {
-        showErrorToast('Error al eliminar platillo', error.message);
+        showErrorToast('Error al eliminar producto', error.message);
       } else {
-        showErrorToast('Error al eliminar platillo', 'Ocurrió un error inesperado');
+        showErrorToast('Error al eliminar producto', 'Ocurrió un error inesperado');
       }
     } finally {
       setIsDeleting(false);
@@ -139,14 +139,14 @@ const MenuItemsPage: React.FC = () => {
     try {
       await menuItemService.createMenuItem({ ...data, userId: user.id });
       setIsCreateModalOpen(false);
-      showSuccessToast('Platillo creado exitosamente', 'El nuevo platillo ha sido agregado al sistema');
+      showSuccessToast('Producto creado exitosamente', 'El nuevo producto ha sido agregado al sistema');
       invalidate();
       await refetch();
     } catch (error) {
       if (error instanceof AppError) {
-        showErrorToast('Error al crear platillo', error.message);
+        showErrorToast('Error al crear producto', error.message);
       } else {
-        showErrorToast('Error al crear platillo', 'Ocurrió un error inesperado');
+        showErrorToast('Error al crear producto', 'Ocurrió un error inesperado');
       }
       throw error;
     } finally {
@@ -157,10 +157,10 @@ const MenuItemsPage: React.FC = () => {
   return (
     <MainLayout>
       <div className="flex flex-wrap justify-between items-center gap-4 px-4 py-2">
-        <h1 className="text-3xl lg:text-4xl font-black text-slate-800 dark:text-white leading-tight tracking-tight">Platillos</h1>
+        <h1 className="text-3xl lg:text-4xl font-black text-slate-800 dark:text-white leading-tight tracking-tight">Productos</h1>
         <Button onClick={() => setIsCreateModalOpen(true)} className="flex items-center justify-center gap-2 min-w-[84px] cursor-pointer overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-sm hover:bg-primary/90 transition-colors">
           <Plus className="h-4 w-4" />
-          <span className="truncate">Nuevo Platillo</span>
+          <span className="truncate">Nuevo Producto</span>
         </Button>
       </div>
 
@@ -171,7 +171,7 @@ const MenuItemsPage: React.FC = () => {
         <Pagination
           currentPage={paginationData.currentPage} totalPages={paginationData.totalPages}
           totalItems={paginationData.totalItems} itemsPerPage={paginationData.itemsPerPage}
-          itemsLabel="platillos" pageSizeOptions={pageSizeOptions}
+          itemsLabel="productos" pageSizeOptions={pageSizeOptions}
           onPageChange={handlePageChange} onPageSizeChange={handlePageSizeChange}
         />
       )}
@@ -179,7 +179,7 @@ const MenuItemsPage: React.FC = () => {
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
         <DialogContent className="!max-w-[40vw] w-[90vw] max-h-[90vh] overflow-y-auto">
           <DialogClose />
-          <DialogHeader><DialogTitle>Crear Nuevo Platillo</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Crear Nuevo Producto</DialogTitle></DialogHeader>
           <CreateMenuItemForm onSubmit={handleCreateMenuItem} onCancel={() => setIsCreateModalOpen(false)} isLoading={isCreating} />
         </DialogContent>
       </Dialog>
@@ -187,8 +187,8 @@ const MenuItemsPage: React.FC = () => {
       <ConfirmDialog
         open={deleteDialog.isOpen}
         onClose={deleteDialog.close}
-        title="¿Eliminar platillo?"
-        description={deleteDialog.data && (<>Estás a punto de eliminar el platillo <strong className="text-slate-900 dark:text-white">{deleteDialog.data.name}</strong>.<br /><br />Esta acción no se puede deshacer.</>)}
+        title="¿Eliminar producto?"
+        description={deleteDialog.data && (<>Estás a punto de eliminar el producto <strong className="text-slate-900 dark:text-white">{deleteDialog.data.name}</strong>.<br /><br />Esta acción no se puede deshacer.</>)}
         confirmLabel="Eliminar"
         isLoading={isDeleting}
         onConfirm={handleConfirmDelete}

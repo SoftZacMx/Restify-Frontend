@@ -96,8 +96,8 @@ const DashboardPage = () => {
   };
 
   const getTableDisplay = (order: DashboardOrderSummary) => {
-    if (order.tableName != null && order.tableName !== '') return `Mesa ${order.tableName}`;
-    return order.origin === 'local' ? 'Local' : order.origin || 'Sin mesa';
+    if (order.tableName != null && order.tableName !== '') return `Ubicación ${order.tableName}`;
+    return order.origin === 'local' ? 'Local' : order.origin || 'Sin ubicación';
   };
 
   if (isLoading) {
@@ -180,13 +180,13 @@ const DashboardPage = () => {
           subtitle="Sin pagar"
         />
         <StatCard
-          title="Mesas ocupadas"
+          title="Ubicaciones ocupadas"
           value={occupiedTables.count}
           icon={UtensilsCrossed}
           accent="blue"
           subtitle={
             occupiedTables.items.length > 0
-              ? `Mesas ${occupiedTables.items.map((t) => t.name).join(', ')}`
+              ? `Ubicaciones ${occupiedTables.items.map((t) => t.name).join(', ')}`
               : undefined
           }
         />
@@ -256,7 +256,7 @@ const DashboardPage = () => {
                     <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50/50 dark:bg-slate-700/50">
                       <tr>
                         <th className="px-4 py-3 font-medium rounded-l-lg">Orden</th>
-                        <th className="px-4 py-3 font-medium">Mesa</th>
+                        <th className="px-4 py-3 font-medium">Ubicación</th>
                         <th className="px-4 py-3 font-medium">Hora</th>
                         <th className="px-4 py-3 font-medium text-right rounded-r-lg">Total</th>
                       </tr>
@@ -313,7 +313,7 @@ const DashboardPage = () => {
                     <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50/50 dark:bg-slate-700/50">
                       <tr>
                         <th className="px-4 py-3 font-medium rounded-l-lg">Orden</th>
-                        <th className="px-4 py-3 font-medium">Mesa</th>
+                        <th className="px-4 py-3 font-medium">Ubicación</th>
                         <th className="px-4 py-3 font-medium">Estado</th>
                         <th className="px-4 py-3 font-medium">Hora</th>
                         <th className="px-4 py-3 font-medium text-right rounded-r-lg">Total</th>
@@ -374,7 +374,7 @@ const DashboardPage = () => {
                 onClick={() => navigate('/tables')}
               >
                 <MapPin className="h-5 w-5" />
-                <span>Ver mapa de mesas</span>
+                <span>Ver mapa de ubicaciones</span>
               </Button>
             </CardContent>
           </Card>

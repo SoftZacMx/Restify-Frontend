@@ -19,7 +19,7 @@ export interface ListTablesRequest {
   status?: boolean;
   availabilityStatus?: boolean;
   userId?: string;
-  /** Filtro exacto por nombre de mesa */
+  /** Filtro exacto por nombre de ubicación */
   name?: string;
 }
 
@@ -53,13 +53,13 @@ export type TableFormData = Omit<CreateTableRequest, 'userId'>;
 // Para formularios de edición
 export type TableEditFormData = UpdateTableRequest;
 
-// Para mostrar en listas/selectores (mesas disponibles)
+// Para mostrar en listas/selectores (ubicaciones disponibles)
 export type AvailableTableOption = Pick<TableResponse, 'id' | 'name'>;
 
 // Para uso en Order
 export type TableForOrder = Pick<TableResponse, 'id' | 'name' | 'availabilityStatus'>;
 
-// Estado visual de la mesa
+// Estado visual de la ubicación
 export interface TableStatusInfo {
   label: string;
   color: 'green' | 'red' | 'gray';

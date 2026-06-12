@@ -27,7 +27,7 @@ interface TablesTableProps {
 
 /**
  * Componente TablesTable
- * Responsabilidad única: Renderizar tabla de mesas
+ * Responsabilidad única: Renderizar tabla de ubicaciones
  * Cumple SRP: Solo maneja la presentación de datos en tabla
  */
 export const TablesTable: React.FC<TablesTableProps> = ({
@@ -40,7 +40,7 @@ export const TablesTable: React.FC<TablesTableProps> = ({
       <div className="px-4 py-5">
         <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark">
           <div className="p-8 text-center text-slate-500 dark:text-slate-400">
-            Cargando mesas...
+            Cargando ubicaciones...
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@ export const TablesTable: React.FC<TablesTableProps> = ({
       <div className="px-4 py-5">
         <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark">
           <div className="p-8 text-center text-slate-500 dark:text-slate-400">
-            No se encontraron mesas
+            No se encontraron ubicaciones
           </div>
         </div>
       </div>
@@ -67,7 +67,7 @@ export const TablesTable: React.FC<TablesTableProps> = ({
             <TableHeader>
               <TableRow className="bg-slate-50 dark:bg-slate-800/50">
                 <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                  Mesa
+                  Ubicación
                 </TableHead>
                 <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Estado
@@ -97,7 +97,7 @@ export const TablesTable: React.FC<TablesTableProps> = ({
                       <span className="inline-flex items-center justify-center min-w-8 h-8 px-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs max-w-[120px] truncate">
                         {table.name}
                       </span>
-                      <span className="truncate max-w-[180px]">Mesa {table.name}</span>
+                      <span className="truncate max-w-[180px]">Ubicación {table.name}</span>
                     </Link>
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap">

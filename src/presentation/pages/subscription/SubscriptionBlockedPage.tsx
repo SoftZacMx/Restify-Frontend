@@ -73,8 +73,8 @@ const SubscriptionBlockedPage = () => {
           Tu suscripción ha expirado
         </h1>
         <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto">
-          Tu acceso a Restify se encuentra restringido actualmente. Elige un plan
-          para continuar gestionando tu restaurante sin interrupciones.
+          Tu acceso a BizFlow se encuentra restringido actualmente. Elige un plan
+          para continuar gestionando tu negocio sin interrupciones.
         </p>
       </div>
 

@@ -29,7 +29,7 @@ interface RecipeEditorProps {
   menuItemId: string;
   /**
    * Indica si el MenuItem es un extra. Cambia el copy contextual: la receta del extra
-   * se descuenta cuando el extra se vende junto con un platillo principal.
+   * se descuenta cuando el extra se vende junto con un producto principal.
    */
   isExtra?: boolean;
 }
@@ -204,7 +204,7 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
       for (const ing of recipe.ingredients) {
         await recipeService.removeIngredient(menuItemId, ing.productId);
       }
-      showSuccessToast('Receta borrada', 'El platillo ya no tiene ingredientes asignados');
+      showSuccessToast('Receta borrada', 'El producto ya no tiene ingredientes asignados');
       await queryClient.invalidateQueries({ queryKey: ['recipe', menuItemId] });
       setIsDeleteOpen(false);
     } catch (err) {
@@ -225,7 +225,7 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
           <ChefHat className="h-5 w-5 text-yellow-700 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
           <div>
             <h3 className="text-base font-semibold text-yellow-900 dark:text-yellow-200">
-              Este platillo es un ítem directo
+              Este producto es un ítem directo
             </h3>
             <p className="text-sm text-yellow-800 dark:text-yellow-300 mt-1">
               No puede tener receta porque ya está vinculado a un producto único.
@@ -258,8 +258,8 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
             <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Receta</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400">
               {isExtra
-                ? 'Ingredientes que se descuentan del stock cuando este extra se vende junto con un platillo.'
-                : 'Ingredientes que se descuentan del stock al vender este platillo.'}
+                ? 'Ingredientes que se descuentan del stock cuando este extra se vende junto con un producto.'
+                : 'Ingredientes que se descuentan del stock al vender este producto.'}
             </p>
           </div>
         </div>
@@ -285,7 +285,7 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
         <>
           {drafts.length === 0 ? (
             <div className="text-center text-slate-500 dark:text-slate-400 py-8 border border-dashed border-slate-200 dark:border-slate-700 rounded-lg">
-              Este platillo no tiene receta. Agregá ingredientes para empezar a trackear.
+              Este producto no tiene receta. Agregá ingredientes para empezar a trackear.
             </div>
           ) : (
             <div className="overflow-x-auto -mx-2">
@@ -436,7 +436,7 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
 
       {/* Dialog de selección de producto (reusado del módulo de gastos).
           onlyTracked: la receta solo puede usar productos con tracking activado, sino al
-          venderse el platillo el ingrediente no descontaría stock (sería una receta decorativa). */}
+          venderse el producto el ingrediente no descontaría stock (sería una receta decorativa). */}
       <SelectProductDialog
         open={pickerRowId !== null}
         onOpenChange={(open) => {
@@ -455,7 +455,7 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
         open={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
         title="¿Borrar la receta completa?"
-        description="El platillo dejará de descontar ingredientes al venderse. Podés recrear la receta cuando quieras."
+        description="El producto dejará de descontar ingredientes al venderse. Podés recrear la receta cuando quieras."
         confirmLabel="Borrar receta"
         isLoading={isDeleting}
         onConfirm={handleDeleteAll}

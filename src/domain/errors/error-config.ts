@@ -247,22 +247,22 @@ export const ERROR_CONFIG = {
     category: 'BUSINESS',
   },
   TABLE_NOT_FOUND: {
-    message: 'Mesa no encontrada',
+    message: 'Ubicación no encontrada',
     statusCode: 404,
     category: 'BUSINESS',
   },
   TABLE_CREATION_FAILED: {
-    message: 'No se pudo crear la mesa',
+    message: 'No se pudo crear la ubicación',
     statusCode: 400,
     category: 'BUSINESS',
   },
   TABLE_UPDATE_FAILED: {
-    message: 'No se pudo actualizar la mesa',
+    message: 'No se pudo actualizar la ubicación',
     statusCode: 400,
     category: 'BUSINESS',
   },
   TABLE_DELETE_FAILED: {
-    message: 'No se pudo eliminar la mesa',
+    message: 'No se pudo eliminar la ubicación',
     statusCode: 400,
     category: 'BUSINESS',
   },

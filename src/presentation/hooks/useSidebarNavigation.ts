@@ -3,7 +3,6 @@ import type { LucideIcon } from 'lucide-react';
 import {
   LayoutDashboard,
   ClipboardList,
-  Map,
   BookOpen,
   BarChart3,
   Users,
@@ -63,12 +62,12 @@ const FULL_NAV_MAIN: NavItem[] = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
   { icon: ClipboardList, label: 'Órdenes', path: '/orders' },
   { icon: Receipt, label: 'Punto De Venta', path: '/pos' },
-  { icon: Map, label: 'Mapa de Mesas', path: '/tables' },
+  // Oculto del sidebar (cambio visual): { icon: Map, label: 'Mapa de Ubicaciones', path: '/tables' },
   {
     icon: BookOpen,
-    label: 'Menú del Restaurante',
+    label: 'Catálogo del Negocio',
     subItems: [
-      { icon: Utensils, label: 'Platillos', path: '/menu/items' },
+      { icon: Utensils, label: 'Productos del Catálogo', path: '/menu/items' },
       { icon: FolderTree, label: 'Categorías', path: '/menu/categories' },
     ],
   },

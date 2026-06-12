@@ -29,7 +29,7 @@ const PublicCheckoutPage = () => {
             No hay items en el carrito
           </p>
           <Button onClick={() => navigate('/public/menu')}>
-            Volver al menú
+            Volver al catálogo
           </Button>
         </div>
       </PublicLayout>
@@ -110,7 +110,7 @@ const PublicCheckoutPage = () => {
           className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
-          Volver al menú
+          Volver al catálogo
         </button>
 
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">

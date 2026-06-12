@@ -6,7 +6,7 @@
 import type { Table, Category, PosProduct } from '@/domain/types';
 
 /**
- * Mesas disponibles del restaurante
+ * Ubicaciones disponibles del restaurante
  */
 export const AVAILABLE_TABLES: Table[] = [
   { id: '1', name: '1', capacity: 2, isAvailable: true, location: 'Interior' },

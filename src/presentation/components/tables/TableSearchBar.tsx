@@ -21,7 +21,7 @@ interface TableSearchBarProps {
 
 /**
  * Componente TableSearchBar
- * Responsabilidad única: Manejar filtros y búsqueda de mesas
+ * Responsabilidad única: Manejar filtros y búsqueda de ubicaciones
  * Cumple SRP: Solo maneja los filtros de búsqueda
  */
 export const TableSearchBar: React.FC<TableSearchBarProps> = ({
@@ -61,7 +61,7 @@ export const TableSearchBar: React.FC<TableSearchBarProps> = ({
             type="text"
             inputMode="text"
             autoComplete="off"
-            placeholder="Buscar por nombre de mesa..."
+            placeholder="Buscar por nombre de ubicación..."
             value={filters.search || ''}
             onChange={handleSearchChange}
             className="pl-10"
@@ -100,7 +100,7 @@ export const TableSearchBar: React.FC<TableSearchBarProps> = ({
                 : 'Todas'}
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todas las mesas</SelectItem>
+            <SelectItem value="all">Todas las ubicaciones</SelectItem>
             <SelectItem value="available">Libres</SelectItem>
             <SelectItem value="occupied">Ocupadas</SelectItem>
           </SelectContent>

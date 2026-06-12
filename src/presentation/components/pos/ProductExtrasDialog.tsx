@@ -97,7 +97,7 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
                 {product.name}
               </DialogTitle>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                Personaliza tu platillo favorito
+                Personaliza tu producto favorito
               </p>
             </div>
             <DialogClose className="rounded-lg p-1.5 -mr-1" />

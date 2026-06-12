@@ -19,7 +19,7 @@ export const UserRecentActivity: React.FC<UserRecentActivityProps> = ({ userId: 
       iconColor: 'text-blue-600 dark:text-blue-400',
       bgColor: 'bg-blue-100 dark:bg-blue-900/50',
       title: 'Creó la orden #8432',
-      description: 'Para la Mesa 5',
+      description: 'Para la Ubicación 5',
       time: 'Hace 2 horas',
     },
     {
@@ -39,7 +39,7 @@ export const UserRecentActivity: React.FC<UserRecentActivityProps> = ({ userId: 
       iconColor: 'text-blue-600 dark:text-blue-400',
       bgColor: 'bg-blue-100 dark:bg-blue-900/50',
       title: 'Creó la orden #8429',
-      description: 'Para la Mesa 2',
+      description: 'Para la Ubicación 2',
       time: 'Ayer',
     },
   ];

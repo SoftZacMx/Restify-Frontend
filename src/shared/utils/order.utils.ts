@@ -161,11 +161,11 @@ export const countOrderItems = (order: OrderResponse): number => {
 };
 
 /**
- * Obtiene el nombre para mostrar de la mesa o tipo de orden
+ * Obtiene el nombre para mostrar de la ubicación o tipo de orden
  */
 export const getOrderLocationDisplay = (order: OrderResponse): string => {
   if (order.table) {
-    return `Mesa ${order.table.name}`;
+    return `Ubicación ${order.table.name}`;
   }
   if (order.origin === 'Delivery') {
     return 'Delivery';
@@ -173,10 +173,10 @@ export const getOrderLocationDisplay = (order: OrderResponse): string => {
   if (order.origin === 'Pickup') {
     return 'Para llevar';
   }
-  return order.origin || 'Sin mesa';
+  return order.origin || 'Sin ubicación';
 };
 
-/** Etiqueta del origen para la tarjeta (solo tipo de servicio, sin mesa). */
+/** Etiqueta del origen para la tarjeta (solo tipo de servicio, sin ubicación). */
 export const getOrderOriginLabel = (order: OrderResponse): string => {
   const o = (order.origin || '').trim();
   if (!o) return '—';
@@ -193,13 +193,13 @@ export const isOnlineOrder = (order: OrderResponse): boolean => {
   return o === 'online-delivery' || o === 'online-pickup';
 };
 
-/** Origen comida en local (mesa / salón). */
+/** Origen comida en local (ubicación / salón). */
 export const isOrderLocalOrigin = (order: OrderResponse): boolean => {
   return (order.origin || '').trim().toLowerCase() === 'local';
 };
 
 /**
- * Nombre de mesa para mostrar: relación `order.table`, o mapa id→nombre desde la lista de mesas.
+ * Nombre de ubicación para mostrar: relación `order.table`, o mapa id→nombre desde la lista de ubicaciones.
  */
 export const getOrderTableDisplayName = (
   order: OrderResponse,
@@ -213,7 +213,7 @@ export const getOrderTableDisplayName = (
 };
 
 /**
- * Texto de mesa para la card cuando el origen es local (siempre una línea: nombre o Sin mesa).
+ * Texto de ubicación para la card cuando el origen es local (siempre una línea: nombre o Sin ubicación).
  * `null` si el origen no es local.
  */
 export const getLocalOrderMesaLine = (
@@ -222,9 +222,9 @@ export const getLocalOrderMesaLine = (
 ): string | null => {
   if (!isOrderLocalOrigin(order)) return null;
   const name = getOrderTableDisplayName(order, tableNameById);
-  if (name) return `Mesa ${name}`;
-  if (order.tableId) return 'Mesa';
-  return 'Sin mesa';
+  if (name) return `Ubicación ${name}`;
+  if (order.tableId) return 'Ubicación';
+  return 'Sin ubicación';
 };
 
 /**

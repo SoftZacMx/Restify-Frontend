@@ -190,14 +190,14 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
           onSelect={(category) => setValue('categoryId', category?.id ?? undefined)}
         />
         {errors.categoryId && <p className="text-sm text-destructive">{errors.categoryId.message}</p>}
-        <p className="text-xs text-slate-500 dark:text-slate-400">Selecciona la categoría del menú a la que pertenece el platillo</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400">Selecciona la categoría del catálogo a la que pertenece el producto</p>
       </div>
 
       <div className="flex items-center justify-between space-x-2 rounded-lg border  p-4">
         <div className="space-y-0.5">
           <Label htmlFor="isExtra" className="text-sm font-medium">Es un Extra</Label>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            {isExtra ? 'Este platillo es un extra que se puede agregar a otros platillos' : 'Este es un platillo normal del menú'}
+            {isExtra ? 'Este producto es un extra que se puede agregar a otros productos' : 'Este es un producto normal del catálogo'}
           </p>
         </div>
         <Switch id="isExtra" checked={isExtra} onCheckedChange={(checked) => setValue('isExtra', checked)} disabled={isLoading} />
@@ -207,7 +207,7 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
         <div className="space-y-0.5">
           <Label htmlFor="status" className="text-sm font-medium">Estado</Label>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            {status ? 'Platillo activo' : 'Platillo inactivo'}
+            {status ? 'Producto activo' : 'Producto inactivo'}
           </p>
         </div>
         <Switch id="status" checked={status} onCheckedChange={(checked) => setValue('status', checked)} disabled={isLoading} />

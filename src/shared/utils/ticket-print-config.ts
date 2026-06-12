@@ -87,7 +87,7 @@ export const DEFAULT_TICKET_PRINT_CONFIG: ResolvedTicketPrintConfig = {
     showPaymentMethod: true,
     showDeliveredStatus: true,
     showFooter: true,
-    footerText: 'Restify',
+    footerText: 'BizFlow',
     centerTotalsBlock: true,
   },
   kitchen: {

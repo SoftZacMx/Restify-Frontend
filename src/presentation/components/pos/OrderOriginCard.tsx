@@ -25,7 +25,7 @@ interface OrderOriginCardProps {
 
 /**
  * Card unificada para el origen de la orden: tipo (Para Comer Aquí / Para Llevar),
- * selección de mesa (si es local) o nombre del cliente (si es para llevar).
+ * selección de ubicación (si es local) o nombre del cliente (si es para llevar).
  * Todo en una sola card.
  */
 export const OrderOriginCard: React.FC<OrderOriginCardProps> = ({
@@ -61,10 +61,10 @@ export const OrderOriginCard: React.FC<OrderOriginCardProps> = ({
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                    Mesa seleccionada
+                    Ubicación seleccionada
                   </p>
                   <p className="text-lg font-bold text-slate-900 dark:text-white mt-0.5">
-                    Mesa {selectedTable.name}
+                    Ubicación {selectedTable.name}
                   </p>
                   {selectedTable.location?.trim() && (
                     <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
@@ -85,10 +85,10 @@ export const OrderOriginCard: React.FC<OrderOriginCardProps> = ({
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                    Sin mesa asignada
+                    Sin ubicación asignada
                   </p>
                   <p className="text-base font-semibold text-slate-700 dark:text-slate-300 mt-0.5">
-                    Toca para elegir mesa
+                    Toca para elegir ubicación
                   </p>
                 </div>
               </button>

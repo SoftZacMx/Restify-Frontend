@@ -26,7 +26,7 @@ export const Sidebar = () => {
     queryFn: () => companyService.getCompany(),
     staleTime: 5 * 60 * 1000,
   });
-  const businessName = company?.name ?? 'Restify';
+  const businessName = company?.name ?? 'BizFlow';
 
   const handleLogout = async () => {
     await logout();

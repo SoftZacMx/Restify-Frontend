@@ -227,7 +227,7 @@ export type {
   CategorySelectOption,
 } from './menu-category.types';
 
-// Re-export table types (CRUD de mesas)
+// Re-export table types (CRUD de ubicaciones)
 export type {
   CreateTableRequest,
   UpdateTableRequest,

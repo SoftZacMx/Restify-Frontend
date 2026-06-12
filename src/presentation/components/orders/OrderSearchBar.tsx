@@ -117,16 +117,16 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
 
       {/* Segunda fila: Filtros adicionales */}
       <div className="flex flex-col sm:flex-row gap-3">
-        {/* Mesa */}
+        {/* Ubicación */}
         <Select
           value={filters.tableId || 'all'}
           onValueChange={handleTableChange}
         >
           <SelectTrigger className="w-full sm:w-[160px]">
-            <SelectValue placeholder="Mesa" />
+            <SelectValue placeholder="Ubicación" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todas las mesas</SelectItem>
+            <SelectItem value="all">Todas las ubicaciones</SelectItem>
             {isLoadingTables ? (
               <SelectItem value="loading">
                 Cargando...
@@ -134,7 +134,7 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
             ) : (
               tables.map((table) => (
                 <SelectItem key={table.id} value={table.id}>
-                  Mesa {table.name}
+                  Ubicación {table.name}
                 </SelectItem>
               ))
             )}

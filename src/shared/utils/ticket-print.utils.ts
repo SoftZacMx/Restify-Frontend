@@ -101,9 +101,9 @@ function buildTableLocationLine(tableName: string | null | undefined, origin?: s
     return 'Para llevar';
   }
   if (tableName != null && tableName.trim() !== '') {
-    return `Mesa ${tableName.trim()}`;
+    return `Ubicación ${tableName.trim()}`;
   }
-  return 'Sin mesa';
+  return 'Sin ubicación';
 }
 
 function resolveConfig(
@@ -146,7 +146,7 @@ export function buildKitchenTicketHtml(
   }
 
   const brandBranchHtml = k.showBrandBranch
-    ? '<div class="brand-branch">COCINA</div>'
+    ? '<div class="brand-branch">OPERACIONES</div>'
     : '';
   const orderTitleHtml = k.showOrderId
     ? `<div class="ticket-title">Orden #${orderShortId}</div>`
@@ -158,7 +158,7 @@ export function buildKitchenTicketHtml(
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><style>${buildBaseStyles(cfg)}${buildKitchenTicketStyles(cfg)}</style></head><body>
 <div class="ticket ticket-kitchen">
-  <div class="brand-main">RESTIFY</div>
+  <div class="brand-main">BIZFLOW</div>
   ${brandBranchHtml}
   <hr class="rule" />
   ${orderTitleHtml}
@@ -176,9 +176,9 @@ export function buildKitchenTicketHtml(
 export function buildSaleTicketHtml(data: SaleTicketResponse, config?: ResolvedTicketPrintConfig): string {
   const cfg = resolveConfig(config, data.printConfig);
   const s = cfg.sale;
-  const companyFull = data.companyName?.trim() || 'Restify';
+  const companyFull = data.companyName?.trim() || 'BizFlow';
   const parts = companyFull.split(/\s+/);
-  const brandMain = parts[0] ?? 'Restify';
+  const brandMain = parts[0] ?? 'BizFlow';
   const brandBranch = data.companyBranch?.trim() || (parts.length > 1 ? parts.slice(1).join(' ') : '');
   const tableText = buildTableLocationLine(data.tableName, data.origin);
   const orderShortId = data.orderId.slice(-8).toUpperCase();

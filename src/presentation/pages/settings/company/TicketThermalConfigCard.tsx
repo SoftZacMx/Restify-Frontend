@@ -338,7 +338,7 @@ export const TicketThermalConfigCard: React.FC<TicketThermalConfigCardProps> = (
       />
       <RowSwitch
         id="tp-s-table"
-        label="Mesa / para llevar"
+        label="Ubicación / para llevar"
         checked={s.showTableLine}
         onCheckedChange={(v) => patchSale({ showTableLine: v })}
         disabled={disabled}
@@ -459,7 +459,7 @@ export const TicketThermalConfigCard: React.FC<TicketThermalConfigCardProps> = (
           id="tp-footer-text"
           value={s.footerText}
           onChange={(e) => patchSale({ footerText: e.target.value })}
-          placeholder="Restify"
+          placeholder="BizFlow"
           maxLength={120}
           disabled={disabled || !s.showFooter}
         />
@@ -471,7 +471,7 @@ export const TicketThermalConfigCard: React.FC<TicketThermalConfigCardProps> = (
     <div className={cn(switchListClass, 'mt-1')}>
       <RowSwitch
         id="tp-k-br"
-        label="Subtítulo «COCINA»"
+        label="Subtítulo «OPERACIONES»"
         checked={k.showBrandBranch}
         onCheckedChange={(v) => patchKitchen({ showBrandBranch: v })}
         disabled={disabled}
@@ -485,7 +485,7 @@ export const TicketThermalConfigCard: React.FC<TicketThermalConfigCardProps> = (
       />
       <RowSwitch
         id="tp-k-tbl"
-        label="Mesa / para llevar"
+        label="Ubicación / para llevar"
         checked={k.showTableLine}
         onCheckedChange={(v) => patchKitchen({ showTableLine: v })}
         disabled={disabled}
@@ -555,7 +555,7 @@ export const TicketThermalConfigCard: React.FC<TicketThermalConfigCardProps> = (
             <CollapsibleSection
               id="tp-sale-header"
               title="Encabezado"
-              description="Marca, contacto, título, número, fecha y mesa"
+              description="Marca, contacto, título, número, fecha y ubicación"
               icon={AlignLeft}
               nested
             >
@@ -593,7 +593,7 @@ export const TicketThermalConfigCard: React.FC<TicketThermalConfigCardProps> = (
 
         <CollapsibleSection
           id="tp-kitchen-root"
-          title="Ticket de cocina"
+          title="Ticket de operaciones"
           description="Optimización para área de preparación"
           icon={ChefHat}
         >
@@ -601,7 +601,7 @@ export const TicketThermalConfigCard: React.FC<TicketThermalConfigCardProps> = (
             <CollapsibleSection
               id="tp-kitchen-header"
               title="Encabezado"
-              description="Marca, orden, mesa y título del pedido"
+              description="Marca, orden, ubicación y título del pedido"
               icon={AlignLeft}
               nested
             >

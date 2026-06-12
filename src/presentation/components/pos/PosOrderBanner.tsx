@@ -23,7 +23,7 @@ export function PosOrderBanner({ order, onBack }: PosOrderBannerProps) {
               Orden {formatOrderNumber(order.id)}
             </p>
             <p className="text-sm text-slate-600 dark:text-slate-300">
-              {order.table ? `Mesa ${order.table.name}` : order.origin}
+              {order.table ? `Ubicación ${order.table.name}` : order.origin}
               {order.client && ` • ${order.client}`}
             </p>
           </div>
