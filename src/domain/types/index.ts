@@ -340,3 +340,13 @@ export type {
 
 // Re-export company types (configuración de la compañía)
 export type { CompanyResponse, UpsertCompanyRequest } from "./company.types";
+
+// Re-export branch types (CRUD de sucursales)
+export type {
+  BranchStatus,
+  BranchListItem,
+  BranchDetail,
+  CreateBranchRequest,
+  UpdateBranchRequest,
+  BranchFilters,
+} from "./branch.types";

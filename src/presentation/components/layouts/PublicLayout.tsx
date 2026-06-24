@@ -3,13 +3,14 @@ import { UtensilsCrossed } from 'lucide-react';
 
 interface PublicLayoutProps {
   children: React.ReactNode;
+  title?: string;
 }
 
 /**
  * Layout público sin sidebar, sin auth.
  * Header con logo y nombre del restaurante + contenido principal.
  */
-export const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
+export const PublicLayout: React.FC<PublicLayoutProps> = ({ children, title = 'Menú' }) => {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-900 dark:text-slate-100">
       {/* Header */}
@@ -19,7 +20,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
             <UtensilsCrossed className="h-5 w-5 text-primary-foreground" />
           </div>
           <h1 className="text-lg font-bold text-slate-900 dark:text-white">
-            Menú
+            {title}
           </h1>
         </div>
       </header>

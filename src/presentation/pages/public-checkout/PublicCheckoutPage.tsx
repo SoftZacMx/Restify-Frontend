@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, MapPin, Clock, Loader2 } from 'lucide-react';
 import { PublicLayout } from '@/presentation/components/layouts/PublicLayout';
 import { Cart } from '@/presentation/components/pos/Cart';
@@ -7,6 +7,7 @@ import { Button } from '@/presentation/components/ui/button';
 import { Input } from '@/presentation/components/ui/input';
 import { Label } from '@/presentation/components/ui/label';
 import { DeliveryMap } from '@/presentation/components/map/DeliveryMap';
+import { usePublicBranch } from '@/presentation/hooks/usePublicBranch';
 import { publicOrderRepository } from '@/infrastructure/api/repositories/public-order.repository';
 import type { OrderItem } from '@/domain/types';
 import { showErrorToast } from '@/shared/utils/toast';
@@ -16,25 +17,12 @@ type OrderType = 'DELIVERY' | 'PICKUP';
 const PublicCheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { slug } = useParams<{ slug: string }>();
+
+  const { branchId } = usePublicBranch(slug);
 
   const cartItems: OrderItem[] = location.state?.cartItems || [];
   const cartTotal: number = location.state?.cartTotal || 0;
-
-  // Si no hay items, volver al menú
-  if (cartItems.length === 0) {
-    return (
-      <PublicLayout>
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <p className="text-slate-500 dark:text-slate-400 mb-4">
-            No hay items en el carrito
-          </p>
-          <Button onClick={() => navigate('/public/menu')}>
-            Volver al menú
-          </Button>
-        </div>
-      </PublicLayout>
-    );
-  }
 
   // Form state
   const [customerName, setCustomerName] = useState('');
@@ -51,6 +39,22 @@ const PublicCheckoutPage = () => {
     setLongitude(lng);
   };
 
+  // Si no hay items, volver al menú
+  if (cartItems.length === 0) {
+    return (
+      <PublicLayout>
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <p className="text-slate-500 dark:text-slate-400 mb-4">
+            No hay items en el carrito
+          </p>
+          <Button onClick={() => navigate(`/menu/${slug}`)}>
+            Volver al menú
+          </Button>
+        </div>
+      </PublicLayout>
+    );
+  }
+
   const isFormValid = () => {
     if (!customerName.trim() || !customerPhone.trim() || !orderType) return false;
     if (orderType === 'DELIVERY' && !deliveryAddress.trim()) return false;
@@ -59,6 +63,10 @@ const PublicCheckoutPage = () => {
 
   const handlePayWithMP = async () => {
     if (!isFormValid() || !orderType) return;
+    if (!branchId) {
+      showErrorToast('Error', 'No se pudo identificar la sucursal. Vuelve al menú e intenta de nuevo.');
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -72,7 +80,7 @@ const PublicCheckoutPage = () => {
           : undefined,
       }));
 
-      const order = await publicOrderRepository.createOrder({
+      const order = await publicOrderRepository.createOrder(branchId, {
         customerName: customerName.trim(),
         customerPhone: customerPhone.trim(),
         orderType,
@@ -106,7 +114,7 @@ const PublicCheckoutPage = () => {
         {/* Back button */}
         <button
           type="button"
-          onClick={() => navigate('/public/menu')}
+          onClick={() => navigate(`/menu/${slug}`)}
           className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />

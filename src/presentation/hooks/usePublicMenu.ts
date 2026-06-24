@@ -5,10 +5,11 @@ import type { PosProduct, Category, OrderItem } from '@/domain/types';
 
 let nextCartItemId = 1;
 
-export function usePublicMenu() {
+export function usePublicMenu(branchId: string | null) {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['public-menu'],
-    queryFn: () => publicMenuRepository.getMenu(),
+    queryKey: ['public-menu', branchId],
+    queryFn: () => publicMenuRepository.getMenu(branchId!),
+    enabled: !!branchId,
   });
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ShoppingCart, X, Search } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { PublicLayout } from '@/presentation/components/layouts/PublicLayout';
 import { CategoryFilter } from '@/presentation/components/pos/CategoryFilter';
 import { ProductGrid } from '@/presentation/components/pos/ProductGrid';
@@ -7,11 +8,15 @@ import { ProductExtrasDialog } from '@/presentation/components/pos/ProductExtras
 import { Cart } from '@/presentation/components/pos/Cart';
 import { Button } from '@/presentation/components/ui/button';
 import { Input } from '@/presentation/components/ui/input';
+import { usePublicBranch } from '@/presentation/hooks/usePublicBranch';
 import { usePublicMenu } from '@/presentation/hooks/usePublicMenu';
-import { useNavigate } from 'react-router-dom';
 
 const PublicMenuPage = () => {
   const navigate = useNavigate();
+  const { slug } = useParams<{ slug: string }>();
+
+  const { branchId, branchName, isLoading: isBranchLoading, error: branchError } = usePublicBranch(slug);
+
   const {
     categories,
     filteredProducts,
@@ -30,18 +35,34 @@ const PublicMenuPage = () => {
     handleAddToCart,
     handleRemoveItem,
     setIsExtrasDialogOpen,
-  } = usePublicMenu();
+  } = usePublicMenu(branchId);
 
   const [isCartSheetOpen, setIsCartSheetOpen] = useState(false);
 
   const handleCheckout = () => {
-    navigate('/public/checkout', {
+    navigate(`/menu/${slug}/checkout`, {
       state: { cartItems, cartTotal: cartState.total },
     });
   };
 
+  // El slug no resuelve a una sucursal válida (inexistente o inactiva).
+  if (branchError) {
+    return (
+      <PublicLayout>
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
+            Menú no disponible
+          </h2>
+          <p className="text-slate-500 dark:text-slate-400">
+            No encontramos esta sucursal. Verifica el enlace e intenta de nuevo.
+          </p>
+        </div>
+      </PublicLayout>
+    );
+  }
+
   return (
-    <PublicLayout>
+    <PublicLayout title={branchName ?? 'Menú'}>
       <div className="space-y-4">
         {/* Search */}
         <div className="relative">
@@ -68,7 +89,7 @@ const PublicMenuPage = () => {
             <ProductGrid
               products={filteredProducts}
               onProductSelect={handleProductSelect}
-              isLoading={isLoading}
+              isLoading={isBranchLoading || isLoading}
               error={error}
             />
           </div>

@@ -333,6 +333,50 @@ export const ERROR_CONFIG = {
   },
 
   // ============================================
+  // Branch Errors (sucursales)
+  // ============================================
+  BRANCH_NOT_FOUND: {
+    message: 'Sucursal no encontrada',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
+  BRANCH_LIMIT_REACHED: {
+    message: 'Alcanzaste el límite de sucursales de tu plan',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  BRANCH_ALREADY_DISABLED: {
+    message: 'La sucursal ya está deshabilitada',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  BRANCH_ALREADY_ACTIVE: {
+    message: 'La sucursal ya está activa',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  BRANCH_CREATION_FAILED: {
+    message: 'No se pudo crear la sucursal',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  BRANCH_FETCH_FAILED: {
+    message: 'Error al obtener la sucursal',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
+  BRANCH_UPDATE_FAILED: {
+    message: 'No se pudo actualizar la sucursal',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  BRANCH_LIST_FAILED: {
+    message: 'Error al listar sucursales',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+
+  // ============================================
   // Subscription Errors
   // ============================================
   SUBSCRIPTION_EXPIRED: {

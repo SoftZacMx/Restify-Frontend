@@ -12,6 +12,7 @@ import {
   Package,
   Utensils,
   FolderTree,
+  Store,
 } from 'lucide-react';
 import { useAuthStore } from '@/presentation/store/auth.store';
 import { hasFullAccess } from '@/shared/constants/roles.constants';
@@ -55,6 +56,7 @@ export interface UseSidebarNavigationReturn {
  */
 const FULL_NAV_MAIN: NavItem[] = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+  { icon: Store, label: 'Sucursales', path: '/branches' },
   { icon: ClipboardList, label: 'Órdenes', path: '/orders' },
   { icon: Receipt, label: 'Punto De Venta', path: '/pos' },
   { icon: Map, label: 'Mapa de Mesas', path: '/tables' },

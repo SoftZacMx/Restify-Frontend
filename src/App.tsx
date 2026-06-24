@@ -28,6 +28,7 @@ const ExpenseDetailPage = lazy(() => import('@/presentation/pages/expenses/Expen
 const ReportsPage = lazy(() => import('@/presentation/pages/reports/ReportsPage'));
 const UsersPage = lazy(() => import('@/presentation/pages/users/UsersPage'));
 const UserDetailPage = lazy(() => import('@/presentation/pages/users/UserDetailPage'));
+const BranchesPage = lazy(() => import('@/presentation/pages/branches/BranchesPage'));
 const ProductsPage = lazy(() => import('@/presentation/pages/products/ProductsPage'));
 const ProductDetailPage = lazy(() => import('@/presentation/pages/products/ProductDetailPage'));
 const MenuItemsPage = lazy(() => import('@/presentation/pages/menu-items/MenuItemsPage'));
@@ -58,6 +59,7 @@ const protectedRoutes: { path: string; element: React.ReactNode }[] = [
   { path: '/reports', element: <ReportsPage /> },
   { path: '/users', element: <UsersPage /> },
   { path: '/users/:userId', element: <UserDetailPage /> },
+  { path: '/branches', element: <BranchesPage /> },
   { path: '/products', element: <ProductsPage /> },
   { path: '/products/:productId', element: <ProductDetailPage /> },
   { path: '/menu/items', element: <MenuItemsPage /> },
@@ -98,8 +100,8 @@ function App() {
                       <Route path="/auth/recover-password" element={<RecoverPasswordPage />} />
 
                       {/* Public routes (no auth, no subscription guard) */}
-                      <Route path="/public/menu" element={<PublicMenuPage />} />
-                      <Route path="/public/checkout" element={<PublicCheckoutPage />} />
+                      <Route path="/menu/:slug" element={<PublicMenuPage />} />
+                      <Route path="/menu/:slug/checkout" element={<PublicCheckoutPage />} />
                       <Route path="/public/pedido/:trackingToken" element={<PublicOrderTrackingPage />} />
 
                       {/* Payment result routes (public - customer redirected from MP after QR scan) */}

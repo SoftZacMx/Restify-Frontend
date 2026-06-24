@@ -48,8 +48,11 @@ export interface PublicOrderStatusResponse {
 }
 
 export class PublicOrderRepository {
-  async createOrder(data: CreatePublicOrderRequest): Promise<CreatePublicOrderResponse> {
-    const response = await publicApiClient.post('/api/public/orders', data);
+  async createOrder(
+    branchId: string,
+    data: CreatePublicOrderRequest
+  ): Promise<CreatePublicOrderResponse> {
+    const response = await publicApiClient.post('/api/public/orders', { ...data, branchId });
     return response.data.data;
   }
 

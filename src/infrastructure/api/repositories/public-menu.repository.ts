@@ -18,8 +18,10 @@ export interface PublicMenuResponse {
 }
 
 export class PublicMenuRepository {
-  async getMenu(): Promise<PublicMenuResponse> {
-    const response = await publicApiClient.get('/api/public/menu');
+  async getMenu(branchId: string): Promise<PublicMenuResponse> {
+    const response = await publicApiClient.get('/api/public/menu', {
+      params: { branchId },
+    });
     return response.data.data;
   }
 }
