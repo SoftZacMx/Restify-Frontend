@@ -39,7 +39,11 @@ export const branchFormSchema = z.object({
     .string()
     .trim()
     .min(1, 'El número exterior es requerido')
-    .max(20, 'El número exterior no puede exceder 20 caracteres'),
+    .max(10, 'El número exterior no puede exceder 10 caracteres')
+    .regex(
+      /^[A-Za-z0-9\s-]+$/,
+      'El número exterior solo puede contener letras, números, espacios y guiones'
+    ),
   phone: z
     .string()
     .trim()
@@ -49,6 +53,7 @@ export const branchFormSchema = z.object({
     .string()
     .trim()
     .max(20, 'El RFC no puede exceder 20 caracteres')
+    .regex(/^[A-Z0-9]+$/, 'El RFC solo puede contener letras mayúsculas y números')
     .or(z.literal('')),
   logoUrl: z
     .string()

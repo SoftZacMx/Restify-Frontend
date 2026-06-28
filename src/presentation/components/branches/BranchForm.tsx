@@ -23,15 +23,6 @@ interface BranchFormProps {
   isLoading?: boolean;
 }
 
-/** Estados de México (dominio cerrado). El backend acepta cualquier string ≤100. */
-const MEXICAN_STATES = [
-  'Aguascalientes', 'Baja California', 'Baja California Sur', 'Campeche', 'Chiapas',
-  'Chihuahua', 'Ciudad de México', 'Coahuila', 'Colima', 'Durango', 'Estado de México',
-  'Guanajuato', 'Guerrero', 'Hidalgo', 'Jalisco', 'Michoacán', 'Morelos', 'Nayarit',
-  'Nuevo León', 'Oaxaca', 'Puebla', 'Querétaro', 'Quintana Roo', 'San Luis Potosí',
-  'Sinaloa', 'Sonora', 'Tabasco', 'Tamaulipas', 'Tlaxcala', 'Veracruz', 'Yucatán', 'Zacatecas',
-];
-
 const TIMEZONES = [
   'America/Mexico_City', 'America/Tijuana', 'America/Monterrey', 'America/Cancun',
   'America/Hermosillo', 'America/Mazatlan', 'America/Merida',
@@ -131,7 +122,6 @@ export const BranchForm: React.FC<BranchFormProps> = ({
     },
   });
 
-  const state = watch('state');
   const timezone = watch('timezone');
   const currency = watch('currency');
   const logoUrl = watch('logoUrl');
@@ -250,23 +240,14 @@ export const BranchForm: React.FC<BranchFormProps> = ({
             <Label htmlFor="state" className="text-sm font-medium">
               Estado <span className="text-destructive">*</span>
             </Label>
-            <Select value={state} onValueChange={(value) => setValue('state', value)}>
-              <SelectTrigger
-                id="state"
-                className={cn('h-11 rounded-lg', inputClass, errors.state && 'border-destructive')}
-              >
-                <span className={cn(!state && 'text-slate-500 dark:text-slate-400')}>
-                  {state || 'Selecciona un estado'}
-                </span>
-              </SelectTrigger>
-              <SelectContent>
-                {MEXICAN_STATES.map((s) => (
-                  <SelectItem key={s} value={s}>
-                    {s}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Input
+              id="state"
+              {...register('state')}
+              placeholder="Ej: Ciudad de México"
+              className={cn(inputClass, errors.state && 'border-destructive')}
+              maxLength={100}
+              disabled={isLoading}
+            />
             {errors.state && <p className="text-sm text-destructive mt-1">{errors.state.message}</p>}
           </div>
           <div className="space-y-2">
@@ -307,9 +288,9 @@ export const BranchForm: React.FC<BranchFormProps> = ({
             <Input
               id="exteriorNumber"
               {...register('exteriorNumber')}
-              placeholder="123"
+              placeholder="123, 154C, 12-B"
               className={cn(inputClass, errors.exteriorNumber && 'border-destructive')}
-              maxLength={20}
+              maxLength={10}
               disabled={isLoading}
             />
             {errors.exteriorNumber && (

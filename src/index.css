@@ -62,6 +62,26 @@
     @apply bg-background text-foreground;
     font-family: 'Poppins', sans-serif;
   }
+
+  /* El autofill del navegador fuerza un fondo blanco que pisa el tema (sobre todo en dark).
+     Lo neutralizamos con un box-shadow inset del color del input y respetando el color de texto. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+    -webkit-text-fill-color: #0f172a; /* slate-900 */
+    caret-color: #0f172a;
+    transition: background-color 9999s ease-in-out 0s;
+  }
+  .dark input:-webkit-autofill,
+  .dark input:-webkit-autofill:hover,
+  .dark input:-webkit-autofill:focus,
+  .dark input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #1e293b inset; /* slate-800 */
+    -webkit-text-fill-color: #ffffff;
+    caret-color: #ffffff;
+  }
 }
 
 @layer base {
