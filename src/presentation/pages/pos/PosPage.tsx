@@ -19,7 +19,7 @@ import { LoadingOverlay } from '@/presentation/components/ui/loading-overlay';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { useAuthStore } from '@/presentation/store/auth.store';
 import { orderService } from '@/application/services/order.service';
-import { companyService } from '@/application/services/company.service';
+import { useActiveBranch } from '@/presentation/hooks/useActiveBranch';
 import type {
   OrderFormErrors,
   PosMode,
@@ -59,6 +59,7 @@ const PosPage = () => {
   const isPaymentOnlyMode = urlMode === 'pay' && !!orderId;
 
   const { user } = useAuthStore();
+  const { selectedBranch } = useActiveBranch();
 
   const {
     posMode,
@@ -460,13 +461,12 @@ const PosPage = () => {
 
       if (selectedMethod1 === 'QR_MP') {
         // Show payment success view only for Mercado Pago QR
-        const company = await companyService.getCompany().catch(() => null);
         setPaymentSuccessData({
           orderId: orderIdToProcess,
           date: savedOrder?.date || loadedOrder?.date || new Date().toISOString(),
           total: paymentState.total,
           paymentMethod: pmNumber,
-          companyName: company?.name,
+          companyName: selectedBranch?.name,
         });
       } else {
         // For other payment methods, show toast and redirect

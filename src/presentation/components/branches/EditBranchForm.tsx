@@ -1,5 +1,6 @@
 import React from 'react';
 import { BranchForm } from './BranchForm';
+import { BranchPublicUrl } from './BranchPublicUrl';
 import type { BranchDetail, CreateBranchRequest, UpdateBranchRequest } from '@/domain/types';
 
 interface EditBranchFormProps {
@@ -20,12 +21,18 @@ export const EditBranchForm: React.FC<EditBranchFormProps> = ({
     await onSubmit(data as UpdateBranchRequest);
   };
 
+  // La URL pública solo existe para sucursales activas con slug (las legacy sin backfill no lo traen).
+  const showPublicUrl = branch.status === 'active' && !!branch.slug;
+
   return (
-    <BranchForm
-      initialData={branch}
-      onSubmit={handleSubmit}
-      onCancel={onCancel}
-      isLoading={isLoading}
-    />
+    <div className="space-y-6">
+      {showPublicUrl && <BranchPublicUrl slug={branch.slug!} />}
+      <BranchForm
+        initialData={branch}
+        onSubmit={handleSubmit}
+        onCancel={onCancel}
+        isLoading={isLoading}
+      />
+    </div>
   );
 };

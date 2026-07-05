@@ -4,17 +4,31 @@ import { Save, X, Image as ImageIcon, Clock } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card';
 import { Button } from '@/presentation/components/ui/button';
 import { Input } from '@/presentation/components/ui/input';
-import { companyService } from '@/application/services';
-import type { UpsertCompanyRequest } from '@/domain/types';
+import { branchService } from '@/application/services';
+import { useActiveBranch } from '@/presentation/hooks/useActiveBranch';
+import type { UpdateBranchRequest } from '@/domain/types';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
 import { mergeTicketPrintConfig } from '@/shared/utils/ticket-print-config';
 import type { ResolvedTicketPrintConfig } from '@/shared/utils/ticket-print-config';
 import { TicketThermalConfigCard } from './TicketThermalConfigCard';
 
-type CompanyFormState = UpsertCompanyRequest & { ticketConfig: ResolvedTicketPrintConfig };
+/** Campos editables de la sucursal en esta pantalla + el ticket resuelto. */
+interface BranchConfigFormState {
+  name: string;
+  state: string;
+  city: string;
+  street: string;
+  exteriorNumber: string;
+  phone: string;
+  rfc: string | null;
+  logoUrl: string | null;
+  startOperations: string | null;
+  endOperations: string | null;
+  ticketConfig: ResolvedTicketPrintConfig;
+}
 
-const INITIAL_FORM: CompanyFormState = {
+const INITIAL_FORM: BranchConfigFormState = {
   name: '',
   state: '',
   city: '',
@@ -53,48 +67,81 @@ function ConfigFieldLabel({ children }: { children: React.ReactNode }) {
 const configCardClass =
   'rounded-xl border-slate-200 dark:border-slate-700/80 bg-card dark:bg-slate-900/30 shadow-sm';
 
+/** Mapea el detalle de la sucursal al estado del formulario. */
+function branchToForm(branch: {
+  name: string;
+  state: string;
+  city: string;
+  street: string;
+  exteriorNumber: string;
+  phone: string;
+  rfc: string | null;
+  logoUrl: string | null;
+  startOperations: string | null;
+  endOperations: string | null;
+  ticketConfig: unknown | null;
+}): BranchConfigFormState {
+  return {
+    name: branch.name,
+    state: branch.state,
+    city: branch.city,
+    street: branch.street,
+    exteriorNumber: branch.exteriorNumber,
+    phone: branch.phone,
+    rfc: branch.rfc ?? null,
+    logoUrl: branch.logoUrl ?? null,
+    startOperations: branch.startOperations ?? null,
+    endOperations: branch.endOperations ?? null,
+    ticketConfig: mergeTicketPrintConfig(branch.ticketConfig),
+  };
+}
+
 /**
- * Página de configuración de la compañía.
+ * Página de configuración de la sucursal activa (datos del negocio + ticket).
+ * Reemplaza la antigua configuración de "compañía": en multi-tenancy cada sucursal
+ * tiene su propia identidad, dirección y configuración de ticket.
  */
 const CompanyConfigPage: React.FC = () => {
   const queryClient = useQueryClient();
-  const [form, setForm] = useState<CompanyFormState>({ ...INITIAL_FORM });
+  const { selectedBranchId } = useActiveBranch();
+  const [form, setForm] = useState<BranchConfigFormState>({ ...INITIAL_FORM });
   const [isSaving, setIsSaving] = useState(false);
 
-  const { data: company, isLoading } = useQuery({
-    queryKey: ['company'],
-    queryFn: () => companyService.getCompany(),
+  const { data: branch, isLoading } = useQuery({
+    queryKey: ['branches', selectedBranchId, 'detail'],
+    queryFn: () => branchService.getBranch(selectedBranchId as string),
+    enabled: !!selectedBranchId,
   });
 
   React.useEffect(() => {
-    if (company) {
-      const startOp = company.startOperations ?? null;
-      const endOp = company.endOperations ?? null;
-      setForm({
-        name: company.name,
-        state: company.state,
-        city: company.city,
-        street: company.street,
-        exteriorNumber: company.exteriorNumber,
-        phone: company.phone,
-        rfc: company.rfc ?? null,
-        logoUrl: company.logoUrl ?? null,
-        startOperations: startOp,
-        endOperations: endOp,
-        ticketConfig: company.ticketConfig ?? mergeTicketPrintConfig(undefined),
-      });
+    if (branch) {
+      setForm(branchToForm(branch));
     } else if (!isLoading) {
       setForm({ ...INITIAL_FORM });
     }
-  }, [company, isLoading]);
+  }, [branch, isLoading]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedBranchId) return;
     setIsSaving(true);
     try {
-      const updated = await companyService.upsertCompany(form);
-      queryClient.setQueryData(['company'], updated);
-      showSuccessToast('Cambios guardados', 'La información de la compañía se actualizó correctamente.');
+      const payload: UpdateBranchRequest = {
+        name: form.name,
+        state: form.state,
+        city: form.city,
+        street: form.street,
+        exteriorNumber: form.exteriorNumber,
+        phone: form.phone,
+        rfc: form.rfc,
+        logoUrl: form.logoUrl,
+        startOperations: form.startOperations,
+        endOperations: form.endOperations,
+        ticketConfig: form.ticketConfig as Record<string, unknown>,
+      };
+      const updated = await branchService.updateBranch(selectedBranchId, payload);
+      queryClient.setQueryData(['branches', selectedBranchId, 'detail'], updated);
+      showSuccessToast('Cambios guardados', 'La información de la sucursal se actualizó correctamente.');
     } catch (error) {
       if (error instanceof AppError) {
         showErrorToast('Error al guardar', error.message);
@@ -107,24 +154,8 @@ const CompanyConfigPage: React.FC = () => {
   };
 
   const handleCancel = useCallback(() => {
-    if (company) {
-      setForm({
-        name: company.name,
-        state: company.state,
-        city: company.city,
-        street: company.street,
-        exteriorNumber: company.exteriorNumber,
-        phone: company.phone,
-        rfc: company.rfc ?? null,
-        logoUrl: company.logoUrl ?? null,
-        startOperations: company.startOperations ?? null,
-        endOperations: company.endOperations ?? null,
-        ticketConfig: company.ticketConfig ?? mergeTicketPrintConfig(undefined),
-      });
-    } else {
-      setForm({ ...INITIAL_FORM });
-    }
-  }, [company]);
+    setForm(branch ? branchToForm(branch) : { ...INITIAL_FORM });
+  }, [branch]);
 
   if (isLoading) {
     return (

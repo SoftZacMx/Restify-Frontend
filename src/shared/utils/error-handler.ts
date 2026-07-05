@@ -62,7 +62,10 @@ function convertAxiosErrorToAppError(axiosError: AxiosError): AppError {
 
   // Try to extract error code from backend response
   // Backend returns: { success: false, error: { code: 'USER_NOT_FOUND', message: '...' } }
-  const errorData = data as any;
+  const errorData = data as {
+    message?: string;
+    error?: { code?: string; message?: string; metadata?: unknown } | string;
+  };
   
   // Get error message from various possible locations
   const errorMessage = 
@@ -100,13 +103,14 @@ function convertAxiosErrorToAppError(axiosError: AxiosError): AppError {
   // Check for error code from backend
   if (errorData?.error?.code) {
     const backendCode = errorData.error.code as string;
-    const backendMessage = errorData.error.message || errorData.error;
 
-    // Validate that the code exists in our ERROR_CONFIG
+    // Si el código existe en nuestro catálogo, usamos el mensaje en español del frontend
+    // (el backend responde en inglés). El mensaje del backend se ignora a propósito para
+    // mantener textos consistentes y localizados; los detalles siguen en `metadata`.
     if (isValidErrorCode(backendCode)) {
       return AppError.create(
         backendCode as ErrorCode,
-        backendMessage,
+        undefined,
         errorData.error.metadata
       );
     }

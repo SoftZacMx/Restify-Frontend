@@ -26,6 +26,7 @@ export interface BranchListItem {
 export interface BranchDetail {
   id: string;
   organizationId: string;
+  slug: string | null;               // identificador de la URL pública /menu/<slug>; null en sucursales legacy sin backfill
   name: string;
   state: string;
   city: string;
@@ -68,8 +69,12 @@ export interface CreateBranchRequest {
 
 /**
  * Body para actualizar — `PATCH /api/branches/:id`. Todos los campos opcionales.
+ * Incluye `ticketConfig` (config de ticket térmico) porque la pantalla de configuración
+ * de la sucursal sí lo administra; el backend lo acepta como objeto opcional/nullable.
  */
-export type UpdateBranchRequest = Partial<CreateBranchRequest>;
+export type UpdateBranchRequest = Partial<CreateBranchRequest> & {
+  ticketConfig?: Record<string, unknown> | null;
+};
 
 /**
  * Estado de los filtros de la UI del listado (no se mapea 1:1 al backend:

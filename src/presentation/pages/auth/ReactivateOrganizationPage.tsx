@@ -2,20 +2,26 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff, UtensilsCrossed } from 'lucide-react';
-import { useAuth } from '@/presentation/hooks/useAuth';
-import { useAuthStore } from '@/presentation/store/auth.store';
+import { Eye, EyeOff, UtensilsCrossed, ArrowLeft, RotateCcw } from 'lucide-react';
+import { organizationService } from '@/application/services';
+import { AppError } from '@/domain/errors';
 import { Button } from '@/presentation/components/ui/button';
 import { Input } from '@/presentation/components/ui/input';
 import { Label } from '@/presentation/components/ui/label';
 import { Card, CardContent, CardHeader } from '@/presentation/components/ui/card';
 import { ThemeToggle } from '@/presentation/components/ui/theme-toggle';
-import { getDefaultRouteForRole } from '@/shared/constants/roles.constants';
+import { showSuccessToast } from '@/shared/utils/toast';
 import { loginSchema, type LoginFormData } from './login.schema';
 
-export default function LoginPage() {
+/**
+ * Reactivación de organización (ruta pública).
+ * Tras cerrar la org, el login queda bloqueado; aquí el owner re-valida sus credenciales
+ * (email + password) para reactivarla dentro de la ventana de 30 días. No pide el nombre.
+ */
+export default function ReactivateOrganizationPage() {
   const navigate = useNavigate();
-  const { login, isLoading, error, clearError } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -27,35 +33,36 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    clearError();
-    const result = await login({
-      email: data.email,
-      password: data.password,
-    });
+    setIsLoading(true);
+    setError(null);
 
-    if (result.success) {
-      const currentUser = useAuthStore.getState().user;
-      // Reset del admin o rotación obligatoria: primero cambia la clave, luego opera.
-      if (currentUser?.mustChangePassword) {
-        navigate('/auth/change-password');
-        return;
+    try {
+      const response = await organizationService.reactivate({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (response.success) {
+        showSuccessToast('Organización reactivada', 'Ya puedes iniciar sesión con normalidad.');
+        navigate('/auth/login', { replace: true });
+      } else {
+        setError(response.error?.message || 'No se pudo reactivar la organización');
       }
-      navigate(getDefaultRouteForRole(currentUser?.rol));
+    } catch (err) {
+      const appError = err instanceof AppError ? err : AppError.create('UNKNOWN_ERROR', 'Error desconocido');
+      setError(appError.message);
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
   };
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4">
-      {/* Theme Toggle - Top Right */}
       <div className="absolute top-4 right-4">
         <ThemeToggle variant="icon" />
       </div>
 
-      {/* Logo Section */}
+      {/* Logo */}
       <div className="mb-8 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
           <UtensilsCrossed className="h-8 w-8 text-blue-600 dark:text-blue-400" />
@@ -65,19 +72,21 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Login Card */}
       <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800">
-        <CardHeader className="space-y-1 text-center pb-8 pt-10">
+        <CardHeader className="space-y-3 text-center pb-8 pt-10">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
+            <RotateCcw className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          </div>
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white font-serif">
-            Bienvenido de Nuevo
+            Reactivar organización
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Inicia sesión para gestionar tu restaurante.
+            Ingresa las credenciales del propietario para reactivar tu organización.
           </p>
         </CardHeader>
 
         <CardContent className="space-y-6 px-8 pb-10">
-          {/* Error Message */}
+          {/* Error */}
           {error && (
             <div
               className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg relative"
@@ -89,7 +98,7 @@ export default function LoginPage() {
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Email Field */}
+            {/* Email */}
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium text-slate-700 dark:text-slate-300">
                 Email
@@ -106,7 +115,7 @@ export default function LoginPage() {
               )}
             </div>
 
-            {/* Password Field */}
+            {/* Password */}
             <div className="space-y-2">
               <Label htmlFor="password" className="text-sm font-medium text-slate-700 dark:text-slate-300">
                 Contraseña
@@ -121,7 +130,7 @@ export default function LoginPage() {
                 />
                 <button
                   type="button"
-                  onClick={togglePasswordVisibility}
+                  onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 focus:outline-none"
                   aria-label="Toggle password visibility"
                 >
@@ -133,42 +142,21 @@ export default function LoginPage() {
               )}
             </div>
 
-            {/* Submit Button */}
             <Button
               type="submit"
               disabled={isLoading}
               className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-medium text-base shadow-sm mt-2"
             >
-              {isLoading ? 'Cargando...' : 'Iniciar Sesión'}
+              {isLoading ? 'Reactivando...' : 'Reactivar organización'}
             </Button>
 
-            {/* Forgot Password Link */}
             <div className="text-center pt-2">
               <Link
-                to="/auth/recover-password"
-                className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-medium"
+                to="/auth/login"
+                className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-medium inline-flex items-center gap-1"
               >
-                ¿Olvidaste tu contraseña?
-              </Link>
-            </div>
-
-            {/* Signup Link */}
-            <div className="text-center">
-              <Link
-                to="/auth/signup"
-                className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-medium"
-              >
-                ¿No tienes cuenta? Regístrate
-              </Link>
-            </div>
-
-            {/* Reactivate Organization Link */}
-            <div className="text-center">
-              <Link
-                to="/auth/reactivate-organization"
-                className="text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:underline font-medium"
-              >
-                ¿Tu organización está cerrada? Reactívala
+                <ArrowLeft className="h-4 w-4" />
+                Volver al inicio de sesión
               </Link>
             </div>
           </form>

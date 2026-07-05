@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/auth.store';
-import { isWaiterAllowedPath } from '@/shared/constants/roles.constants';
+import { isWaiterAllowedPath, hasFullAccess } from '@/shared/constants/roles.constants';
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -15,14 +15,19 @@ const HYDRATE_FALLBACK_MS = 400;
  * redirigir al login cuando el usuario sí está logueado pero el estado aún no se ha leído.
  * Incluye un fallback por tiempo por si onRehydrateStorage no dispara (p. ej. en algunos builds).
  * - Redirige al login si el usuario no está autenticado.
- * - Si el usuario es mesero (WAITER), solo puede acceder a POS y Órdenes;
- *   cualquier otra ruta redirige a /pos.
+ * - Si el usuario tiene un rol operativo (WAITER, CHEF), solo puede acceder a POS y
+ *   Órdenes; cualquier otra ruta redirige a /pos.
  */
+const SELECT_BRANCH_PATH = '/select-branch';
+const CHANGE_PASSWORD_PATH = '/auth/change-password';
+
 export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const hasHydrated = useAuthStore((s) => s._hasHydrated);
   const setHasHydrated = useAuthStore((s) => s.setHasHydrated);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const user = useAuthStore((s) => s.user);
+  const branches = useAuthStore((s) => s.branches);
+  const selectedBranchId = useAuthStore((s) => s.selectedBranchId);
   const location = useLocation();
 
   useEffect(() => {
@@ -43,7 +48,32 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
     return <Navigate to="/auth/login" replace />;
   }
 
-  if (user?.rol === 'WAITER' && !isWaiterAllowedPath(location.pathname)) {
+  // Cambio de contraseña forzado: tiene prioridad sobre selección de sucursal y rol.
+  // Mientras el flag esté activo el usuario solo puede estar en la pantalla de cambio.
+  if (user?.mustChangePassword) {
+    if (location.pathname !== CHANGE_PASSWORD_PATH) {
+      return <Navigate to={CHANGE_PASSWORD_PATH} replace />;
+    }
+    return <>{children}</>;
+  }
+  // Si ya no debe cambiarla, no tiene sentido quedarse en esa pantalla.
+  if (location.pathname === CHANGE_PASSWORD_PATH) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // Con varias sucursales hay que elegir una antes de operar; la propia pantalla de
+  // selección queda exenta para no entrar en bucle.
+  const needsBranchSelection = branches.length > 1 && selectedBranchId === null;
+  if (needsBranchSelection && location.pathname !== SELECT_BRANCH_PATH) {
+    return <Navigate to={SELECT_BRANCH_PATH} replace />;
+  }
+  // Si ya hay sucursal elegida (o solo hay una), no tiene sentido quedarse en la selección.
+  if (!needsBranchSelection && location.pathname === SELECT_BRANCH_PATH) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // Roles operativos (WAITER, CHEF) solo acceden a POS y Órdenes; el resto de rutas → /pos.
+  if (!hasFullAccess(user?.rol) && !isWaiterAllowedPath(location.pathname)) {
     return <Navigate to="/pos" replace />;
   }
 

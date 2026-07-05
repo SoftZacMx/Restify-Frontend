@@ -12,5 +12,5 @@ export { MenuCategoryService, menuCategoryService } from './menu-category.servic
 export { TableService, tableService } from './table.service';
 export { TicketService, ticketService } from './ticket.service';
 export { ReportService, reportService } from './report.service';
-export { CompanyService, companyService } from './company.service';
 export { BranchService, branchService } from './branch.service';
+export { OrganizationService, organizationService } from './organization.service';

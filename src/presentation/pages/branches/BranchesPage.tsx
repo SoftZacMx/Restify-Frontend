@@ -2,19 +2,14 @@ import React, { useCallback, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { Button } from '@/presentation/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogClose,
-} from '@/presentation/components/ui/dialog';
+import { FormDialog } from '@/presentation/components/ui/form-dialog';
 import { Pagination } from '@/presentation/components/ui/pagination';
 import { ConfirmDialog } from '@/presentation/components/ui/confirm-dialog';
 import { BranchSearchBar } from '@/presentation/components/branches/BranchSearchBar';
 import { BranchTable, type BranchAction } from '@/presentation/components/branches/BranchTable';
 import { CreateBranchForm } from '@/presentation/components/branches/CreateBranchForm';
 import { EditBranchForm } from '@/presentation/components/branches/EditBranchForm';
+import { BranchDetailView } from '@/presentation/components/branches/BranchDetailView';
 import { useCrudList } from '@/presentation/hooks/useCrudList';
 import { useDialogState } from '@/presentation/hooks/useDialogState';
 import { branchService } from '@/application/services';
@@ -77,6 +72,10 @@ const BranchesPage: React.FC = () => {
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
+  // Ver detalle (solo lectura): mismo patrón on-demand que la edición.
+  const [viewingBranch, setViewingBranch] = useState<BranchDetail | null>(null);
+  const [isLoadingView, setIsLoadingView] = useState(false);
+
   // Habilitar / deshabilitar (soft delete): confirmación + mutación.
   const disableDialog = useDialogState<BranchListItem>();
   const enableDialog = useDialogState<BranchListItem>();
@@ -122,7 +121,21 @@ const BranchesPage: React.FC = () => {
         enableDialog.open(branch);
         return;
       }
-      // 'view': el detalle dedicado llega en una entrega posterior.
+
+      if (action === 'view') {
+        setIsLoadingView(true);
+        try {
+          const detail = await branchService.getBranch(branchId);
+          setViewingBranch(detail);
+        } catch (err) {
+          showErrorToast(
+            'Error al cargar la sucursal',
+            err instanceof AppError ? err.message : 'Intentalo de nuevo'
+          );
+        } finally {
+          setIsLoadingView(false);
+        }
+      }
     },
     [rawData, disableDialog, enableDialog]
   );
@@ -222,7 +235,7 @@ const BranchesPage: React.FC = () => {
 
         <BranchTable
           branches={paginatedData}
-          isLoading={isLoading || isLoadingDetail}
+          isLoading={isLoading}
           canWrite={canWrite}
           onBranchAction={handleBranchAction}
         />
@@ -241,48 +254,66 @@ const BranchesPage: React.FC = () => {
         )}
 
         {/* Crear */}
-        <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-          <DialogContent className="w-full md:max-w-3xl lg:max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogClose />
-            <DialogHeader>
-              <DialogTitle>Crear nueva sucursal</DialogTitle>
-              <p className="text-sm text-muted-foreground">
-                Configura los detalles operativos y de ubicación para tu nueva sede.
-              </p>
-            </DialogHeader>
-            <CreateBranchForm
-              onSubmit={handleCreateBranch}
-              onCancel={() => setIsCreateModalOpen(false)}
-              isLoading={isCreating}
-            />
-          </DialogContent>
-        </Dialog>
+        <FormDialog
+          open={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          title="Crear nueva sucursal"
+          description="Configura los detalles operativos y de ubicación para tu nueva sede."
+        >
+          <CreateBranchForm
+            onSubmit={handleCreateBranch}
+            onCancel={() => setIsCreateModalOpen(false)}
+            isLoading={isCreating}
+          />
+        </FormDialog>
 
         {/* Editar */}
-        <Dialog
-          open={!!editingBranch}
-          onOpenChange={(open) => {
-            if (!open) setEditingBranch(null);
-          }}
+        <FormDialog
+          open={!!editingBranch || isLoadingDetail}
+          onClose={() => setEditingBranch(null)}
+          title="Editar sucursal"
+          description="Actualiza los detalles operativos y de ubicación de la sede."
         >
-          <DialogContent className="w-full md:max-w-3xl lg:max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogClose />
-            <DialogHeader>
-              <DialogTitle>Editar sucursal</DialogTitle>
-              <p className="text-sm text-muted-foreground">
-                Actualiza los detalles operativos y de ubicación de la sede.
-              </p>
-            </DialogHeader>
-            {editingBranch && (
-              <EditBranchForm
-                branch={editingBranch}
-                onSubmit={handleUpdateBranch}
-                onCancel={() => setEditingBranch(null)}
-                isLoading={isUpdating}
-              />
-            )}
-          </DialogContent>
-        </Dialog>
+          {editingBranch ? (
+            <EditBranchForm
+              branch={editingBranch}
+              onSubmit={handleUpdateBranch}
+              onCancel={() => setEditingBranch(null)}
+              isLoading={isUpdating}
+            />
+          ) : (
+            <p className="py-8 text-center text-sm text-muted-foreground">Cargando sucursal...</p>
+          )}
+        </FormDialog>
+
+        {/* Ver detalle (solo lectura) */}
+        <FormDialog
+          open={!!viewingBranch || isLoadingView}
+          onClose={() => setViewingBranch(null)}
+          title="Detalle de sucursal"
+          description="Información general, ubicación y operación de la sede."
+        >
+          {viewingBranch ? (
+            <>
+              <BranchDetailView branch={viewingBranch} />
+              {canWrite && (
+                <div className="flex justify-end pt-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setEditingBranch(viewingBranch);
+                      setViewingBranch(null);
+                    }}
+                  >
+                    Editar
+                  </Button>
+                </div>
+              )}
+            </>
+          ) : (
+            <p className="py-8 text-center text-sm text-muted-foreground">Cargando sucursal...</p>
+          )}
+        </FormDialog>
 
         {/* Deshabilitar (destructivo) */}
         <ConfirmDialog

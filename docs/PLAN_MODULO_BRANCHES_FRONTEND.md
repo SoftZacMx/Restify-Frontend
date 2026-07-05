@@ -1,5 +1,7 @@
 # Plan de implementación — Módulo CRUD de Sucursales (Branches) en el Frontend
 
+> **ESTADO GLOBAL (auditado en código 2026-07-04): ✅ COMPLETO (Fases 1–6).**
+
 > **Doble propósito:** este documento es a la vez el plan de implementación y el prompt
 > de ejecución. Cada fase es **atómica**: compila (`npx tsc --noEmit`), pasa lint
 > (`npm run lint`) y se puede mergear sola sin romper nada. Implementar y revisar en orden.
@@ -122,7 +124,7 @@ del plan: FREE=3, PRO=10), `BRANCH_ALREADY_DISABLED`, `BRANCH_ALREADY_ACTIVE`, `
 
 ---
 
-## FASE 1 — Tipos de dominio y repositorio
+## FASE 1 — Tipos de dominio y repositorio — ✅ COMPLETA
 
 **Objetivo:** que el frontend conozca el contrato de branches y sepa llamar a cada endpoint.
 Capa de datos pura, sin React.
@@ -152,7 +154,7 @@ Capa de datos pura, sin React.
 
 ---
 
-## FASE 2 — Servicio de aplicación
+## FASE 2 — Servicio de aplicación — ✅ COMPLETA
 
 **Objetivo:** una capa fina que orqueste el repositorio y transforme datos a la forma que el
 UI quiere (siguiendo la regla "hooks nunca llaman al repository directo").
@@ -176,7 +178,7 @@ UI quiere (siguiendo la regla "hooks nunca llaman al repository directo").
 
 ---
 
-## FASE 3 — Listado de sucursales (página + tabla + filtros)
+## FASE 3 — Listado de sucursales (página + tabla + filtros) — ✅ COMPLETA
 
 **Objetivo:** pantalla de listado funcional con los 3 estados (loading/empty/error),
 búsqueda, filtro activas/deshabilitadas y paginación cliente.
@@ -224,7 +226,7 @@ Fase 4. Se puede mergear y ya aporta valor (ver sucursales).
 
 ---
 
-## FASE 4 — Crear y editar sucursal (formularios + modales)
+## FASE 4 — Crear y editar sucursal (formularios + modales) — ✅ COMPLETA
 
 **Objetivo:** alta y edición de sucursales con validación, conectadas a las mutaciones del
 backend.
@@ -268,7 +270,7 @@ escritura y refresca la lista al terminar.
 
 ---
 
-## FASE 5 — Habilitar / deshabilitar sucursal
+## FASE 5 — Habilitar / deshabilitar sucursal — ✅ COMPLETA
 
 **Objetivo:** el soft-delete del backend expuesto en la UI.
 
@@ -296,7 +298,11 @@ escritura y refresca la lista al terminar.
 
 ---
 
-## FASE 6 — Exponer la URL pública por slug (requiere cambio de backend)
+## FASE 6 — Exponer la URL pública por slug (requiere cambio de backend) — ✅ COMPLETA
+
+> El prerrequisito de backend ya está hecho: `slug` está en `BranchDetailResponse`
+> (`branch-response.mapper.ts`). En frontend: `slug` en `BranchDetail`, `BranchPublicUrl.tsx`
+> y su uso en `EditBranchForm`.
 
 **Objetivo:** mostrar y copiar la URL pública `/menu/<slug>` de cada sucursal, cerrando lo
 que en el plan de slug quedó como "Fase 7 opcional".
@@ -322,8 +328,7 @@ Sin este cambio, esta fase no puede implementarse; las Fases 1–5 no dependen d
    - Mostrar la URL pública construida como `${window.location.origin}/menu/${slug}` (solo si
      `slug` existe y la sucursal está activa).
    - Botón "Copiar" (usar `navigator.clipboard.writeText` + `showSuccessToast`).
-   - (Opcional) Botón "Generar QR" reutilizando `qrcode.react` (ya presente en el repo); no
-     agregar librerías.
+  
 
 ### Criterio de aceptación
 

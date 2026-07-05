@@ -66,6 +66,8 @@ export interface CreateUserRequest {
   password: string;
   rol: UserRole;
   status: boolean;
+  // Sucursales asignadas (roles operativos). OWNER/ADMIN acceden a todas sin enviarlo.
+  branchIds?: string[];
 }
 
 /**
@@ -80,6 +82,8 @@ export interface UpdateUserRequest {
   password?: string;
   rol?: UserRole;
   status?: boolean;
+  // Sucursales asignadas (roles operativos). OWNER/ADMIN acceden a todas sin enviarlo.
+  branchIds?: string[];
 }
 
 /**

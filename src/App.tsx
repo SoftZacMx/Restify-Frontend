@@ -15,6 +15,9 @@ import { PageLoader } from '@/presentation/components/ui/PageLoader';
 import LoginPage from '@/presentation/pages/auth/LoginPage';
 import SignupPage from '@/presentation/pages/auth/SignupPage';
 import RecoverPasswordPage from '@/presentation/pages/auth/RecoverPasswordPage';
+import ChangePasswordPage from '@/presentation/pages/auth/ChangePasswordPage';
+import ReactivateOrganizationPage from '@/presentation/pages/auth/ReactivateOrganizationPage';
+import VerifyEmailPage from '@/presentation/pages/auth/VerifyEmailPage';
 
 // Lazy-loaded pages
 const DashboardPage = lazy(() => import('@/presentation/pages/dashboard/DashboardPage'));
@@ -42,6 +45,7 @@ const PaymentConfigPage = lazy(() => import('@/presentation/pages/settings/payme
 const SubscriptionSuccessPage = lazy(() => import('@/presentation/pages/subscription/SubscriptionSuccessPage'));
 const SubscriptionCancelPage = lazy(() => import('@/presentation/pages/subscription/SubscriptionCancelPage'));
 const PaymentResultPage = lazy(() => import('@/presentation/pages/payment/PaymentResultPage'));
+const SelectBranchPage = lazy(() => import('@/presentation/pages/branch-selection/SelectBranchPage'));
 const PublicMenuPage = lazy(() => import('@/presentation/pages/public-menu/PublicMenuPage'));
 const PublicCheckoutPage = lazy(() => import('@/presentation/pages/public-checkout/PublicCheckoutPage'));
 const PublicOrderTrackingPage = lazy(() => import('@/presentation/pages/public-tracking/PublicOrderTrackingPage'));
@@ -98,6 +102,10 @@ function App() {
                       <Route path="/auth/login" element={<LoginPage />} />
                       <Route path="/auth/signup" element={<SignupPage />} />
                       <Route path="/auth/recover-password" element={<RecoverPasswordPage />} />
+                      <Route path="/auth/reactivate-organization" element={<ReactivateOrganizationPage />} />
+
+                      {/* Verificación de email: el usuario llega desde el link del correo */}
+                      <Route path="/verify-email" element={<VerifyEmailPage />} />
 
                       {/* Public routes (no auth, no subscription guard) */}
                       <Route path="/menu/:slug" element={<PublicMenuPage />} />
@@ -108,6 +116,28 @@ function App() {
                       <Route path="/payment/success" element={<PaymentResultPage />} />
                       <Route path="/payment/failure" element={<PaymentResultPage />} />
                       <Route path="/payment/pending" element={<PaymentResultPage />} />
+
+                      {/* Cambio de contraseña forzado (mustChangePassword): requiere sesión pero
+                          NO subscription guard — cambiar la clave no debe depender de la suscripción */}
+                      <Route
+                        path="/auth/change-password"
+                        element={
+                          <PrivateRoute>
+                            <ChangePasswordPage />
+                          </PrivateRoute>
+                        }
+                      />
+
+                      {/* Selección de sucursal (auth pero sin subscription guard: elegir sucursal
+                          no debe depender del estado de la suscripción) */}
+                      <Route
+                        path="/select-branch"
+                        element={
+                          <PrivateRoute>
+                            <SelectBranchPage />
+                          </PrivateRoute>
+                        }
+                      />
 
                       {/* Subscription routes (no guard - need access without active subscription) */}
                       <Route

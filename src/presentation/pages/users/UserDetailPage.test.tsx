@@ -19,6 +19,7 @@ const mockUser: User = {
   status: true,
   rol: 'MANAGER',
   organizationId: 'org-1',
+  organizationName: 'Org 1',
   mustChangePassword: false,
   emailVerified: true,
   createdAt: new Date(),

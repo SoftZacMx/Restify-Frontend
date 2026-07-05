@@ -1,29 +1,31 @@
 import type { UserRole } from "@/domain/types";
 
 /**
- * Rutas que un mesero (WAITER) puede acceder.
+ * Rutas que un rol operativo (WAITER, CHEF) puede acceder.
  * Solo punto de venta y órdenes (y sus subrutas).
  */
-export const WAITER_ALLOWED_PATH_PREFIXES = ["/pos", "/orders"] as const;
+export const OPERATIONAL_ALLOWED_PATH_PREFIXES = ["/pos", "/orders"] as const;
+
+/** @deprecated Usar OPERATIONAL_ALLOWED_PATH_PREFIXES. Alias por compatibilidad. */
+export const WAITER_ALLOWED_PATH_PREFIXES = OPERATIONAL_ALLOWED_PATH_PREFIXES;
 
 /**
- * Indica si la ruta actual está permitida para el rol WAITER.
+ * Indica si la ruta actual está permitida para los roles operativos (WAITER, CHEF).
  */
 export function isWaiterAllowedPath(pathname: string): boolean {
-  return WAITER_ALLOWED_PATH_PREFIXES.some(
+  return OPERATIONAL_ALLOWED_PATH_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(prefix + "/"),
   );
 }
 
 /**
- * Roles con acceso completo a todos los módulos (admin, gerente).
- * Meseros (WAITER) solo tienen acceso a POS y Órdenes.
+ * Roles con acceso completo a todos los módulos (owner, admin, gerente).
+ * Los roles operativos (WAITER, CHEF) solo tienen acceso a POS y Órdenes.
  */
 export const FULL_ACCESS_ROLES: UserRole[] = [
   "OWNER",
   "ADMIN",
   "MANAGER",
-  "CHEF",
 ];
 
 /**
@@ -31,4 +33,12 @@ export const FULL_ACCESS_ROLES: UserRole[] = [
  */
 export function hasFullAccess(role: UserRole | undefined | null): boolean {
   return role != null && FULL_ACCESS_ROLES.includes(role);
+}
+
+/**
+ * Ruta por defecto tras iniciar sesión / elegir sucursal según el rol.
+ * Los roles operativos (WAITER, CHEF) van a POS; el resto al dashboard.
+ */
+export function getDefaultRouteForRole(role: UserRole | undefined | null): string {
+  return hasFullAccess(role) ? "/dashboard" : "/pos";
 }

@@ -23,6 +23,11 @@ export const ERROR_CONFIG = {
     statusCode: 401,
     category: 'AUTH',
   },
+  INVALID_CREDENTIALS: {
+    message: 'Email o contraseña incorrectos',
+    statusCode: 401,
+    category: 'AUTH',
+  },
   INVALID_TOKEN: {
     message: 'Token inválido o expirado',
     statusCode: 401,
@@ -324,6 +329,31 @@ export const ERROR_CONFIG = {
   COMPANY_NOT_FOUND: {
     message: 'Información de la compañía no configurada',
     statusCode: 404,
+    category: 'BUSINESS',
+  },
+  ORGANIZATION_NOT_FOUND: {
+    message: 'Organización no encontrada',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
+  ORGANIZATION_NAME_MISMATCH: {
+    message: 'El nombre no coincide con el de tu organización',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  ORGANIZATION_ALREADY_CLOSED: {
+    message: 'La organización ya está cerrada',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  ORGANIZATION_NOT_CLOSED: {
+    message: 'La organización no está cerrada',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  ORGANIZATION_REACTIVATION_EXPIRED: {
+    message: 'El plazo para reactivar la organización (30 días) ya venció',
+    statusCode: 400,
     category: 'BUSINESS',
   },
   OUTSIDE_OPERATING_HOURS: {

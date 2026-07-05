@@ -36,10 +36,12 @@ export const STORAGE_KEYS = {
 
 // Role-based access
 export {
+  OPERATIONAL_ALLOWED_PATH_PREFIXES,
   WAITER_ALLOWED_PATH_PREFIXES,
   isWaiterAllowedPath,
   FULL_ACCESS_ROLES,
   hasFullAccess,
+  getDefaultRouteForRole,
 } from './roles.constants';
 
 // POS constants

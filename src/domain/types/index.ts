@@ -14,8 +14,11 @@ export interface User {
   rol: UserRole;
   // Multi-tenant (devueltos por login/signup)
   organizationId: string;
+  organizationName: string;
   mustChangePassword: boolean;
   emailVerified: boolean;
+  // Sucursales asignadas (solo lo devuelve GET /api/users/:id para roles operativos).
+  branchIds?: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -24,6 +27,15 @@ export interface User {
 export interface LoginRequest {
   email: string;
   password: string;
+}
+
+/**
+ * Sucursal accesible para el usuario, tal cual la entrega el login/signup.
+ * Solo `id` + `name`: es lo único que el backend manda aquí (no la dirección).
+ */
+export interface AccessibleBranch {
+  id: string;
+  name: string;
 }
 
 export interface LoginResponse {
@@ -36,9 +48,12 @@ export interface LoginResponse {
     email: string;
     rol: string;
     organizationId: string;
+    organizationName: string;
     mustChangePassword: boolean;
     emailVerified: boolean;
   };
+  /** Sucursales accesibles (el backend solo la incluye si hay al menos una). */
+  branches?: AccessibleBranch[];
 }
 
 // Signup (registro público: crea organización + owner + primera sucursal)
@@ -337,9 +352,6 @@ export type {
   ReportsSummaryDailyRow,
   ReportsSummaryResponse,
 } from "./report.types";
-
-// Re-export company types (configuración de la compañía)
-export type { CompanyResponse, UpsertCompanyRequest } from "./company.types";
 
 // Re-export branch types (CRUD de sucursales)
 export type {

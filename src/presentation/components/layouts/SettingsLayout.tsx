@@ -12,26 +12,26 @@ interface SettingsNavItem {
 }
 
 const SETTINGS_NAV_ITEMS: SettingsNavItem[] = [
-  { id: 'company', label: 'Compañía', path: '/settings/company', icon: Building2 },
+  { id: 'company', label: 'Sucursal', path: '/settings/company', icon: Building2 },
   { id: 'payments', label: 'Pasarelas de Pago', path: '/settings/payments', icon: CreditCard },
   { id: 'general', label: 'General', path: '/settings/general', icon: Settings },
 ];
 
 const PATH_TO_BREADCRUMB: Record<string, string> = {
   '/settings/general': 'General',
-  '/settings/company': 'Compañía',
+  '/settings/company': 'Sucursal',
   '/settings/payments': 'Pasarelas de Pago',
 };
 
 const PATH_TO_TITLE: Record<string, string> = {
   '/settings/general': 'Configuración General',
-  '/settings/company': 'Configuración de la Compañía',
+  '/settings/company': 'Configuración de la Sucursal',
   '/settings/payments': 'Pasarelas de Pago',
 };
 
 const PATH_TO_DESCRIPTION: Record<string, string> = {
   '/settings/general': 'Personaliza la apariencia y preferencias de la aplicación.',
-  '/settings/company': 'Administra la información general y legal de tu negocio en la plataforma RESTIFY.',
+  '/settings/company': 'Administra la información general y legal de la sucursal activa en la plataforma RESTIFY.',
   '/settings/payments': 'Configura las credenciales de tus pasarelas de pago.',
 };
 

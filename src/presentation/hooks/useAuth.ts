@@ -50,7 +50,7 @@ export const useAuth = () => {
       if (response.success && response.data) {
         // El backend ya dejó la sesión iniciada (cookie HttpOnly). Poblamos el store.
         // Tras un signup el usuario arranca con email sin verificar y sin cambio de contraseña forzado.
-        const { token, user } = response.data;
+        const { token, user, organization, branch } = response.data;
         loginStore({
           token,
           user: {
@@ -61,9 +61,12 @@ export const useAuth = () => {
             email: user.email,
             rol: user.rol,
             organizationId: user.organizationId,
+            organizationName: organization.name,
             mustChangePassword: false,
             emailVerified: false,
           },
+          // El signup crea una única sucursal: queda auto-elegida (no hay selección que mostrar).
+          branches: [branch],
         });
         return { success: true };
       } else {

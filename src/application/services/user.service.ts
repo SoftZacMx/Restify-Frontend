@@ -151,6 +151,17 @@ export class UserService implements IUserService {
   }
 
   /**
+   * Resetea la contraseña de un empleado (owner/admin). El empleado deberá definir
+   * una nueva clave en su próximo inicio de sesión.
+   */
+  async resetUserPassword(userId: string): Promise<void> {
+    if (!userId) {
+      throw new AppError('VALIDATION_ERROR', 'El ID del usuario es requerido');
+    }
+    await this.userRepository.resetUserPassword(userId);
+  }
+
+  /**
    * Valida los datos para crear un usuario
    */
   private validateCreateUserData(userData: CreateUserRequest): void {

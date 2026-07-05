@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
-import { LogOut, UtensilsCrossed, ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+import { LogOut, UtensilsCrossed, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Store } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/presentation/hooks/useAuth';
+import { useActiveBranch } from '@/presentation/hooks/useActiveBranch';
+import { useAuthStore } from '@/presentation/store/auth.store';
 import { useSidebarNavigation, type NavItem } from '@/presentation/hooks/useSidebarNavigation';
 import { useSidebar } from '@/presentation/contexts/sidebar.context';
 import { Tooltip } from '@/presentation/components/ui/tooltip';
 import { Button } from '@/presentation/components/ui/button';
 import { cn } from '@/shared/lib/utils';
-import { companyService } from '@/application/services';
 
 /**
  * Componente Sidebar
@@ -21,12 +22,16 @@ export const Sidebar = () => {
   const { isCollapsed, isMobile, isMobileOpen, toggleSidebar, closeSidebar } = useSidebar();
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
 
-  const { data: company } = useQuery({
-    queryKey: ['company'],
-    queryFn: () => companyService.getCompany(),
-    staleTime: 5 * 60 * 1000,
-  });
-  const businessName = company?.name ?? 'Restify';
+  const { selectedBranch, hasMultipleBranches } = useActiveBranch();
+  const clearSelectedBranch = useAuthStore((s) => s.clearSelectedBranch);
+  const navigate = useNavigate();
+  const businessName = selectedBranch?.name ?? 'Restify';
+
+  const handleChangeBranch = () => {
+    clearSelectedBranch();
+    navigate('/select-branch');
+    if (isMobile) closeSidebar();
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -132,6 +137,18 @@ export const Sidebar = () => {
             </Button>
           )}
         </div>
+
+        {/* Cambiar de sucursal (solo si el usuario tiene más de una) */}
+        {hasMultipleBranches && !isCollapsed && (
+          <button
+            type="button"
+            onClick={handleChangeBranch}
+            className="mx-4 mb-2 flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+          >
+            <Store className="h-4 w-4 shrink-0" />
+            Cambiar de sucursal
+          </button>
+        )}
 
         {/* Main Navigation */}
         <nav className={cn('flex-1 space-y-1 mt-4 overflow-y-auto', isCollapsed ? 'px-2' : 'px-4')}>

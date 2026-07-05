@@ -9,7 +9,9 @@ import { UserTable } from '@/presentation/components/users/UserTable';
 import { Pagination } from '@/presentation/components/ui/pagination';
 import { CreateUserForm } from '@/presentation/components/users/CreateUserForm';
 import { useCrudList } from '@/presentation/hooks/useCrudList';
+import { useDialogState } from '@/presentation/hooks/useDialogState';
 import { UserService } from '@/application/services/user.service';
+import { useAuthStore } from '@/presentation/store/auth.store';
 import type { UserTableFilters, CreateUserRequest, User } from '@/domain/types';
 import { formatUsersForTable } from '@/shared/utils';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
@@ -76,6 +78,12 @@ const UsersPage: React.FC = () => {
 
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Reset de contraseña de empleados: solo OWNER/ADMIN.
+  const currentRole = useAuthStore((s) => s.user?.rol);
+  const canResetPassword = currentRole === 'OWNER' || currentRole === 'ADMIN';
+  const resetDialog = useDialogState<User>();
+  const [isResetting, setIsResetting] = useState(false);
+
   React.useEffect(() => {
     if (error) {
       if (error instanceof AppError) {
@@ -88,7 +96,7 @@ const UsersPage: React.FC = () => {
 
   const tableUsers = useMemo(() => formatUsersForTable(paginatedData), [paginatedData]);
 
-  const handleUserAction = useCallback((userId: string, action: 'delete' | 'reactivate' | 'toggle-status') => {
+  const handleUserAction = useCallback((userId: string, action: 'delete' | 'reactivate' | 'toggle-status' | 'reset-password') => {
     switch (action) {
       case 'delete': {
         const user = users.find((u) => u.id === userId);
@@ -98,11 +106,16 @@ const UsersPage: React.FC = () => {
       case 'reactivate':
         handleReactivateUser(userId);
         break;
+      case 'reset-password': {
+        const user = users.find((u) => u.id === userId);
+        if (user) resetDialog.open(user);
+        break;
+      }
       case 'toggle-status':
         showErrorToast('Funcionalidad en desarrollo', 'El cambio de estado estará disponible pronto');
         break;
     }
-  }, [users, deleteDialog]);
+  }, [users, deleteDialog, resetDialog]);
 
   const handleReactivateUser = async (userId: string) => {
     try {
@@ -140,6 +153,26 @@ const UsersPage: React.FC = () => {
     }
   };
 
+  const handleConfirmReset = async () => {
+    if (!resetDialog.data) return;
+    setIsResetting(true);
+    try {
+      await userService.resetUserPassword(resetDialog.data.id);
+      showSuccessToast(
+        'Contraseña reseteada',
+        `"${resetDialog.data.name}" deberá definir una nueva contraseña en su próximo inicio de sesión.`
+      );
+      resetDialog.close();
+    } catch (error) {
+      showErrorToast(
+        'Error al resetear contraseña',
+        error instanceof AppError ? error.message : 'Ocurrió un error inesperado'
+      );
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
   const handleCreateUser = async (userData: CreateUserRequest) => {
     setIsCreating(true);
     try {
@@ -171,7 +204,7 @@ const UsersPage: React.FC = () => {
       </div>
 
       <UserSearchBar filters={filters} onFiltersChange={setFilters} onExport={() => {}} />
-      <UserTable users={tableUsers} isLoading={isLoading} onUserAction={handleUserAction} />
+      <UserTable users={tableUsers} isLoading={isLoading} canResetPassword={canResetPassword} onUserAction={handleUserAction} />
 
       {paginationData.totalItems > 0 && (
         <Pagination
@@ -205,6 +238,16 @@ const UsersPage: React.FC = () => {
         confirmLabel="Desactivar"
         isLoading={isDeleting}
         onConfirm={handleConfirmDelete}
+      />
+
+      <ConfirmDialog
+        open={resetDialog.isOpen}
+        onClose={resetDialog.close}
+        title="¿Resetear contraseña?"
+        description={resetDialog.data && (<>Vas a resetear la contraseña de <strong className="text-slate-900 dark:text-white">{resetDialog.data.name}</strong>.<br /><br />Se cerrarán sus sesiones activas y deberá definir una nueva contraseña la próxima vez que inicie sesión.</>)}
+        confirmLabel="Resetear contraseña"
+        isLoading={isResetting}
+        onConfirm={handleConfirmReset}
       />
     </MainLayout>
   );

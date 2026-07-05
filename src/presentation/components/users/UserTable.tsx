@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MoreVertical, Trash2, RotateCw } from 'lucide-react';
+import { MoreVertical, Trash2, RotateCw, KeyRound } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -23,7 +23,12 @@ import { APP_TIMEZONE } from '@/shared/constants';
 interface UserTableProps {
   users: UserTableItem[];
   isLoading?: boolean;
-  onUserAction?: (userId: string, action: 'delete' | 'reactivate' | 'toggle-status') => void;
+  /** Si true, muestra "Resetear contraseña" en el menú. Solo OWNER/ADMIN. */
+  canResetPassword?: boolean;
+  onUserAction?: (
+    userId: string,
+    action: 'delete' | 'reactivate' | 'toggle-status' | 'reset-password'
+  ) => void;
 }
 
 /**
@@ -34,6 +39,7 @@ interface UserTableProps {
 export const UserTable: React.FC<UserTableProps> = ({
   users,
   isLoading = false,
+  canResetPassword = false,
   onUserAction,
 }) => {
   const getRoleBadgeColor = (role: string): string => {
@@ -152,6 +158,15 @@ export const UserTable: React.FC<UserTableProps> = ({
                         <MoreVertical className="h-4 w-4" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-40">
+                        {canResetPassword && user.statusLabel === 'Activo' && (
+                          <DropdownMenuItem
+                            onSelect={() => onUserAction?.(user.id, 'reset-password')}
+                            className="cursor-pointer"
+                          >
+                            <KeyRound className="mr-2 h-4 w-4" />
+                            <span>Resetear contraseña</span>
+                          </DropdownMenuItem>
+                        )}
                         {user.statusLabel === 'Activo' ? (
                         <DropdownMenuItem
                           onSelect={() => onUserAction?.(user.id, 'delete')}

@@ -75,6 +75,28 @@ export class AuthService {
   }
 
   /**
+   * Verifica el email con el token recibido en el correo.
+   */
+  async verifyEmail(
+    token: string
+  ): Promise<ApiResponse<{ email: string; alreadyVerified: boolean }>> {
+    if (!token) {
+      throw AppError.create('MISSING_REQUIRED_FIELD', 'El token de verificación es requerido');
+    }
+    return this.authRepository.verifyEmail(token);
+  }
+
+  /**
+   * Reenvía el correo de verificación al email indicado.
+   */
+  async resendVerification(email: string): Promise<ApiResponse<{ message: string }>> {
+    if (!email) {
+      throw AppError.create('MISSING_REQUIRED_FIELD', 'Email es requerido');
+    }
+    return this.authRepository.resendVerification(email);
+  }
+
+  /**
    * Establece nueva contraseña
    */
   async setPassword(userId: string, password: string): Promise<ApiResponse<void>> {
@@ -101,11 +123,37 @@ export class AuthService {
   }
 
   /**
+   * Cambia la propia contraseña (usuario autenticado). Flujo forzado por mustChangePassword:
+   * el usuario ya inició sesión y define su nueva clave; el backend baja el flag.
+   */
+  async changeMyPassword(password: string): Promise<ApiResponse<{ message: string }>> {
+    if (!password) {
+      throw AppError.create('MISSING_REQUIRED_FIELD', 'La contraseña es requerida');
+    }
+    return this.authRepository.changeMyPassword(password);
+  }
+
+  /**
    * Cierra sesión del usuario
    * El backend limpia la cookie HttpOnly automáticamente
    */
   async logout(): Promise<ApiResponse<{ message: string }>> {
     return this.authRepository.logout();
+  }
+
+  /**
+   * Cambia la sucursal activa y devuelve el nuevo token.
+   * Los errores del backend (BRANCH_FORBIDDEN, BRANCH_DISABLED) llegan como AppError.
+   */
+  async switchBranch(branchId: string): Promise<string> {
+    if (!branchId) {
+      throw AppError.create('MISSING_REQUIRED_FIELD', 'La sucursal es requerida');
+    }
+    const response = await this.authRepository.switchBranch(branchId);
+    if (!response.success || !response.data) {
+      throw AppError.create('UNKNOWN_ERROR', 'No se pudo cambiar de sucursal');
+    }
+    return response.data.token;
   }
 }
 

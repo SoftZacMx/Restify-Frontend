@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff, Briefcase, Lock, Settings, Save, UtensilsCrossed, ChefHat, UserCog, Shield } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { Eye, EyeOff, Briefcase, Lock, Settings, Save, UtensilsCrossed, ChefHat, UserCog, Shield, Store, Plus } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
 import { Button } from '@/presentation/components/ui/button';
 import { Label } from '@/presentation/components/ui/label';
+import { Badge } from '@/presentation/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/presentation/components/ui/select';
 import { Switch } from '@/presentation/components/ui/switch';
+import { branchService } from '@/application/services';
 import { userFormSchema, type UserFormValues } from '@/shared/schemas/user.schema';
 import type { CreateUserRequest, UpdateUserRequest, User } from '@/domain/types';
+import { BranchAssignDialog } from './BranchAssignDialog';
 
 // Roles asignables desde el formulario de usuarios. OWNER se excluye: solo se crea vía signup.
 type AssignableRole = UserFormValues['rol'];
+
+// ADMIN accede a todas las sucursales sin asignación explícita; los demás requieren ≥1.
+const ROLES_REQUIRING_BRANCHES: AssignableRole[] = ['WAITER', 'CHEF', 'MANAGER'];
 import {
   getPasswordStrengthPercentage,
   getPasswordStrengthLabel,
@@ -45,6 +52,7 @@ export const UserForm: React.FC<UserFormProps> = ({
 }) => {
   const isEditMode = !!initialData;
   const [showPassword, setShowPassword] = useState(false);
+  const [isBranchDialogOpen, setIsBranchDialogOpen] = useState(false);
 
   const {
     register,
@@ -65,6 +73,7 @@ export const UserForm: React.FC<UserFormProps> = ({
       // OWNER no es asignable desde este formulario (solo se crea vía signup).
       rol: initialData && initialData.rol !== 'OWNER' ? initialData.rol : 'WAITER',
       status: initialData?.status ?? true,
+      branchIds: initialData?.branchIds ?? [],
     },
   });
 
@@ -74,6 +83,20 @@ export const UserForm: React.FC<UserFormProps> = ({
   const password = watch('password');
   const rol = watch('rol');
   const status = watch('status');
+  const branchIds = watch('branchIds');
+
+  const requiresBranches = ROLES_REQUIRING_BRANCHES.includes(rol);
+
+  // Solo se pueden asignar sucursales activas de la organización.
+  const { data: branches = [], isLoading: isLoadingBranches } = useQuery({
+    queryKey: ['branches'],
+    queryFn: () => branchService.listBranches(false),
+  });
+
+  const selectedBranches = useMemo(
+    () => branches.filter((b) => branchIds.includes(b.id)),
+    [branches, branchIds]
+  );
 
   const passwordStrengthPercentage = getPasswordStrengthPercentage(password);
   const passwordStrengthLabel = getPasswordStrengthLabel(password);
@@ -94,6 +117,11 @@ export const UserForm: React.FC<UserFormProps> = ({
     const phoneDigits = data.phone?.replace(/\D/g, '') || '';
     const phoneValue = phoneDigits.length === PHONE_DIGITS ? phoneDigits : (data.phone?.trim() || null);
 
+    // Roles operativos: enviamos las sucursales elegidas (puede ir vacío; el usuario
+    // simplemente no verá ninguna hasta que se le asigne). ADMIN accede a todas sin asignación.
+    const roleRequiresBranches = ROLES_REQUIRING_BRANCHES.includes(data.rol);
+    const branchIdsPayload = roleRequiresBranches ? data.branchIds : undefined;
+
     if (isEditMode) {
       const updateData: UpdateUserRequest = {
         name: data.name,
@@ -103,6 +131,7 @@ export const UserForm: React.FC<UserFormProps> = ({
         phone: phoneValue,
         rol: data.rol,
         status: data.status,
+        branchIds: branchIdsPayload,
       };
       if (data.password && data.password.trim()) {
         updateData.password = data.password;
@@ -113,11 +142,13 @@ export const UserForm: React.FC<UserFormProps> = ({
         ...data,
         second_last_name: data.second_last_name?.trim() || null,
         phone: phoneValue,
+        branchIds: branchIdsPayload,
       } as CreateUserRequest);
     }
   };
 
   return (
+    <>
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-8">
       {/* INFORMACIÓN PERSONAL */}
       <div>
@@ -186,32 +217,35 @@ export const UserForm: React.FC<UserFormProps> = ({
               className={cn('h-11 rounded-lg', errors.email && 'border-red-500 focus-visible:ring-red-500')} />
             {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="password" className="text-sm font-medium text-slate-800 dark:text-slate-200">
-              Contraseña {!isEditMode && <span className="text-red-500">*</span>}
-              {isEditMode && <span className="text-slate-400 dark:text-slate-500 font-normal text-xs">(opcional)</span>}
-            </Label>
-            <div className="relative">
-              <Input id="password" type={showPassword ? 'text' : 'password'}
-                placeholder={isEditMode ? 'Dejar vacío para mantener la actual' : '••••••••'}
-                {...register('password')}
-                className={cn('h-11 rounded-lg pr-10', errors.password && 'border-red-500 focus-visible:ring-red-500')} />
-              <button type="button" onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
-                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}>
-                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-              </button>
-            </div>
-            {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
-            {password && (
-              <div className="flex items-center gap-2 mt-1.5">
-                <div className="flex-1 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                  <div className={cn('h-full rounded-full transition-all', passwordStrengthColor)} style={{ width: `${passwordStrengthPercentage}%` }} />
-                </div>
-                <p className={cn('text-xs font-medium', passwordStrengthTextColor)}>{passwordStrengthLabel}</p>
+          {/* La contraseña solo se define al crear. En edición, el reset se hace desde
+              el menú de acciones del usuario (el empleado define su propia clave). */}
+          {!isEditMode && (
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="password" className="text-sm font-medium text-slate-800 dark:text-slate-200">
+                Contraseña <span className="text-red-500">*</span>
+              </Label>
+              <div className="relative">
+                <Input id="password" type={showPassword ? 'text' : 'password'}
+                  placeholder="••••••••"
+                  {...register('password')}
+                  className={cn('h-11 rounded-lg pr-10', errors.password && 'border-red-500 focus-visible:ring-red-500')} />
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                  aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}>
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
               </div>
-            )}
-          </div>
+              {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
+              {password && (
+                <div className="flex items-center gap-2 mt-1.5">
+                  <div className="flex-1 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div className={cn('h-full rounded-full transition-all', passwordStrengthColor)} style={{ width: `${passwordStrengthPercentage}%` }} />
+                  </div>
+                  <p className={cn('text-xs font-medium', passwordStrengthTextColor)}>{passwordStrengthLabel}</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -256,6 +290,45 @@ export const UserForm: React.FC<UserFormProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Sucursales asignadas: solo roles operativos (ADMIN accede a todas). */}
+        {requiresBranches && (
+          <div className="flex flex-col gap-2 mt-6">
+            <Label className="text-sm font-medium text-slate-800 dark:text-slate-200">
+              Sucursales asignadas{' '}
+              <span className="text-slate-400 dark:text-slate-500 font-normal text-xs">(opcional)</span>
+            </Label>
+            <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-3">
+              {selectedBranches.length === 0 ? (
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Sin sucursales asignadas
+                </p>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {selectedBranches.map((branch) => (
+                    <Badge
+                      key={branch.id}
+                      className="inline-flex items-center gap-1.5 rounded-full border-0 bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
+                    >
+                      <Store className="h-3 w-3" />
+                      {branch.name}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="mt-3"
+                onClick={() => setIsBranchDialogOpen(true)}
+              >
+                <Plus className="h-4 w-4 mr-1.5" />
+                Seleccionar sucursales
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Botones */}
@@ -267,5 +340,18 @@ export const UserForm: React.FC<UserFormProps> = ({
         </Button>
       </div>
     </form>
+
+    <BranchAssignDialog
+      open={isBranchDialogOpen}
+      onClose={() => setIsBranchDialogOpen(false)}
+      branches={branches}
+      isLoading={isLoadingBranches}
+      selectedIds={branchIds}
+      onApply={(ids) => {
+        setValue('branchIds', ids);
+        setIsBranchDialogOpen(false);
+      }}
+    />
+    </>
   );
 };

@@ -2,9 +2,9 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { paymentService } from '@/application/services/payment.service';
 import { ticketService } from '@/application/services/ticket.service';
-import { companyService } from '@/application/services/company.service';
 import { showErrorToast } from '@/shared/utils/toast';
 import { usePaymentSound } from '@/presentation/hooks/usePaymentSound';
+import { useActiveBranch } from '@/presentation/hooks/useActiveBranch';
 import type { PaymentSuccessData } from '@/presentation/components/pos/PaymentSuccessView';
 
 const QR_POLLING_INTERVAL_MS = 3000;
@@ -32,6 +32,7 @@ export const useQrPaymentFlow = ({
 }: UseQrPaymentFlowOptions) => {
   const queryClient = useQueryClient();
   const { playSuccess } = usePaymentSound();
+  const { selectedBranch } = useActiveBranch();
 
   const [isProcessingQr, setIsProcessingQr] = useState(false);
   const [isWaitingQrPayment, setIsWaitingQrPayment] = useState(false);
@@ -90,13 +91,12 @@ export const useQrPaymentFlow = ({
             queryClient.invalidateQueries({ queryKey: ['orders'] });
             queryClient.invalidateQueries({ queryKey: ['tables'] });
 
-            const company = await companyService.getCompany().catch(() => null);
             setPaymentSuccessData({
               orderId,
               date: orderDate || new Date().toISOString(),
               total: paymentTotal,
               paymentMethod: 4,
-              companyName: company?.name,
+              companyName: selectedBranch?.name,
             });
           } else if (status.status === 'FAILED' || status.status === 'CANCELED') {
             stopPolling();
@@ -112,7 +112,7 @@ export const useQrPaymentFlow = ({
       const message = error instanceof Error ? error.message : 'No se pudo crear el pago QR';
       showErrorToast('Error al generar QR', message);
     }
-  }, [orderId, userId, orderDate, paymentTotal, playSuccess, queryClient, stopPolling]);
+  }, [orderId, userId, orderDate, paymentTotal, playSuccess, queryClient, stopPolling, selectedBranch]);
 
   const cancelQrPayment = useCallback(() => {
     stopPolling();

@@ -5,6 +5,7 @@ import { useSidebar } from '@/presentation/contexts/sidebar.context';
 import { Button } from '@/presentation/components/ui/button';
 import { cn } from '@/shared/lib/utils';
 import { SubscriptionBanner } from '@/presentation/components/subscription/SubscriptionBanner';
+import { EmailVerificationBanner } from '@/presentation/components/auth/EmailVerificationBanner';
 
 /**
  * Props del componente MainLayout
@@ -65,6 +66,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
           </Button>
         )}
         <SubscriptionBanner />
+        <EmailVerificationBanner />
         {children}
       </main>
     </div>
