@@ -137,7 +137,7 @@ const CompanyConfigPage: React.FC = () => {
         logoUrl: form.logoUrl,
         startOperations: form.startOperations,
         endOperations: form.endOperations,
-        ticketConfig: form.ticketConfig as Record<string, unknown>,
+        ticketConfig: form.ticketConfig as unknown as Record<string, unknown>,
       };
       const updated = await branchService.updateBranch(selectedBranchId, payload);
       queryClient.setQueryData(['branches', selectedBranchId, 'detail'], updated);

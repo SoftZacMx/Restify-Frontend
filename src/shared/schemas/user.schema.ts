@@ -17,7 +17,7 @@ export const userFormSchema = z.object({
   status: z.boolean(),
   // Sucursales asignadas. La regla "≥1 para roles operativos" se valida en el form
   // (depende del rol elegido); ADMIN accede a todas y no requiere selección.
-  branchIds: z.array(z.string()).default([]),
+  branchIds: z.array(z.string()),
 });
 
 export type UserFormValues = z.infer<typeof userFormSchema>;

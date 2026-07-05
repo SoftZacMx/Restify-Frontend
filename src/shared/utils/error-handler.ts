@@ -66,13 +66,17 @@ function convertAxiosErrorToAppError(axiosError: AxiosError): AppError {
     message?: string;
     error?: { code?: string; message?: string; metadata?: unknown } | string;
   };
-  
+
+  // El backend puede responder `error` como objeto ({ code, message, metadata }) o como string.
+  const errorObj = typeof errorData?.error === 'object' ? errorData.error : undefined;
+  const errorString = typeof errorData?.error === 'string' ? errorData.error : undefined;
+
   // Get error message from various possible locations
-  const errorMessage = 
-    errorData?.error?.message || 
-    errorData?.message || 
-    errorData?.error || 
-    String(data) || 
+  const errorMessage =
+    errorObj?.message ||
+    errorData?.message ||
+    errorString ||
+    String(data) ||
     '';
 
   // Check for foreign key constraint errors FIRST (before checking error codes)
@@ -101,8 +105,8 @@ function convertAxiosErrorToAppError(axiosError: AxiosError): AppError {
   }
 
   // Check for error code from backend
-  if (errorData?.error?.code) {
-    const backendCode = errorData.error.code as string;
+  if (errorObj?.code) {
+    const backendCode = errorObj.code as string;
 
     // Si el código existe en nuestro catálogo, usamos el mensaje en español del frontend
     // (el backend responde en inglés). El mensaje del backend se ignora a propósito para
@@ -111,7 +115,7 @@ function convertAxiosErrorToAppError(axiosError: AxiosError): AppError {
       return AppError.create(
         backendCode as ErrorCode,
         undefined,
-        errorData.error.metadata
+        errorObj.metadata as Record<string, unknown> | undefined
       );
     }
   }
