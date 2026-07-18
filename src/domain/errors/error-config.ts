@@ -356,6 +356,11 @@ export const ERROR_CONFIG = {
     statusCode: 400,
     category: 'BUSINESS',
   },
+  ORGANIZATION_ALREADY_ACTIVE: {
+    message: 'La organización ya está activa',
+    statusCode: 409,
+    category: 'BUSINESS',
+  },
   OUTSIDE_OPERATING_HOURS: {
     message: 'No se pueden crear órdenes fuera del horario de operación',
     statusCode: 400,
