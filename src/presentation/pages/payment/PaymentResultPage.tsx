@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircle, XCircle, Clock } from 'lucide-react';
+import { publicOrderRepository } from '@/infrastructure/api/repositories/public-order.repository';
 
 type PaymentResultStatus = 'success' | 'failure' | 'pending';
 
@@ -32,14 +33,42 @@ const PaymentResultPage: React.FC = () => {
   const status: PaymentResultStatus = statusParam && config[statusParam] ? statusParam : 'success';
   const { icon, title, description, bg } = config[status];
 
-  // Si hay un trackingToken de pedido público, redirigir a la página de seguimiento
+  // Redirigir al seguimiento del pedido público tras volver de Mercado Pago.
+  // 1) Ruta rápida: trackingToken guardado en localStorage antes de ir a MP.
+  // 2) Fallback: si el localStorage se perdió (MP abrió su webview con storage aparte),
+  //    usar el orderId del external_reference ("orderId:branchId") que MP devuelve en la
+  //    query y resolver el trackingToken vía backend.
   useEffect(() => {
+    let cancelled = false;
+
     const trackingToken = localStorage.getItem('publicOrderTrackingToken');
     if (trackingToken) {
       localStorage.removeItem('publicOrderTrackingToken');
       navigate(`/public/pedido/${trackingToken}`, { replace: true });
+      return;
     }
-  }, [navigate]);
+
+    // external_reference viene como "orderId:branchId" (o solo "orderId" en preferencias viejas).
+    const externalReference = searchParams.get('external_reference');
+    const orderId = externalReference?.split(':')[0];
+    if (!orderId) return;
+
+    publicOrderRepository
+      .getOrderStatusByOrderId(orderId)
+      .then((order) => {
+        if (!cancelled && order.trackingToken) {
+          navigate(`/public/pedido/${order.trackingToken}`, { replace: true });
+        }
+      })
+      .catch(() => {
+        // Si no se puede resolver (orden no pública, no existe, etc.) se queda en esta
+        // pantalla de resultado, que ya informa el estado del pago.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [navigate, searchParams]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 px-4">

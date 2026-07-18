@@ -65,6 +65,16 @@ export class PublicOrderRepository {
     const response = await publicApiClient.get(`/api/public/orders/${trackingToken}/status`);
     return response.data.data;
   }
+
+  /**
+   * Status por orderId. Se usa al volver de Mercado Pago (la back_url trae el orderId
+   * en el external_reference) cuando el cliente perdió el trackingToken guardado en
+   * localStorage (típico si MP abrió el checkout en su webview con storage aparte).
+   */
+  async getOrderStatusByOrderId(orderId: string): Promise<PublicOrderStatusResponse> {
+    const response = await publicApiClient.get(`/api/public/orders/by-order-id/${orderId}/status`);
+    return response.data.data;
+  }
 }
 
 export const publicOrderRepository = new PublicOrderRepository();
