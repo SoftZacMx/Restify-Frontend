@@ -3,6 +3,7 @@ import { publicApiClient } from '../public-client';
 import type { ApiResponse } from '@/domain/types';
 import type {
   CloseOrganizationResult,
+  RequestReactivationRequest,
   ReactivateOrganizationRequest,
   ReactivateOrganizationResult,
 } from '@/domain/types/organization.types';
@@ -22,9 +23,20 @@ export class OrganizationRepository {
   }
 
   /**
-   * Reactiva una organización cerrada dentro de la ventana de 30 días.
-   * Endpoint público (la org está cerrada y no hay sesión válida): re-valida
-   * email + password como un login. El backend setea la cookie HttpOnly.
+   * Paso 1: solicita por correo el enlace de reactivación. Endpoint público.
+   * Respuesta uniforme (200) exista o no la cuenta (anti-enumeración).
+   */
+  async requestReactivation(
+    data: RequestReactivationRequest
+  ): Promise<ApiResponse<{ message: string }>> {
+    const response = await publicApiClient.post('/api/organization/request-reactivation', data);
+    return response.data;
+  }
+
+  /**
+   * Paso 2: confirma la reactivación con el token del correo. Endpoint público.
+   * El backend valida el token, reactiva la org (si sigue cerrada y dentro de la
+   * ventana de 30 días) y setea la cookie HttpOnly con la sesión del owner.
    */
   async reactivate(
     data: ReactivateOrganizationRequest

@@ -1,6 +1,7 @@
 import type { ApiResponse } from '@/domain/types';
 import type {
   CloseOrganizationResult,
+  RequestReactivationRequest,
   ReactivateOrganizationRequest,
   ReactivateOrganizationResult,
 } from '@/domain/types/organization.types';
@@ -28,13 +29,25 @@ export class OrganizationService {
   }
 
   /**
-   * Reactiva una organización cerrada con las credenciales del owner.
+   * Paso 1: solicita por correo el enlace de reactivación de la organización.
+   */
+  async requestReactivation(
+    data: RequestReactivationRequest
+  ): Promise<ApiResponse<{ message: string }>> {
+    if (!data.email) {
+      throw AppError.create('MISSING_REQUIRED_FIELD', 'El email es requerido');
+    }
+    return this.repository.requestReactivation(data);
+  }
+
+  /**
+   * Paso 2: confirma la reactivación con el token que llegó por correo.
    */
   async reactivate(
     data: ReactivateOrganizationRequest
   ): Promise<ApiResponse<ReactivateOrganizationResult>> {
-    if (!data.email || !data.password) {
-      throw AppError.create('MISSING_REQUIRED_FIELD', 'Email y contraseña son requeridos');
+    if (!data.token) {
+      throw AppError.create('MISSING_REQUIRED_FIELD', 'El token es requerido');
     }
     return this.repository.reactivate(data);
   }

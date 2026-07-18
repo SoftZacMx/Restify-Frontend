@@ -10,14 +10,34 @@ export interface CloseOrganizationResult {
   closedAt: string | null;
 }
 
-/** Credenciales para reactivar una organización cerrada (ruta pública). */
-export interface ReactivateOrganizationRequest {
+/** Solicitud del enlace de reactivación por correo (paso 1, ruta pública). */
+export interface RequestReactivationRequest {
   email: string;
-  password: string;
 }
 
-/** Resultado de reactivar la organización. */
+/** Confirmación de reactivación con el token del correo (paso 2, ruta pública). */
+export interface ReactivateOrganizationRequest {
+  token: string;
+}
+
+/**
+ * Resultado de reactivar la organización. Misma forma que el login: el owner queda
+ * con sesión iniciada directamente (el backend setea la cookie HttpOnly), sin volver
+ * a pedir contraseña.
+ */
 export interface ReactivateOrganizationResult {
   token: string;
-  organization: { id: string; name: string; status: string };
+  user: {
+    id: string;
+    name: string;
+    last_name: string;
+    second_last_name: string | null;
+    email: string;
+    rol: string;
+    organizationId: string;
+    organizationName: string;
+    mustChangePassword: boolean;
+    emailVerified: boolean;
+  };
+  branches?: Array<{ id: string; name: string }>;
 }

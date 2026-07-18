@@ -18,6 +18,7 @@ import ForgotPasswordPage from '@/presentation/pages/auth/ForgotPasswordPage';
 import ResetPasswordPage from '@/presentation/pages/auth/ResetPasswordPage';
 import ChangePasswordPage from '@/presentation/pages/auth/ChangePasswordPage';
 import ReactivateOrganizationPage from '@/presentation/pages/auth/ReactivateOrganizationPage';
+import ConfirmReactivationPage from '@/presentation/pages/auth/ConfirmReactivationPage';
 import VerifyEmailPage from '@/presentation/pages/auth/VerifyEmailPage';
 
 // Lazy-loaded pages
@@ -105,6 +106,9 @@ function App() {
                       <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
                       <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
                       <Route path="/auth/reactivate-organization" element={<ReactivateOrganizationPage />} />
+
+                      {/* Reactivación de org: el owner llega desde el link del correo (?token=) */}
+                      <Route path="/reactivate-organization" element={<ConfirmReactivationPage />} />
 
                       {/* Verificación de email: el usuario llega desde el link del correo */}
                       <Route path="/verify-email" element={<VerifyEmailPage />} />

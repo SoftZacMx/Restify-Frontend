@@ -1,60 +1,83 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff, UtensilsCrossed, ArrowLeft, RotateCcw } from 'lucide-react';
+import { UtensilsCrossed, ArrowLeft, MailCheck, RotateCcw } from 'lucide-react';
 import { organizationService } from '@/application/services';
-import { AppError } from '@/domain/errors';
 import { Button } from '@/presentation/components/ui/button';
 import { Input } from '@/presentation/components/ui/input';
 import { Label } from '@/presentation/components/ui/label';
 import { Card, CardContent, CardHeader } from '@/presentation/components/ui/card';
 import { ThemeToggle } from '@/presentation/components/ui/theme-toggle';
-import { showSuccessToast } from '@/shared/utils/toast';
-import { loginSchema, type LoginFormData } from './login.schema';
+import { verifyEmailSchema, type VerifyEmailFormData } from './recover-password.schema';
 
 /**
- * Reactivación de organización (ruta pública).
- * Tras cerrar la org, el login queda bloqueado; aquí el owner re-valida sus credenciales
- * (email + password) para reactivarla dentro de la ventana de 30 días. No pide el nombre.
+ * Reactivación de organización — paso 1 (ruta pública).
+ * El owner (sin sesión, la org está cerrada) pide por correo el enlace de reactivación.
+ *
+ * Anti-enumeración: la pantalla de éxito es la misma exista o no la cuenta; el backend
+ * responde siempre 200. La identidad se prueba fuera de banda (control del buzón), no con
+ * contraseña — por eso aquí no se pide.
  */
 export default function ReactivateOrganizationPage() {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<VerifyEmailFormData>({
+    resolver: zodResolver(verifyEmailSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data: VerifyEmailFormData) => {
     setIsLoading(true);
-    setError(null);
-
     try {
-      const response = await organizationService.reactivate({
-        email: data.email,
-        password: data.password,
-      });
-
-      if (response.success) {
-        showSuccessToast('Organización reactivada', 'Ya puedes iniciar sesión con normalidad.');
-        navigate('/auth/login', { replace: true });
-      } else {
-        setError(response.error?.message || 'No se pudo reactivar la organización');
-      }
-    } catch (err) {
-      const appError = err instanceof AppError ? err : AppError.create('UNKNOWN_ERROR', 'Error desconocido');
-      setError(appError.message);
+      await organizationService.requestReactivation({ email: data.email });
+    } catch {
+      // Ignoramos el error a propósito: la pantalla de éxito es la misma exista o no
+      // la cuenta (anti-enumeración). Un fallo real (red/SES) tampoco se le revela.
     } finally {
       setIsLoading(false);
+      setSubmitted(true);
     }
   };
+
+  if (submitted) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4">
+        <div className="absolute top-4 right-4">
+          <ThemeToggle variant="icon" />
+        </div>
+
+        <div className="mb-8 flex flex-col items-center gap-2">
+          <div className="flex items-center gap-2">
+            <UtensilsCrossed className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
+              RESTIFY
+            </span>
+          </div>
+        </div>
+
+        <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800">
+          <CardContent className="flex flex-col items-center gap-4 py-12 px-8">
+            <MailCheck className="h-16 w-16 text-blue-500" />
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white font-serif text-center">
+              Revisa tu correo
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 text-center">
+              Si el correo corresponde al propietario de una organización reactivable, te
+              enviamos un enlace para reactivarla. El enlace caduca en 10 minutos.
+            </p>
+            <Link
+              to="/auth/login"
+              className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-medium inline-flex items-center gap-1 pt-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Volver al inicio de sesión
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4">
@@ -81,64 +104,25 @@ export default function ReactivateOrganizationPage() {
             Reactivar organización
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Ingresa las credenciales del propietario para reactivar tu organización.
+            Ingresa el correo del propietario y te enviaremos un enlace para reactivarla.
           </p>
         </CardHeader>
 
         <CardContent className="space-y-6 px-8 pb-10">
-          {/* Error */}
-          {error && (
-            <div
-              className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg relative"
-              role="alert"
-            >
-              <strong className="font-bold">Error:</strong>
-              <span className="block sm:inline ml-2">{error}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Email */}
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium text-slate-700 dark:text-slate-300">
                 Email
               </Label>
               <Input
                 id="email"
-                {...register('email')}
+                {...form.register('email')}
                 placeholder="correo@ejemplo.com"
                 type="email"
-                className={errors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}
+                className={form.formState.errors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}
               />
-              {errors.email && (
-                <span className="text-red-500 text-sm">{errors.email.message}</span>
-              )}
-            </div>
-
-            {/* Password */}
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                Contraseña
-              </Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  {...register('password')}
-                  placeholder="Introduce tu contraseña"
-                  type={showPassword ? 'text' : 'password'}
-                  className={`pr-10 ${errors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 focus:outline-none"
-                  aria-label="Toggle password visibility"
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
-              </div>
-              {errors.password && (
-                <span className="text-red-500 text-sm">{errors.password.message}</span>
+              {form.formState.errors.email && (
+                <span className="text-red-500 text-sm">{form.formState.errors.email.message}</span>
               )}
             </div>
 
@@ -147,7 +131,7 @@ export default function ReactivateOrganizationPage() {
               disabled={isLoading}
               className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-medium text-base shadow-sm mt-2"
             >
-              {isLoading ? 'Reactivando...' : 'Reactivar organización'}
+              {isLoading ? 'Enviando...' : 'Enviar enlace'}
             </Button>
 
             <div className="text-center pt-2">
