@@ -99,17 +99,17 @@ const OrdersPage: React.FC = () => {
   /** Totales pendientes/pagadas en el rango y filtros de API (no dependen de la página). */
   const ordersSummary = listPayload?.summary;
 
-  // Query para obtener mesas (para filtros)
+  // Query para obtener ubicaciones (para filtros)
   const { data: tables = [], isLoading: isLoadingTables } = useQuery({
     queryKey: ['tables-for-filter'],
     queryFn: async () => {
-      // Todas las mesas: el listado de órdenes no trae `table` anidada; hace falta el nombre aunque la mesa esté inactiva en catálogo.
+      // Todas las ubicaciones: el listado de órdenes no trae `table` anidada; hace falta el nombre aunque la ubicación esté inactiva en catálogo.
       return await tableService.listTables();
     },
     staleTime: 60000, // 1 minuto
   });
 
-  // Orden completa para el diálogo de detalle (mesa, items, extras)
+  // Orden completa para el diálogo de detalle (ubicación, items, extras)
   const { data: detailOrder = null, isLoading: isLoadingDetailOrder } = useQuery({
     queryKey: ['order', detailDialog.data],
     queryFn: async () => {
@@ -120,7 +120,7 @@ const OrdersPage: React.FC = () => {
     staleTime: 0,
   });
 
-  // Si la orden tiene tableId pero el backend no devolvió table, obtener la mesa
+  // Si la orden tiene tableId pero el backend no devolvió table, obtener la ubicación
   const { data: detailOrderTable = null } = useQuery({
     queryKey: ['table', detailOrder?.tableId],
     queryFn: async () => {
@@ -131,7 +131,7 @@ const OrdersPage: React.FC = () => {
     staleTime: 60000,
   });
 
-  // Orden para el diálogo: con mesa enriquecida si se obtuvo por separado
+  // Orden para el diálogo: con ubicación enriquecida si se obtuvo por separado
   const orderForDetailDialog = useMemo(() => {
     if (!detailOrder) return null;
     if (detailOrder.table) return detailOrder;
@@ -221,7 +221,7 @@ const OrdersPage: React.FC = () => {
     }
   }, [ordersError]);
 
-  // Handler para ver detalles: abrir diálogo y cargar orden completa (mesa, items, extras)
+  // Handler para ver detalles: abrir diálogo y cargar orden completa (ubicación, items, extras)
   const handleViewDetails = useCallback((orderId: string) => {
     detailDialog.open(orderId);
   }, [detailDialog]);
@@ -341,7 +341,7 @@ const OrdersPage: React.FC = () => {
     splitPaymentDialog.open(order);
   }, [splitPaymentDialog]);
 
-  // Éxito de pago dividido: invalidar órdenes y mesas, cerrar diálogo, toast
+  // Éxito de pago dividido: invalidar órdenes y ubicaciones, cerrar diálogo, toast
   const handleSplitPaymentSuccess = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ['orders'] });
     queryClient.invalidateQueries({ queryKey: ['tables-for-filter'] });

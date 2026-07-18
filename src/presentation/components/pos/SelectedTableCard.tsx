@@ -6,21 +6,21 @@ import type { Table } from '@/domain/types';
 
 interface SelectedTableCardProps {
   table: Table;
-  /** Si se provee, el card es clicable para abrir el diálogo de cambio (ej. seleccionar otra mesa) */
+  /** Si se provee, el card es clicable para abrir el diálogo de cambio (ej. seleccionar otra ubicación) */
   onClick?: () => void;
   className?: string;
 }
 
 /**
- * Vista de la mesa seleccionada: icono, identificador, capacidad y zona.
- * Sin botones (sin Gestionar Pedido / Cambiar Mesa). Opcionalmente clicable para cambiar mesa.
+ * Vista de la ubicación seleccionada: icono, identificador, capacidad y zona.
+ * Sin botones (sin Gestionar Pedido / Cambiar Ubicación). Opcionalmente clicable para cambiar ubicación.
  */
 export const SelectedTableCard: React.FC<SelectedTableCardProps> = ({
   table,
   onClick,
   className,
 }) => {
-  const tableLabel = `Mesa ${table.name}`;
+  const tableLabel = `Ubicación ${table.name}`;
 
   return (
     <Card

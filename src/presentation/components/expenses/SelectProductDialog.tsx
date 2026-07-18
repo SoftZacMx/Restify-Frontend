@@ -6,10 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogClose,
-  DialogFooter,
 } from '@/presentation/components/ui/dialog';
 import { Input } from '@/presentation/components/ui/input';
-import { Button } from '@/presentation/components/ui/button';
 import { ProductSelectionList } from './ProductSelectionList';
 import type { ProductSelectionItemData } from './ProductSelectionItem';
 
@@ -18,6 +16,14 @@ interface SelectProductDialogProps {
   onOpenChange: (open: boolean) => void;
   products: ProductSelectionItemData[];
   onSelect: (product: ProductSelectionItemData) => void;
+  /**
+   * Si true, oculta los productos sin `trackStock=true`. Útil para flujos de stock
+   * (merma, ajuste, recetas) donde elegir un producto no trackeado no tiene sentido.
+   * Si los items no traen `trackStock`, no filtra (no rompe el flujo de gastos).
+   */
+  onlyTracked?: boolean;
+  /** Mensaje custom para cuando la lista filtrada queda vacía. */
+  emptyMessage?: string;
 }
 
 /**
@@ -28,36 +34,41 @@ export const SelectProductDialog: React.FC<SelectProductDialogProps> = ({
   onOpenChange,
   products,
   onSelect,
+  onlyTracked = false,
+  emptyMessage,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState<ProductSelectionItemData | null>(null);
 
   const filteredProducts = useMemo(() => {
-    if (!searchQuery.trim()) return products;
+    let result = products;
+    if (onlyTracked) {
+      // Solo aplicar el filtro si al menos un item trae el campo (evita filtrar en flujos
+      // donde el caller no provee trackStock — ej. expenses).
+      const hasTrackStockInfo = result.some((p) => typeof p.trackStock === 'boolean');
+      if (hasTrackStockInfo) {
+        result = result.filter((p) => p.trackStock === true);
+      }
+    }
+    if (!searchQuery.trim()) return result;
     const q = searchQuery.trim().toLowerCase();
-    return products.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q)
-    );
-  }, [products, searchQuery]);
+    return result.filter((p) => p.name.toLowerCase().includes(q));
+  }, [products, searchQuery, onlyTracked]);
 
   useEffect(() => {
     if (open) {
       setSearchQuery('');
-      setSelectedProduct(null);
     }
   }, [open]);
 
-  const handleConfirm = () => {
-    if (selectedProduct) {
-      onSelect(selectedProduct);
-      onOpenChange(false);
-    }
+  /** Selección directa: al hacer click en un producto se confirma y se cierra el dialog. */
+  const handlePick = (product: ProductSelectionItemData) => {
+    onSelect(product);
+    onOpenChange(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg w-full max-h-[90vh] flex flex-col">
+      <DialogContent className="w-full md:w-[42vw] max-h-[90vh] md:h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="pr-8">Seleccionar Producto</DialogTitle>
           <DialogClose />
@@ -78,19 +89,11 @@ export const SelectProductDialog: React.FC<SelectProductDialogProps> = ({
 
           <ProductSelectionList
             products={filteredProducts}
-            selectedId={selectedProduct?.id ?? null}
-            onSelect={setSelectedProduct}
+            selectedId={null}
+            onSelect={handlePick}
+            emptyMessage={emptyMessage}
           />
         </div>
-
-        <DialogFooter className="gap-2 sm:gap-0">
-          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-            Cancelar
-          </Button>
-          <Button type="button" onClick={handleConfirm} disabled={!selectedProduct}>
-            Añadir seleccionado
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

@@ -10,7 +10,7 @@ interface CreateTableFormProps {
 }
 
 /**
- * Wrapper de TableForm para creación de mesas
+ * Wrapper de TableForm para creación de ubicaciones
  * Simplifica el uso del formulario cuando solo necesitamos crear
  */
 export const CreateTableForm: React.FC<CreateTableFormProps> = ({

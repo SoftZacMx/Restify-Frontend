@@ -258,6 +258,7 @@ export type {
   ListMenuItemsResponse,
   MenuItemTableFilters,
   MenuItemTableItem,
+  MenuItemStockMode,
   MenuItemTableProps,
   MenuItemSearchBarProps,
   MenuItemPaginationProps,
@@ -288,7 +289,7 @@ export type {
   CategorySelectOption,
 } from "./menu-category.types";
 
-// Re-export table types (CRUD de mesas)
+// Re-export table types (CRUD de ubicaciones)
 export type {
   CreateTableRequest,
   UpdateTableRequest,
@@ -362,3 +363,33 @@ export type {
   UpdateBranchRequest,
   BranchFilters,
 } from "./branch.types";
+
+// Re-export recipe types (recetas de MenuItem)
+export type {
+  RecipeIngredientResponse,
+  GetRecipeResponse,
+  ReplaceRecipeRequest,
+  AddRecipeItemRequest,
+  UpdateRecipeItemRequest,
+  RecipeIngredientDraft,
+} from './recipe.types';
+
+// Re-export stock types (inventario / gestión de stock)
+export type {
+  StockMovementType,
+  WasteReason,
+  StockSummaryResponse,
+  StockListApiFilters,
+  StockListFilters,
+  StockHealth,
+  StockTableItem,
+  UpdateStockConfigRequest,
+  RecordWasteRequest,
+  RecordAdjustmentRequest,
+  StockMovementResponse,
+  RecordMovementResult,
+  StockMovementListItem,
+  MovementsListApiFilters,
+  MovementsListFilters,
+  MovementTableItem,
+} from './stock.types';

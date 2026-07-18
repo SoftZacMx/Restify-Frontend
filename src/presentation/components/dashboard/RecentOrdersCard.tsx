@@ -40,7 +40,7 @@ export function RecentOrdersCard({ orders, onOrderClick }: RecentOrdersCardProps
               <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50/50 dark:bg-slate-700/50">
                 <tr>
                   <th className="px-4 py-3 font-medium rounded-l-lg">Orden</th>
-                  <th className="px-4 py-3 font-medium">Mesa</th>
+                  <th className="px-4 py-3 font-medium">Ubicación</th>
                   <th className="px-4 py-3 font-medium">Estado</th>
                   <th className="px-4 py-3 font-medium">Hora</th>
                   <th className="px-4 py-3 font-medium text-right rounded-r-lg">Total</th>

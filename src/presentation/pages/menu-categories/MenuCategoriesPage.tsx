@@ -183,7 +183,7 @@ const MenuCategoriesPage: React.FC = () => {
         open={deleteDialog.isOpen}
         onClose={deleteDialog.close}
         title="¿Eliminar categoría?"
-        description={deleteDialog.data && (<>Estás a punto de eliminar la categoría <strong className="text-slate-900 dark:text-white">{deleteDialog.data.name}</strong>.<br /><br />Esta acción no se puede deshacer. Si hay platillos asociados, quedarán sin categoría.</>)}
+        description={deleteDialog.data && (<>Estás a punto de eliminar la categoría <strong className="text-slate-900 dark:text-white">{deleteDialog.data.name}</strong>.<br /><br />Esta acción no se puede deshacer. Si hay productos asociados, quedarán sin categoría.</>)}
         confirmLabel="Eliminar"
         isLoading={isDeleting}
         onConfirm={handleConfirmDelete}

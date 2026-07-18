@@ -90,7 +90,7 @@ export const SalesPerformanceReportView: React.FC<SalesPerformanceReportViewProp
         <CardHeader className="bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700">
           <CardTitle className="flex items-center gap-2 text-base">
             <UtensilsCrossed className="h-5 w-5 text-primary" />
-            Ventas por ítem del menú
+            Ventas por ítem del catálogo
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-4">
@@ -100,7 +100,7 @@ export const SalesPerformanceReportView: React.FC<SalesPerformanceReportViewProp
             <Table>
               <TableHeader>
                 <TableRow className="border-slate-200 dark:border-slate-700">
-                  <TableHead>Platillo</TableHead>
+                  <TableHead>Producto</TableHead>
                   <TableHead>Precio unit.</TableHead>
                   <TableHead>Cantidad</TableHead>
                   <TableHead>Total vendido</TableHead>

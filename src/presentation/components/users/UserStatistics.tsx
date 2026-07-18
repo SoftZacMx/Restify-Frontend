@@ -22,7 +22,7 @@ export const UserStatistics: React.FC<UserStatisticsProps> = ({ userId: _userId 
       id: 2,
       icon: Table,
       value: '76',
-      label: 'Mesas atendidas (mes)',
+      label: 'Ubicaciones atendidas (mes)',
     },
   ];
 

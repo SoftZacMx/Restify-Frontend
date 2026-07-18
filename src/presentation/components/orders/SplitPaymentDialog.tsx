@@ -112,7 +112,7 @@ export const SplitPaymentDialog: React.FC<SplitPaymentDialogProps> = ({
 
       if (response.success && response.data) {
         if (response.data.tableReleased) {
-          // La mesa se liberó; la UI se actualizará al invalidar queries
+          // La ubicación se liberó; la UI se actualizará al invalidar queries
         }
         onSuccess();
         onClose();

@@ -63,7 +63,7 @@ export const MenuItemPagination: React.FC<MenuItemPaginationProps> = ({
         <div className="text-sm text-slate-500 dark:text-slate-400">
           Mostrando <span className="font-medium text-slate-700 dark:text-slate-300">{startItem}</span> a{' '}
           <span className="font-medium text-slate-700 dark:text-slate-300">{endItem}</span> de{' '}
-          <span className="font-medium text-slate-700 dark:text-slate-300">{totalItems}</span> platillos
+          <span className="font-medium text-slate-700 dark:text-slate-300">{totalItems}</span> productos
         </div>
 
         {/* Controles de paginación */}

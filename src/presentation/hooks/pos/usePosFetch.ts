@@ -14,7 +14,7 @@ interface UsePosFetchOptions {
 
 /**
  * Hook para cargar datos del backend necesarios para el POS:
- * productos, mesas y categorías.
+ * productos, ubicaciones y categorías.
  */
 export const usePosFetch = (options?: UsePosFetchOptions) => {
   const { currentOrderId } = options || {};
@@ -24,7 +24,7 @@ export const usePosFetch = (options?: UsePosFetchOptions) => {
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [productsError, setProductsError] = useState<string | null>(null);
 
-  // Mesas
+  // Ubicaciones
   const [tables, setTables] = useState<Table[]>([]);
   const [isLoadingTables, setIsLoadingTables] = useState(true);
   const [tablesError, setTablesError] = useState<string | null>(null);
@@ -91,7 +91,7 @@ export const usePosFetch = (options?: UsePosFetchOptions) => {
         const posTables = tablesResponse.map(mapTableResponseToTable);
         setTables(posTables);
       } catch {
-        setTablesError('No se pudieron cargar las mesas');
+        setTablesError('No se pudieron cargar las ubicaciones');
       } finally {
         setIsLoadingTables(false);
       }

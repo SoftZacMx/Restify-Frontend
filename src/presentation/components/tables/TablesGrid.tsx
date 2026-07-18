@@ -19,7 +19,7 @@ interface TablesGridProps {
 
 /**
  * Componente TablesGrid
- * Muestra las mesas en formato de grid visual similar al POS
+ * Muestra las ubicaciones en formato de grid visual similar al POS
  * con acciones de CRUD disponibles
  */
 export const TablesGrid: React.FC<TablesGridProps> = ({
@@ -52,10 +52,10 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
             <Square className="h-8 w-8 text-slate-400" />
           </div>
           <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
-            No hay mesas
+            No hay ubicaciones
           </h3>
           <p className="text-slate-500 dark:text-slate-400">
-            Crea tu primera mesa para comenzar
+            Crea tu primera ubicación para comenzar
           </p>
         </div>
       </div>
@@ -63,7 +63,7 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
   }
 
   /**
-   * Obtiene el color de fondo según el estado de la mesa
+   * Obtiene el color de fondo según el estado de la ubicación
    */
   const getTableColor = (table: TableResponse) => {
     if (!table.status) {
@@ -111,7 +111,7 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
         </div>
       </div>
 
-      {/* Grid de mesas */}
+      {/* Grid de ubicaciones */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
         {tables.map((table) => (
           <div
@@ -182,7 +182,7 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Icono de mesa */}
+            {/* Icono de ubicación */}
             <div className="mb-2">
               <Square className={cn(
                 'h-8 w-8',
@@ -190,7 +190,7 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
               )} />
             </div>
 
-            {/* Nombre de mesa */}
+            {/* Nombre de ubicación */}
             <div className="text-center">
               <span className={cn(
                 'text-lg font-bold px-1 break-words',
@@ -209,11 +209,11 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
         ))}
       </div>
 
-      {/* Resumen de mesas */}
+      {/* Resumen de ubicaciones */}
       <div className="mt-8 px-2">
         <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
           <span>
-            <strong className="text-slate-700 dark:text-slate-300">{tables.length}</strong> mesas en total
+            <strong className="text-slate-700 dark:text-slate-300">{tables.length}</strong> ubicaciones en total
           </span>
           <span>•</span>
           <span>

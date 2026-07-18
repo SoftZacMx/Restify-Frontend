@@ -5,6 +5,8 @@ interface ProductSelectionListProps {
   products: ProductSelectionItemData[];
   selectedId: string | null;
   onSelect: (product: ProductSelectionItemData) => void;
+  /** Mensaje a mostrar cuando la lista filtrada queda vacía. */
+  emptyMessage?: string;
 }
 
 /**
@@ -14,11 +16,12 @@ export const ProductSelectionList: React.FC<ProductSelectionListProps> = ({
   products,
   selectedId,
   onSelect,
+  emptyMessage = 'No hay productos que coincidan con la búsqueda.',
 }) => {
   if (products.length === 0) {
     return (
       <div className="py-8 text-center text-slate-500 dark:text-slate-400 text-sm">
-        No hay productos que coincidan con la búsqueda.
+        {emptyMessage}
       </div>
     );
   }

@@ -14,7 +14,7 @@ interface TableSelectorProps {
 /**
  * Componente TableSelector
  * Vista: número grande, estado (LIBRE/OCUPADA/SELECCIONADA), indicador (verde/rojo/check).
- * Al hacer clic en una mesa se selecciona y se cierra el diálogo (sin botones Confirmar/Cancelar).
+ * Al hacer clic en una ubicación se selecciona y se cierra el diálogo (sin botones Confirmar/Cancelar).
  */
 export const TableSelector: React.FC<TableSelectorProps> = ({
   tables,

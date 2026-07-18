@@ -188,7 +188,7 @@ export interface SplitPaymentResponse {
   order: import('./order.types').CreateOrderResponse;
   payments: PaymentResponse[];
   paymentDifferentiation: PaymentDifferentiation;
-  /** true si la orden era Local con mesa y el backend liberó la mesa */
+  /** true si la orden era Local con ubicación y el backend liberó la ubicación */
   tableReleased?: boolean;
 }
 

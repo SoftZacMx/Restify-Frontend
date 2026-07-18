@@ -14,3 +14,5 @@ export { TicketService, ticketService } from './ticket.service';
 export { ReportService, reportService } from './report.service';
 export { BranchService, branchService } from './branch.service';
 export { OrganizationService, organizationService } from './organization.service';
+export { StockService, stockService } from './stock.service';
+export { RecipeService, recipeService } from './recipe.service';

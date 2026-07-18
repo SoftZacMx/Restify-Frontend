@@ -4,6 +4,8 @@
  * Los productos NO pueden tener extras, solo MenuItem puede tener extras
  */
 
+import type { UnitOfMeasure } from './expense.types';
+
 /**
  * Producto genérico (Product)
  * Diferente de MenuItem - usado para inventario/productos adicionales
@@ -17,6 +19,10 @@ export interface Product {
   userId: string;                    // UUID del usuario propietario
   createdAt: string;                // ISO 8601 date string
   updatedAt: string;                // ISO 8601 date string
+  // Stock config (Fase 6.3) — opcionales por compat con respuestas viejas
+  trackStock?: boolean;
+  unitOfMeasure?: UnitOfMeasure | null;
+  minStockAlert?: number | null;
 }
 
 /**
@@ -27,6 +33,10 @@ export interface CreateProductRequest {
   description?: string | null;       // Opcional - Descripción (máx 1000 caracteres)
   status?: boolean;                  // Opcional - Estado activo/inactivo (default: true)
   userId: string;                    // REQUERIDO - UUID del usuario que crea el producto
+  // Stock config opcional desde la creación (Fase 7)
+  trackStock?: boolean;
+  unitOfMeasure?: UnitOfMeasure | null;
+  minStockAlert?: number | null;
 }
 
 /**
@@ -59,6 +69,10 @@ export interface ProductResponse {
   userId: string;
   createdAt: string;                  // ISO 8601
   updatedAt: string;                 // ISO 8601
+  // Stock config (Fase 6.3) — opcionales por compat con respuestas viejas / endpoints que aún no los exponen
+  trackStock?: boolean;
+  unitOfMeasure?: UnitOfMeasure | null;
+  minStockAlert?: number | null;
 }
 
 // Aliases para claridad

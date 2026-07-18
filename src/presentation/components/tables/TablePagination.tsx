@@ -10,7 +10,7 @@ interface TablePaginationProps {
 
 /**
  * Componente TablePagination
- * Responsabilidad única: Manejar paginación de mesas
+ * Responsabilidad única: Manejar paginación de ubicaciones
  * Cumple SRP: Solo maneja la navegación entre páginas
  */
 export const TablePagination: React.FC<TablePaginationProps> = ({
@@ -64,7 +64,7 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Información de items */}
         <div className="text-sm text-slate-500 dark:text-slate-400">
-          Mostrando {startItem} - {endItem} de {totalItems} mesas
+          Mostrando {startItem} - {endItem} de {totalItems} ubicaciones
         </div>
 
         {/* Controles de paginación */}

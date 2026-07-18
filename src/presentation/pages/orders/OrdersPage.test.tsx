@@ -80,8 +80,9 @@ describe('OrdersPage', () => {
     renderWithProviders(<OrdersPage />);
 
     expect(await screen.findByRole('heading', { name: /órdenes/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /actualizar/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /nueva orden/i })).toBeInTheDocument();
+    // Hay variantes móvil (icon) y desktop (con texto) de cada acción: basta con que exista al menos una.
+    expect(screen.getAllByRole('button', { name: /actualizar/i }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('button', { name: /nueva orden/i }).length).toBeGreaterThan(0);
   });
 
   it('shows empty state when there are no orders', async () => {

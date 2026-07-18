@@ -6,8 +6,8 @@ export type ExpenseType = 'SERVICE_BUSINESS' | 'UTILITY' | 'RENT' | 'MERCHANDISE
 
 export type PaymentMethod = 1 | 2 | 3; // 1: Cash, 2: Transfer, 3: Card
 
-/** Unidades de medida para ítems MERCHANDISE (enum del backend) */
-export type UnitOfMeasure = 'KG' | 'G' | 'PCS' | 'OTHER';
+/** Unidades de medida para ítems MERCHANDISE y stock (enum del backend) */
+export type UnitOfMeasure = 'KG' | 'G' | 'L' | 'ML' | 'PCS' | 'OTHER';
 
 /**
  * Gastos

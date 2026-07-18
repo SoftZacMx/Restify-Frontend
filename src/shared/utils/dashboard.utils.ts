@@ -27,6 +27,6 @@ export function getOrderStatusStyle(order: DashboardOrderSummary): string {
 }
 
 export function getTableDisplay(order: DashboardOrderSummary): string {
-  if (order.tableName != null && order.tableName !== '') return `Mesa ${order.tableName}`;
-  return order.origin === 'local' ? 'Local' : order.origin || 'Sin mesa';
+  if (order.tableName != null && order.tableName !== '') return `Ubicación ${order.tableName}`;
+  return order.origin === 'local' ? 'Local' : order.origin || 'Sin ubicación';
 }

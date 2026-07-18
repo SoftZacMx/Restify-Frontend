@@ -22,7 +22,7 @@ export interface KitchenTicketOrderItem {
 /** Respuesta GET /api/orders/:order_id/ticket/kitchen-ticket */
 export interface KitchenTicketResponse {
   orderId: string;
-  /** Origen (p. ej. "local") — la mesa solo aplica en consumo en local */
+  /** Origen (p. ej. "local") — la ubicación solo aplica en consumo en local */
   origin?: string;
   tableName: string | null;
   items: KitchenTicketOrderItem[];
@@ -58,7 +58,7 @@ export interface SaleTicketResponse {
   companyWebsite?: string | null;
   orderId: string;
   date: string;
-  /** Origen (p. ej. "local") — la mesa solo aplica en consumo en local */
+  /** Origen (p. ej. "local") — la ubicación solo aplica en consumo en local */
   origin?: string;
   tableName: string | null;
   client: string | null;

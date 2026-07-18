@@ -73,7 +73,7 @@ export const TableForm: React.FC<TableFormProps> = ({
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
       <div className="space-y-2">
         <Label htmlFor="table-name-input" className="text-sm font-medium">
-          Nombre de la mesa <span className="text-destructive">*</span>
+          Nombre de la ubicación <span className="text-destructive">*</span>
         </Label>
         <Input
           id="table-name-input"
@@ -91,15 +91,15 @@ export const TableForm: React.FC<TableFormProps> = ({
         />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
         <p className="text-xs text-slate-500 dark:text-slate-400">
-          Identificador único para la mesa (letras, números o ambos). Máximo 64 caracteres.
+          Identificador único para la ubicación (letras, números o ambos). Máximo 64 caracteres.
         </p>
       </div>
 
       <div className="flex items-center justify-between space-x-2 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
         <div className="space-y-0.5">
-          <Label htmlFor="status" className="text-sm font-medium">Estado de la Mesa</Label>
+          <Label htmlFor="status" className="text-sm font-medium">Estado de la Ubicación</Label>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            {status ? 'Mesa activa en el sistema' : 'Mesa inactiva (no visible para operaciones)'}
+            {status ? 'Ubicación activa en el sistema' : 'Ubicación inactiva (no visible para operaciones)'}
           </p>
         </div>
         <Switch
@@ -114,7 +114,7 @@ export const TableForm: React.FC<TableFormProps> = ({
         <div className="space-y-0.5">
           <Label htmlFor="availabilityStatus" className="text-sm font-medium">Disponibilidad</Label>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            {availabilityStatus ? 'Mesa libre (disponible para nuevas órdenes)' : 'Mesa ocupada (tiene una orden activa)'}
+            {availabilityStatus ? 'Ubicación libre (disponible para nuevas órdenes)' : 'Ubicación ocupada (tiene una orden activa)'}
           </p>
         </div>
         <Switch
@@ -126,7 +126,7 @@ export const TableForm: React.FC<TableFormProps> = ({
       </div>
 
       <div className="rounded-lg bg-slate-50 dark:bg-slate-800/50 p-4 space-y-2">
-        <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Estado actual de la mesa:</p>
+        <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Estado actual de la ubicación:</p>
         <div className="flex items-center gap-2">
           <span className={cn('inline-block w-3 h-3 rounded-full', !status ? 'bg-gray-400' : availabilityStatus ? 'bg-green-500' : 'bg-red-500')} />
           <span className="text-sm text-slate-600 dark:text-slate-400">

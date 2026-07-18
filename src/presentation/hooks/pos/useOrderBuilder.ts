@@ -17,7 +17,7 @@ interface UseOrderBuilderOptions {
 
 /**
  * Hook para gestionar la construcción de la orden:
- * tipo de orden, mesa, cliente, carrito, filtros y diálogo de extras.
+ * tipo de orden, ubicación, cliente, carrito, filtros y diálogo de extras.
  */
 export const useOrderBuilder = ({ posMode, tables }: UseOrderBuilderOptions) => {
   // Tipo de orden
@@ -41,7 +41,7 @@ export const useOrderBuilder = ({ posMode, tables }: UseOrderBuilderOptions) => 
     return orderService.calculateCartState(cartItems);
   }, [cartItems]);
 
-  // Mesa seleccionada
+  // Ubicación seleccionada
   const selectedTable: Table | undefined = useMemo(() => {
     if (!selectedTableId) return undefined;
     return tables.find((table) => table.id === selectedTableId);

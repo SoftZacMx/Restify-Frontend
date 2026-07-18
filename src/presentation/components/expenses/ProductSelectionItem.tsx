@@ -7,6 +7,8 @@ export interface ProductSelectionItemData {
   id: string;
   name: string;
   status: boolean;
+  /** Si está presente, el dialog puede filtrar por `onlyTracked`. */
+  trackStock?: boolean;
 }
 
 interface ProductSelectionItemProps {

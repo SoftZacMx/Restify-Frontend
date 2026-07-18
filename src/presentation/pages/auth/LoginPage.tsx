@@ -60,7 +60,7 @@ export default function LoginPage() {
         <div className="flex items-center gap-2">
           <UtensilsCrossed className="h-8 w-8 text-blue-600 dark:text-blue-400" />
           <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
-            RESTIFY
+            BIZFLOW
           </span>
         </div>
       </div>
@@ -72,7 +72,7 @@ export default function LoginPage() {
             Bienvenido de Nuevo
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Inicia sesión para gestionar tu restaurante.
+            Inicia sesión para gestionar tu negocio.
           </p>
         </CardHeader>
 

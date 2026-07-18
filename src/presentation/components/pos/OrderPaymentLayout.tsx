@@ -57,7 +57,7 @@ export const OrderPaymentLayout: React.FC<OrderPaymentLayoutProps> = ({
 }) => {
   const subtitle = [
     orderInfo.orderId && `Orden ${formatOrderNumber(orderInfo.orderId)}`,
-    orderInfo.tableName != null && orderInfo.tableName !== '' && `Mesa ${orderInfo.tableName}`,
+    orderInfo.tableName != null && orderInfo.tableName !== '' && `Ubicación ${orderInfo.tableName}`,
     orderInfo.client && orderInfo.client,
   ]
     .filter(Boolean)

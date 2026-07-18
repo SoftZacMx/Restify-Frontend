@@ -9,8 +9,8 @@ const ROLE_LABELS: Record<UserRole, string> = {
   OWNER: 'Propietario',
   ADMIN: 'Administrador',
   MANAGER: 'Gerente',
-  WAITER: 'Mesero',
-  CHEF: 'Cocinero',
+  WAITER: 'Empleado',
+  CHEF: 'Operario',
 };
 
 /**

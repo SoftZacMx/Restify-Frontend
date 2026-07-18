@@ -46,8 +46,8 @@ export const UserTable: React.FC<UserTableProps> = ({
     const colors: Record<string, string> = {
       Administrador: 'bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300',
       Gerente: 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300',
-      Mesero: 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300',
-      Cocinero: 'bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-300',
+      Empleado: 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300',
+      Operario: 'bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-300',
     };
     return colors[role] || '';
   };

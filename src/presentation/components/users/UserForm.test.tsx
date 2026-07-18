@@ -1,12 +1,29 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@/presentation/contexts/theme.context';
 import { UserForm } from './UserForm';
 import type { CreateUserRequest, User } from '@/domain/types';
 
+// UserForm carga las sucursales asignables vía branchService.listBranches (useQuery).
+const mockListBranches = vi.fn().mockResolvedValue([]);
+vi.mock('@/application/services', () => ({
+  branchService: {
+    listBranches: (...args: unknown[]) => mockListBranches(...args),
+  },
+}));
+
 const mockOnSubmit = vi.fn();
 const mockOnCancel = vi.fn();
+
+function createTestQueryClient() {
+  return new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+    },
+  });
+}
 
 function renderUserForm(props: {
   initialData?: User | null;
@@ -14,14 +31,17 @@ function renderUserForm(props: {
   onCancel?: () => void;
   isLoading?: boolean;
 } = {}) {
+  const queryClient = createTestQueryClient();
   return render(
     <ThemeProvider>
-      <UserForm
-        initialData={props.initialData ?? null}
-        onSubmit={props.onSubmit ?? mockOnSubmit}
-        onCancel={props.onCancel ?? mockOnCancel}
-        isLoading={props.isLoading ?? false}
-      />
+      <QueryClientProvider client={queryClient}>
+        <UserForm
+          initialData={props.initialData ?? null}
+          onSubmit={props.onSubmit ?? mockOnSubmit}
+          onCancel={props.onCancel ?? mockOnCancel}
+          isLoading={props.isLoading ?? false}
+        />
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }
@@ -56,6 +76,7 @@ async function submitEditForm(user: ReturnType<typeof userEvent.setup>) {
 describe('UserForm', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockListBranches.mockResolvedValue([]);
   });
 
   describe('render', () => {
@@ -350,20 +371,6 @@ describe('UserForm', () => {
       updatedAt: new Date(),
     };
 
-    it('muestra error cuando la contraseña tiene menos de 8 caracteres en modo edición', async () => {
-      const user = userEvent.setup();
-      renderUserForm({ initialData: existingUser });
-      const passwordInput = document.getElementById('password') as HTMLInputElement;
-      await user.clear(passwordInput);
-      await user.type(passwordInput, 'Abc12');
-      await submitEditForm(user);
-
-      await waitFor(() => {
-        expect(screen.getByText(/la contraseña debe tener al menos 8 caracteres/i)).toBeInTheDocument();
-      });
-      expect(mockOnSubmit).not.toHaveBeenCalled();
-    });
-
     it('el input de segundo apellido tiene maxLength para prevenir exceso de caracteres', () => {
       const existingUser2: User = { ...existingUser };
       renderUserForm({ initialData: existingUser2 });
@@ -372,39 +379,9 @@ describe('UserForm', () => {
     });
   });
 
-  describe('modo edición: submit con password', () => {
-    const existingUser: User = {
-      id: 'user-1',
-      name: 'Ana',
-      last_name: 'López',
-      second_last_name: null,
-      email: 'ana@test.com',
-      phone: '',
-      status: true,
-      rol: 'MANAGER',
-      organizationId: 'org-1',
-      organizationName: 'Org 1',
-      mustChangePassword: false,
-      emailVerified: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    it('incluye password en el payload cuando se proporciona nueva contraseña en edición', async () => {
-      const user = userEvent.setup();
-      mockOnSubmit.mockResolvedValue(undefined);
-      renderUserForm({ initialData: existingUser });
-      const passwordInput = document.getElementById('password') as HTMLInputElement;
-      await user.clear(passwordInput);
-      await user.type(passwordInput, 'NewPassword123!');
-      await submitEditForm(user);
-
-      await waitFor(() => {
-        expect(mockOnSubmit).toHaveBeenCalledTimes(1);
-      });
-      expect(mockOnSubmit.mock.calls[0][0].password).toBe('NewPassword123!');
-    });
-  });
+  // Nota: en multi-tenancy el campo de contraseña NO se muestra en modo edición
+  // (el reset se hace desde el menú de acciones del usuario), por eso ya no hay
+  // tests de "editar contraseña inline" — esa funcionalidad se removió del form.
 
   describe('switch permitir acceso', () => {
     it('envía status false cuando el switch está desactivado', async () => {

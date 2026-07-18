@@ -36,7 +36,7 @@ import { cn } from '@/shared/utils';
 
 interface OrderCardProps {
   order: OrderResponse;
-  /** id mesa → nombre (lista cargada en Órdenes; el listado API no trae `table` anidada). */
+  /** id ubicación → nombre (lista cargada en Órdenes; el listado API no trae `table` anidada). */
   tableNameById?: Map<string, string>;
   onViewDetails: (orderId: string) => void;
   onMarkDelivered?: (orderId: string) => void;
@@ -65,7 +65,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   const originLabel = getOrderOriginLabel(order);
   const mesaLine = getLocalOrderMesaLine(order, tableNameById);
   const orderNumberLabel = formatOrderNumber(order.id);
-  /** Origen local: mesa destacada arriba y # de orden debajo del pin (intercambiado respecto al resto). */
+  /** Origen local: ubicación destacada arriba y # de orden debajo del pin (intercambiado respecto al resto). */
   const isLocalWithMesaBlock = mesaLine != null;
   const paymentIcon = getPaymentMethodIcon(order.paymentMethod);
 
@@ -112,7 +112,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
 
       <CardContent className="pb-3">
         <div className="space-y-2">
-          {/* Origen + # orden (en local el # va aquí; la mesa va en el encabezado) */}
+          {/* Origen + # orden (en local el # va aquí; la ubicación va en el encabezado) */}
           <div className="flex items-start gap-2 text-slate-600 dark:text-slate-300">
             <MapPin className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />
             <div className="flex flex-col gap-0.5 min-w-0">
@@ -214,7 +214,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
             {onPrintKitchenTicket && (
               <DropdownMenuItem onSelect={() => onPrintKitchenTicket(order.id)}>
                 <UtensilsCrossed className="h-4 w-4 mr-2" />
-                Imprimir ticket cocina
+                Imprimir ticket operaciones
               </DropdownMenuItem>
             )}
             {order.status && !order.delivered && onMarkDelivered && (

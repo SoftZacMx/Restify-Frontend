@@ -22,8 +22,8 @@ interface TableSelectionDialogProps {
 }
 
 /**
- * Diálogo para seleccionar mesa (tipo de orden local).
- * Muestra el grid de mesas; al seleccionar una se cierra el diálogo.
+ * Diálogo para seleccionar ubicación (tipo de orden local).
+ * Muestra el grid de ubicaciones; al seleccionar una se cierra el diálogo.
  */
 export const TableSelectionDialog: React.FC<TableSelectionDialogProps> = ({
   open,
@@ -50,10 +50,10 @@ export const TableSelectionDialog: React.FC<TableSelectionDialogProps> = ({
             </div>
             <div>
               <DialogTitle className="text-xl font-bold text-slate-900 dark:text-white pr-10">
-                Seleccionar Mesa
+                Seleccionar Ubicación
               </DialogTitle>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                Elige una mesa disponible para la orden
+                Elige una ubicación disponible para la orden
               </p>
             </div>
           </div>
@@ -62,11 +62,11 @@ export const TableSelectionDialog: React.FC<TableSelectionDialogProps> = ({
 
         <div className="p-6 overflow-y-auto">
           {isLoading ? (
-            <div className="text-center py-12 text-slate-500 dark:text-slate-400">Cargando mesas...</div>
+            <div className="text-center py-12 text-slate-500 dark:text-slate-400">Cargando ubicaciones...</div>
           ) : error ? (
             <div className="text-center py-12 text-red-600 dark:text-red-400">{error}</div>
           ) : tables.length === 0 ? (
-            <div className="text-center py-12 text-slate-500 dark:text-slate-400">No hay mesas disponibles</div>
+            <div className="text-center py-12 text-slate-500 dark:text-slate-400">No hay ubicaciones disponibles</div>
           ) : (
             <TableSelector
               tables={tables}

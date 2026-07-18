@@ -59,8 +59,8 @@ export const UserSearchBar: React.FC<UserSearchBarProps> = ({
       OWNER: 'Propietario',
       ADMIN: 'Administrador',
       MANAGER: 'Gerente',
-      WAITER: 'Mesero',
-      CHEF: 'Cocinero',
+      WAITER: 'Empleado',
+      CHEF: 'Operario',
     };
     return labels[role] || 'Rol';
   };
@@ -101,8 +101,8 @@ export const UserSearchBar: React.FC<UserSearchBarProps> = ({
             <SelectItem value="all">Todos los roles</SelectItem>
             <SelectItem value="ADMIN">Administrador</SelectItem>
             <SelectItem value="MANAGER">Gerente</SelectItem>
-            <SelectItem value="WAITER">Mesero</SelectItem>
-            <SelectItem value="CHEF">Cocinero</SelectItem>
+            <SelectItem value="WAITER">Empleado</SelectItem>
+            <SelectItem value="CHEF">Operario</SelectItem>
           </SelectContent>
         </Select>
 

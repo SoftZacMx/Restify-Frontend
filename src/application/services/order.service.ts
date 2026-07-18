@@ -324,9 +324,9 @@ export class OrderService {
       errors.type = 'Debe seleccionar un tipo de orden';
     }
 
-    // Validar mesa o nombre de cliente según el tipo
+    // Validar ubicación o nombre de cliente según el tipo
     if (orderType === 'DINE_IN' && !tableId) {
-      errors.tableId = 'Debe seleccionar una mesa';
+      errors.tableId = 'Debe seleccionar una ubicación';
     }
 
     if (orderType === 'TAKEOUT' && !customerName?.trim()) {
@@ -489,7 +489,7 @@ export class OrderService {
 
     // Validar tableId si se proporciona
     if (request.tableId && !uuidRegex.test(request.tableId)) {
-      errors.push('El ID de la mesa debe ser un UUID válido');
+      errors.push('El ID de la ubicación debe ser un UUID válido');
     }
 
     // Validar tip
@@ -562,7 +562,7 @@ export class OrderService {
 
   /**
    * Paga una orden (POST /api/orders/:order_id/pay).
-   * Backend crea el pago, actualiza la orden y libera la mesa si aplica.
+   * Backend crea el pago, actualiza la orden y libera la ubicación si aplica.
    */
   async payOrder(
     orderId: string,
@@ -646,7 +646,7 @@ export class OrderService {
   }
 
   /**
-   * Obtiene órdenes pendientes de una mesa
+   * Obtiene órdenes pendientes de una ubicación
    */
   async getPendingOrdersByTable(tableId: string): Promise<OrderResponse[]> {
     const { orders } = await this.listOrders({ tableId, status: false, page: 1, limit: 100 });

@@ -10,8 +10,8 @@ interface EditTableFormProps {
 }
 
 /**
- * Wrapper de TableForm para edición de mesas
- * Simplifica el uso del formulario cuando necesitamos editar una mesa existente
+ * Wrapper de TableForm para edición de ubicaciones
+ * Simplifica el uso del formulario cuando necesitamos editar una ubicación existente
  */
 export const EditTableForm: React.FC<EditTableFormProps> = ({
   tableData,

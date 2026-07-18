@@ -139,13 +139,13 @@ export function DashboardKpiCards({
         subtitle="Sin pagar"
       />
       <StatCard
-        title="Mesas ocupadas"
+        title="Ubicaciones ocupadas"
         value={occupiedTables.count}
         icon={UtensilsCrossed}
         accent="blue"
         subtitle={
           occupiedTables.items.length > 0
-            ? `Mesas ${occupiedTables.items.map((t) => t.name).join(', ')}`
+            ? `Ubicaciones ${occupiedTables.items.map((t) => t.name).join(', ')}`
             : undefined
         }
       />

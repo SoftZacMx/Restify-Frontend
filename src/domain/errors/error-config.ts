@@ -161,6 +161,66 @@ export const ERROR_CONFIG = {
     statusCode: 400,
     category: 'BUSINESS',
   },
+  STOCK_LIST_FAILED: {
+    message: 'Error al listar el stock',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  STOCK_CONFIG_UPDATE_FAILED: {
+    message: 'No se pudo actualizar la configuración de stock',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  STOCK_WASTE_FAILED: {
+    message: 'No se pudo registrar la merma',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  STOCK_ADJUSTMENT_FAILED: {
+    message: 'No se pudo registrar el ajuste',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  STOCK_MOVEMENTS_LIST_FAILED: {
+    message: 'Error al cargar los movimientos',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  RECIPE_FETCH_FAILED: {
+    message: 'Error al cargar la receta',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  RECIPE_UPDATE_FAILED: {
+    message: 'No se pudo guardar la receta',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  INGREDIENT_NOT_FOUND: {
+    message: 'El ingrediente no está en la receta',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
+  INGREDIENT_ALREADY_EXISTS: {
+    message: 'El ingrediente ya está en la receta',
+    statusCode: 409,
+    category: 'BUSINESS',
+  },
+  DUPLICATE_INGREDIENT: {
+    message: 'Hay un producto repetido en la receta',
+    statusCode: 400,
+    category: 'VALIDATION',
+  },
+  RECIPE_NOT_ALLOWED_ON_DIRECT_ITEM: {
+    message: 'Este platillo está marcado como ítem directo. No puede tener receta.',
+    statusCode: 400,
+    category: 'BUSINESS',
+  },
+  INCOMPATIBLE_UNIT: {
+    message: 'La unidad ingresada no es compatible con la unidad del producto',
+    statusCode: 400,
+    category: 'VALIDATION',
+  },
   EXPENSE_NOT_FOUND: {
     message: 'Gasto no encontrado',
     statusCode: 404,
@@ -202,22 +262,22 @@ export const ERROR_CONFIG = {
     category: 'BUSINESS',
   },
   TABLE_NOT_FOUND: {
-    message: 'Mesa no encontrada',
+    message: 'Ubicación no encontrada',
     statusCode: 404,
     category: 'BUSINESS',
   },
   TABLE_CREATION_FAILED: {
-    message: 'No se pudo crear la mesa',
+    message: 'No se pudo crear la ubicación',
     statusCode: 400,
     category: 'BUSINESS',
   },
   TABLE_UPDATE_FAILED: {
-    message: 'No se pudo actualizar la mesa',
+    message: 'No se pudo actualizar la ubicación',
     statusCode: 400,
     category: 'BUSINESS',
   },
   TABLE_DELETE_FAILED: {
-    message: 'No se pudo eliminar la mesa',
+    message: 'No se pudo eliminar la ubicación',
     statusCode: 400,
     category: 'BUSINESS',
   },
