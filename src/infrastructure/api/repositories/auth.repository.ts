@@ -34,14 +34,6 @@ export class AuthRepository {
   }
 
   /**
-   * Verifica usuario para recuperación de contraseña
-   */
-  async verifyUser(email: string): Promise<ApiResponse<{ email: string }>> {
-    const response = await apiClient.post('/api/auth/verify-user', { email });
-    return response.data;
-  }
-
-  /**
    * Verifica el email a partir del token del correo (endpoint público).
    * Idempotente: si ya estaba verificado responde con alreadyVerified=true.
    */
@@ -70,10 +62,21 @@ export class AuthRepository {
   }
 
   /**
-   * Recuperación de contraseña (público, sin autenticación)
+   * Flujo forgot-password (paso 1): pide al backend enviar el correo con el enlace de
+   * restablecimiento. Endpoint público → publicApiClient. Respuesta uniforme (anti-enumeración):
+   * el backend siempre responde 200 exista o no la cuenta.
    */
-  async recoverPassword(userId: string, password: string): Promise<ApiResponse<void>> {
-    const response = await apiClient.post(`/api/auth/recover-password/${userId}`, { password });
+  async requestPasswordReset(email: string): Promise<ApiResponse<{ message: string }>> {
+    const response = await publicApiClient.post('/api/auth/request-password-reset', { email });
+    return response.data;
+  }
+
+  /**
+   * Flujo forgot-password (paso 2): fija la nueva contraseña usando el token del correo.
+   * Endpoint público → publicApiClient.
+   */
+  async resetPassword(token: string, password: string): Promise<ApiResponse<void>> {
+    const response = await publicApiClient.post('/api/auth/reset-password', { token, password });
     return response.data;
   }
 

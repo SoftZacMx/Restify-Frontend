@@ -14,7 +14,8 @@ import { PageLoader } from '@/presentation/components/ui/PageLoader';
 // Auth pages (estáticas - son el entry point)
 import LoginPage from '@/presentation/pages/auth/LoginPage';
 import SignupPage from '@/presentation/pages/auth/SignupPage';
-import RecoverPasswordPage from '@/presentation/pages/auth/RecoverPasswordPage';
+import ForgotPasswordPage from '@/presentation/pages/auth/ForgotPasswordPage';
+import ResetPasswordPage from '@/presentation/pages/auth/ResetPasswordPage';
 import ChangePasswordPage from '@/presentation/pages/auth/ChangePasswordPage';
 import ReactivateOrganizationPage from '@/presentation/pages/auth/ReactivateOrganizationPage';
 import VerifyEmailPage from '@/presentation/pages/auth/VerifyEmailPage';
@@ -101,7 +102,8 @@ function App() {
                       {/* Auth routes */}
                       <Route path="/auth/login" element={<LoginPage />} />
                       <Route path="/auth/signup" element={<SignupPage />} />
-                      <Route path="/auth/recover-password" element={<RecoverPasswordPage />} />
+                      <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+                      <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
                       <Route path="/auth/reactivate-organization" element={<ReactivateOrganizationPage />} />
 
                       {/* Verificación de email: el usuario llega desde el link del correo */}

@@ -58,23 +58,6 @@ export class AuthService {
   }
 
   /**
-   * Verifica usuario para recuperación de contraseña
-   */
-  async verifyUser(email: string): Promise<ApiResponse<{ email: string }>> {
-    if (!email) {
-      throw AppError.create('MISSING_REQUIRED_FIELD', 'Email es requerido');
-    }
-
-    // Validar formato de email básico
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      throw AppError.create('INVALID_EMAIL');
-    }
-
-    return this.authRepository.verifyUser(email);
-  }
-
-  /**
    * Verifica el email con el token recibido en el correo.
    */
   async verifyEmail(
@@ -112,14 +95,30 @@ export class AuthService {
   }
 
   /**
-   * Recuperación de contraseña (público, sin autenticación)
+   * Flujo forgot-password (paso 1): solicita el correo con el enlace de restablecimiento.
    */
-  async recoverPassword(userId: string, password: string): Promise<ApiResponse<void>> {
-    if (!userId || !password) {
-      throw AppError.create('MISSING_REQUIRED_FIELD', 'UserId y password son requeridos');
+  async requestPasswordReset(email: string): Promise<ApiResponse<{ message: string }>> {
+    if (!email) {
+      throw AppError.create('MISSING_REQUIRED_FIELD', 'Email es requerido');
     }
 
-    return this.authRepository.recoverPassword(userId, password);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw AppError.create('INVALID_EMAIL');
+    }
+
+    return this.authRepository.requestPasswordReset(email);
+  }
+
+  /**
+   * Flujo forgot-password (paso 2): fija la nueva contraseña con el token del correo.
+   */
+  async resetPassword(token: string, password: string): Promise<ApiResponse<void>> {
+    if (!token || !password) {
+      throw AppError.create('MISSING_REQUIRED_FIELD', 'Token y contraseña son requeridos');
+    }
+
+    return this.authRepository.resetPassword(token, password);
   }
 
   /**
