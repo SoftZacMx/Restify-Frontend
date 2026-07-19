@@ -86,7 +86,6 @@ const PublicCheckoutPage = () => {
 
     setIsSubmitting(true);
     try {
-      // 1. Crear la orden
       const items = cartItems.map((item) => ({
         menuItemId: item.productId,
         quantity: item.quantity,
@@ -96,7 +95,10 @@ const PublicCheckoutPage = () => {
           : undefined,
       }));
 
-      const order = await publicOrderRepository.createOrder(branchId, {
+      // 1. Iniciar checkout: guarda un borrador y prepara el pago SIN crear la orden.
+      //    La orden real se crea cuando MP confirme el pago (evita órdenes huérfanas
+      //    en pagos rechazados y duplicados al reintentar).
+      const checkout = await publicOrderRepository.startCheckout(branchId, {
         customerName: customerName.trim(),
         customerPhone: customerPhone.trim(),
         orderType,
@@ -107,14 +109,12 @@ const PublicCheckoutPage = () => {
         items,
       });
 
-      // 2. Guardar trackingToken antes de cualquier redirect
-      localStorage.setItem('publicOrderTrackingToken', order.trackingToken);
+      // 2. Guardar trackingToken antes de redirigir (sirve para el seguimiento aunque
+      //    la orden todavía no exista).
+      localStorage.setItem('publicOrderTrackingToken', checkout.trackingToken);
 
-      // 3. Iniciar pago con MP
-      const payment = await publicOrderRepository.payOrder(order.id);
-
-      // 4. Redirigir a MP
-      window.location.href = payment.initPoint;
+      // 3. Redirigir a Mercado Pago
+      window.location.href = checkout.initPoint;
     } catch (error) {
       console.error('Error al procesar pedido:', error);
       const message = error instanceof Error ? error.message : 'No se pudo procesar el pedido';

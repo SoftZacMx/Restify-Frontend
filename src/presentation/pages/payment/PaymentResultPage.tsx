@@ -48,9 +48,15 @@ const PaymentResultPage: React.FC = () => {
       return;
     }
 
-    // external_reference viene como "orderId:branchId" (o solo "orderId" en preferencias viejas).
+    // external_reference viene como:
+    //  - "checkout:checkoutId:branchId" (flujo nuevo): la orden puede no existir aún y no
+    //    hay forma de resolver el trackingToken por orderId → se queda en esta pantalla,
+    //    que ya informa el estado del pago (el caso normal usa el trackingToken de arriba).
+    //  - "orderId:branchId" o "orderId" (flujo legacy): se resuelve el trackingToken por orderId.
     const externalReference = searchParams.get('external_reference');
-    const orderId = externalReference?.split(':')[0];
+    const parts = externalReference?.split(':') ?? [];
+    if (parts[0] === 'checkout') return;
+    const orderId = parts[0];
     if (!orderId) return;
 
     publicOrderRepository

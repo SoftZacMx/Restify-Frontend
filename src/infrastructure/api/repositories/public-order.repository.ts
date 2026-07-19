@@ -36,6 +36,16 @@ export interface PayPublicOrderResponse {
   expiresAt: string;
 }
 
+export interface StartCheckoutResponse {
+  checkoutId: string;
+  trackingToken: string;
+  paymentId: string;
+  preferenceId: string;
+  initPoint: string;
+  expiresAt: string;
+  total: number;
+}
+
 export interface PublicOrderStatusResponse {
   trackingToken: string;
   status: 'PENDING_PAYMENT' | 'PAID' | 'PREPARING' | 'READY' | 'ON_THE_WAY' | 'DELIVERED';
@@ -58,6 +68,20 @@ export class PublicOrderRepository {
 
   async payOrder(orderId: string): Promise<PayPublicOrderResponse> {
     const response = await publicApiClient.post(`/api/public/orders/${orderId}/pay`);
+    return response.data.data;
+  }
+
+  /**
+   * Inicia el pago SIN crear la orden todavía (Opción A). Guarda un borrador y
+   * devuelve el initPoint de Mercado Pago + trackingToken. La orden real se materializa
+   * al confirmar el pago. Reemplaza al par createOrder + payOrder para evitar órdenes
+   * huérfanas en pagos rechazados y duplicados al reintentar.
+   */
+  async startCheckout(
+    branchId: string,
+    data: CreatePublicOrderRequest
+  ): Promise<StartCheckoutResponse> {
+    const response = await publicApiClient.post('/api/public/checkout', { ...data, branchId });
     return response.data.data;
   }
 
