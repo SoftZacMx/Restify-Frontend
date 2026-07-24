@@ -48,13 +48,14 @@ export interface StartCheckoutResponse {
 
 export interface PublicOrderStatusResponse {
   trackingToken: string;
-  status: 'PENDING_PAYMENT' | 'PAID' | 'PREPARING' | 'READY' | 'ON_THE_WAY' | 'DELIVERED';
+  status: 'PENDING_PAYMENT' | 'PAYMENT_FAILED' | 'PAID' | 'PREPARING' | 'READY' | 'ON_THE_WAY' | 'DELIVERED';
   customerName: string;
   orderType: 'DELIVERY' | 'PICKUP';
   scheduledAt: string | null;
   items: { name: string; quantity: number; total: number }[];
   total: number;
   createdAt: string;
+  branchSlug: string | null;
 }
 
 export class PublicOrderRepository {

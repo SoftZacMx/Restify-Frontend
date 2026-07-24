@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import {
   CheckCircle,
@@ -9,6 +9,8 @@ import {
   MapPin,
   Loader2,
   AlertCircle,
+  XCircle,
+  RotateCcw,
 } from 'lucide-react';
 import { PublicLayout } from '@/presentation/components/layouts/PublicLayout';
 import { Button } from '@/presentation/components/ui/button';
@@ -34,12 +36,14 @@ function getStepIndex(status: OrderStatus): number {
 
 const PublicOrderTrackingPage = () => {
   const { trackingToken } = useParams<{ trackingToken: string }>();
+  const navigate = useNavigate();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['public-order-status', trackingToken],
     queryFn: () => publicOrderRepository.getOrderStatus(trackingToken!),
     enabled: !!trackingToken,
-    refetchInterval: 15000,
+    refetchInterval: (query) =>
+      query.state.data?.status === 'PAYMENT_FAILED' ? false : 15000,
   });
 
   if (isLoading) {
@@ -64,6 +68,30 @@ const PublicOrderTrackingPage = () => {
           <p className="text-sm text-slate-500 dark:text-slate-400">
             Verifica que el enlace sea correcto.
           </p>
+        </div>
+      </PublicLayout>
+    );
+  }
+
+  if (data.status === 'PAYMENT_FAILED') {
+    return (
+      <PublicLayout>
+        <div className="max-w-lg mx-auto flex flex-col items-center justify-center py-20 text-center space-y-4">
+          <XCircle className="h-12 w-12 text-red-400" />
+          <div className="space-y-1">
+            <p className="text-lg font-semibold text-slate-900 dark:text-white">
+              Tu pago no se completó
+            </p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              No se realizó ningún cargo. Puedes volver a intentarlo.
+            </p>
+          </div>
+          {data.branchSlug && (
+            <Button onClick={() => navigate(`/menu/${data.branchSlug}`)}>
+              <RotateCcw className="h-4 w-4 mr-2" />
+              Volver a intentar
+            </Button>
+          )}
         </div>
       </PublicLayout>
     );
