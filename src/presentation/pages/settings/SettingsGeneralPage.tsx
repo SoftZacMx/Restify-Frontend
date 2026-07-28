@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/presentation/components/ui/card';
-import { ThemeToggle } from '@/presentation/components/ui/theme-toggle';
 import { Button } from '@/presentation/components/ui/button';
-import { useTheme } from '@/presentation/contexts/theme.context';
 import { usePalette } from '@/presentation/contexts/palette.context';
-import { Palette, Sun, Moon, AlertTriangle } from 'lucide-react';
+import { Palette, AlertTriangle } from 'lucide-react';
 import { cn } from '@/shared/utils';
 import { useAuth } from '@/presentation/hooks/useAuth';
 import { useAuthStore } from '@/presentation/store/auth.store';
@@ -15,11 +13,11 @@ import { showErrorToast, showSuccessToast } from '@/shared/utils/toast';
 import { CloseOrganizationDialog } from '@/presentation/components/settings/CloseOrganizationDialog';
 
 /**
- * Página de configuración general (tema y paleta de colores).
+ * Página de configuración general (paleta de colores).
+ * El modo claro/oscuro se alterna desde el pie de la sidebar.
  * Se muestra dentro del layout de configuración en /settings.
  */
 const SettingsGeneralPage = () => {
-  const { theme } = useTheme();
   const { paletteId, setPaletteId, palettes } = usePalette();
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -49,25 +47,6 @@ const SettingsGeneralPage = () => {
 
   return (
     <div className="space-y-6">
-      <Card className="border-slate-200 dark:border-slate-700 shadow-sm">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            {theme === 'dark' ? (
-              <Moon className="h-5 w-5 text-slate-500" />
-            ) : (
-              <Sun className="h-5 w-5 text-slate-500" />
-            )}
-            Tema
-          </CardTitle>
-          <CardDescription>
-            Elige entre modo claro u oscuro para la interfaz.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ThemeToggle variant="default" />
-        </CardContent>
-      </Card>
-
       <Card className="border-slate-200 dark:border-slate-700 shadow-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">

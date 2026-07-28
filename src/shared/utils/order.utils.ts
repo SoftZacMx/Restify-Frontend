@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { formatInTimeZone, fromZonedTime } from 'date-fns-tz';
+import { formatInTimeZone } from 'date-fns-tz';
 import { APP_TIMEZONE } from '@/shared/constants';
 import type { OrderResponse } from '@/domain/types';
 import { formatCurrency } from './currency.utils';
@@ -320,17 +320,6 @@ export const getTodayDateString = (): string => {
 };
 
 /**
- * Convierte una fecha local YYYY-MM-DD a los instantes UTC
- * que delimitan ese dia en la zona horaria de la app.
- */
-export const getLocalDayBoundsUtc = (
-  localYmd: string
-): { dateFrom: string; dateTo: string } => ({
-  dateFrom: fromZonedTime(`${localYmd} 00:00:00.000`, APP_TIMEZONE).toISOString(),
-  dateTo: fromZonedTime(`${localYmd} 23:59:59.999`, APP_TIMEZONE).toISOString(),
-});
-
-/**
  * Filtros por defecto con fecha de hoy (órdenes del día al cargar)
  */
 export const getDefaultOrderFiltersForToday = (): OrderViewFilters => ({
@@ -379,12 +368,13 @@ export const convertViewFiltersToApiFilters = (
     apiFilters.origin = filters.origin;
   }
 
+  // Los dias van tal cual (YYYY-MM-DD): el backend los ubica en la zona de la sucursal.
   if (filters.dateFrom) {
-    apiFilters.dateFrom = getLocalDayBoundsUtc(filters.dateFrom).dateFrom;
+    apiFilters.dateFrom = filters.dateFrom;
   }
 
   if (filters.dateTo) {
-    apiFilters.dateTo = getLocalDayBoundsUtc(filters.dateTo).dateTo;
+    apiFilters.dateTo = filters.dateTo;
   }
 
   return apiFilters;

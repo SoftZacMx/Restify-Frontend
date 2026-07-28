@@ -14,6 +14,15 @@ import { showErrorToast } from '@/shared/utils/toast';
 
 type OrderType = 'DELIVERY' | 'PICKUP';
 
+const PHONE_PATTERN = /^\d{10,13}$/;
+
+const getPhoneError = (phone: string): string | null => {
+  if (!phone) return null;
+  if (!/^\d+$/.test(phone)) return 'Solo números, sin espacios ni guiones';
+  if (phone.length < 10) return 'Debe tener al menos 10 dígitos';
+  return null;
+};
+
 const PublicCheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -71,8 +80,10 @@ const PublicCheckoutPage = () => {
     );
   }
 
+  const phoneError = getPhoneError(customerPhone);
+
   const isFormValid = () => {
-    if (!customerName.trim() || !customerPhone.trim() || !orderType) return false;
+    if (!customerName.trim() || !PHONE_PATTERN.test(customerPhone) || !orderType) return false;
     if (orderType === 'DELIVERY' && !deliveryAddress.trim()) return false;
     return true;
   };
@@ -165,11 +176,15 @@ const PublicCheckoutPage = () => {
                   <Input
                     id="phone"
                     type="tel"
+                    inputMode="numeric"
                     placeholder="Ej: 5512345678"
                     value={customerPhone}
                     onChange={(e) => setCustomerPhone(e.target.value)}
                     maxLength={13}
+                    aria-invalid={!!phoneError}
+                    className={phoneError ? 'border-red-500 focus-visible:ring-red-500' : undefined}
                   />
+                  {phoneError && <p className="text-red-500 text-xs mt-1">{phoneError}</p>}
                 </div>
               </div>
             </div>

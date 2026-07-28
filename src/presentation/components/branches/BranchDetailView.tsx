@@ -5,8 +5,6 @@ import {
   FileText,
   MapPin,
   Clock,
-  Globe2,
-  Coins,
   CreditCard,
   CalendarPlus,
   CalendarClock,
@@ -130,12 +128,6 @@ export const BranchDetailView: React.FC<BranchDetailViewProps> = ({ branch }) =>
             label="Horario"
             value={formatSchedule(branch.startOperations, branch.endOperations)}
           />
-          <InfoRow
-            icon={<Globe2 className="h-4 w-4" />}
-            label="Zona horaria"
-            value={branch.timezone}
-          />
-          <InfoRow icon={<Coins className="h-4 w-4" />} label="Moneda" value={branch.currency} />
         </SectionCard>
 
         {/* Métricas y sistema */}

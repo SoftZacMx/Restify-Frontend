@@ -100,6 +100,12 @@ export class PublicOrderRepository {
     const response = await publicApiClient.get(`/api/public/orders/by-order-id/${orderId}/status`);
     return response.data.data;
   }
+
+  /** Igual que el anterior pero para el checkout diferido, donde la ref trae el checkoutId. */
+  async getOrderStatusByCheckoutId(checkoutId: string): Promise<PublicOrderStatusResponse> {
+    const response = await publicApiClient.get(`/api/public/orders/by-checkout-id/${checkoutId}/status`);
+    return response.data.data;
+  }
 }
 
 export const publicOrderRepository = new PublicOrderRepository();

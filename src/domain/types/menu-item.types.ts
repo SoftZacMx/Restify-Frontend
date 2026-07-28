@@ -18,6 +18,7 @@ export interface MenuItem {
   userId: string;                   // UUID del usuario propietario
   createdAt: string;                // ISO 8601 date string
   updatedAt: string;                // ISO 8601 date string
+  imageUrl?: string | null;
   // Stock integration (Fase 7 — Bloque D) — opcionales por compat con respuestas viejas
   productId?: string | null;        // Vinculado a un producto (modo "directo")
   hasRecipe?: boolean;              // El platillo tiene ingredientes cargados
@@ -33,6 +34,7 @@ export interface CreateMenuItemRequest {
   isExtra?: boolean;                 // Opcional - Si es un extra (default: false)
   categoryId?: string;               // Opcional - UUID de la categoría del menú (puede ser null o undefined)
   userId: string;                    // REQUERIDO - UUID del usuario que crea el platillo
+  imageUrl?: string | null;
 }
 
 /**
@@ -45,6 +47,7 @@ export interface UpdateMenuItemRequest {
   isExtra?: boolean;                 // Opcional - Si es un extra
   categoryId?: string;               // Opcional - UUID de la categoría (debe existir)
   userId?: string;                   // Opcional - UUID del usuario propietario (debe existir)
+  imageUrl?: string | null;
 }
 
 /**
@@ -70,6 +73,7 @@ export interface MenuItemResponse {
   userId: string;
   createdAt: string;                 // ISO 8601
   updatedAt: string;                 // ISO 8601
+  imageUrl?: string | null;
   // Stock integration (Fase 7 — Bloque D)
   productId?: string | null;
   hasRecipe?: boolean;

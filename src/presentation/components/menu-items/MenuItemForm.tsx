@@ -6,7 +6,9 @@ import { Input } from '@/presentation/components/ui/input';
 import { Button } from '@/presentation/components/ui/button';
 import { Label } from '@/presentation/components/ui/label';
 import { Switch } from '@/presentation/components/ui/switch';
+import { ImageUpload } from '@/presentation/components/ui/image-upload';
 import { menuItemFormSchema, type MenuItemFormValues } from '@/shared/schemas/menu-item.schema';
+import { uploadService } from '@/application/services/upload.service';
 import type {
   MenuItemResponse,
   CreateMenuItemRequest,
@@ -46,6 +48,7 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
       status: initialData?.status ?? true,
       isExtra: initialData?.isExtra ?? false,
       categoryId: initialData?.categoryId ?? undefined,
+      imageUrl: initialData?.imageUrl ?? null,
     },
   });
 
@@ -53,6 +56,7 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
   const status = watch('status');
   const isExtra = watch('isExtra');
   const categoryId = watch('categoryId');
+  const imageUrl = watch('imageUrl');
 
   const [priceInput, setPriceInput] = useState(
     initialData?.price ? initialData.price.toString() : ''
@@ -97,6 +101,7 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
       if (data.status !== initialData!.status) updateData.status = data.status;
       if (data.isExtra !== initialData!.isExtra) updateData.isExtra = data.isExtra;
       if (data.categoryId !== initialData!.categoryId) updateData.categoryId = data.categoryId || undefined;
+      if (data.imageUrl !== initialData!.imageUrl) updateData.imageUrl = data.imageUrl ?? null;
       await onSubmit(updateData);
     } else {
       const createData = {
@@ -104,6 +109,7 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
         price: data.price,
         status: data.status,
         isExtra: data.isExtra,
+        imageUrl: data.imageUrl ?? null,
         ...(data.categoryId && { categoryId: data.categoryId }),
       } as Omit<CreateMenuItemRequest, 'userId'>;
       await onSubmit(createData as CreateMenuItemRequest);
@@ -128,6 +134,16 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
         />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
         <p className="text-xs text-slate-500 dark:text-slate-400">{name.length}/200 caracteres</p>
+      </div>
+
+      <div className="space-y-2">
+        <Label className="text-sm font-medium">Imagen</Label>
+        <ImageUpload
+          value={imageUrl}
+          onUpload={(file) => uploadService.uploadImage(file, 'menu_item_image')}
+          onChange={(url) => setValue('imageUrl', url, { shouldDirty: true })}
+          disabled={isLoading}
+        />
       </div>
 
       <div className="space-y-2">

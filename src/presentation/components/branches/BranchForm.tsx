@@ -5,15 +5,8 @@ import { Image as ImageIcon, Clock } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
 import { Button } from '@/presentation/components/ui/button';
 import { Label } from '@/presentation/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from '@/presentation/components/ui/select';
 import { branchFormSchema, type BranchFormValues } from '@/shared/schemas/branch.schema';
 import type { BranchDetail, CreateBranchRequest, UpdateBranchRequest } from '@/domain/types';
-import { APP_TIMEZONE } from '@/shared/constants';
 import { cn } from '@/shared/lib/utils';
 
 interface BranchFormProps {
@@ -22,17 +15,6 @@ interface BranchFormProps {
   onCancel: () => void;
   isLoading?: boolean;
 }
-
-const TIMEZONES = [
-  'America/Mexico_City', 'America/Tijuana', 'America/Monterrey', 'America/Cancun',
-  'America/Hermosillo', 'America/Mazatlan', 'America/Merida',
-];
-
-const CURRENCIES: { value: string; label: string }[] = [
-  { value: 'MXN', label: 'MXN (Pesos)' },
-  { value: 'USD', label: 'USD (Dólares)' },
-  { value: 'EUR', label: 'EUR (Euros)' },
-];
 
 const inputClass =
   'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 focus:border-primary';
@@ -57,8 +39,6 @@ const buildCreatePayload = (data: BranchFormValues): CreateBranchRequest => ({
   logoUrl: emptyToNull(data.logoUrl),
   startOperations: emptyToNull(data.startOperations),
   endOperations: emptyToNull(data.endOperations),
-  timezone: data.timezone.trim(),
-  currency: data.currency.trim(),
 });
 
 /** Diff contra el detalle original: solo los campos que cambiaron viajan en el PATCH. */
@@ -83,8 +63,6 @@ const buildUpdatePayload = (
   if (next.endOperations !== (initial.endOperations ?? null)) {
     patch.endOperations = next.endOperations;
   }
-  if (next.timezone !== initial.timezone) patch.timezone = next.timezone;
-  if (next.currency !== initial.currency) patch.currency = next.currency;
 
   return patch;
 };
@@ -102,10 +80,10 @@ export const BranchForm: React.FC<BranchFormProps> = ({
     register,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors },
   } = useForm<BranchFormValues>({
     resolver: zodResolver(branchFormSchema),
+    mode: 'onChange',
     defaultValues: {
       name: initialData?.name ?? '',
       state: initialData?.state ?? '',
@@ -117,17 +95,12 @@ export const BranchForm: React.FC<BranchFormProps> = ({
       logoUrl: initialData?.logoUrl ?? '',
       startOperations: initialData?.startOperations ?? '',
       endOperations: initialData?.endOperations ?? '',
-      timezone: initialData?.timezone ?? APP_TIMEZONE,
-      currency: initialData?.currency ?? 'MXN',
     },
   });
 
-  const timezone = watch('timezone');
-  const currency = watch('currency');
   const logoUrl = watch('logoUrl');
 
   const logoIsValid = /^https?:\/\//i.test(logoUrl.trim());
-  const currencyLabel = CURRENCIES.find((c) => c.value === currency)?.label ?? currency;
 
   const onFormSubmit = async (data: BranchFormValues) => {
     if (isEditMode) {
@@ -167,10 +140,11 @@ export const BranchForm: React.FC<BranchFormProps> = ({
               <Input
                 id="phone"
                 type="tel"
+                inputMode="numeric"
                 {...register('phone')}
-                placeholder="+52 55 0000 0000"
+                placeholder="5550000000"
                 className={cn(inputClass, errors.phone && 'border-destructive')}
-                maxLength={30}
+                maxLength={10}
                 disabled={isLoading}
               />
               {errors.phone && <p className="text-sm text-destructive mt-1">{errors.phone.message}</p>}
@@ -302,99 +276,45 @@ export const BranchForm: React.FC<BranchFormProps> = ({
 
       <div className="h-px bg-slate-200 dark:bg-slate-700" />
 
-      {/* Configuración operativa */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-6">
-        <div className="space-y-4">
-          <h3 className={sectionTitleClass}>Horarios de operación</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="startOperations" className="text-sm font-medium">
-                Apertura
-              </Label>
-              <div className="relative">
-                <Input
-                  id="startOperations"
-                  type="time"
-                  {...register('startOperations')}
-                  className={cn(inputClass, 'pr-10', errors.startOperations && 'border-destructive')}
-                  disabled={isLoading}
-                />
-                <Clock className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
-              </div>
-              {errors.startOperations && (
-                <p className="text-sm text-destructive mt-1">{errors.startOperations.message}</p>
-              )}
+      {/* Horarios de operación */}
+      <div className="space-y-4">
+        <h3 className={sectionTitleClass}>Horarios de operación</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="startOperations" className="text-sm font-medium">
+              Apertura
+            </Label>
+            <div className="relative">
+              <Input
+                id="startOperations"
+                type="time"
+                {...register('startOperations')}
+                className={cn(inputClass, 'pr-10', errors.startOperations && 'border-destructive')}
+                disabled={isLoading}
+              />
+              <Clock className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="endOperations" className="text-sm font-medium">
-                Cierre
-              </Label>
-              <div className="relative">
-                <Input
-                  id="endOperations"
-                  type="time"
-                  {...register('endOperations')}
-                  className={cn(inputClass, 'pr-10', errors.endOperations && 'border-destructive')}
-                  disabled={isLoading}
-                />
-                <Clock className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
-              </div>
-              {errors.endOperations && (
-                <p className="text-sm text-destructive mt-1">{errors.endOperations.message}</p>
-              )}
-            </div>
+            {errors.startOperations && (
+              <p className="text-sm text-destructive mt-1">{errors.startOperations.message}</p>
+            )}
           </div>
-        </div>
-
-        <div className="space-y-4">
-          <h3 className={sectionTitleClass}>Ajustes regionales</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="timezone" className="text-sm font-medium">
-                Zona horaria
-              </Label>
-              <Select value={timezone} onValueChange={(value) => setValue('timezone', value)}>
-                <SelectTrigger
-                  id="timezone"
-                  className={cn('h-11 rounded-lg', inputClass, errors.timezone && 'border-destructive')}
-                >
-                  <span className="truncate">{timezone}</span>
-                </SelectTrigger>
-                <SelectContent>
-                  {TIMEZONES.map((tz) => (
-                    <SelectItem key={tz} value={tz}>
-                      {tz}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.timezone && (
-                <p className="text-sm text-destructive mt-1">{errors.timezone.message}</p>
-              )}
+          <div className="space-y-2">
+            <Label htmlFor="endOperations" className="text-sm font-medium">
+              Cierre
+            </Label>
+            <div className="relative">
+              <Input
+                id="endOperations"
+                type="time"
+                {...register('endOperations')}
+                className={cn(inputClass, 'pr-10', errors.endOperations && 'border-destructive')}
+                disabled={isLoading}
+              />
+              <Clock className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="currency" className="text-sm font-medium">
-                Moneda
-              </Label>
-              <Select value={currency} onValueChange={(value) => setValue('currency', value)}>
-                <SelectTrigger
-                  id="currency"
-                  className={cn('h-11 rounded-lg', inputClass, errors.currency && 'border-destructive')}
-                >
-                  <span className="truncate">{currencyLabel}</span>
-                </SelectTrigger>
-                <SelectContent>
-                  {CURRENCIES.map((c) => (
-                    <SelectItem key={c.value} value={c.value}>
-                      {c.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.currency && (
-                <p className="text-sm text-destructive mt-1">{errors.currency.message}</p>
-              )}
-            </div>
+            {errors.endOperations && (
+              <p className="text-sm text-destructive mt-1">{errors.endOperations.message}</p>
+            )}
           </div>
         </div>
       </div>

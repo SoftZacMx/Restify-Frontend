@@ -16,3 +16,4 @@ export { BranchService, branchService } from './branch.service';
 export { OrganizationService, organizationService } from './organization.service';
 export { StockService, stockService } from './stock.service';
 export { RecipeService, recipeService } from './recipe.service';
+export { UploadService, uploadService } from './upload.service';

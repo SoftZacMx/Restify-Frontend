@@ -7,7 +7,6 @@ import {
   filterOrdersClient,
   getDefaultOrderFiltersForToday,
   getTodayDateString,
-  getLocalDayBoundsUtc,
 } from './order.utils';
 import { APP_TIMEZONE } from '@/shared/constants';
 import type { OrderResponse } from '@/domain/types';
@@ -98,7 +97,7 @@ describe('order.utils', () => {
       expect(api.status).toBe(true);
     });
 
-    it('converts local dates to UTC day bounds in the app timezone', () => {
+    it('sends the picked days as-is, without converting them', () => {
       const api = convertViewFiltersToApiFilters({
         search: '',
         status: 'all',
@@ -107,9 +106,9 @@ describe('order.utils', () => {
         tableId: '',
         origin: '',
       });
-      // America/Mexico_City is UTC-6 year-round (no DST since 2022).
-      expect(api.dateFrom).toBe('2025-01-15T06:00:00.000Z');
-      expect(api.dateTo).toBe('2025-01-17T05:59:59.999Z');
+      // Convertir aca obligaba al frontend a saber la zona de la sucursal. Ahora decide el backend.
+      expect(api.dateFrom).toBe('2025-01-15');
+      expect(api.dateTo).toBe('2025-01-16');
     });
   });
 
@@ -180,28 +179,7 @@ describe('order.utils', () => {
     });
   });
 
-  describe('getLocalDayBoundsUtc', () => {
-    // Mexico eliminated DST in 2022: America/Mexico_City is UTC-6 year-round.
-    it('returns UTC bounds of a Mexico_City calendar day', () => {
-      const bounds = getLocalDayBoundsUtc('2026-04-22');
-      expect(bounds.dateFrom).toBe('2026-04-22T06:00:00.000Z');
-      expect(bounds.dateTo).toBe('2026-04-23T05:59:59.999Z');
-    });
-
-    it('handles end-of-month boundaries', () => {
-      const bounds = getLocalDayBoundsUtc('2026-01-31');
-      expect(bounds.dateFrom).toBe('2026-01-31T06:00:00.000Z');
-      expect(bounds.dateTo).toBe('2026-02-01T05:59:59.999Z');
-    });
-
-    it('handles end-of-year boundary', () => {
-      const bounds = getLocalDayBoundsUtc('2026-12-31');
-      expect(bounds.dateFrom).toBe('2026-12-31T06:00:00.000Z');
-      expect(bounds.dateTo).toBe('2027-01-01T05:59:59.999Z');
-    });
-  });
-
-  describe("today filter covers the full local day (regression for '23 vs 22' bug)", () => {
+  describe("today filter sends the right local day (regression for '23 vs 22' bug)", () => {
     beforeEach(() => {
       vi.useFakeTimers();
     });
@@ -210,12 +188,24 @@ describe('order.utils', () => {
       vi.useRealTimers();
     });
 
-    it('at 23:55 MX builds an API range covering the whole MX day', () => {
+    // El dia viaja como YYYY-MM-DD y el backend lo ubica en la zona de la sucursal.
+    // Lo que se protege aca es que sea el dia local correcto, no el del reloj universal.
+    it('at 23:55 MX sends the MX day, not the UTC one', () => {
       // 2026-04-23T05:55:00Z == 2026-04-22 23:55 Mexico_City
       vi.setSystemTime(new Date('2026-04-23T05:55:00Z'));
       const api = convertViewFiltersToApiFilters(getDefaultOrderFiltersForToday());
-      expect(api.dateFrom).toBe('2026-04-22T06:00:00.000Z');
-      expect(api.dateTo).toBe('2026-04-23T05:59:59.999Z');
+      expect(api.dateFrom).toBe('2026-04-22');
+      expect(api.dateTo).toBe('2026-04-22');
+    });
+
+    it('passes an explicitly picked day through untouched', () => {
+      const api = convertViewFiltersToApiFilters({
+        ...getDefaultOrderFiltersForToday(),
+        dateFrom: '2026-01-31',
+        dateTo: '2026-12-31',
+      });
+      expect(api.dateFrom).toBe('2026-01-31');
+      expect(api.dateTo).toBe('2026-12-31');
     });
   });
 });

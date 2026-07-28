@@ -18,6 +18,7 @@ import { Input } from '@/presentation/components/ui/input';
 import { Label } from '@/presentation/components/ui/label';
 import { Badge } from '@/presentation/components/ui/badge';
 import { Card } from '@/presentation/components/ui/card';
+import { ImageUpload } from '@/presentation/components/ui/image-upload';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,6 +29,7 @@ import { ConfirmDialog } from '@/presentation/components/ui/confirm-dialog';
 import { SelectCategoryDialog } from '@/presentation/components/menu-items/SelectCategoryDialog';
 import { RecipeEditor } from '@/presentation/components/menu-items/RecipeEditor';
 import { menuItemService, menuCategoryService } from '@/application/services';
+import { uploadService } from '@/application/services/upload.service';
 import { showErrorToast, showSuccessToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
 import { menuItemFormSchema, type MenuItemFormValues } from '@/shared/schemas/menu-item.schema';
@@ -81,10 +83,12 @@ const MenuItemDetailPage: React.FC = () => {
       status: menuItem?.status ?? true,
       isExtra: menuItem?.isExtra ?? false,
       categoryId: menuItem?.categoryId ?? undefined,
+      imageUrl: menuItem?.imageUrl ?? null,
     },
   });
 
   const categoryId = watch('categoryId');
+  const imageUrl = watch('imageUrl');
   const [priceInput, setPriceInput] = useState('');
 
   // Sincronizar form cuando llega data del backend.
@@ -96,6 +100,7 @@ const MenuItemDetailPage: React.FC = () => {
       status: menuItem.status,
       isExtra: menuItem.isExtra,
       categoryId: menuItem.categoryId ?? undefined,
+      imageUrl: menuItem.imageUrl ?? null,
     });
     setPriceInput(menuItem.price ? menuItem.price.toString() : '');
   }, [menuItem, reset]);
@@ -132,6 +137,7 @@ const MenuItemDetailPage: React.FC = () => {
         status: values.status,
         isExtra: values.isExtra,
         categoryId: values.categoryId,
+        imageUrl: values.imageUrl ?? null,
       });
       showSuccessToast('Producto actualizado', 'Los cambios se guardaron correctamente');
       await queryClient.invalidateQueries({ queryKey: ['menuItem', menuItemId] });
@@ -316,6 +322,20 @@ const MenuItemDetailPage: React.FC = () => {
                   {errors.price && (
                     <p className="text-sm text-destructive mt-1">{errors.price.message}</p>
                   )}
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
+                  Imagen
+                </Label>
+                <div className="mt-1">
+                  <ImageUpload
+                    value={imageUrl}
+                    onUpload={(file) => uploadService.uploadImage(file, 'menu_item_image')}
+                    onChange={(url) => setValue('imageUrl', url, { shouldDirty: true })}
+                    disabled={isSaving}
+                  />
                 </div>
               </div>
 

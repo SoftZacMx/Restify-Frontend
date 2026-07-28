@@ -164,7 +164,9 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
     const base = {
       title: title.trim(),
       type: expenseType as ExpenseType,
-      date: new Date(date).toISOString(),
+      // El dia va tal cual: convertirlo aca lo interpretaba como medianoche universal y el
+      // gasto quedaba guardado un dia antes. El backend lo ubica en la zona de la sucursal.
+      date,
       total: parseFloat(total),
       subtotal: parseFloat(subtotal),
       iva: parseFloat(iva),

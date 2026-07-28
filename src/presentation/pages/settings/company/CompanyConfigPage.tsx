@@ -1,10 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Save, X, Image as ImageIcon, Clock } from 'lucide-react';
+import { Save, X, Clock } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card';
 import { Button } from '@/presentation/components/ui/button';
 import { Input } from '@/presentation/components/ui/input';
+import { ImageUpload } from '@/presentation/components/ui/image-upload';
 import { branchService } from '@/application/services';
+import { uploadService } from '@/application/services/upload.service';
 import { useActiveBranch } from '@/presentation/hooks/useActiveBranch';
 import type { UpdateBranchRequest } from '@/domain/types';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
@@ -190,41 +192,14 @@ const CompanyConfigPage: React.FC = () => {
             </div>
             <div className="md:col-span-2">
               <label htmlFor="co-logo-url" className="contents">
-                <ConfigFieldLabel>Logo URL</ConfigFieldLabel>
+                <ConfigFieldLabel>Logo del negocio</ConfigFieldLabel>
               </label>
-              <div className="flex flex-col sm:flex-row gap-3 sm:items-start">
-                <div className="relative flex-1 min-w-0">
-                  <ImageIcon
-                    className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-600 dark:text-sky-400 pointer-events-none"
-                    aria-hidden
-                  />
-                  <Input
-                    id="co-logo-url"
-                    type="url"
-                    className="pl-10"
-                    value={form.logoUrl ?? ''}
-                    onChange={(e) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        logoUrl: e.target.value.trim() || null,
-                      }))
-                    }
-                    placeholder="https://…"
-                  />
-                </div>
-                {form.logoUrl ? (
-                  <div className="h-14 w-14 shrink-0 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/80 flex items-center justify-center overflow-hidden">
-                    <img
-                      src={form.logoUrl}
-                      alt=""
-                      className="max-h-full max-w-full object-contain"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.opacity = '0.2';
-                      }}
-                    />
-                  </div>
-                ) : null}
-              </div>
+              <ImageUpload
+                value={form.logoUrl}
+                onUpload={(file) => uploadService.uploadImage(file, 'branch_logo')}
+                onChange={(url) => setForm((prev) => ({ ...prev, logoUrl: url }))}
+                disabled={isSaving}
+              />
             </div>
 
             <div>

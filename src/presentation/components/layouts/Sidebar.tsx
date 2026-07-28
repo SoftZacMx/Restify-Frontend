@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
-import { LogOut, UtensilsCrossed, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Store } from 'lucide-react';
+import { LogOut, UtensilsCrossed, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Store, Moon, Sun } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/presentation/hooks/useAuth';
 import { useActiveBranch } from '@/presentation/hooks/useActiveBranch';
 import { useAuthStore } from '@/presentation/store/auth.store';
 import { useSidebarNavigation, type NavItem } from '@/presentation/hooks/useSidebarNavigation';
 import { useSidebar } from '@/presentation/contexts/sidebar.context';
+import { useTheme } from '@/presentation/contexts/theme.context';
 import { Tooltip } from '@/presentation/components/ui/tooltip';
 import { Button } from '@/presentation/components/ui/button';
 import { cn } from '@/shared/lib/utils';
+
+/** Fila del bloque inferior (tema, cerrar sesión): mismo look que un NavItem inactivo. */
+const bottomRowClass =
+  'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-100';
 
 /**
  * Componente Sidebar
@@ -20,7 +25,11 @@ export const Sidebar = () => {
   const { logout } = useAuth();
   const { mainNavItems, bottomNavItems, isActive, handleNavigate, currentPath } = useSidebarNavigation();
   const { isCollapsed, isMobile, isMobileOpen, toggleSidebar, closeSidebar } = useSidebar();
+  const { theme, toggleTheme } = useTheme();
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+
+  const isDark = theme === 'dark';
+  const themeLabel = isDark ? 'Modo Claro' : 'Modo Oscuro';
 
   const { selectedBranch, hasMultipleBranches } = useActiveBranch();
   const clearSelectedBranch = useAuthStore((s) => s.clearSelectedBranch);
@@ -209,13 +218,28 @@ export const Sidebar = () => {
             );
           })}
           {(() => {
+            const themeButton = (
+              <button
+                onClick={toggleTheme}
+                className={cn(bottomRowClass, isCollapsed && 'justify-center px-2')}
+                aria-label={themeLabel}
+              >
+                {isDark ? <Sun size={20} /> : <Moon size={20} />}
+                {!isCollapsed && <span>{themeLabel}</span>}
+              </button>
+            );
+
+            if (isCollapsed) {
+              return <Tooltip content={themeLabel}>{themeButton}</Tooltip>;
+            }
+
+            return themeButton;
+          })()}
+          {(() => {
             const logoutButton = (
               <button
                 onClick={handleLogout}
-                className={cn(
-                  'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-100',
-                  isCollapsed && 'justify-center px-2'
-                )}
+                className={cn(bottomRowClass, isCollapsed && 'justify-center px-2')}
               >
                 <LogOut size={20} />
                 {!isCollapsed && <span>Cerrar Sesión</span>}

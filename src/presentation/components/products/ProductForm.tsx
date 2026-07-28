@@ -7,6 +7,7 @@ import { Button } from '@/presentation/components/ui/button';
 import { Label } from '@/presentation/components/ui/label';
 import { Switch } from '@/presentation/components/ui/switch';
 import { Textarea } from '@/presentation/components/ui/textarea';
+import { ImageUpload } from '@/presentation/components/ui/image-upload';
 import {
   Select,
   SelectContent,
@@ -16,6 +17,7 @@ import {
 } from '@/presentation/components/ui/select';
 import { productFormSchema, type ProductFormValues } from '@/shared/schemas/product.schema';
 import { UNIT_OPTIONS, getUnitName } from '@/shared/utils/stock.utils';
+import { uploadService } from '@/application/services/upload.service';
 import type {
   ProductResponse,
   CreateProductRequest,
@@ -51,6 +53,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       name: initialData?.name ?? '',
       description: initialData?.description ?? '',
       status: initialData?.status ?? true,
+      imageUrl: initialData?.imageUrl ?? null,
       // En creación, trackStock arranca en true (caso por defecto del owner).
       trackStock: initialData?.trackStock ?? !isEditMode,
       unitOfMeasure: initialData?.unitOfMeasure ?? null,
@@ -63,6 +66,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const status = watch('status');
   const trackStock = watch('trackStock');
   const unitOfMeasure = watch('unitOfMeasure');
+  const imageUrl = watch('imageUrl');
 
   // El input numérico se maneja como string para soportar el caso vacío sin coerce a 0.
   const [minStockInput, setMinStockInput] = useState<string>(
@@ -97,6 +101,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       const initialDesc = initialData!.description ?? '';
       if ((data.description ?? '') !== initialDesc) updateData.description = data.description?.trim() || null;
       if (data.status !== initialData!.status) updateData.status = data.status;
+      if (data.imageUrl !== initialData!.imageUrl) updateData.imageUrl = data.imageUrl ?? null;
       // Stock config en edición: se maneja en StockConfigSection del detalle, no aquí.
       await onSubmit(updateData);
     } else {
@@ -106,6 +111,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         description: data.description || null,
         status: data.status,
         userId: '', // se setea en el padre con el user logueado
+        imageUrl: data.imageUrl ?? null,
         trackStock: data.trackStock,
         unitOfMeasure: data.trackStock ? data.unitOfMeasure ?? null : null,
         minStockAlert: data.trackStock ? data.minStockAlert ?? null : null,
@@ -132,6 +138,16 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
         <p className="text-xs text-slate-500 dark:text-slate-400">{name.length}/200 caracteres</p>
+      </div>
+
+      <div className="space-y-2">
+        <Label className="text-sm font-medium">Imagen</Label>
+        <ImageUpload
+          value={imageUrl}
+          onUpload={(file) => uploadService.uploadImage(file, 'product_image')}
+          onChange={(url) => setValue('imageUrl', url, { shouldDirty: true })}
+          disabled={isLoading}
+        />
       </div>
 
       <div className="space-y-2">

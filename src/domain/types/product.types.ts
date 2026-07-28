@@ -19,6 +19,7 @@ export interface Product {
   userId: string;                    // UUID del usuario propietario
   createdAt: string;                // ISO 8601 date string
   updatedAt: string;                // ISO 8601 date string
+  imageUrl?: string | null;
   // Stock config (Fase 6.3) — opcionales por compat con respuestas viejas
   trackStock?: boolean;
   unitOfMeasure?: UnitOfMeasure | null;
@@ -33,6 +34,7 @@ export interface CreateProductRequest {
   description?: string | null;       // Opcional - Descripción (máx 1000 caracteres)
   status?: boolean;                  // Opcional - Estado activo/inactivo (default: true)
   userId: string;                    // REQUERIDO - UUID del usuario que crea el producto
+  imageUrl?: string | null;
   // Stock config opcional desde la creación (Fase 7)
   trackStock?: boolean;
   unitOfMeasure?: UnitOfMeasure | null;
@@ -46,6 +48,7 @@ export interface UpdateProductRequest {
   name?: string;                     // Opcional - Nombre del producto (mín 1, máx 200 caracteres)
   description?: string | null;       // Opcional - Descripción (máx 1000 caracteres, puede ser null)
   status?: boolean;                  // Opcional - Estado activo/inactivo
+  imageUrl?: string | null;
 }
 
 /**
@@ -69,6 +72,7 @@ export interface ProductResponse {
   userId: string;
   createdAt: string;                  // ISO 8601
   updatedAt: string;                 // ISO 8601
+  imageUrl?: string | null;
   // Stock config (Fase 6.3) — opcionales por compat con respuestas viejas / endpoints que aún no los exponen
   trackStock?: boolean;
   unitOfMeasure?: UnitOfMeasure | null;

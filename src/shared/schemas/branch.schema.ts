@@ -13,6 +13,8 @@ const optionalTime = z
  * Schema del formulario de sucursal.
  * Refleja los límites de `createBranchSchema` del backend.
  * `paymentConfig`/`ticketConfig` quedan fuera de este módulo (se administran en settings/payments).
+ * `currency`/`timezone` no se editan: el backend les pone default y toda la app opera en
+ * MXN y `APP_TIMEZONE`, así que ofrecerlos prometía algo que ningún cálculo respetaba.
  */
 export const branchFormSchema = z.object({
   name: z
@@ -48,7 +50,8 @@ export const branchFormSchema = z.object({
     .string()
     .trim()
     .min(1, 'El teléfono es requerido')
-    .max(30, 'El teléfono no puede exceder 30 caracteres'),
+    .regex(/^\d+$/, 'El teléfono solo puede contener números')
+    .length(10, 'El teléfono debe tener 10 dígitos'),
   rfc: z
     .string()
     .trim()
@@ -63,16 +66,6 @@ export const branchFormSchema = z.object({
     .or(z.literal('')),
   startOperations: optionalTime,
   endOperations: optionalTime,
-  timezone: z
-    .string()
-    .trim()
-    .min(1, 'La zona horaria es requerida')
-    .max(64, 'La zona horaria no puede exceder 64 caracteres'),
-  currency: z
-    .string()
-    .trim()
-    .min(1, 'La moneda es requerida')
-    .max(8, 'La moneda no puede exceder 8 caracteres'),
 });
 
 export type BranchFormValues = z.infer<typeof branchFormSchema>;

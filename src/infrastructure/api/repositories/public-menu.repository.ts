@@ -4,6 +4,7 @@ export interface PublicMenuItem {
   id: string;
   name: string;
   price: number;
+  imageUrl?: string | null;
 }
 
 export interface PublicMenuCategory {

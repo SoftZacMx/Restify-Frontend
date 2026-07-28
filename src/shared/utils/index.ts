@@ -81,7 +81,6 @@ export {
   getOrderLocationDisplay,
   defaultOrderFilters,
   getTodayDateString,
-  getLocalDayBoundsUtc,
   getDefaultOrderFiltersForToday,
   convertViewFiltersToApiFilters,
   filterOrdersClient,

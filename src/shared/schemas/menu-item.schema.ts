@@ -11,6 +11,7 @@ export const menuItemFormSchema = z.object({
   status: z.boolean(),
   isExtra: z.boolean(),
   categoryId: z.string().optional(),
+  imageUrl: z.string().nullable().optional(),
 });
 
 export type MenuItemFormValues = z.infer<typeof menuItemFormSchema>;

@@ -33,11 +33,8 @@ const PaymentResultPage: React.FC = () => {
   const status: PaymentResultStatus = statusParam && config[statusParam] ? statusParam : 'success';
   const { icon, title, description, bg } = config[status];
 
-  // Redirigir al seguimiento del pedido público tras volver de Mercado Pago.
-  // 1) Ruta rápida: trackingToken guardado en localStorage antes de ir a MP.
-  // 2) Fallback: si el localStorage se perdió (MP abrió su webview con storage aparte),
-  //    usar el orderId del external_reference ("orderId:branchId") que MP devuelve en la
-  //    query y resolver el trackingToken vía backend.
+  // Redirigir al seguimiento del pedido público tras volver de Mercado Pago. El fallback
+  // cubre el caso de que se pierda el localStorage (MP abre su webview con storage aparte).
   useEffect(() => {
     let cancelled = false;
 
@@ -48,19 +45,18 @@ const PaymentResultPage: React.FC = () => {
       return;
     }
 
-    // external_reference viene como:
-    //  - "checkout:checkoutId:branchId" (flujo nuevo): la orden puede no existir aún y no
-    //    hay forma de resolver el trackingToken por orderId → se queda en esta pantalla,
-    //    que ya informa el estado del pago (el caso normal usa el trackingToken de arriba).
-    //  - "orderId:branchId" o "orderId" (flujo legacy): se resuelve el trackingToken por orderId.
-    const externalReference = searchParams.get('external_reference');
-    const parts = externalReference?.split(':') ?? [];
-    if (parts[0] === 'checkout') return;
-    const orderId = parts[0];
-    if (!orderId) return;
+    // external_reference viene como "checkout:checkoutId:branchId" (flujo diferido) o
+    // "orderId:branchId" / "orderId" (legacy).
+    const parts = searchParams.get('external_reference')?.split(':') ?? [];
+    const isCheckout = parts[0] === 'checkout';
+    const id = isCheckout ? parts[1] : parts[0];
+    if (!id) return;
 
-    publicOrderRepository
-      .getOrderStatusByOrderId(orderId)
+    const lookup = isCheckout
+      ? publicOrderRepository.getOrderStatusByCheckoutId(id)
+      : publicOrderRepository.getOrderStatusByOrderId(id);
+
+    lookup
       .then((order) => {
         if (!cancelled && order.trackingToken) {
           navigate(`/public/pedido/${order.trackingToken}`, { replace: true });
