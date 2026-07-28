@@ -37,7 +37,7 @@ export function usePublicMenu(branchId: string | null) {
         categoryId: cat.id,
         description: null,
         status: true,
-        imageUrl: item.imageUrl,
+        imageUrl: item.imageUrl ?? undefined,
       }))
     );
   }, [data]);
@@ -52,7 +52,7 @@ export function usePublicMenu(branchId: string | null) {
       description: null,
       status: true,
       isExtra: true,
-      imageUrl: extra.imageUrl,
+        imageUrl: extra.imageUrl ?? undefined,
     }));
   }, [data]);
 

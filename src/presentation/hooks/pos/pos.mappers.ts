@@ -18,7 +18,7 @@ export const mapMenuItemToPosProduct = (menuItem: MenuItemResponse): PosProduct 
   categoryId: menuItem.categoryId || '',
   status: menuItem.status,
   isExtra: menuItem.isExtra ?? false,
-  imageUrl: menuItem.imageUrl,
+  imageUrl: menuItem.imageUrl ?? undefined,
 });
 
 /**

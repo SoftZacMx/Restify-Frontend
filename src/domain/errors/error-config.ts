@@ -532,6 +532,25 @@ export const ERROR_CONFIG = {
     statusCode: 503,
     category: 'SYSTEM',
   },
+
+  // ============================================
+  // Upload Errors
+  // ============================================
+  INVALID_IMAGE_TYPE: {
+    message: 'Tipo de imagen no permitido. Use JPEG, PNG o WebP.',
+    statusCode: 400,
+    category: 'VALIDATION',
+  },
+  IMAGE_SIZE_EXCEEDS_LIMIT: {
+    message: 'La imagen no puede superar 5MB.',
+    statusCode: 400,
+    category: 'VALIDATION',
+  },
+  IMAGE_UPLOAD_FAILED: {
+    message: 'No se pudo subir la imagen.',
+    statusCode: 500,
+    category: 'SYSTEM',
+  },
 } as const;
 
 /**
