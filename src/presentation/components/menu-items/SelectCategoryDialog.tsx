@@ -1,15 +1,13 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Search } from 'lucide-react';
+import { Search, LayoutGrid } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogClose,
-  DialogFooter,
 } from '@/presentation/components/ui/dialog';
 import { Input } from '@/presentation/components/ui/input';
-import { Button } from '@/presentation/components/ui/button';
 import { CategorySelectionList } from './CategorySelectionList';
 import type { CategorySelectionItemData } from './CategorySelectionItem';
 
@@ -20,10 +18,6 @@ interface SelectCategoryDialogProps {
   onSelect: (category: CategorySelectionItemData | null) => void;
 }
 
-/**
- * Diálogo para seleccionar una categoría de menú: búsqueda por nombre y lista con selección única.
- * Permite elegir "Sin categoría" para dejar el platillo sin categoría.
- */
 export const SelectCategoryDialog: React.FC<SelectCategoryDialogProps> = ({
   open,
   onOpenChange,
@@ -31,7 +25,6 @@ export const SelectCategoryDialog: React.FC<SelectCategoryDialogProps> = ({
   onSelect,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<CategorySelectionItemData | null>(null);
 
   const filteredCategories = useMemo(() => {
     if (!searchQuery.trim()) return categories;
@@ -42,17 +35,11 @@ export const SelectCategoryDialog: React.FC<SelectCategoryDialogProps> = ({
   useEffect(() => {
     if (open) {
       setSearchQuery('');
-      setSelectedCategory(null);
     }
   }, [open]);
 
-  const handleConfirm = () => {
-    onSelect(selectedCategory);
-    onOpenChange(false);
-  };
-
-  const handleSelectNone = () => {
-    onSelect(null);
+  const handleSelect = (category: CategorySelectionItemData | null) => {
+    onSelect(category);
     onOpenChange(false);
   };
 
@@ -77,24 +64,29 @@ export const SelectCategoryDialog: React.FC<SelectCategoryDialogProps> = ({
             />
           </div>
 
-          <CategorySelectionList
-            categories={filteredCategories}
-            selectedId={selectedCategory?.id ?? null}
-            onSelect={setSelectedCategory}
-          />
-        </div>
+          <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1">
+            <button
+              type="button"
+              onClick={() => handleSelect(null)}
+              className="w-full flex items-center gap-4 p-3 rounded-lg border text-left transition-colors border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50"
+            >
+              <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                <LayoutGrid className="h-6 w-6 text-slate-500 dark:text-slate-400" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-slate-900 dark:text-white truncate">
+                  Sin categoría
+                </p>
+              </div>
+            </button>
 
-        <DialogFooter className="gap-2 sm:gap-0">
-          <Button type="button" variant="outline" onClick={handleSelectNone}>
-            Sin categoría
-          </Button>
-          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-            Cancelar
-          </Button>
-          <Button type="button" onClick={handleConfirm} disabled={!selectedCategory}>
-            Seleccionar
-          </Button>
-        </DialogFooter>
+            <CategorySelectionList
+              categories={filteredCategories}
+              selectedId={null}
+              onSelect={(cat) => handleSelect(cat)}
+            />
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );
