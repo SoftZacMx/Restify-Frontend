@@ -41,6 +41,7 @@ const clientFilter = (data: BranchListItem[], filters: BranchFilters) => {
 
 const BranchesPage: React.FC = () => {
   const { user } = useAuthStore();
+  const setBranches = useAuthStore((s) => s.setBranches);
   const canWrite = canWriteRoles.includes(user?.rol ?? '');
 
   const {
@@ -91,6 +92,19 @@ const BranchesPage: React.FC = () => {
       );
     }
   }, [error]);
+
+  // Mantener auth.store.branches sincronizado con el listado del backend.
+  // Esto asegura que crear/deshabilitar/habilitar sucursales se refleje en el
+  // sidebar (hasMultipleBranches) y en la pantalla de selección.
+  React.useEffect(() => {
+    if (rawData.length > 0) {
+      setBranches(
+        rawData
+          .filter((b) => b.status === 'active')
+          .map((b) => ({ id: b.id, name: b.name }))
+      );
+    }
+  }, [rawData, setBranches]);
 
   const handleBranchAction = useCallback(
     async (branchId: string, action: BranchAction) => {

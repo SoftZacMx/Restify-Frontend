@@ -32,6 +32,8 @@ interface AuthState {
   selectBranch: (branchId: string, token: string) => void;
   /** Reabre la selección de sucursal (acción "cambiar de sucursal"). */
   clearSelectedBranch: () => void;
+  /** Refresca el listado de sucursales disponibles (ej: después de crear/deshabilitar una). */
+  setBranches: (branches: AccessibleBranch[]) => void;
   setHasHydrated: (value: boolean) => void;
 }
 
@@ -85,6 +87,7 @@ export const useAuthStore = create<AuthState>()(
         ),
       selectBranch: (branchId, token) => set({ selectedBranchId: branchId, token }),
       clearSelectedBranch: () => set({ selectedBranchId: null }),
+      setBranches: (branches) => set({ branches }),
     }),
     {
       name: 'auth-storage',
