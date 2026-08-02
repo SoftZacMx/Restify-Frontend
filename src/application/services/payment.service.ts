@@ -1,24 +1,16 @@
 import type { ApiResponse } from '@/domain/types';
 import type {
-  PayOrderWithCashRequest,
-  PayOrderWithTransferRequest,
-  PayOrderWithCardPhysicalRequest,
-  PayOrderWithCardStripeRequest,
   PayOrderWithSplitPaymentRequest,
-  ConfirmStripePaymentRequest,
   ListPaymentsRequest,
   PaymentResponse,
-  StripePaymentResponse,
   SplitPaymentResponse,
   QrMpPaymentResponse,
   QrMpPaymentStatusResponse,
   CreateRefundRequest,
   RefundResponse,
   PaymentFormErrors,
-  PaymentMethodType,
   SplitPaymentPart,
 } from '@/domain/types/payment.types';
-import type { PosPaymentMethod } from '@/domain/types/order.types';
 import { paymentRepository } from '@/infrastructure/api/repositories/payment.repository';
 
 /**
@@ -84,114 +76,10 @@ export class PaymentService {
     };
   }
 
-  // ============ MAPEO DE MÉTODOS DE PAGO ============
-
-  /**
-   * Convierte método de pago del POS al formato del backend
-   */
-  mapPosMethodToBackend(posMethod: PosPaymentMethod): PaymentMethodType {
-    const mapping: Record<PosPaymentMethod, PaymentMethodType> = {
-      CASH: 'CASH',
-      CARD: 'CARD_PHYSICAL',
-      TRANSFER: 'TRANSFER',
-      QR_MP: 'QR_MERCADO_PAGO',
-    };
-    return mapping[posMethod];
-  }
-
-  /**
-   * Convierte método de pago del POS a número para crear orden
-   */
-  mapPosMethodToNumber(posMethod: PosPaymentMethod): number {
-    const mapping: Record<PosPaymentMethod, number> = {
-      CASH: 1,
-      TRANSFER: 2,
-      CARD: 3,
-      QR_MP: 4,
-    };
-    return mapping[posMethod];
-  }
-
-  /**
-   * Convierte método de pago del backend a número
-   */
-  mapBackendMethodToNumber(method: PaymentMethodType): number {
-    const mapping: Record<PaymentMethodType, number> = {
-      CASH: 1,
-      TRANSFER: 2,
-      CARD_PHYSICAL: 3,
-      CARD_STRIPE: 3,
-      QR_MERCADO_PAGO: 4,
-    };
-    return mapping[method];
-  }
-
   // ============ PROCESAMIENTO DE PAGOS ============
-
-  /**
-   * Procesa pago con efectivo
-   */
-  async payWithCash(orderId: string): Promise<ApiResponse<PaymentResponse>> {
-    const validation = this.validatePaymentData(orderId, 1); // Solo validar orderId
-    if (!validation.isValid) {
-      throw new Error(Object.values(validation.errors).join(', '));
-    }
-
-    const data: PayOrderWithCashRequest = { orderId };
-    return await paymentRepository.payWithCash(data);
-  }
-
-  /**
-   * Procesa pago con transferencia
-   */
-  async payWithTransfer(
-    orderId: string,
-    transferNumber?: string
-  ): Promise<ApiResponse<PaymentResponse>> {
-    const validation = this.validatePaymentData(orderId, 1);
-    if (!validation.isValid) {
-      throw new Error(Object.values(validation.errors).join(', '));
-    }
-
-    const data: PayOrderWithTransferRequest = {
-      orderId,
-      transferNumber,
-    };
-    return await paymentRepository.payWithTransfer(data);
-  }
-
-  /**
-   * Procesa pago con tarjeta física
-   */
-  async payWithCardPhysical(orderId: string): Promise<ApiResponse<PaymentResponse>> {
-    const validation = this.validatePaymentData(orderId, 1);
-    if (!validation.isValid) {
-      throw new Error(Object.values(validation.errors).join(', '));
-    }
-
-    const data: PayOrderWithCardPhysicalRequest = { orderId };
-    return await paymentRepository.payWithCardPhysical(data);
-  }
-
-  /**
-   * Procesa pago con Stripe (inicia el proceso)
-   * Retorna clientSecret para completar en frontend con Stripe.js
-   */
-  async payWithCardStripe(
-    orderId: string,
-    connectionId?: string
-  ): Promise<ApiResponse<StripePaymentResponse>> {
-    const validation = this.validatePaymentData(orderId, 1);
-    if (!validation.isValid) {
-      throw new Error(Object.values(validation.errors).join(', '));
-    }
-
-    const data: PayOrderWithCardStripeRequest = {
-      orderId,
-      connectionId,
-    };
-    return await paymentRepository.payWithCardStripe(data);
-  }
+  // El cobro simple de órdenes (efectivo/transferencia/tarjeta) va por el endpoint
+  // unificado POST /api/orders/:id/pay vía orderService.payOrder. Aquí solo viven
+  // los flujos con lógica propia: QR de Mercado Pago y pago dividido.
 
   /**
    * Inicia pago con QR de Mercado Pago
@@ -235,66 +123,6 @@ export class PaymentService {
       secondPayment,
     };
     return await paymentRepository.payWithSplit(data);
-  }
-
-  /**
-   * Confirma pago de Stripe
-   */
-  async confirmStripePayment(
-    paymentIntentId: string,
-    status: 'succeeded' | 'failed'
-  ): Promise<ApiResponse<PaymentResponse>> {
-    const data: ConfirmStripePaymentRequest = {
-      paymentIntentId,
-      status,
-    };
-    return await paymentRepository.confirmStripePayment(data);
-  }
-
-  /**
-   * Procesa el pago basado en el método seleccionado en el POS
-   * Maneja tanto pagos simples como divididos
-   */
-  async processPayment(
-    orderId: string,
-    posMethod1: PosPaymentMethod,
-    amount1: number,
-    posMethod2?: PosPaymentMethod | null,
-    amount2?: number,
-    orderTotal?: number,
-    options?: {
-      transferNumber?: string;
-      useStripe?: boolean;
-      connectionId?: string;
-    }
-  ): Promise<ApiResponse<PaymentResponse | SplitPaymentResponse>> {
-    // Si hay dos métodos, es pago dividido
-    if (posMethod2 && amount2 && orderTotal) {
-      const firstPayment: SplitPaymentPart = {
-        amount: amount1,
-        paymentMethod: this.mapPosMethodToBackend(posMethod1) as 'CASH' | 'TRANSFER' | 'CARD_PHYSICAL',
-      };
-      const secondPayment: SplitPaymentPart = {
-        amount: amount2,
-        paymentMethod: this.mapPosMethodToBackend(posMethod2) as 'CASH' | 'TRANSFER' | 'CARD_PHYSICAL',
-      };
-      return await this.payWithSplit(orderId, firstPayment, secondPayment, orderTotal);
-    }
-
-    // Pago simple basado en el método
-    switch (posMethod1) {
-      case 'CASH':
-        return await this.payWithCash(orderId);
-      case 'TRANSFER':
-        return await this.payWithTransfer(orderId, options?.transferNumber);
-      case 'CARD':
-        if (options?.useStripe) {
-          return await this.payWithCardStripe(orderId, options.connectionId);
-        }
-        return await this.payWithCardPhysical(orderId);
-      default:
-        throw new Error('Método de pago no soportado');
-    }
   }
 
   // ============ CONSULTAS ============
@@ -359,25 +187,6 @@ export class PaymentService {
     return response.data;
   }
 
-  /**
-   * Crea un reembolso para pago con Stripe
-   */
-  async createStripeRefund(
-    paymentId: string,
-    amount: number,
-    reason?: string
-  ): Promise<RefundResponse> {
-    const data: CreateRefundRequest = {
-      paymentId,
-      amount,
-      reason,
-    };
-    const response = await paymentRepository.createStripeRefund(data);
-    if (!response.success || !response.data) {
-      throw new Error('No se pudo crear el reembolso en Stripe');
-    }
-    return response.data;
-  }
 }
 
 // Exportar instancia singleton

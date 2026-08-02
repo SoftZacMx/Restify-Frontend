@@ -47,9 +47,12 @@ apiClient.interceptors.response.use(
 
     // Handle 401 (Unauthorized) - redirect to login solo si NO es un endpoint de auth
     // Los 401 en /api/auth/ son respuestas esperadas (password incorrecto, validación, etc.)
+    // TOKEN_REVOKED / ACCOUNT_DISABLED / ORGANIZATION_INACTIVE: el backend invalidó la
+    // sesión (logout global, usuario deshabilitado u organización cerrada) — volver a login.
     const requestUrl = error?.config?.url || '';
     const isAuthEndpoint = requestUrl.includes('/api/auth/');
-    if (!isAuthEndpoint && (appError.statusCode === 401 || appError.code === 'UNAUTHORIZED' || appError.code === 'TOKEN_EXPIRED')) {
+    const sessionInvalidCodes = ['UNAUTHORIZED', 'TOKEN_EXPIRED', 'TOKEN_REVOKED', 'ACCOUNT_DISABLED', 'ORGANIZATION_INACTIVE'];
+    if (!isAuthEndpoint && (appError.statusCode === 401 || sessionInvalidCodes.includes(appError.code))) {
       window.location.href = '/auth/login';
     }
 

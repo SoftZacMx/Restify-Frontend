@@ -8,7 +8,7 @@
 /**
  * Métodos de pago soportados por el backend
  */
-export type PaymentMethodType = 'CASH' | 'TRANSFER' | 'CARD_PHYSICAL' | 'CARD_STRIPE' | 'QR_MERCADO_PAGO';
+export type PaymentMethodType = 'CASH' | 'TRANSFER' | 'CARD_PHYSICAL' | 'QR_MERCADO_PAGO';
 
 /**
  * Estados de pago
@@ -48,41 +48,11 @@ export type PaymentMethodNumberType = typeof PaymentMethodNumber[keyof typeof Pa
 // ============ REQUESTS DE PAGO ============
 
 /**
- * Request para pagar con efectivo
- */
-export interface PayOrderWithCashRequest {
-  orderId: string; // UUID de la orden
-}
-
-/**
- * Request para pagar con transferencia
- */
-export interface PayOrderWithTransferRequest {
-  orderId: string; // UUID de la orden
-  transferNumber?: string; // Número de referencia (máx 100 chars)
-}
-
-/**
- * Request para pagar con tarjeta física (POS)
- */
-export interface PayOrderWithCardPhysicalRequest {
-  orderId: string; // UUID de la orden
-}
-
-/**
- * Request para pagar con Stripe (Online)
- */
-export interface PayOrderWithCardStripeRequest {
-  orderId: string; // UUID de la orden
-  connectionId?: string | null; // ID de conexión WebSocket para notificaciones
-}
-
-/**
  * Parte de un pago dividido
  */
 export interface SplitPaymentPart {
   amount: number; // Monto (positivo, máx 2 decimales)
-  paymentMethod: 'CASH' | 'TRANSFER' | 'CARD_PHYSICAL'; // Solo métodos sin Stripe
+  paymentMethod: 'CASH' | 'TRANSFER' | 'CARD_PHYSICAL';
 }
 
 /**
@@ -123,14 +93,6 @@ export interface QrMpPaymentStatusResponse {
 }
 
 /**
- * Request para confirmar pago de Stripe
- */
-export interface ConfirmStripePaymentRequest {
-  paymentIntentId: string; // ID del PaymentIntent de Stripe
-  status: 'succeeded' | 'failed'; // Estado del pago
-}
-
-/**
  * Filtros para listar pagos
  */
 export interface ListPaymentsRequest {
@@ -160,13 +122,6 @@ export interface PaymentResponse {
   metadata: Record<string, unknown> | null;
   createdAt: string; // ISO 8601
   updatedAt: string; // ISO 8601
-}
-
-/**
- * Respuesta de pago con Stripe (incluye clientSecret)
- */
-export interface StripePaymentResponse extends PaymentResponse {
-  clientSecret: string; // Para completar pago en frontend con Stripe.js
 }
 
 /**
@@ -210,15 +165,6 @@ export interface CreateRefundRequest {
   paymentId: string; // UUID del pago a reembolsar
   amount: number; // Monto (positivo, máx 2 decimales)
   reason?: string | null; // Razón del reembolso (máx 500 chars)
-}
-
-/**
- * Request para procesar reembolso de Stripe
- */
-export interface ProcessStripeRefundRequest {
-  refundId: string; // UUID del reembolso
-  stripeRefundId: string; // ID del refund en Stripe
-  status: 'succeeded' | 'failed';
 }
 
 /**
@@ -283,7 +229,7 @@ export interface PaymentFormErrors {
  */
 export const PosPaymentMethodToBackend: Record<string, PaymentMethodType> = {
   CASH: 'CASH',
-  CARD: 'CARD_PHYSICAL', // Por defecto tarjeta física, puede cambiar a CARD_STRIPE
+  CARD: 'CARD_PHYSICAL',
   TRANSFER: 'TRANSFER',
   QR_MP: 'QR_MERCADO_PAGO',
 };
@@ -305,6 +251,5 @@ export const PaymentMethodStringToNumber: Record<string, number> = {
   CASH: 1,
   TRANSFER: 2,
   CARD_PHYSICAL: 3,
-  CARD_STRIPE: 3, // Ambos tipos de tarjeta usan el mismo número
   QR_MERCADO_PAGO: 4,
 };

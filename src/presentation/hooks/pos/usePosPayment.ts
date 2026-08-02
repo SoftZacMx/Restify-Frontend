@@ -4,21 +4,18 @@ import type {
   PaymentState,
   CartState,
 } from '@/domain/types';
-import type { PaymentResponse, SplitPaymentResponse } from '@/domain/types/payment.types';
-import { orderService, tableService } from '@/application/services';
-import { paymentService } from '@/application/services/payment.service';
+import { orderService } from '@/application/services';
 
 interface UsePosPaymentOptions {
   cartState: CartState;
   paymentTotal: number;
-  selectedTableId: string | null;
 }
 
 /**
- * Hook para gestionar métodos de pago, montos, validación
- * y procesamiento de pagos contra el backend.
+ * Hook para gestionar métodos de pago, montos y validación del pago en el POS.
+ * El cobro contra el backend lo hace la página vía orderService.payOrder.
  */
-export const usePosPayment = ({ cartState, paymentTotal, selectedTableId }: UsePosPaymentOptions) => {
+export const usePosPayment = ({ cartState, paymentTotal }: UsePosPaymentOptions) => {
   // Montos por método
   const [cashAmount, setCashAmount] = useState<number>(0);
   const [cardAmount, setCardAmount] = useState<number>(0);
@@ -28,11 +25,6 @@ export const usePosPayment = ({ cartState, paymentTotal, selectedTableId }: UseP
   const [selectedMethod1, setSelectedMethod1] = useState<PosPaymentMethod | null>(null);
   const [selectedMethod2, setSelectedMethod2] = useState<PosPaymentMethod | null>(null);
   const [showSecondPaymentMethod, setShowSecondPaymentMethodState] = useState(false);
-
-  // Estado de procesamiento
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-  const [paymentError, setPaymentError] = useState<string | null>(null);
-  const [paymentResult, setPaymentResult] = useState<PaymentResponse | SplitPaymentResponse | null>(null);
 
   // Estado de pago calculado
   const paymentState: PaymentState = useMemo(() => {
@@ -130,96 +122,6 @@ export const usePosPayment = ({ cartState, paymentTotal, selectedTableId }: UseP
     }
   }, []);
 
-  /**
-   * Procesa el pago de una orden contra el backend
-   */
-  const processPaymentInBackend = useCallback(
-    async (
-      orderId: string,
-      options?: {
-        transferNumber?: string;
-        useStripe?: boolean;
-        connectionId?: string;
-      }
-    ): Promise<PaymentResponse | SplitPaymentResponse | null> => {
-      if (!selectedMethod1) {
-        setPaymentError('Debe seleccionar un método de pago');
-        return null;
-      }
-
-      const paymentValidation = orderService.validatePayment(paymentState);
-      if (!paymentValidation.isValid) {
-        const errorMessages = Object.values(paymentValidation.errors).filter(Boolean).join('. ');
-        setPaymentError(errorMessages);
-        return null;
-      }
-
-      setIsProcessingPayment(true);
-      setPaymentError(null);
-
-      try {
-        const amount1 = orderService.getPaymentAmount(selectedMethod1, cashAmount, cardAmount, transferAmount);
-        const amount2 = selectedMethod2
-          ? orderService.getPaymentAmount(selectedMethod2, cashAmount, cardAmount, transferAmount)
-          : 0;
-
-        const result = await paymentService.processPayment(
-          orderId,
-          selectedMethod1,
-          amount1,
-          selectedMethod2,
-          amount2,
-          cartState.total,
-          options
-        );
-
-        if (result.success && result.data) {
-          setPaymentResult(result.data);
-
-          if (selectedTableId) {
-            try {
-              await tableService.updateTable(selectedTableId, { availabilityStatus: true });
-            } catch {
-              // Ubicación: no se pudo actualizar estado
-            }
-          }
-
-          return result.data;
-        } else {
-          throw new Error('No se recibió respuesta del pago');
-        }
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'No se pudo procesar el pago';
-        setPaymentError(errorMessage);
-        return null;
-      } finally {
-        setIsProcessingPayment(false);
-      }
-    },
-    [selectedMethod1, selectedMethod2, cashAmount, cardAmount, transferAmount, cartState.total, paymentState, selectedTableId]
-  );
-
-  /**
-   * Pagar una orden existente
-   */
-  const payExistingOrder = useCallback(
-    async (
-      orderId: string,
-      paymentOptions?: {
-        transferNumber?: string;
-        useStripe?: boolean;
-        connectionId?: string;
-      }
-    ): Promise<PaymentResponse | SplitPaymentResponse | null> => {
-      return await processPaymentInBackend(orderId, paymentOptions);
-    },
-    [processPaymentInBackend]
-  );
-
-  const clearPaymentError = useCallback(() => {
-    setPaymentError(null);
-  }, []);
-
   const resetPayment = useCallback(() => {
     setCashAmount(0);
     setCardAmount(0);
@@ -227,9 +129,6 @@ export const usePosPayment = ({ cartState, paymentTotal, selectedTableId }: UseP
     setSelectedMethod1(null);
     setSelectedMethod2(null);
     setShowSecondPaymentMethodState(false);
-    setIsProcessingPayment(false);
-    setPaymentError(null);
-    setPaymentResult(null);
   }, []);
 
   return {
@@ -240,17 +139,11 @@ export const usePosPayment = ({ cartState, paymentTotal, selectedTableId }: UseP
     selectedMethod2,
     showSecondPaymentMethod,
     paymentState,
-    isProcessingPayment,
-    paymentError,
-    paymentResult,
     handlePaymentAmountChange,
     handleMethod1Change,
     handleMethod2Change,
     setShowSecondPaymentMethod,
     populatePaymentFromMethod,
-    processPaymentInBackend,
-    payExistingOrder,
-    clearPaymentError,
     resetPayment,
   };
 };

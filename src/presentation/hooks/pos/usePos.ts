@@ -4,7 +4,6 @@ import type {
   Order,
   OrderResponse,
 } from '@/domain/types';
-import type { PaymentResponse, SplitPaymentResponse } from '@/domain/types/payment.types';
 import { orderService, tableService } from '@/application/services';
 import { usePosFetch } from './usePosFetch';
 import { useOrderBuilder } from './useOrderBuilder';
@@ -55,7 +54,6 @@ export const usePos = (options?: UsePosOptions) => {
   const payment = usePosPayment({
     cartState: orderBuilder.cartState,
     paymentTotal,
-    selectedTableId: orderBuilder.selectedTableId,
   });
 
   // Productos filtrados (combina productos de fetch con filtros del builder)
@@ -180,21 +178,6 @@ export const usePos = (options?: UsePosOptions) => {
     [validateOrder, orderBuilder, payment.selectedMethod1]
   );
 
-  const submitOrderWithPayment = useCallback(
-    async (
-      userId: string,
-      tip?: number,
-      note?: string,
-      paymentOptions?: { transferNumber?: string; useStripe?: boolean; connectionId?: string }
-    ): Promise<{ order: OrderResponse | null; payment: PaymentResponse | SplitPaymentResponse | null }> => {
-      const order = await createOrderInBackend(userId, tip, note);
-      if (!order) return { order: null, payment: null };
-      const paymentResult = await payment.processPaymentInBackend(order.id, paymentOptions);
-      return { order, payment: paymentResult };
-    },
-    [createOrderInBackend, payment]
-  );
-
   const submitOrderDeferred = useCallback(
     async (userId: string, tip?: number, note?: string): Promise<OrderResponse | null> => {
       return await createOrderInBackend(userId, tip, note);
@@ -259,11 +242,8 @@ export const usePos = (options?: UsePosOptions) => {
 
     // Estado de operaciones con backend
     isCreatingOrder,
-    isProcessingPayment: payment.isProcessingPayment,
     orderError,
-    paymentError: payment.paymentError,
     createdOrder,
-    paymentResult: payment.paymentResult,
 
     // Estado de orden cargada
     loadedOrder,
@@ -293,11 +273,7 @@ export const usePos = (options?: UsePosOptions) => {
 
     // Handlers de operaciones con backend
     createOrderInBackend,
-    processPaymentInBackend: payment.processPaymentInBackend,
-    submitOrderWithPayment,
     submitOrderDeferred,
-    payExistingOrder: payment.payExistingOrder,
     clearOrderError,
-    clearPaymentError: payment.clearPaymentError,
   };
 };

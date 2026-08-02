@@ -1,21 +1,14 @@
 import apiClient from '../client';
 import type {
-  PayOrderWithCashRequest,
-  PayOrderWithTransferRequest,
-  PayOrderWithCardPhysicalRequest,
-  PayOrderWithCardStripeRequest,
   PayOrderWithSplitPaymentRequest,
   PayOrderWithQrMpRequest,
-  ConfirmStripePaymentRequest,
   ListPaymentsRequest,
   PaymentResponse,
-  StripePaymentResponse,
   SplitPaymentResponse,
   PaymentSessionResponse,
   QrMpPaymentResponse,
   QrMpPaymentStatusResponse,
   CreateRefundRequest,
-  ProcessStripeRefundRequest,
   ListRefundsRequest,
   RefundResponse,
 } from '@/domain/types/payment.types';
@@ -28,65 +21,14 @@ import type { ApiResponse } from '@/domain/types';
  */
 export class PaymentRepository {
   // ============ MÉTODOS DE PAGO ============
-
-  /**
-   * Procesa pago con efectivo
-   */
-  async payWithCash(data: PayOrderWithCashRequest): Promise<ApiResponse<PaymentResponse>> {
-    try {
-      const response = await apiClient.post('/api/payments/cash', data);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  /**
-   * Procesa pago con transferencia
-   */
-  async payWithTransfer(data: PayOrderWithTransferRequest): Promise<ApiResponse<PaymentResponse>> {
-    try {
-      const response = await apiClient.post('/api/payments/transfer', data);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  /**
-   * Procesa pago con tarjeta física (POS terminal)
-   */
-  async payWithCardPhysical(
-    data: PayOrderWithCardPhysicalRequest
-  ): Promise<ApiResponse<PaymentResponse>> {
-    try {
-      const response = await apiClient.post('/api/payments/card-physical', data);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  /**
-   * Procesa pago con Stripe (tarjeta online)
-   * Retorna clientSecret para completar el pago en frontend con Stripe.js
-   */
-  async payWithCardStripe(
-    data: PayOrderWithCardStripeRequest
-  ): Promise<ApiResponse<StripePaymentResponse>> {
-    try {
-      const response = await apiClient.post('/api/payments/card-stripe', data);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
+  // El pago simple (efectivo/transferencia/tarjeta) va por el endpoint unificado
+  // POST /api/orders/:id/pay (ver order.repository.payOrder).
 
   /**
    * Procesa pago dividido (split payment)
    * Mismo endpoint que pago único: POST /api/orders/:order_id/pay
    * Body: solo { firstPayment, secondPayment }; order_id va en la URL.
-   * Solo permite CASH, TRANSFER y CARD_PHYSICAL (no Stripe).
+   * Solo permite CASH, TRANSFER y CARD_PHYSICAL.
    */
   async payWithSplit(
     data: PayOrderWithSplitPaymentRequest
@@ -125,20 +67,6 @@ export class PaymentRepository {
     }
   }
 
-  /**
-   * Confirma pago de Stripe después de completar en frontend
-   */
-  async confirmStripePayment(
-    data: ConfirmStripePaymentRequest
-  ): Promise<ApiResponse<PaymentResponse>> {
-    try {
-      const response = await apiClient.post('/api/payments/stripe/confirm', data);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   // ============ CONSULTAS DE PAGO ============
 
   /**
@@ -166,7 +94,7 @@ export class PaymentRepository {
   }
 
   /**
-   * Obtiene la sesión de pago (para Stripe)
+   * Obtiene la sesión de pago (initPoint de MP para pagos QR)
    */
   async getPaymentSession(paymentId: string): Promise<ApiResponse<PaymentSessionResponse>> {
     try {
@@ -215,31 +143,6 @@ export class PaymentRepository {
     }
   }
 
-  /**
-   * Crea un reembolso para pago con Stripe
-   */
-  async createStripeRefund(data: CreateRefundRequest): Promise<ApiResponse<RefundResponse>> {
-    try {
-      const response = await apiClient.post('/api/refunds/stripe', data);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  /**
-   * Procesa reembolso de Stripe después de completar en Stripe
-   */
-  async processStripeRefund(
-    data: ProcessStripeRefundRequest
-  ): Promise<ApiResponse<RefundResponse>> {
-    try {
-      const response = await apiClient.post('/api/refunds/stripe/process', data);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
 }
 
 // Exportar instancia singleton
