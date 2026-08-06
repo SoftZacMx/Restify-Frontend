@@ -102,7 +102,7 @@ export default function LoginPage() {
                 className={errors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}
               />
               {errors.email && (
-                <span className="text-red-500 text-sm">{errors.email.message}</span>
+                <span className="text-destructive text-sm">{errors.email.message}</span>
               )}
             </div>
 
@@ -129,7 +129,7 @@ export default function LoginPage() {
                 </button>
               </div>
               {errors.password && (
-                <span className="text-red-500 text-sm">{errors.password.message}</span>
+                <span className="text-destructive text-sm">{errors.password.message}</span>
               )}
             </div>
 

@@ -42,7 +42,8 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
   };
 
   return (
-    <div className="flex h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-900 dark:text-slate-100">
+    // Fondo de página desde el token --background: las cards blancas se despegan del fondo.
+    <div className="flex h-screen bg-background dark:bg-slate-900 font-sans text-slate-900 dark:text-slate-100">
       {/* Sidebar */}
       <Sidebar />
 

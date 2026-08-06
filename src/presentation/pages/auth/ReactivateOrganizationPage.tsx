@@ -122,7 +122,7 @@ export default function ReactivateOrganizationPage() {
                 className={form.formState.errors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}
               />
               {form.formState.errors.email && (
-                <span className="text-red-500 text-sm">{form.formState.errors.email.message}</span>
+                <span className="text-destructive text-sm">{form.formState.errors.email.message}</span>
               )}
             </div>
 

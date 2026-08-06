@@ -233,7 +233,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
               {title.length}/200 caracteres
             </p>
             {errors.title && (
-              <p className="text-sm text-red-500">{errors.title}</p>
+              <p className="text-sm text-destructive">{errors.title}</p>
             )}
           </div>
           <div className="space-y-2">
@@ -280,7 +280,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
               </SelectContent>
             </Select>
             {errors.type && (
-              <p className="text-sm text-red-500">{errors.type}</p>
+              <p className="text-sm text-destructive">{errors.type}</p>
             )}
           </div>
           <div className="space-y-2 md:col-span-2 md:max-w-xs">
@@ -298,7 +298,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
               <Calendar className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 pointer-events-none" />
             </div>
             {errors.date && (
-              <p className="text-sm text-red-500">{errors.date}</p>
+              <p className="text-sm text-destructive">{errors.date}</p>
             )}
           </div>
           <div className="space-y-2 md:col-span-2">
@@ -340,7 +340,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
               <CreditCard className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 pointer-events-none" />
             </div>
             {errors.paymentMethod && (
-              <p className="text-sm text-red-500">{errors.paymentMethod}</p>
+              <p className="text-sm text-destructive">{errors.paymentMethod}</p>
             )}
           </div>
         </div>
@@ -362,7 +362,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
             }}
           />
           {errors.merchandiseItemsRequired && (
-            <p className="text-sm text-red-500">{errors.merchandiseItemsRequired}</p>
+            <p className="text-sm text-destructive">{errors.merchandiseItemsRequired}</p>
           )}
         </>
       )}
@@ -410,7 +410,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
             }}
           />
           {errors.salaryEmployee && (
-            <p className="text-sm text-red-500">{errors.salaryEmployee}</p>
+            <p className="text-sm text-destructive">{errors.salaryEmployee}</p>
           )}
         </>
       )}
@@ -455,13 +455,13 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
           </div>
         </div>
         {errors.subtotal && (
-          <p className="mt-2 text-sm text-red-500">{errors.subtotal}</p>
+          <p className="mt-2 text-sm text-destructive">{errors.subtotal}</p>
         )}
         {errors.iva && (
-          <p className="mt-1 text-sm text-red-500">{errors.iva}</p>
+          <p className="mt-1 text-sm text-destructive">{errors.iva}</p>
         )}
         {errors.total && (
-          <p className="mt-1 text-sm text-red-500">{errors.total}</p>
+          <p className="mt-1 text-sm text-destructive">{errors.total}</p>
         )}
       </section>
 

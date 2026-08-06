@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { LogOut, UtensilsCrossed, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Store, Moon, Sun } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { branchService } from '@/application/services';
 import { useAuth } from '@/presentation/hooks/useAuth';
 import { useActiveBranch } from '@/presentation/hooks/useActiveBranch';
 import { useAuthStore } from '@/presentation/store/auth.store';
@@ -31,10 +33,19 @@ export const Sidebar = () => {
   const isDark = theme === 'dark';
   const themeLabel = isDark ? 'Modo Claro' : 'Modo Oscuro';
 
-  const { selectedBranch, hasMultipleBranches } = useActiveBranch();
+  const { selectedBranch, selectedBranchId, hasMultipleBranches } = useActiveBranch();
   const clearSelectedBranch = useAuthStore((s) => s.clearSelectedBranch);
   const navigate = useNavigate();
   const businessName = selectedBranch?.name ?? 'Restify';
+  const [logoFailed, setLogoFailed] = useState(false);
+
+  const { data: branchDetail } = useQuery({
+    queryKey: ['branches', selectedBranchId, 'detail'],
+    queryFn: () => branchService.getBranch(selectedBranchId as string),
+    enabled: !!selectedBranchId,
+  });
+
+  const logoUrl = !logoFailed ? branchDetail?.logoUrl ?? null : null;
 
   const handleChangeBranch = () => {
     clearSelectedBranch();
@@ -71,10 +82,10 @@ export const Sidebar = () => {
   React.useEffect(() => {
     const currentPath = window.location.pathname;
     const itemsToExpand = new Set<string>();
-    
+
     mainNavItems.forEach((item) => {
       if (item.subItems) {
-        const hasActiveChild = item.subItems.some((subItem) => 
+        const hasActiveChild = item.subItems.some((subItem) =>
           currentPath === subItem.path || currentPath.startsWith(subItem.path + '/')
         );
         if (hasActiveChild) {
@@ -82,7 +93,7 @@ export const Sidebar = () => {
         }
       }
     });
-    
+
     // Solo actualizar si hay cambios y no está ya expandido
     if (itemsToExpand.size > 0) {
       setExpandedItems((prev) => {
@@ -121,21 +132,58 @@ export const Sidebar = () => {
           isMobile && isMobileOpen && 'translate-x-0'
         )}
       >
-        {/* Logo y botón de toggle */}
-        <div className={cn('p-6 flex items-center gap-2', isCollapsed && 'justify-center px-2')}>
-          <UtensilsCrossed className="h-6 w-6 text-blue-600 dark:text-blue-400 flex-shrink-0" />
-          {!isCollapsed && (
-            <span className="text-xl font-bold text-slate-900 dark:text-slate-100 whitespace-nowrap truncate" title={businessName}>
-              {businessName}
-            </span>
+        {/* Marca de la sucursal (logo, nombre y ciudad) + botón de toggle */}
+        <div
+          className={cn(
+            'relative flex flex-col items-center gap-3',
+            isCollapsed ? 'px-2 pt-4 pb-3' : 'px-4 pt-6 pb-5'
           )}
-          {/* Botón de toggle para desktop */}
+        >
+          {logoUrl ? (
+            <img
+              src={logoUrl}
+              alt={businessName}
+              onError={() => setLogoFailed(true)}
+              className={cn(
+                'shrink-0 rounded-full object-cover ring-1 ring-border',
+                isCollapsed ? 'h-10 w-10' : 'h-20 w-20'
+              )}
+            />
+          ) : (
+            <div
+              className={cn(
+                'flex shrink-0 items-center justify-center rounded-full bg-primary/10 dark:bg-primary/20',
+                isCollapsed ? 'h-10 w-10' : 'h-16 w-16'
+              )}
+            >
+              <UtensilsCrossed
+                className={cn('text-primary', isCollapsed ? 'h-5 w-5' : 'h-7 w-7')}
+              />
+            </div>
+          )}
+
+          {!isCollapsed && (
+            <div className="w-full text-center">
+              <p
+                className="text-base font-semibold leading-snug text-slate-900 dark:text-slate-100 line-clamp-2"
+                title={businessName}
+              >
+                {businessName}
+              </p>
+              {branchDetail?.city && (
+                <p className="mt-0.5 truncate text-xs text-slate-500 dark:text-slate-400">
+                  {branchDetail.city}
+                </p>
+              )}
+            </div>
+          )}
+
           {!isMobile && (
             <Button
               onClick={toggleSidebar}
               variant="ghost"
               size="icon"
-              className="ml-auto h-8 w-8"
+              className={cn('h-8 w-8', !isCollapsed && 'absolute right-2 top-2')}
               aria-label={isCollapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}
             >
               {isCollapsed ? (
@@ -163,12 +211,12 @@ export const Sidebar = () => {
         <nav className={cn('flex-1 space-y-1 mt-4 overflow-y-auto', isCollapsed ? 'px-2' : 'px-4')}>
           {mainNavItems.map((item: NavItem) => {
             const IconComponent = item.icon;
-            
+
             // Si tiene submenú, renderizar como item desplegable
             if (item.subItems && item.subItems.length > 0) {
               const isExpanded = expandedItems.has(item.label);
               const hasActiveChild = item.subItems.some((subItem) => isActive(subItem.path));
-              
+
               return (
                 <NavItemWithSubmenu
                   key={item.label}
@@ -184,7 +232,7 @@ export const Sidebar = () => {
                 />
               );
             }
-            
+
             // Item normal sin submenú
             return (
               <NavItemComponent

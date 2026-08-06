@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Bell,
-  Search,
   Plus,
   DollarSign,
   MapPin,
@@ -14,7 +13,6 @@ import {
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/presentation/components/ui/button';
-import { Input } from '@/presentation/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/presentation/components/ui/avatar';
 import { Badge } from '@/presentation/components/ui/badge';
@@ -128,14 +126,7 @@ const DashboardPage = () => {
   return (
     <MainLayout>
       {/* Header */}
-      <header className="flex justify-between items-center mb-8">
-        <div className="relative w-96">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <Input
-            placeholder="Buscar órdenes, clientes, productos..."
-            className="pl-10 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 focus-visible:ring-blue-600"
-          />
-        </div>
+      <header className="flex justify-end items-center mb-8">
         <div className="flex items-center gap-4">
           <Button
             variant="ghost"

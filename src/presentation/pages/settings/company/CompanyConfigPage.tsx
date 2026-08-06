@@ -11,11 +11,8 @@ import { useActiveBranch } from '@/presentation/hooks/useActiveBranch';
 import type { UpdateBranchRequest } from '@/domain/types';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
-import { mergeTicketPrintConfig } from '@/shared/utils/ticket-print-config';
-import type { ResolvedTicketPrintConfig } from '@/shared/utils/ticket-print-config';
-import { TicketThermalConfigCard } from './TicketThermalConfigCard';
 
-/** Campos editables de la sucursal en esta pantalla + el ticket resuelto. */
+/** Campos editables de la sucursal en esta pantalla (el ticket vive en /settings/tickets). */
 interface BranchConfigFormState {
   name: string;
   state: string;
@@ -27,7 +24,6 @@ interface BranchConfigFormState {
   logoUrl: string | null;
   startOperations: string | null;
   endOperations: string | null;
-  ticketConfig: ResolvedTicketPrintConfig;
 }
 
 const INITIAL_FORM: BranchConfigFormState = {
@@ -41,7 +37,6 @@ const INITIAL_FORM: BranchConfigFormState = {
   logoUrl: null,
   startOperations: null,
   endOperations: null,
-  ticketConfig: mergeTicketPrintConfig(undefined),
 };
 
 /** Normaliza "HH:mm:ss" o "H:m" a "HH:mm" para input type="time" */
@@ -81,7 +76,6 @@ function branchToForm(branch: {
   logoUrl: string | null;
   startOperations: string | null;
   endOperations: string | null;
-  ticketConfig: unknown | null;
 }): BranchConfigFormState {
   return {
     name: branch.name,
@@ -94,19 +88,19 @@ function branchToForm(branch: {
     logoUrl: branch.logoUrl ?? null,
     startOperations: branch.startOperations ?? null,
     endOperations: branch.endOperations ?? null,
-    ticketConfig: mergeTicketPrintConfig(branch.ticketConfig),
   };
 }
 
 /**
- * Página de configuración de la sucursal activa (datos del negocio + ticket).
+ * Página de datos de la sucursal activa (identidad, dirección, contacto y horario).
  * Reemplaza la antigua configuración de "compañía": en multi-tenancy cada sucursal
- * tiene su propia identidad, dirección y configuración de ticket.
+ * tiene su propia identidad. La configuración de ticket vive en /settings/tickets.
  */
 const CompanyConfigPage: React.FC = () => {
   const queryClient = useQueryClient();
   const { selectedBranchId } = useActiveBranch();
   const [form, setForm] = useState<BranchConfigFormState>({ ...INITIAL_FORM });
+  const [logoFile, setLogoFile] = useState<File | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
   const { data: branch, isLoading } = useQuery({
@@ -128,6 +122,10 @@ const CompanyConfigPage: React.FC = () => {
     if (!selectedBranchId) return;
     setIsSaving(true);
     try {
+      const logoUrl = logoFile
+        ? await uploadService.uploadImage(logoFile, 'branch_logo')
+        : form.logoUrl;
+
       const payload: UpdateBranchRequest = {
         name: form.name,
         state: form.state,
@@ -136,13 +134,13 @@ const CompanyConfigPage: React.FC = () => {
         exteriorNumber: form.exteriorNumber,
         phone: form.phone,
         rfc: form.rfc,
-        logoUrl: form.logoUrl,
+        logoUrl,
         startOperations: form.startOperations,
         endOperations: form.endOperations,
-        ticketConfig: form.ticketConfig as unknown as Record<string, unknown>,
       };
       const updated = await branchService.updateBranch(selectedBranchId, payload);
       queryClient.setQueryData(['branches', selectedBranchId, 'detail'], updated);
+      setLogoFile(null);
       showSuccessToast('Cambios guardados', 'La información de la sucursal se actualizó correctamente.');
     } catch (error) {
       if (error instanceof AppError) {
@@ -157,6 +155,7 @@ const CompanyConfigPage: React.FC = () => {
 
   const handleCancel = useCallback(() => {
     setForm(branch ? branchToForm(branch) : { ...INITIAL_FORM });
+    setLogoFile(null);
   }, [branch]);
 
   if (isLoading) {
@@ -170,15 +169,30 @@ const CompanyConfigPage: React.FC = () => {
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
       <Card className={configCardClass}>
-        <CardHeader className="space-y-1 pb-2">
-          <CardTitle className="text-lg text-slate-900 dark:text-slate-100">Datos del negocio</CardTitle>
+        <CardHeader className="space-y-1.5">
+          <CardTitle className="text-lg text-slate-900 dark:text-slate-100">Identidad</CardTitle>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Identidad y ubicación. Aparecen en tickets y documentos donde aplique.
+            Nombre y logo del negocio. Aparecen en tickets y documentos donde aplique.
           </p>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-            <div className="md:col-span-1">
+        <CardContent className="pt-2">
+          <div className="flex flex-col sm:flex-row sm:items-start gap-6 sm:gap-8">
+            <div className="shrink-0">
+              <ConfigFieldLabel>Logo</ConfigFieldLabel>
+              <ImageUpload
+                value={form.logoUrl}
+                file={logoFile}
+                onFileChange={setLogoFile}
+                onChange={(url) => setForm((prev) => ({ ...prev, logoUrl: url }))}
+                disabled={isSaving}
+                size="lg"
+                emptyAsBox
+              />
+              <p className="text-xs text-slate-500 dark:text-slate-500 mt-2 max-w-40">
+                PNG, JPG o WebP. Fondo transparente recomendado.
+              </p>
+            </div>
+            <div className="flex-1 min-w-0 max-w-md">
               <label htmlFor="co-name" className="contents">
                 <ConfigFieldLabel>Nombre del negocio</ConfigFieldLabel>
               </label>
@@ -189,19 +203,25 @@ const CompanyConfigPage: React.FC = () => {
                 placeholder="Nombre comercial"
                 required
               />
+              <p className="text-xs text-slate-500 dark:text-slate-500 mt-2">
+                Nombre comercial con el que se identifica esta sucursal.
+              </p>
             </div>
-            <div className="md:col-span-2">
-              <label htmlFor="co-logo-url" className="contents">
-                <ConfigFieldLabel>Logo del negocio</ConfigFieldLabel>
-              </label>
-              <ImageUpload
-                value={form.logoUrl}
-                onUpload={(file) => uploadService.uploadImage(file, 'branch_logo')}
-                onChange={(url) => setForm((prev) => ({ ...prev, logoUrl: url }))}
-                disabled={isSaving}
-              />
-            </div>
+          </div>
+        </CardContent>
+      </Card>
 
+      <Card className={configCardClass}>
+        <CardHeader className="space-y-1.5">
+          <CardTitle className="text-lg text-slate-900 dark:text-slate-100">
+            Dirección y contacto
+          </CardTitle>
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            Ubicación física, teléfono y datos fiscales de la sucursal.
+          </p>
+        </CardHeader>
+        <CardContent className="pt-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-5 md:gap-x-5">
             <div>
               <label htmlFor="co-state" className="contents">
                 <ConfigFieldLabel>Estado</ConfigFieldLabel>
@@ -279,61 +299,59 @@ const CompanyConfigPage: React.FC = () => {
                 required
               />
             </div>
-
-            <div className="md:col-span-3">
-              <div className="flex items-center gap-2 mb-1.5">
-                <Clock className="h-3.5 w-3.5 text-blue-600 dark:text-sky-400 shrink-0" aria-hidden />
-                <ConfigFieldLabel>Horario de operación</ConfigFieldLabel>
-              </div>
-              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                <Input
-                  type="time"
-                  className="w-[min(100%,160px)]"
-                  value={normalizeTimeForInput(form.startOperations)}
-                  onChange={(e) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      startOperations: e.target.value ? e.target.value : null,
-                    }))
-                  }
-                  aria-label="Hora de apertura"
-                />
-                <span className="text-sm text-slate-500 dark:text-slate-400">al</span>
-                <Input
-                  type="time"
-                  className="w-[min(100%,160px)]"
-                  value={normalizeTimeForInput(form.endOperations)}
-                  onChange={(e) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      endOperations: e.target.value ? e.target.value : null,
-                    }))
-                  }
-                  aria-label="Hora de cierre"
-                />
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-500 mt-2">
-                Rango para permitir creación de órdenes según la lógica del negocio.
-              </p>
-            </div>
           </div>
         </CardContent>
       </Card>
 
-      <TicketThermalConfigCard
-        value={form.ticketConfig}
-        onChange={(ticketConfig) => setForm((prev) => ({ ...prev, ticketConfig }))}
-        disabled={isSaving}
-      />
+      <Card className={configCardClass}>
+        <CardHeader className="space-y-1.5">
+          <CardTitle className="flex items-center gap-2 text-lg text-slate-900 dark:text-slate-100">
+            <Clock className="h-4 w-4 text-blue-600 dark:text-sky-400 shrink-0" aria-hidden />
+            Horario de operación
+          </CardTitle>
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            Rango para permitir creación de órdenes según la lógica del negocio.
+          </p>
+        </CardHeader>
+        <CardContent className="pt-2">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <Input
+              type="time"
+              className="w-[min(100%,160px)]"
+              value={normalizeTimeForInput(form.startOperations)}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  startOperations: e.target.value ? e.target.value : null,
+                }))
+              }
+              aria-label="Hora de apertura"
+            />
+            <span className="text-sm text-slate-500 dark:text-slate-400">al</span>
+            <Input
+              type="time"
+              className="w-[min(100%,160px)]"
+              value={normalizeTimeForInput(form.endOperations)}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  endOperations: e.target.value ? e.target.value : null,
+                }))
+              }
+              aria-label="Hora de cierre"
+            />
+          </div>
+        </CardContent>
+      </Card>
 
-      <div className="flex flex-wrap gap-3">
-        <Button type="submit" disabled={isSaving} className="gap-2">
-          <Save className="h-4 w-4" />
-          Guardar cambios
-        </Button>
+      <div className="flex flex-wrap justify-end gap-3 border-t border-slate-200 dark:border-slate-700/80 pt-5">
         <Button type="button" variant="outline" onClick={handleCancel} className="gap-2">
           <X className="h-4 w-4" />
           Cancelar
+        </Button>
+        <Button type="submit" disabled={isSaving} className="gap-2">
+          <Save className="h-4 w-4" />
+          {isSaving ? 'Guardando...' : 'Guardar cambios'}
         </Button>
       </div>
     </form>

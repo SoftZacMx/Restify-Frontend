@@ -53,7 +53,7 @@ const SelectBranchPage = lazy(() => import('@/presentation/pages/branch-selectio
 const PublicMenuPage = lazy(() => import('@/presentation/pages/public-menu/PublicMenuPage'));
 const PublicCheckoutPage = lazy(() => import('@/presentation/pages/public-checkout/PublicCheckoutPage'));
 const PublicOrderTrackingPage = lazy(() => import('@/presentation/pages/public-tracking/PublicOrderTrackingPage'));
-
+const SettingsTicketsPage = lazy(() => import('@/presentation/pages/settings/tickets/SettingsTicketsPage'));
 // Protected routes config (PrivateRoute + SubscriptionGuard)
 const protectedRoutes: { path: string; element: React.ReactNode }[] = [
   { path: '/dashboard', element: <DashboardPage /> },
@@ -194,6 +194,7 @@ function App() {
                         <Route index element={<Navigate to="/settings/company" replace />} />
                         <Route path="company" element={<CompanyConfigPage />} />
                         <Route path="payments" element={<PaymentConfigPage />} />
+                        <Route path="tickets" element={<SettingsTicketsPage />} />
                         <Route path="general" element={<SettingsGeneralPage />} />
                       </Route>
 

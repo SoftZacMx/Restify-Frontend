@@ -118,12 +118,8 @@ export const MovementsTable: React.FC<MovementsTableProps> = ({
                     <TableCell className="px-6 py-4 whitespace-nowrap">
                       <Badge
                         className={cn(
-                          'inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0 transition-colors',
-                          // Color base del tipo (verde/azul/naranja/etc) + hover con el
-                          // mismo color en variante más clara. tailwind-merge resuelve el
-                          // conflicto con el hover gris por defecto del Badge variant="default".
-                          typeOption.badgeClassName,
-                          typeOption.hoverClassName
+                          'inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0',
+                          typeOption.badgeClassName
                         )}
                       >
                         <Icon className="h-3 w-3" />

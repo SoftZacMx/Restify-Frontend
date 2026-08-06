@@ -191,7 +191,7 @@ export default function SignupPage() {
                     }
                   />
                   {ownerForm.formState.errors.name && (
-                    <span className="text-red-500 text-xs">
+                    <span className="text-destructive text-xs">
                       {ownerForm.formState.errors.name.message}
                     </span>
                   )}
@@ -212,7 +212,7 @@ export default function SignupPage() {
                     }
                   />
                   {ownerForm.formState.errors.lastName && (
-                    <span className="text-red-500 text-xs">
+                    <span className="text-destructive text-xs">
                       {ownerForm.formState.errors.lastName.message}
                     </span>
                   )}
@@ -234,7 +234,7 @@ export default function SignupPage() {
                   />
                 </div>
                 {ownerForm.formState.errors.email && (
-                  <span className="text-red-500 text-xs">
+                  <span className="text-destructive text-xs">
                     {ownerForm.formState.errors.email.message}
                   </span>
                 )}
@@ -255,7 +255,7 @@ export default function SignupPage() {
                   />
                 </div>
                 {ownerForm.formState.errors.organizationName && (
-                  <span className="text-red-500 text-xs">
+                  <span className="text-destructive text-xs">
                     {ownerForm.formState.errors.organizationName.message}
                   </span>
                 )}
@@ -330,7 +330,7 @@ export default function SignupPage() {
                 requireSpecialChar={false}
               />
               {watchConfirmPassword.length > 0 && !doPasswordsMatch && (
-                <span className="text-red-500 text-xs">
+                <span className="text-destructive text-xs">
                   Las contraseñas no coinciden
                 </span>
               )}
@@ -398,7 +398,7 @@ export default function SignupPage() {
                   />
                 </div>
                 {branchForm.formState.errors.name && (
-                  <span className="text-red-500 text-xs">
+                  <span className="text-destructive text-xs">
                     {branchForm.formState.errors.name.message}
                   </span>
                 )}
@@ -420,7 +420,7 @@ export default function SignupPage() {
                     }
                   />
                   {branchForm.formState.errors.state && (
-                    <span className="text-red-500 text-xs">
+                    <span className="text-destructive text-xs">
                       {branchForm.formState.errors.state.message}
                     </span>
                   )}
@@ -440,7 +440,7 @@ export default function SignupPage() {
                     }
                   />
                   {branchForm.formState.errors.city && (
-                    <span className="text-red-500 text-xs">
+                    <span className="text-destructive text-xs">
                       {branchForm.formState.errors.city.message}
                     </span>
                   )}
@@ -463,7 +463,7 @@ export default function SignupPage() {
                     }
                   />
                   {branchForm.formState.errors.street && (
-                    <span className="text-red-500 text-xs">
+                    <span className="text-destructive text-xs">
                       {branchForm.formState.errors.street.message}
                     </span>
                   )}
@@ -483,7 +483,7 @@ export default function SignupPage() {
                     }
                   />
                   {branchForm.formState.errors.exteriorNumber && (
-                    <span className="text-red-500 text-xs">
+                    <span className="text-destructive text-xs">
                       {branchForm.formState.errors.exteriorNumber.message}
                     </span>
                   )}
@@ -508,7 +508,7 @@ export default function SignupPage() {
                     />
                   </div>
                   {branchForm.formState.errors.phone && (
-                    <span className="text-red-500 text-xs">
+                    <span className="text-destructive text-xs">
                       {branchForm.formState.errors.phone.message}
                     </span>
                   )}
@@ -524,7 +524,7 @@ export default function SignupPage() {
                     placeholder="XAXX010101000"
                   />
                   {branchForm.formState.errors.rfc && (
-                    <span className="text-red-500 text-xs">
+                    <span className="text-destructive text-xs">
                       {branchForm.formState.errors.rfc.message}
                     </span>
                   )}

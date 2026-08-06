@@ -165,7 +165,7 @@ export const UserForm: React.FC<UserFormProps> = ({
               {...register('name')}
               className={cn('h-11 rounded-lg', errors.name && 'border-red-500 focus-visible:ring-red-500')} />
             <p className="text-xs text-slate-500 dark:text-slate-400">{name.length}/{INPUT_LENGTH.simple_input}</p>
-            {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
+            {errors.name && <p className="text-destructive text-xs">{errors.name.message}</p>}
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="last_name" className="text-sm font-medium text-slate-800 dark:text-slate-200">
@@ -175,7 +175,7 @@ export const UserForm: React.FC<UserFormProps> = ({
               {...register('last_name')}
               className={cn('h-11 rounded-lg', errors.last_name && 'border-red-500 focus-visible:ring-red-500')} />
             <p className="text-xs text-slate-500 dark:text-slate-400">{lastName.length}/{INPUT_LENGTH.simple_input}</p>
-            {errors.last_name && <p className="text-red-500 text-xs">{errors.last_name.message}</p>}
+            {errors.last_name && <p className="text-destructive text-xs">{errors.last_name.message}</p>}
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="second_last_name" className="text-sm font-medium text-slate-800 dark:text-slate-200">
@@ -185,7 +185,7 @@ export const UserForm: React.FC<UserFormProps> = ({
               {...register('second_last_name')}
               className={cn('h-11 rounded-lg', errors.second_last_name && 'border-red-500 focus-visible:ring-red-500')} />
             <p className="text-xs text-slate-500 dark:text-slate-400">{(secondLastName || '').length}/{INPUT_LENGTH.simple_input}</p>
-            {errors.second_last_name && <p className="text-red-500 text-xs">{errors.second_last_name.message}</p>}
+            {errors.second_last_name && <p className="text-destructive text-xs">{errors.second_last_name.message}</p>}
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="phone" className="text-sm font-medium text-slate-800 dark:text-slate-200">
@@ -194,7 +194,7 @@ export const UserForm: React.FC<UserFormProps> = ({
             <Input id="phone" type="tel" inputMode="numeric" placeholder="Ej. 5512345678" maxLength={PHONE_DIGITS + 4}
               {...register('phone')}
               className={cn('h-11 rounded-lg', errors.phone && 'border-red-500 focus-visible:ring-red-500')} />
-            {errors.phone && <p className="text-red-500 text-xs">{errors.phone.message}</p>}
+            {errors.phone && <p className="text-destructive text-xs">{errors.phone.message}</p>}
           </div>
         </div>
       </div>
@@ -215,7 +215,7 @@ export const UserForm: React.FC<UserFormProps> = ({
             <Input id="email" type="email" placeholder="usuario@empresa.com"
               {...register('email')}
               className={cn('h-11 rounded-lg', errors.email && 'border-red-500 focus-visible:ring-red-500')} />
-            {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
+            {errors.email && <p className="text-destructive text-xs">{errors.email.message}</p>}
           </div>
           {/* La contraseña solo se define al crear. En edición, el reset se hace desde
               el menú de acciones del usuario (el empleado define su propia clave). */}
@@ -235,7 +235,7 @@ export const UserForm: React.FC<UserFormProps> = ({
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
               </div>
-              {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
+              {errors.password && <p className="text-destructive text-xs">{errors.password.message}</p>}
               {password && (
                 <div className="flex items-center gap-2 mt-1.5">
                   <div className="flex-1 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
@@ -280,7 +280,7 @@ export const UserForm: React.FC<UserFormProps> = ({
                 ))}
               </SelectContent>
             </Select>
-            {errors.rol && <p className="text-red-500 text-xs">{errors.rol.message}</p>}
+            {errors.rol && <p className="text-destructive text-xs">{errors.rol.message}</p>}
           </div>
           <div className="flex flex-col gap-2">
             <Label className="text-sm font-medium text-slate-800 dark:text-slate-200">Estado de la cuenta</Label>

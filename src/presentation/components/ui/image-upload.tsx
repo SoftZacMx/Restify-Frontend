@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Upload, X } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 
@@ -6,32 +6,58 @@ interface ImageUploadProps {
   value?: string | null;
   onChange: (url: string | null) => void;
   onUpload?: (file: File) => Promise<string>;
+  file?: File | null;
+  onFileChange?: (file: File | null) => void;
   disabled?: boolean;
   className?: string;
+  size?: 'md' | 'lg';
+  emptyAsBox?: boolean;
 }
 
 export const ImageUpload: React.FC<ImageUploadProps> = ({
   value,
   onChange,
   onUpload,
+  file,
+  onFileChange,
   disabled = false,
   className,
+  size = 'md',
+  emptyAsBox = false,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
+  const isDeferred = !!onFileChange;
+
+  useEffect(() => {
+    if (!isDeferred) return;
+    if (!file) {
+      setPreview(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(file);
+    setPreview(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [file, isDeferred]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const selected = e.target.files?.[0];
+    if (inputRef.current) inputRef.current.value = '';
+    if (!selected) return;
 
-    const objectUrl = URL.createObjectURL(file);
+    if (onFileChange) {
+      onFileChange(selected);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(selected);
     setPreview(objectUrl);
 
     if (onUpload) {
       setIsUploading(true);
       try {
-        const url = await onUpload(file);
+        const url = await onUpload(selected);
         onChange(url);
       } catch {
         setPreview(null);
@@ -40,17 +66,17 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         URL.revokeObjectURL(objectUrl);
       }
     }
-
-    if (inputRef.current) inputRef.current.value = '';
   };
 
   const handleRemove = () => {
+    onFileChange?.(null);
     setPreview(null);
     onChange(null);
     if (inputRef.current) inputRef.current.value = '';
   };
 
   const displayUrl = preview || value;
+  const boxSizeClass = size === 'lg' ? 'h-40 w-40' : 'h-24 w-24';
 
   return (
     <div className={cn('space-y-2', className)}>
@@ -65,11 +91,16 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
       {displayUrl ? (
         <div className="relative inline-block">
-          <div className="h-24 w-24 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/80 flex items-center justify-center overflow-hidden">
+          <div
+            className={cn(
+              'rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/80 flex items-center justify-center overflow-hidden',
+              boxSizeClass
+            )}
+          >
             <img
               src={displayUrl}
               alt="Preview"
-              className="max-h-full max-w-full object-contain"
+              className="h-full w-full object-cover"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.opacity = '0.2';
               }}
@@ -96,13 +127,16 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           onClick={() => inputRef.current?.click()}
           disabled={disabled || isUploading}
           className={cn(
-            'flex items-center gap-2 px-4 py-2 rounded-lg border border-dashed border-slate-300 dark:border-slate-600',
-            'text-sm text-slate-500 dark:text-slate-400 hover:border-blue-400 hover:text-blue-500 transition-colors',
-            'disabled:opacity-50 disabled:cursor-not-allowed'
+            'rounded-lg border border-dashed border-slate-300 dark:border-slate-600',
+            'text-slate-500 dark:text-slate-400 hover:border-blue-400 hover:text-blue-500 transition-colors',
+            'disabled:opacity-50 disabled:cursor-not-allowed',
+            emptyAsBox
+              ? cn('flex flex-col items-center justify-center gap-2 text-xs', boxSizeClass)
+              : 'flex items-center gap-2 px-4 py-2 text-sm'
           )}
         >
-          <Upload className="h-4 w-4" />
-          {isUploading ? 'Subiendo...' : 'Subir imagen'}
+          <Upload className={emptyAsBox ? 'h-5 w-5' : 'h-4 w-4'} />
+          {isUploading ? 'Subiendo...' : emptyAsBox ? 'Subir' : 'Subir imagen'}
         </button>
       )}
     </div>

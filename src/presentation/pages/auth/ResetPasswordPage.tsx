@@ -217,7 +217,7 @@ export default function ResetPasswordPage() {
                 </button>
               </div>
               {watchConfirmPassword.length > 0 && !doPasswordsMatch && (
-                <span className="text-red-500 text-xs">Las contraseñas no coinciden</span>
+                <span className="text-destructive text-xs">Las contraseñas no coinciden</span>
               )}
               {doPasswordsMatch && (
                 <span className="text-green-600 dark:text-green-400 text-xs flex items-center gap-1">

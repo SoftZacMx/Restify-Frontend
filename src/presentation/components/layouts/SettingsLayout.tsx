@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { Building2, Settings, CreditCard } from 'lucide-react';
+import { Building2, Settings, CreditCard , Ticket} from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { cn } from '@/shared/lib/utils';
 
@@ -14,6 +14,7 @@ interface SettingsNavItem {
 const SETTINGS_NAV_ITEMS: SettingsNavItem[] = [
   { id: 'company', label: 'Sucursal', path: '/settings/company', icon: Building2 },
   { id: 'payments', label: 'Pasarelas de Pago', path: '/settings/payments', icon: CreditCard },
+  { id: 'ticket', label: 'Configuración de ticket', path: '/settings/tickets', icon: Ticket },
   { id: 'general', label: 'General', path: '/settings/general', icon: Settings },
 ];
 
@@ -21,18 +22,24 @@ const PATH_TO_BREADCRUMB: Record<string, string> = {
   '/settings/general': 'General',
   '/settings/company': 'Sucursal',
   '/settings/payments': 'Pasarelas de Pago',
+  '/settings/tickets': 'Tickets',
+
 };
 
 const PATH_TO_TITLE: Record<string, string> = {
   '/settings/general': 'Configuración General',
   '/settings/company': 'Configuración de la Sucursal',
   '/settings/payments': 'Pasarelas de Pago',
+  '/settings/tickets': 'Configuración de tickets',
+
 };
 
 const PATH_TO_DESCRIPTION: Record<string, string> = {
   '/settings/general': 'Personaliza la apariencia y preferencias de la aplicación.',
   '/settings/company': 'Administra la información general y legal de la sucursal activa en la plataforma RESTIFY.',
   '/settings/payments': 'Configura las credenciales de tus pasarelas de pago.',
+  '/settings/tickets': 'Configura la apariencia del ticket.',
+
 };
 
 /**
@@ -70,7 +77,7 @@ export const SettingsLayout: React.FC = () => {
         )}
         {!pageDescription && <div className="mb-8" />}
 
-        <div className="flex flex-col md:flex-row gap-8">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-12">
           {/* Sidebar de configuración */}
           <nav className="w-full md:w-56 shrink-0">
             <ul className="space-y-1">
@@ -83,10 +90,12 @@ export const SettingsLayout: React.FC = () => {
                     <Link
                       to={item.path}
                       className={cn(
-                        'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                        // Marca discreta (línea + color) en vez de fondo pleno: este menú es
+                        // de segundo nivel y no debe competir con el sidebar principal.
+                        'flex items-center gap-3 rounded-r-lg border-l-2 px-3 py-2.5 text-sm transition-colors',
                         isActive
-                          ? 'bg-primary text-white'
-                          : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
+                          ? 'border-primary bg-primary/5 font-semibold text-primary dark:bg-primary/10'
+                          : 'border-transparent font-medium text-slate-600 dark:text-slate-400 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 dark:hover:border-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-100'
                       )}
                     >
                       <Icon className="h-5 w-5 shrink-0" />

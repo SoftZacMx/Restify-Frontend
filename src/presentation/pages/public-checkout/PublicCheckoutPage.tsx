@@ -184,7 +184,7 @@ const PublicCheckoutPage = () => {
                     aria-invalid={!!phoneError}
                     className={phoneError ? 'border-red-500 focus-visible:ring-red-500' : undefined}
                   />
-                  {phoneError && <p className="text-red-500 text-xs mt-1">{phoneError}</p>}
+                  {phoneError && <p className="text-destructive text-xs mt-1">{phoneError}</p>}
                 </div>
               </div>
             </div>
