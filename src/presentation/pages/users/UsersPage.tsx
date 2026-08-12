@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Plus, UserPlus } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { Button } from '@/presentation/components/ui/button';
@@ -48,6 +49,7 @@ const clientFilter = (data: User[], filters: UserTableFilters) => {
 };
 
 const UsersPage: React.FC = () => {
+  const navigate = useNavigate();
   const {
     rawData: users,
     paginatedData,
@@ -96,8 +98,27 @@ const UsersPage: React.FC = () => {
 
   const tableUsers = useMemo(() => formatUsersForTable(paginatedData), [paginatedData]);
 
-  const handleUserAction = useCallback((userId: string, action: 'delete' | 'reactivate' | 'toggle-status' | 'reset-password') => {
+  const handleReactivateUser = useCallback(async (userId: string) => {
+    try {
+      await userService.reactivateUser(userId);
+      const user = users.find((u) => u.id === userId);
+      showSuccessToast('Usuario reactivado', `El usuario "${user?.name || 'Usuario'}" ha sido reactivado exitosamente`);
+      invalidate();
+      await refetch();
+    } catch (error) {
+      if (error instanceof AppError) {
+        showErrorToast('Error al reactivar usuario', error.message);
+      } else {
+        showErrorToast('Error al reactivar usuario', 'Ocurrió un error inesperado');
+      }
+    }
+  }, [users, invalidate, refetch]);
+
+  const handleUserAction = useCallback((userId: string, action: 'view' | 'delete' | 'reactivate' | 'toggle-status' | 'reset-password') => {
     switch (action) {
+      case 'view':
+        navigate(`/users/${userId}`);
+        break;
       case 'delete': {
         const user = users.find((u) => u.id === userId);
         if (user) deleteDialog.open(user);
@@ -115,23 +136,7 @@ const UsersPage: React.FC = () => {
         showErrorToast('Funcionalidad en desarrollo', 'El cambio de estado estará disponible pronto');
         break;
     }
-  }, [users, deleteDialog, resetDialog]);
-
-  const handleReactivateUser = async (userId: string) => {
-    try {
-      await userService.reactivateUser(userId);
-      const user = users.find((u) => u.id === userId);
-      showSuccessToast('Usuario reactivado', `El usuario "${user?.name || 'Usuario'}" ha sido reactivado exitosamente`);
-      invalidate();
-      await refetch();
-    } catch (error) {
-      if (error instanceof AppError) {
-        showErrorToast('Error al reactivar usuario', error.message);
-      } else {
-        showErrorToast('Error al reactivar usuario', 'Ocurrió un error inesperado');
-      }
-    }
-  };
+  }, [users, deleteDialog, resetDialog, navigate, handleReactivateUser]);
 
   const handleConfirmDelete = async () => {
     if (!deleteDialog.data) return;

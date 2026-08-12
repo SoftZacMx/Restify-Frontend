@@ -74,7 +74,7 @@ const FULL_NAV_MAIN: NavItem[] = [
     ],
   },
   { icon: Package, label: 'Productos', path: '/products' },
-  { icon: Boxes, label: 'Stock', path: '/stock', allowedRoles: ['ADMIN', 'MANAGER'] },
+  { icon: Boxes, label: 'Stock', path: '/stock', allowedRoles: ['OWNER', 'ADMIN', 'MANAGER'] },
   { icon: Receipt, label: 'Gastos', path: '/expenses' },
   { icon: BarChart3, label: 'Reportes', path: '/reports' },
   { icon: Users, label: 'Usuarios', path: '/users' },

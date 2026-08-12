@@ -158,7 +158,7 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       data-dropdown-content
       className={cn(
-        'fixed z-[9999] min-w-[8rem] overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg',
+        'fixed z-[9999] min-w-[18rem] overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg',
         className
       )}
       style={{
@@ -222,4 +222,3 @@ const DropdownMenuSeparator = React.forwardRef<
 DropdownMenuSeparator.displayName = 'DropdownMenuSeparator';
 
 export { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator };
-

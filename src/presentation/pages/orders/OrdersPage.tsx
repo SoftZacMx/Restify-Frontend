@@ -482,7 +482,6 @@ const OrdersPage: React.FC = () => {
             onViewDetails={handleViewDetails}
             onMarkDelivered={handleMarkDelivered}
             onProcessPayment={handleProcessPayment}
-            onSplitPayment={handleSplitPayment}
             onDelete={isAdmin ? handleDeleteOrder : undefined}
             onPrintClientTicket={handlePrintClientTicket}
             onPrintKitchenTicket={handlePrintKitchenTicket}

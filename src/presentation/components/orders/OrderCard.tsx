@@ -31,6 +31,7 @@ import {
   getOrderOriginLabel,
   getLocalOrderMesaLine,
   getPaymentMethodIcon,
+  isOnlineOrder,
 } from '@/shared/utils/order.utils';
 import { cn } from '@/shared/utils';
 
@@ -41,7 +42,6 @@ interface OrderCardProps {
   onViewDetails: (orderId: string) => void;
   onMarkDelivered?: (orderId: string) => void;
   onProcessPayment?: (orderId: string) => void;
-  onSplitPayment?: (order: OrderResponse) => void;
   onDelete?: (orderId: string) => void;
   onPrintClientTicket?: (orderId: string) => void;
   onPrintKitchenTicket?: (orderId: string) => void;
@@ -56,7 +56,6 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   onViewDetails,
   onMarkDelivered,
   onProcessPayment,
-  onSplitPayment,
   onDelete,
   onPrintClientTicket,
   onPrintKitchenTicket,
@@ -68,6 +67,8 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   /** Origen local: ubicación destacada arriba y # de orden debajo del pin (intercambiado respecto al resto). */
   const isLocalWithMesaBlock = mesaLine != null;
   const paymentIcon = getPaymentMethodIcon(order.paymentMethod);
+  /** Las órdenes que entran por la web pública no se editan desde la card. */
+  const canEdit = !order.delivered && !isOnlineOrder(order);
 
   // Navegar al POS para ver/editar la orden (modo edición: permite modificar datos e ítems)
   const handleViewInPos = () => {
@@ -167,18 +168,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
           <Eye className="h-4 w-4 mr-1" />
            Detalles
         </Button>
-        {!(order.status && order.delivered) && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleViewInPos}
-            className="flex-1"
-            title="Editar en POS"
-          >
-            <Edit className="h-4 w-4 mr-1" />
-            Editar
-          </Button>
-        )}
+
         {!order.status && onProcessPayment && (
           <Button
             variant="outline"
@@ -199,12 +189,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-[200px]">
-            {!order.status && onSplitPayment && (
-              <DropdownMenuItem onSelect={() => onSplitPayment(order)}>
-                <CreditCard className="h-4 w-4 mr-2" />
-                Pago dividido
-              </DropdownMenuItem>
-            )}
+
             {onPrintClientTicket && (
               <DropdownMenuItem onSelect={() => onPrintClientTicket(order.id)}>
                 <Receipt className="h-4 w-4 mr-2" />
@@ -214,13 +199,19 @@ export const OrderCard: React.FC<OrderCardProps> = ({
             {onPrintKitchenTicket && (
               <DropdownMenuItem onSelect={() => onPrintKitchenTicket(order.id)}>
                 <UtensilsCrossed className="h-4 w-4 mr-2" />
-                Imprimir ticket operaciones
+                Imprimir ticket para cocina
               </DropdownMenuItem>
             )}
             {order.status && !order.delivered && onMarkDelivered && (
               <DropdownMenuItem onSelect={() => onMarkDelivered(order.id)}>
                 <CheckCircle className="h-4 w-4 mr-2" />
                 Marcar entregada
+              </DropdownMenuItem>
+            )}
+            {canEdit && (
+              <DropdownMenuItem onSelect={() => handleViewInPos()}>
+                <Edit className="h-4 w-4 mr-2" />
+                Editar
               </DropdownMenuItem>
             )}
             {onDelete && (

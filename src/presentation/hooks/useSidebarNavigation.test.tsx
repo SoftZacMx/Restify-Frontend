@@ -60,6 +60,14 @@ describe('useSidebarNavigation — visibilidad de "Stock" (Fase 6.1)', () => {
     expect(labels).toContain('Stock');
   });
 
+  it('rol OWNER ve "Stock" en mainNavItems', () => {
+    setAuthUser(buildUser('OWNER'));
+    const { result } = renderHook(() => useSidebarNavigation(), { wrapper });
+
+    const labels = result.current.mainNavItems.map((i) => i.label);
+    expect(labels).toContain('Stock');
+  });
+
   it('rol CHEF es operativo: ve solo POS y Órdenes (no Stock ni Dashboard)', () => {
     setAuthUser(buildUser('CHEF'));
     const { result } = renderHook(() => useSidebarNavigation(), { wrapper });

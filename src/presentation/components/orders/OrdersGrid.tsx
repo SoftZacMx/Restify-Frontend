@@ -12,7 +12,6 @@ interface OrdersGridProps {
   onViewDetails: (orderId: string) => void;
   onMarkDelivered?: (orderId: string) => void;
   onProcessPayment?: (orderId: string) => void;
-  onSplitPayment?: (order: OrderResponse) => void;
   onDelete?: (orderId: string) => void;
   onPrintClientTicket?: (orderId: string) => void;
   onPrintKitchenTicket?: (orderId: string) => void;
@@ -29,7 +28,6 @@ export const OrdersGrid: React.FC<OrdersGridProps> = ({
   onViewDetails,
   onMarkDelivered,
   onProcessPayment,
-  onSplitPayment,
   onDelete,
   onPrintClientTicket,
   onPrintKitchenTicket,
@@ -84,7 +82,6 @@ export const OrdersGrid: React.FC<OrdersGridProps> = ({
             onViewDetails={onViewDetails}
             onMarkDelivered={onMarkDelivered}
             onProcessPayment={onProcessPayment}
-            onSplitPayment={onSplitPayment}
             onDelete={onDelete}
             onPrintClientTicket={onPrintClientTicket}
             onPrintKitchenTicket={onPrintKitchenTicket}

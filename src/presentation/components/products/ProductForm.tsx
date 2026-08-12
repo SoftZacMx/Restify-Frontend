@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Boxes } from 'lucide-react';
+import { Boxes, Package } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
 import { Button } from '@/presentation/components/ui/button';
 import { Label } from '@/presentation/components/ui/label';
@@ -122,93 +122,106 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="name" className="text-sm font-medium">
-          Nombre <span className="text-destructive">*</span>
-        </Label>
-        <Input
-          id="name"
-          type="text"
-          {...register('name')}
-          placeholder="Ej: Coca Cola 500ml"
-          className={cn(errors.name && 'border-destructive')}
-          maxLength={200}
-          disabled={isLoading}
-          aria-required
-        />
-        {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
-        <p className="text-xs text-slate-500 dark:text-slate-400">{name.length}/200 caracteres</p>
-      </div>
+      <ImageUpload
+        value={imageUrl}
+        onUpload={(file) => uploadService.uploadImage(file, 'product_image')}
+        onChange={(url) => setValue('imageUrl', url, { shouldDirty: true })}
+        disabled={isLoading}
+        size="featured"
+      />
 
-      <div className="space-y-2">
-        <Label className="text-sm font-medium">Imagen</Label>
-        <ImageUpload
-          value={imageUrl}
-          onUpload={(file) => uploadService.uploadImage(file, 'product_image')}
-          onChange={(url) => setValue('imageUrl', url, { shouldDirty: true })}
-          disabled={isLoading}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="description" className="text-sm font-medium">Descripción</Label>
-        <Textarea
-          id="description"
-          {...register('description')}
-          placeholder="Descripción del producto (opcional)"
-          className={cn('min-h-[100px] resize-y', errors.description && 'border-destructive')}
-          maxLength={1000}
-          disabled={isLoading}
-        />
-        {errors.description && <p className="text-sm text-destructive">{errors.description.message}</p>}
-        <p className="text-xs text-slate-500 dark:text-slate-400">{(description || '').length}/1000 caracteres</p>
-      </div>
-
-      <div className="flex items-center justify-between space-x-2 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
-        <div className="space-y-0.5">
-          <Label htmlFor="status" className="text-sm font-medium">Estado</Label>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            {status ? 'Producto activo' : 'Producto inactivo'}
-          </p>
+      <div className="rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800 shadow-lg p-6">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <Package className="h-4 w-4" />
+          </div>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+            Información General
+          </h2>
         </div>
-        <Switch
-          id="status"
-          checked={status}
-          onCheckedChange={(checked) => setValue('status', checked)}
-          disabled={isLoading}
-        />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="name" className="text-sm font-medium">
+              Nombre <span className="text-destructive">*</span>
+            </Label>
+            <Input
+              id="name"
+              type="text"
+              {...register('name')}
+              placeholder="Ej: Coca Cola 500ml"
+              className={cn('h-[3.75rem]', errors.name && 'border-destructive')}
+              maxLength={200}
+              disabled={isLoading}
+              aria-required
+            />
+            {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+            <p className="text-xs text-slate-500 dark:text-slate-400">{name.length}/200 caracteres</p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="status" className="text-sm font-medium">Estado</Label>
+            <div className="flex h-[3.75rem] items-center justify-between gap-3 rounded-lg border border-slate-200 dark:border-slate-700 px-4">
+              <p className="truncate text-sm text-slate-500 dark:text-slate-400">
+                {status ? 'Producto activo' : 'Producto inactivo'}
+              </p>
+              <Switch
+                id="status"
+                checked={status}
+                onCheckedChange={(checked) => setValue('status', checked)}
+                disabled={isLoading}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6 space-y-2">
+          <Label htmlFor="description" className="text-sm font-medium">Descripción</Label>
+          <Textarea
+            id="description"
+            {...register('description')}
+            placeholder="Descripción del producto (opcional)"
+            className={cn('min-h-[100px] resize-y', errors.description && 'border-destructive')}
+            maxLength={1000}
+            disabled={isLoading}
+          />
+          {errors.description && <p className="text-sm text-destructive">{errors.description.message}</p>}
+          <p className="text-xs text-slate-500 dark:text-slate-400">{(description || '').length}/1000 caracteres</p>
+        </div>
       </div>
 
       {/* Stock config — solo visible en creación (edición se hace desde StockConfigSection del detalle). */}
       {!isEditMode && (
-        <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 space-y-4">
-          <div className="flex items-start gap-3">
-            <div className="rounded-lg bg-primary/10 p-2 text-primary mt-0.5">
+        <div className="rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800 shadow-lg p-6 space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <Boxes className="h-4 w-4" />
             </div>
-            <div className="flex-1">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <Label htmlFor="trackStock" className="text-sm font-medium cursor-pointer">
-                    Trackear stock
-                  </Label>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    Activado por defecto. Si lo desactivás, el producto se crea sin tracking
-                    y no podrá usarse en recetas hasta que lo actives.
-                  </p>
-                </div>
-                <Switch
-                  id="trackStock"
-                  checked={trackStock}
-                  onCheckedChange={(checked) => setValue('trackStock', checked, { shouldDirty: true })}
-                  disabled={isLoading}
-                />
-              </div>
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+              Configuración de stock
+            </h2>
+          </div>
+
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <Label htmlFor="trackStock" className="text-sm font-medium cursor-pointer">
+                Trackear stock
+              </Label>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Activado por defecto. Si lo desactivás, el producto se crea sin tracking
+                y no podrá usarse en recetas hasta que lo actives.
+              </p>
             </div>
+            <Switch
+              id="trackStock"
+              checked={trackStock}
+              onCheckedChange={(checked) => setValue('trackStock', checked, { shouldDirty: true })}
+              disabled={isLoading}
+            />
           </div>
 
           {trackStock && (
-            <div className="pl-11 space-y-3">
+            <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
               <div>
                 <Label htmlFor="unitOfMeasure" className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
                   Unidad de medida <span className="text-destructive">*</span>

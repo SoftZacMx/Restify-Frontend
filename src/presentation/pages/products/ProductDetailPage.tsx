@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Edit, ArrowLeft } from 'lucide-react';
+import { Edit, ArrowLeft, Package, Tag, AlignLeft, User as UserIcon, CalendarDays, CalendarCheck, CalendarPlus, Clock } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { Button } from '@/presentation/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/presentation/components/ui/dialog';
@@ -138,92 +138,122 @@ const ProductDetailPage: React.FC = () => {
         {/* Cards Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Información General */}
-          <Card className="p-6">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-              Información General
-            </h2>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                  Nombre
-                </label>
-                <p className="text-base text-slate-900 dark:text-white mt-1">{product.name}</p>
+          <Card className="p-6 h-full">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <Package className="h-4 w-4" />
               </div>
-              <div>
-                <label className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                  Descripción
-                </label>
-                <p className="text-base text-slate-900 dark:text-white mt-1">
-                  {product.description || 'Sin descripción'}
-                </p>
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+                Información General
+              </h2>
+            </div>
+            <div className="space-y-6">
+              <div className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                  <Tag className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Nombre</p>
+                  <p className="text-base font-semibold text-slate-900 dark:text-white mt-0.5">
+                    {product.name}
+                  </p>
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                  Estado
-                </label>
-                <p className="text-base text-slate-900 dark:text-white mt-1">
-                  {product.status ? 'Activo' : 'Inactivo'}
-                </p>
+              <div className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                  <AlignLeft className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Descripción</p>
+                  <p className="text-sm text-slate-800 dark:text-slate-200 mt-0.5 break-words">
+                    {product.description || 'Sin descripción'}
+                  </p>
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                  Usuario propietario
-                </label>
-                <p className="text-base text-slate-900 dark:text-white mt-1 font-mono text-sm">
-                  {product.userId}
-                </p>
+              <div className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                  <UserIcon className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                    Usuario propietario
+                  </p>
+                  <p className="text-sm font-mono text-slate-800 dark:text-slate-200 mt-0.5 break-all">
+                    {product.userId}
+                  </p>
+                </div>
               </div>
             </div>
           </Card>
 
           {/* Información de Fechas */}
-          <Card className="p-6">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-              Información de Fechas
-            </h2>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                  Fecha de Registro
-                </label>
-                <p className="text-base text-slate-900 dark:text-white mt-1">
-                  {new Date(product.registrationDate).toLocaleDateString('es-ES', {
-                    day: '2-digit',
-                    month: 'long',
-                    year: 'numeric',
-                    timeZone: APP_TIMEZONE,
-                  })}
-                </p>
+          <Card className="p-6 h-full">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <CalendarDays className="h-4 w-4" />
               </div>
-              <div>
-                <label className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                  Fecha de Creación
-                </label>
-                <p className="text-base text-slate-900 dark:text-white mt-1">
-                  {new Date(product.createdAt).toLocaleDateString('es-ES', {
-                    day: '2-digit',
-                    month: 'long',
-                    year: 'numeric',
-                    timeZone: APP_TIMEZONE,
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </p>
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+                Información de Fechas
+              </h2>
+            </div>
+            <div className="space-y-6">
+              <div className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                  <CalendarCheck className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                    Fecha de Registro
+                  </p>
+                  <p className="text-sm text-slate-800 dark:text-slate-200 mt-0.5">
+                    {new Date(product.registrationDate).toLocaleDateString('es-ES', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric',
+                      timeZone: APP_TIMEZONE,
+                    })}
+                  </p>
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                  Última Actualización
-                </label>
-                <p className="text-base text-slate-900 dark:text-white mt-1">
-                  {new Date(product.updatedAt).toLocaleDateString('es-ES', {
-                    day: '2-digit',
-                    month: 'long',
-                    year: 'numeric',
-                    timeZone: APP_TIMEZONE,
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </p>
+              <div className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                  <CalendarPlus className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                    Fecha de Creación
+                  </p>
+                  <p className="text-sm text-slate-800 dark:text-slate-200 mt-0.5">
+                    {new Date(product.createdAt).toLocaleDateString('es-ES', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric',
+                      timeZone: APP_TIMEZONE,
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                  <Clock className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                    Última Actualización
+                  </p>
+                  <p className="text-sm text-slate-800 dark:text-slate-200 mt-0.5">
+                    {new Date(product.updatedAt).toLocaleDateString('es-ES', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric',
+                      timeZone: APP_TIMEZONE,
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </p>
+                </div>
               </div>
             </div>
           </Card>
@@ -270,7 +300,7 @@ const ProductDetailPage: React.FC = () => {
       {/* Modal de Edición de Producto */}
       {product && (
         <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
             <DialogClose />
             <DialogHeader>
               <DialogTitle>Editar Producto</DialogTitle>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MoreVertical, Trash2, RotateCw, KeyRound } from 'lucide-react';
+import { MoreVertical, Eye, Trash2, RotateCw, KeyRound } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -27,7 +27,7 @@ interface UserTableProps {
   canResetPassword?: boolean;
   onUserAction?: (
     userId: string,
-    action: 'delete' | 'reactivate' | 'toggle-status' | 'reset-password'
+    action: 'view' | 'delete' | 'reactivate' | 'toggle-status' | 'reset-password'
   ) => void;
 }
 
@@ -157,7 +157,14 @@ export const UserTable: React.FC<UserTableProps> = ({
                       >
                         <MoreVertical className="h-4 w-4" />
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-40">
+                      <DropdownMenuContent align="end" className="w-44">
+                        <DropdownMenuItem
+                          onSelect={() => onUserAction?.(user.id, 'view')}
+                          className="cursor-pointer"
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          <span>Ver detalle</span>
+                        </DropdownMenuItem>
                         {canResetPassword && user.statusLabel === 'Activo' && (
                           <DropdownMenuItem
                             onSelect={() => onUserAction?.(user.id, 'reset-password')}

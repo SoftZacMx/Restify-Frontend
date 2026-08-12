@@ -132,13 +132,33 @@ export const Sidebar = () => {
           isMobile && isMobileOpen && 'translate-x-0'
         )}
       >
-        {/* Marca de la sucursal (logo, nombre y ciudad) + botón de toggle */}
+        {/* Marca de la sucursal (logo, nombre y ciudad) + botón de toggle.
+            Expandida: bloque a ancho completo pegado al tope, con el fondo desvaneciéndose
+            hacia abajo para que el corte con la navegación no se note.
+            Colapsada: sin fondo, solo el logo. */}
         <div
           className={cn(
             'relative flex flex-col items-center gap-3',
-            isCollapsed ? 'px-2 pt-4 pb-3' : 'px-4 pt-6 pb-5'
+            isCollapsed
+              ? 'px-2 pt-4 pb-3'
+              : 'bg-slate-200/30 px-4 pt-6 pb-6 dark:bg-slate-900/30'
           )}
         >
+          {!isCollapsed && (
+            <>
+              {/* Últimos píxeles del fondo diluyéndose hacia el color del sidebar. */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-gradient-to-b from-transparent to-white dark:to-slate-800"
+              />
+              {/* Línea del límite: marca dónde termina la sección y se apaga en los costados. */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent dark:via-slate-700"
+              />
+            </>
+          )}
+
           {logoUrl ? (
             <img
               src={logoUrl}
@@ -208,7 +228,7 @@ export const Sidebar = () => {
         )}
 
         {/* Main Navigation */}
-        <nav className={cn('flex-1 space-y-1 mt-4 overflow-y-auto', isCollapsed ? 'px-2' : 'px-4')}>
+        <nav className={cn('flex-1 space-y-1 mt-8 overflow-y-auto', isCollapsed ? 'px-2' : 'px-4')}>
           {mainNavItems.map((item: NavItem) => {
             const IconComponent = item.icon;
 

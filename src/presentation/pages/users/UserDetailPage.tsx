@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Edit, ArrowLeft, UserCog } from 'lucide-react';
+import { ArrowLeft, UserCog } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { Button } from '@/presentation/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/presentation/components/ui/dialog';
@@ -10,8 +10,8 @@ import { showErrorToast, showSuccessToast } from '@/shared/utils/toast';
 import { AppError } from '@/domain/errors';
 import { UserPersonalInfo } from '@/presentation/components/users/UserPersonalInfo';
 import { UserAccountInfo } from '@/presentation/components/users/UserAccountInfo';
-import { UserRecentActivity } from '@/presentation/components/users/UserRecentActivity';
-import { UserStatistics } from '@/presentation/components/users/UserStatistics';
+import { UserProfileHeader } from '@/presentation/components/users/UserProfileHeader';
+import { UserBranches } from '@/presentation/components/users/UserBranches';
 import { EditUserForm } from '@/presentation/components/users/EditUserForm';
 import type { UpdateUserRequest } from '@/domain/types';
 
@@ -106,17 +106,8 @@ const UserDetailPage: React.FC = () => {
         </div>
 
         {/* Page Heading */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-          <h1 className="text-slate-900 dark:text-white text-3xl font-black leading-tight tracking-tight">
-            {fullName}
-          </h1>
-          <Button
-            onClick={() => setIsEditModalOpen(true)}
-            className="flex items-center justify-center gap-2 min-w-[84px] cursor-pointer rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors"
-          >
-            <Edit className="h-4 w-4" />
-            <span className="truncate">Editar Usuario</span>
-          </Button>
+        <div className="mb-8">
+          <UserProfileHeader user={user} onEdit={() => setIsEditModalOpen(true)} />
         </div>
 
         {/* Cards Layout */}
@@ -125,19 +116,18 @@ const UserDetailPage: React.FC = () => {
           <div className="lg:col-span-2 flex flex-col gap-8">
             {/* Card: Información Personal */}
             <UserPersonalInfo user={user} />
-
-            {/* Card: Actividad Reciente */}
-            <UserRecentActivity userId={user.id} />
           </div>
 
           {/* Right Column */}
           <div className="lg:col-span-1 flex flex-col gap-8">
             {/* Card: Información de la Cuenta */}
             <UserAccountInfo user={user} />
-
-            {/* Card: Estadísticas */}
-            <UserStatistics userId={user.id} />
           </div>
+        </div>
+
+        {/* Card: Sucursales asignadas (ancho completo, debajo de las dos columnas) */}
+        <div className="mt-8">
+          <UserBranches user={user} />
         </div>
       </div>
 
