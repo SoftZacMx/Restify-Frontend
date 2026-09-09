@@ -2,6 +2,7 @@ import React from 'react';
 import { Loader2, PackageOpen } from 'lucide-react';
 import { OrderCard } from './OrderCard';
 import type { OrderResponse } from '@/domain/types';
+import type { EditablePaymentMethod } from '@/shared/utils/order.utils';
 
 interface OrdersGridProps {
   orders: OrderResponse[];
@@ -16,6 +17,7 @@ interface OrdersGridProps {
   onDelete?: (orderId: string) => void;
   onPrintClientTicket?: (orderId: string) => void;
   onPrintKitchenTicket?: (orderId: string) => void;
+  onChangePaymentMethod?: (order: OrderResponse, method: EditablePaymentMethod) => void;
 }
 
 /**
@@ -33,6 +35,7 @@ export const OrdersGrid: React.FC<OrdersGridProps> = ({
   onDelete,
   onPrintClientTicket,
   onPrintKitchenTicket,
+  onChangePaymentMethod,
 }) => {
   // Estado de carga
   if (isLoading) {
@@ -88,6 +91,7 @@ export const OrdersGrid: React.FC<OrdersGridProps> = ({
             onDelete={onDelete}
             onPrintClientTicket={onPrintClientTicket}
             onPrintKitchenTicket={onPrintKitchenTicket}
+            onChangePaymentMethod={onChangePaymentMethod}
           />
         </div>
       ))}

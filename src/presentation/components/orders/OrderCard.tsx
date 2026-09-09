@@ -19,18 +19,22 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/presentation/components/ui/dropdown-menu';
 import { OrderStatusBadge } from './OrderStatusBadge';
 import type { OrderResponse } from '@/domain/types';
+import type { EditablePaymentMethod } from '@/shared/utils/order.utils';
 import {
+  EDITABLE_PAYMENT_METHODS,
   formatOrderNumber,
   formatOrderTime,
   formatCurrency,
   getOrderOriginLabel,
   getLocalOrderMesaLine,
   getPaymentMethodIcon,
+  getPaymentMethodName,
 } from '@/shared/utils/order.utils';
 import { cn } from '@/shared/utils';
 
@@ -45,6 +49,8 @@ interface OrderCardProps {
   onDelete?: (orderId: string) => void;
   onPrintClientTicket?: (orderId: string) => void;
   onPrintKitchenTicket?: (orderId: string) => void;
+  /** Solo ADMIN: cambiar el método de pago de una orden completada. */
+  onChangePaymentMethod?: (order: OrderResponse, method: EditablePaymentMethod) => void;
 }
 
 /**
@@ -60,6 +66,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   onDelete,
   onPrintClientTicket,
   onPrintKitchenTicket,
+  onChangePaymentMethod,
 }) => {
   const navigate = useNavigate();
   const originLabel = getOrderOriginLabel(order);
@@ -68,6 +75,16 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   /** Origen local: mesa destacada arriba y # de orden debajo del pin (intercambiado respecto al resto). */
   const isLocalWithMesaBlock = mesaLine != null;
   const paymentIcon = getPaymentMethodIcon(order.paymentMethod);
+  /** Completada = pagada y entregada. Los pagos divididos tienen dos métodos, no se editan. */
+  const canChangePaymentMethod =
+    !!onChangePaymentMethod &&
+    order.status &&
+    order.delivered &&
+    !order.paymentDiffer &&
+    order.paymentMethod != null;
+  const changeablePaymentMethods = EDITABLE_PAYMENT_METHODS.filter(
+    (m) => m.orderMethod !== order.paymentMethod
+  );
 
   // Navegar al POS para ver/editar la orden (modo edición: permite modificar datos e ítems)
   const handleViewInPos = () => {
@@ -222,6 +239,21 @@ export const OrderCard: React.FC<OrderCardProps> = ({
                 <CheckCircle className="h-4 w-4 mr-2" />
                 Marcar entregada
               </DropdownMenuItem>
+            )}
+            {canChangePaymentMethod && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Editar método de pago</DropdownMenuLabel>
+                {changeablePaymentMethods.map((method) => (
+                  <DropdownMenuItem
+                    key={method.value}
+                    onSelect={() => onChangePaymentMethod?.(order, method.value)}
+                  >
+                    <span className="mr-2">{getPaymentMethodIcon(method.orderMethod)}</span>
+                    {getPaymentMethodName(method.orderMethod)}
+                  </DropdownMenuItem>
+                ))}
+              </>
             )}
             {onDelete && (
               <>
