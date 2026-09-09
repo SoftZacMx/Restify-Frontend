@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Clock,
@@ -12,6 +12,11 @@ import {
   Receipt,
   UtensilsCrossed,
   CheckCircle,
+  ChevronDown,
+  ChevronUp,
+  DollarSign,
+  Building2,
+  type LucideIcon,
 } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader } from '@/presentation/components/ui/card';
 import { Button } from '@/presentation/components/ui/button';
@@ -19,7 +24,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/presentation/components/ui/dropdown-menu';
@@ -37,6 +41,12 @@ import {
   getPaymentMethodName,
 } from '@/shared/utils/order.utils';
 import { cn } from '@/shared/utils';
+
+const PAYMENT_METHOD_ICONS: Record<EditablePaymentMethod, LucideIcon> = {
+  CASH: DollarSign,
+  TRANSFER: Building2,
+  CARD_PHYSICAL: CreditCard,
+};
 
 interface OrderCardProps {
   order: OrderResponse;
@@ -69,6 +79,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   onChangePaymentMethod,
 }) => {
   const navigate = useNavigate();
+  const [showPaymentMethods, setShowPaymentMethods] = useState(false);
   const originLabel = getOrderOriginLabel(order);
   const mesaLine = getLocalOrderMesaLine(order, tableNameById);
   const orderNumberLabel = formatOrderNumber(order.id);
@@ -243,16 +254,35 @@ export const OrderCard: React.FC<OrderCardProps> = ({
             {canChangePaymentMethod && (
               <>
                 <DropdownMenuSeparator />
-                <DropdownMenuLabel>Editar método de pago</DropdownMenuLabel>
-                {changeablePaymentMethods.map((method) => (
-                  <DropdownMenuItem
-                    key={method.value}
-                    onSelect={() => onChangePaymentMethod?.(order, method.value)}
-                  >
-                    <span className="mr-2">{getPaymentMethodIcon(method.orderMethod)}</span>
-                    {getPaymentMethodName(method.orderMethod)}
-                  </DropdownMenuItem>
-                ))}
+                <DropdownMenuItem
+                  closeOnSelect={false}
+                  onSelect={() => setShowPaymentMethods((isOpen) => !isOpen)}
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Cambiar método de pago
+                  {showPaymentMethods ? (
+                    <ChevronUp className="h-4 w-4 ml-auto" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4 ml-auto" />
+                  )}
+                </DropdownMenuItem>
+                {showPaymentMethods &&
+                  changeablePaymentMethods.map((method) => {
+                    const MethodIcon = PAYMENT_METHOD_ICONS[method.value];
+                    return (
+                      <DropdownMenuItem
+                        key={method.value}
+                        className="pl-9"
+                        onSelect={() => {
+                          setShowPaymentMethods(false);
+                          onChangePaymentMethod?.(order, method.value);
+                        }}
+                      >
+                        <MethodIcon className="h-4 w-4 mr-2" />
+                        {getPaymentMethodName(method.orderMethod)}
+                      </DropdownMenuItem>
+                    );
+                  })}
               </>
             )}
             {onDelete && (

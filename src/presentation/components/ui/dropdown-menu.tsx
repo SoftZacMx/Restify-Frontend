@@ -179,13 +179,17 @@ const DropdownMenuItem = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & {
     onSelect?: () => void;
+    /** `false` deja el menú abierto: para items que despliegan más opciones. */
+    closeOnSelect?: boolean;
   }
->(({ className, children, onSelect, ...props }, ref) => {
+>(({ className, children, onSelect, closeOnSelect = true, ...props }, ref) => {
   const { setOpen } = useDropdownMenuContext();
 
   const handleClick = () => {
     onSelect?.();
-    setOpen(false);
+    if (closeOnSelect) {
+      setOpen(false);
+    }
   };
 
   return (
@@ -204,25 +208,6 @@ const DropdownMenuItem = React.forwardRef<
 });
 DropdownMenuItem.displayName = 'DropdownMenuItem';
 
-const DropdownMenuLabel = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, children, ...props }, ref) => {
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        'px-3 py-1.5 text-xs font-medium text-slate-500 dark:text-slate-400',
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-});
-DropdownMenuLabel.displayName = 'DropdownMenuLabel';
-
 const DropdownMenuSeparator = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -240,5 +225,5 @@ const DropdownMenuSeparator = React.forwardRef<
 });
 DropdownMenuSeparator.displayName = 'DropdownMenuSeparator';
 
-export { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator };
+export { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator };
 
