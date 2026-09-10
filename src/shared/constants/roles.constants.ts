@@ -36,6 +36,22 @@ export function hasFullAccess(role: UserRole | undefined | null): boolean {
 }
 
 /**
+ * Roles con permisos críticos: billing, settings de pagos y correcciones
+ * administrativas. Equivale a OWNER_ADMIN en la API.
+ */
+export const CRITICAL_ACCESS_ROLES: UserRole[] = [
+  "OWNER",
+  "ADMIN",
+];
+
+/**
+ * Indica si el rol puede ejecutar acciones críticas.
+ */
+export function hasCriticalAccess(role: UserRole | undefined | null): boolean {
+  return role != null && CRITICAL_ACCESS_ROLES.includes(role);
+}
+
+/**
  * Ruta por defecto tras iniciar sesión / elegir sucursal según el rol.
  * Los roles operativos (WAITER, CHEF) van a POS; el resto al dashboard.
  */

@@ -10,6 +10,13 @@ import type {
   PayOrderResult,
   ApiResponse,
 } from '@/domain/types';
+import type { EditablePaymentMethod } from '@/shared/utils/order.utils';
+
+interface UpdateOrderPaymentMethodResult {
+  id: string;
+  previousPaymentMethod: number | null;
+  paymentMethod: number;
+}
 
 /**
  * Repository para operaciones de órdenes
@@ -216,6 +223,19 @@ export class OrderRepository {
     } catch (error) {
       throw error;
     }
+  }
+
+  /**
+   * Cambia el método de pago de una orden ya cobrada (solo OWNER y ADMIN)
+   */
+  async updateOrderPaymentMethod(
+    orderId: string,
+    paymentMethod: EditablePaymentMethod
+  ): Promise<ApiResponse<UpdateOrderPaymentMethodResult>> {
+    const response = await apiClient.put(`/api/orders/${orderId}/payment-method`, {
+      paymentMethod,
+    });
+    return response.data;
   }
 
   /**

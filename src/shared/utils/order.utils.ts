@@ -86,6 +86,18 @@ export const getPaymentMethodName = (method: number | null): string => {
 /**
  * Obtiene el icono del método de pago
  */
+/**
+ * Métodos que un ADMIN puede asignar a mano.
+ * Mercado Pago queda afuera: lo asigna la pasarela junto con su transacción.
+ */
+export const EDITABLE_PAYMENT_METHODS = [
+  { value: 'CASH', orderMethod: 1 },
+  { value: 'TRANSFER', orderMethod: 2 },
+  { value: 'CARD_PHYSICAL', orderMethod: 3 },
+] as const;
+
+export type EditablePaymentMethod = (typeof EDITABLE_PAYMENT_METHODS)[number]['value'];
+
 export const getPaymentMethodIcon = (method: number | null): React.ReactNode => {
   switch (method) {
     case 1:

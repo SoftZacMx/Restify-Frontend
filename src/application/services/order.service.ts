@@ -17,6 +17,7 @@ import type {
   OrderType,
 } from '@/domain/types';
 import { orderRepository } from '@/infrastructure/api/repositories/order.repository';
+import type { EditablePaymentMethod } from '@/shared/utils/order.utils';
 
 /**
  * Servicio de órdenes
@@ -605,6 +606,13 @@ export class OrderService {
    */
   async updateDeliveryStatus(orderId: string, status: 'PREPARING' | 'READY' | 'ON_THE_WAY' | 'DELIVERED'): Promise<void> {
     await orderRepository.updateDeliveryStatus(orderId, status);
+  }
+
+  /**
+   * Cambia el método de pago de una orden ya cobrada (solo OWNER y ADMIN)
+   */
+  async updateOrderPaymentMethod(orderId: string, paymentMethod: EditablePaymentMethod): Promise<void> {
+    await orderRepository.updateOrderPaymentMethod(orderId, paymentMethod);
   }
 
   /**

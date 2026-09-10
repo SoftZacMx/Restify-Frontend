@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Clock,
@@ -12,6 +12,11 @@ import {
   Receipt,
   UtensilsCrossed,
   CheckCircle,
+  ChevronDown,
+  ChevronUp,
+  DollarSign,
+  Building2,
+  type LucideIcon,
 } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader } from '@/presentation/components/ui/card';
 import { Button } from '@/presentation/components/ui/button';
@@ -24,16 +29,25 @@ import {
 } from '@/presentation/components/ui/dropdown-menu';
 import { OrderStatusBadge } from './OrderStatusBadge';
 import type { OrderResponse } from '@/domain/types';
+import type { EditablePaymentMethod } from '@/shared/utils/order.utils';
 import {
+  EDITABLE_PAYMENT_METHODS,
   formatOrderNumber,
   formatOrderTime,
   formatCurrency,
   getOrderOriginLabel,
   getLocalOrderMesaLine,
   getPaymentMethodIcon,
+  getPaymentMethodName,
   isOnlineOrder,
 } from '@/shared/utils/order.utils';
 import { cn } from '@/shared/utils';
+
+const PAYMENT_METHOD_ICONS: Record<EditablePaymentMethod, LucideIcon> = {
+  CASH: DollarSign,
+  TRANSFER: Building2,
+  CARD_PHYSICAL: CreditCard,
+};
 
 interface OrderCardProps {
   order: OrderResponse;
@@ -45,6 +59,8 @@ interface OrderCardProps {
   onDelete?: (orderId: string) => void;
   onPrintClientTicket?: (orderId: string) => void;
   onPrintKitchenTicket?: (orderId: string) => void;
+  /** Solo OWNER y ADMIN: cambiar el método de pago de una orden completada. */
+  onChangePaymentMethod?: (order: OrderResponse, method: EditablePaymentMethod) => void;
 }
 
 /**
@@ -59,8 +75,10 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   onDelete,
   onPrintClientTicket,
   onPrintKitchenTicket,
+  onChangePaymentMethod,
 }) => {
   const navigate = useNavigate();
+  const [showPaymentMethods, setShowPaymentMethods] = useState(false);
   const originLabel = getOrderOriginLabel(order);
   const mesaLine = getLocalOrderMesaLine(order, tableNameById);
   const orderNumberLabel = formatOrderNumber(order.id);
@@ -69,6 +87,16 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   const paymentIcon = getPaymentMethodIcon(order.paymentMethod);
   /** Las órdenes que entran por la web pública no se editan desde la card. */
   const canEdit = !order.delivered && !isOnlineOrder(order);
+  /** Completada = pagada y entregada. Los pagos divididos tienen dos métodos, no se editan. */
+  const canChangePaymentMethod =
+    !!onChangePaymentMethod &&
+    order.status &&
+    order.delivered &&
+    !order.paymentDiffer &&
+    order.paymentMethod != null;
+  const changeablePaymentMethods = EDITABLE_PAYMENT_METHODS.filter(
+    (m) => m.orderMethod !== order.paymentMethod
+  );
 
   // Navegar al POS para ver/editar la orden (modo edición: permite modificar datos e ítems)
   const handleViewInPos = () => {
@@ -213,6 +241,40 @@ export const OrderCard: React.FC<OrderCardProps> = ({
                 <Edit className="h-4 w-4 mr-2" />
                 Editar
               </DropdownMenuItem>
+            )}
+            {canChangePaymentMethod && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  closeOnSelect={false}
+                  onSelect={() => setShowPaymentMethods((isOpen) => !isOpen)}
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Cambiar método de pago
+                  {showPaymentMethods ? (
+                    <ChevronUp className="h-4 w-4 ml-auto" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4 ml-auto" />
+                  )}
+                </DropdownMenuItem>
+                {showPaymentMethods &&
+                  changeablePaymentMethods.map((method) => {
+                    const MethodIcon = PAYMENT_METHOD_ICONS[method.value];
+                    return (
+                      <DropdownMenuItem
+                        key={method.value}
+                        className="pl-9"
+                        onSelect={() => {
+                          setShowPaymentMethods(false);
+                          onChangePaymentMethod?.(order, method.value);
+                        }}
+                      >
+                        <MethodIcon className="h-4 w-4 mr-2" />
+                        {getPaymentMethodName(method.orderMethod)}
+                      </DropdownMenuItem>
+                    );
+                  })}
+              </>
             )}
             {onDelete && (
               <>

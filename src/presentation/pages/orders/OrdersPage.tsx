@@ -19,13 +19,16 @@ import { OrdersGrid } from '@/presentation/components/orders/OrdersGrid';
 import { OrderPagination } from '@/presentation/components/orders/OrderPagination';
 import { OrderDetailDialog } from '@/presentation/components/orders/OrderDetailDialog';
 import { SplitPaymentDialog } from '@/presentation/components/orders/SplitPaymentDialog';
+import { ChangePaymentMethodDialog } from '@/presentation/components/orders/ChangePaymentMethodDialog';
 import { ConnectionIndicator } from '@/presentation/components/websocket/ConnectionIndicator';
 import { useWebSocketContext } from '@/presentation/contexts/websocket.context';
 import { useOrderFilters } from '@/presentation/hooks/useOrderFilters';
 import { useDialogState } from '@/presentation/hooks/useDialogState';
 import { orderService, tableService, ticketService } from '@/application/services';
 import type { OrderResponse, PaginationData } from '@/domain/types';
+import type { EditablePaymentMethod } from '@/shared/utils/order.utils';
 import { filterOrdersClient } from '@/shared/utils/order.utils';
+import { hasCriticalAccess } from '@/shared/constants/roles.constants';
 import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
 import { usePaymentSound } from '@/presentation/hooks/usePaymentSound';
 import { useAuthStore } from '@/presentation/store/auth.store';
@@ -40,6 +43,7 @@ const OrdersPage: React.FC = () => {
   const queryClient = useQueryClient();
   const { playSuccess } = usePaymentSound();
   const isAdmin = useAuthStore((state) => state.user?.rol === 'ADMIN');
+  const canEditPaymentMethod = useAuthStore((state) => hasCriticalAccess(state.user?.rol));
 
   // Estado de conexión WebSocket
   const { isConnected, connectionId } = useWebSocketContext();
@@ -62,6 +66,10 @@ const OrdersPage: React.FC = () => {
   const detailDialog = useDialogState<string>();        // data = orderId
   const deleteDialog = useDialogState<OrderResponse>();
   const splitPaymentDialog = useDialogState<OrderResponse>();
+  const changePaymentMethodDialog = useDialogState<{
+    order: OrderResponse;
+    method: EditablePaymentMethod;
+  }>();
 
   // Estado de operaciones
   const [_isUpdating, setIsUpdating] = useState(false);
@@ -350,6 +358,20 @@ const OrdersPage: React.FC = () => {
     showSuccessToast('Pago dividido procesado', 'La orden ha sido pagada con dos métodos');
   }, [queryClient]);
 
+  // Handler para abrir la confirmación de cambio de método de pago
+  const handleChangePaymentMethod = useCallback((order: OrderResponse, method: EditablePaymentMethod) => {
+    changePaymentMethodDialog.open({ order, method });
+  }, [changePaymentMethodDialog]);
+
+  // Éxito del cambio de método: refrescar listado y detalle abierto
+  const handleChangePaymentMethodSuccess = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['orders'] });
+    if (detailDialog.isOpen && detailDialog.data) {
+      queryClient.invalidateQueries({ queryKey: ['order', detailDialog.data] });
+    }
+    showSuccessToast('Método de pago actualizado', 'La orden quedó con el método nuevo');
+  }, [queryClient, detailDialog]);
+
   // Handler para ir al POS a crear nueva orden
   const handleNewOrder = useCallback(() => {
     navigate('/pos');
@@ -483,6 +505,7 @@ const OrdersPage: React.FC = () => {
             onMarkDelivered={handleMarkDelivered}
             onProcessPayment={handleProcessPayment}
             onDelete={isAdmin ? handleDeleteOrder : undefined}
+            onChangePaymentMethod={canEditPaymentMethod ? handleChangePaymentMethod : undefined}
             onPrintClientTicket={handlePrintClientTicket}
             onPrintKitchenTicket={handlePrintKitchenTicket}
           />
@@ -515,6 +538,15 @@ const OrdersPage: React.FC = () => {
           open={!!splitPaymentDialog.data}
           onClose={() => splitPaymentDialog.close()}
           onSuccess={handleSplitPaymentSuccess}
+        />
+
+        {/* Confirmación de cambio de método de pago (OWNER y ADMIN) */}
+        <ChangePaymentMethodDialog
+          order={changePaymentMethodDialog.data?.order ?? null}
+          targetMethod={changePaymentMethodDialog.data?.method ?? null}
+          open={!!changePaymentMethodDialog.data}
+          onClose={() => changePaymentMethodDialog.close()}
+          onSuccess={handleChangePaymentMethodSuccess}
         />
 
         {/* Diálogo de confirmación de eliminación */}

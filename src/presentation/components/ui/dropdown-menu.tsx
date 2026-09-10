@@ -179,13 +179,17 @@ const DropdownMenuItem = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & {
     onSelect?: () => void;
+    /** `false` deja el menú abierto: para items que despliegan más opciones. */
+    closeOnSelect?: boolean;
   }
->(({ className, children, onSelect, ...props }, ref) => {
+>(({ className, children, onSelect, closeOnSelect = true, ...props }, ref) => {
   const { setOpen } = useDropdownMenuContext();
 
   const handleClick = () => {
     onSelect?.();
-    setOpen(false);
+    if (closeOnSelect) {
+      setOpen(false);
+    }
   };
 
   return (
