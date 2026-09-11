@@ -110,7 +110,7 @@ export const Sidebar = () => {
     }
   }, [currentPath]); // Solo depende de currentPath del hook
 
-  const sidebarWidth = isCollapsed ? 'w-16' : 'w-64';
+  const sidebarWidth = isCollapsed ? 'w-16' : 'w-72';
 
   return (
     <>

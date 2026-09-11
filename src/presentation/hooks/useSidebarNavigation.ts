@@ -67,9 +67,9 @@ const FULL_NAV_MAIN: NavItem[] = [
   // Oculto del sidebar (cambio visual): { icon: Map, label: 'Mapa de Ubicaciones', path: '/tables' },
   {
     icon: BookOpen,
-    label: 'Catálogo del Negocio',
+    label: 'Platillos y Categorías',
     subItems: [
-      { icon: Utensils, label: 'Productos del Catálogo', path: '/menu/items' },
+      { icon: Utensils, label: 'Platillos', path: '/menu/items' },
       { icon: FolderTree, label: 'Categorías', path: '/menu/categories' },
     ],
   },

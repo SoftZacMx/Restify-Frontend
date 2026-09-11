@@ -38,7 +38,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
     if (isMobile) {
       return 'ml-0'; // En móvil no hay margen (sidebar es overlay)
     }
-    return isCollapsed ? 'ml-16' : 'ml-64'; // Desktop: 16 cuando colapsada, 64 cuando expandida
+    return isCollapsed ? 'ml-16' : 'ml-72'; // Debe coincidir con sidebarWidth en Sidebar.tsx
   };
 
   return (
