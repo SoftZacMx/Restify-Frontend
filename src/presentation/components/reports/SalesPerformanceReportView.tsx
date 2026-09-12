@@ -36,17 +36,17 @@ export const SalesPerformanceReportView: React.FC<SalesPerformanceReportViewProp
             <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{formatCurrency(totalSold)}</p>
           </CardContent>
         </Card>
-        <Card className="overflow-hidden border-l-4 border-l-blue-500 dark:border-l-blue-600 bg-gradient-to-br from-white to-blue-50/30 dark:from-slate-800 dark:to-blue-950/20 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="overflow-hidden border-l-4 border-l-primary dark:border-l-primary bg-gradient-to-br from-white to-primary/30 dark:from-slate-800 dark:to-primary/20 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400 flex items-center gap-2">
-              <span className="rounded-lg bg-blue-100 dark:bg-blue-900/40 p-1.5">
-                <Package className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <span className="rounded-lg bg-primary/10 dark:bg-primary/20/40 p-1.5">
+                <Package className="h-4 w-4 text-primary dark:text-primary" />
               </span>
               Ítems con ventas
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{summary.totalMenuItems}</p>
+            <p className="text-2xl font-bold text-primary dark:text-primary">{summary.totalMenuItems}</p>
           </CardContent>
         </Card>
         <Card className="overflow-hidden border-l-4 border-l-violet-500 dark:border-l-violet-600 bg-gradient-to-br from-white to-violet-50/30 dark:from-slate-800 dark:to-violet-950/20 shadow-md hover:shadow-lg transition-shadow">

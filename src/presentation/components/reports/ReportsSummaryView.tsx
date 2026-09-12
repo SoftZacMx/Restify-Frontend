@@ -64,7 +64,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
             </p>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-primary">
           <CardHeader className="pb-1">
             <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400 flex items-center gap-2">
               <ShoppingCart className="h-4 w-4" />

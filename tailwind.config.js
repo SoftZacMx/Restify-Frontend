@@ -53,6 +53,18 @@ export default {
         },
         "background-light": "#f5f6f8",
         "background-dark": "#0f1323",
+        // Roles del sistema de diseño (no cubiertos por shadcn)
+        marca: "var(--color-marca)",
+        fresco: {
+          DEFAULT: "var(--color-fresco)",
+          suave: "var(--color-fresco-suave)",
+          texto: "var(--color-fresco-texto)",
+        },
+        apoyo: {
+          DEFAULT: "var(--color-apoyo)",
+          suave: "var(--color-apoyo-suave)",
+          texto: "var(--color-apoyo-texto)",
+        },
       },
       borderRadius: {
         DEFAULT: "0.25rem",
@@ -61,7 +73,8 @@ export default {
         full: "9999px",
       },
       fontFamily: {
-        display: ["Poppins", "sans-serif"],
+        sans: ["Manrope", "system-ui", "sans-serif"],
+        display: ["Manrope", "system-ui", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {

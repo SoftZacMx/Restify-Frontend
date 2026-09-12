@@ -22,7 +22,7 @@ export function getOrderStatusLabel(order: DashboardOrderSummary): string {
 export function getOrderStatusStyle(order: DashboardOrderSummary): string {
   if (order.status && order.delivered)
     return 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400';
-  if (order.status) return 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400';
+  if (order.status) return 'bg-primary/10 dark:bg-primary/20/20 text-primary dark:text-primary';
   return 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400';
 }
 

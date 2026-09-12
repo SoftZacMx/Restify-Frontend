@@ -46,7 +46,7 @@ const labelClass =
 const iconClass =
   "pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 dark:text-slate-500";
 const primaryButtonClass =
-  "bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white font-semibold shadow-lg shadow-blue-500/30";
+  "bg-gradient-to-r from-primary to-primary hover:from-primary hover:to-primary text-white font-semibold shadow-lg shadow-primary/30";
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -126,7 +126,7 @@ export default function SignupPage() {
       {/* Logo */}
       <div className="mb-6 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
-          <UtensilsCrossed className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+          <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
           <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
             RESTIFY
           </span>
@@ -355,7 +355,7 @@ export default function SignupPage() {
                 </span>
                 <Link
                   to="/auth/login"
-                  className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-semibold"
+                  className="text-sm text-primary hover:text-primary/80 dark:text-primary dark:hover:text-primary/80 hover:underline font-semibold"
                 >
                   Inicia sesión
                 </Link>

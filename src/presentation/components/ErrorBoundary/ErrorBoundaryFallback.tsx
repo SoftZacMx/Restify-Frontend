@@ -14,7 +14,7 @@ interface ErrorBoundaryFallbackProps {
 export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({ onRetry }) => {
   useEffect(() => {
     const prev = document.title;
-    document.title = 'Error Boundary BIZFLOW';
+    document.title = 'Error Boundary RESTIFY';
     return () => {
       document.title = prev;
     };
@@ -35,8 +35,8 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({ on
       <main className="flex-1 flex flex-col items-center justify-center px-6 py-12">
         <div className="max-w-md w-full flex flex-col items-center text-center space-y-6">
           {/* Icon */}
-          <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-slate-300 dark:border-slate-500 bg-blue-100 dark:bg-blue-600/20">
-            <AlertTriangle className="h-10 w-10 text-blue-600 dark:text-blue-400" strokeWidth={2} />
+          <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-slate-300 dark:border-slate-500 bg-primary/10 dark:bg-primary/20">
+            <AlertTriangle className="h-10 w-10 text-primary dark:text-primary" strokeWidth={2} />
           </div>
 
           <div className="space-y-2">
@@ -53,7 +53,7 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({ on
             <button
               type="button"
               onClick={handleRetry}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-50 dark:focus:ring-offset-slate-900 transition-colors"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-slate-50 dark:focus:ring-offset-slate-900 transition-colors"
             >
               <RefreshCw className="h-4 w-4" />
               Intentar de nuevo
@@ -76,7 +76,7 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({ on
 
       {/* Footer */}
       <footer className="py-4 text-center text-sm text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700/50">
-        © 2024 BIZFLOW Admin Panel. Todos los derechos reservados.
+        © 2024 RESTIFY Admin Panel. Todos los derechos reservados.
       </footer>
     </div>
   );

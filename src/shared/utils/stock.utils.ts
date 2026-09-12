@@ -123,8 +123,8 @@ export const MOVEMENT_TYPE_OPTIONS: MovementTypeOption[] = [
     description: 'Venta',
     descriptionPlural: 'Ventas',
     icon: Receipt,
-    badgeClassName: 'bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300',
-    hoverClassName: 'hover:bg-blue-200 dark:hover:bg-blue-900/60 focus:bg-blue-200 dark:focus:bg-blue-900/60',
+    badgeClassName: 'bg-primary/10 dark:bg-primary/20/40 text-primary dark:text-primary',
+    hoverClassName: 'hover:bg-primary/90 dark:hover:bg-primary/90/60 focus:bg-primary/20 dark:focus:bg-primary/20/60',
   },
   {
     value: 'WASTE',

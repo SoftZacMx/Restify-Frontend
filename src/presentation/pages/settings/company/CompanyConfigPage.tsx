@@ -306,7 +306,7 @@ const CompanyConfigPage: React.FC = () => {
       <Card className={configCardClass}>
         <CardHeader className="space-y-1.5">
           <CardTitle className="flex items-center gap-2 text-lg text-slate-900 dark:text-slate-100">
-            <Clock className="h-4 w-4 text-blue-600 dark:text-sky-400 shrink-0" aria-hidden />
+            <Clock className="h-4 w-4 text-primary dark:text-sky-400 shrink-0" aria-hidden />
             Horario de operación
           </CardTitle>
           <p className="text-sm text-slate-500 dark:text-slate-400">

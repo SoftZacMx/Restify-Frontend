@@ -26,7 +26,7 @@ function Bar({
     <div className="flex flex-col items-center gap-2 flex-1 group cursor-pointer" title={title}>
       <div
         className={`w-full rounded-t-md transition-all group-hover:opacity-80 min-h-[24px] ${
-          active ? 'bg-blue-500 dark:bg-blue-400' : 'bg-blue-100 dark:bg-blue-900/30'
+          active ? 'bg-primary dark:bg-primary' : 'bg-primary/10 dark:bg-primary/20/30'
         }`}
         style={{ height }}
       />

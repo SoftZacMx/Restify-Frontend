@@ -39,7 +39,7 @@ export default function SelectBranchPage() {
 
       <div className="mb-8 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
-          <UtensilsCrossed className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+          <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
           <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
             RESTIFY
           </span>

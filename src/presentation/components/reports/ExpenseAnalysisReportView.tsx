@@ -35,7 +35,7 @@ const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>
 
 const CATEGORY_BORDER: Record<string, string> = {
   businessServices: 'border-l-amber-500 dark:border-l-amber-600',
-  utilities: 'border-l-blue-500 dark:border-l-blue-600',
+  utilities: 'border-l-primary dark:border-l-primary',
   rent: 'border-l-red-500 dark:border-l-red-600',
   merchandise: 'border-l-emerald-500 dark:border-l-emerald-600',
   other: 'border-l-slate-500 dark:border-l-slate-600',
@@ -159,7 +159,7 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
             <span className="rounded-lg bg-amber-100 dark:bg-amber-900/40 px-3 py-1.5 text-sm font-medium text-amber-800 dark:text-amber-200">
               Efectivo: {formatCurrency(summary.totalByPaymentMethod.cash)}
             </span>
-            <span className="rounded-lg bg-blue-100 dark:bg-blue-900/40 px-3 py-1.5 text-sm font-medium text-blue-800 dark:text-blue-200">
+            <span className="rounded-lg bg-primary/10 dark:bg-primary/20/40 px-3 py-1.5 text-sm font-medium text-primary dark:text-primary">
               Transferencia: {formatCurrency(summary.totalByPaymentMethod.transfer)}
             </span>
             <span className="rounded-lg bg-violet-100 dark:bg-violet-900/40 px-3 py-1.5 text-sm font-medium text-violet-800 dark:text-violet-200">

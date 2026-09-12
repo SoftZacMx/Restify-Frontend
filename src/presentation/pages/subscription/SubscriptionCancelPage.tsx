@@ -38,7 +38,7 @@ const SubscriptionCancelPage = () => {
         <div className="flex flex-col gap-3">
           <Button
             onClick={handleRetry}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-primary hover:bg-primary/90 text-white"
           >
             Elegir un plan
           </Button>

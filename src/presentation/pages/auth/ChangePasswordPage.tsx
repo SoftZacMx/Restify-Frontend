@@ -78,7 +78,7 @@ export default function ChangePasswordPage() {
       {/* Logo */}
       <div className="mb-8 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
-          <UtensilsCrossed className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+          <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
           <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
             RESTIFY
           </span>
@@ -176,7 +176,7 @@ export default function ChangePasswordPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-medium text-base shadow-sm mt-2"
+              className="w-full h-11 bg-primary hover:bg-primary/90 text-white font-medium text-base shadow-sm mt-2"
             >
               {isLoading ? 'Cambiando contraseña...' : 'Guardar y continuar'}
             </Button>

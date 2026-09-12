@@ -26,7 +26,7 @@ const PAYMENT_LABELS: Record<number, string> = {
 
 const paymentPillClass: Record<number, string> = {
   1: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  2: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
+  2: 'bg-primary/10 text-primary dark:bg-primary/20/40 dark:text-primary',
   3: 'bg-violet-100 text-violet-800 dark:bg-violet-900/40 dark:text-violet-300',
   4: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
 };
@@ -58,7 +58,7 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
             <p className="text-2xl font-bold text-green-600 dark:text-green-400">{formatCurrency(incomes.totalIncomes)}</p>
             <div className="flex flex-wrap gap-1.5 mt-2">
               <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">Efectivo {formatCurrency(bpm.cash)}</span>
-              <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300">Transf. {formatCurrency(bpm.transfer)}</span>
+              <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-primary/10 dark:bg-primary/20/40 text-primary dark:text-primary">Transf. {formatCurrency(bpm.transfer)}</span>
               <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-violet-100 dark:bg-violet-900/40 text-violet-800 dark:text-violet-300">Tarjeta {formatCurrency(bpm.card)}</span>
             </div>
           </CardContent>
@@ -85,7 +85,7 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
                 <span className="rounded-md px-2 py-0.5 font-medium bg-rose-100 dark:bg-rose-900/40 text-rose-800 dark:text-rose-300">Renta {formatCurrency(expenses.rent.total)}</span>
               )}
               {expenses.merchandise.total > 0 && (
-                <span className="rounded-md px-2 py-0.5 font-medium bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300">Mercancía {formatCurrency(expenses.merchandise.total)}</span>
+                <span className="rounded-md px-2 py-0.5 font-medium bg-primary/10 dark:bg-primary/20/40 text-primary dark:text-primary">Mercancía {formatCurrency(expenses.merchandise.total)}</span>
               )}
               {(expenses.salary.total + expenses.employeeSalaries.total) > 0 && (
                 <span className="rounded-md px-2 py-0.5 font-medium bg-violet-100 dark:bg-violet-900/40 text-violet-800 dark:text-violet-300">Nómina {formatCurrency(expenses.salary.total + expenses.employeeSalaries.total)}</span>
@@ -198,7 +198,7 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
         <Card className="shadow-md border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <Package className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <Package className="h-4 w-4 text-primary dark:text-primary" />
               Mercancía
             </CardTitle>
           </CardHeader>
@@ -223,7 +223,7 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
                 </TableBody>
               </Table>
             )}
-            <p className="text-sm font-semibold mt-3 rounded-lg bg-blue-50 dark:bg-blue-950/30 px-3 py-2 text-blue-800 dark:text-blue-200">
+            <p className="text-sm font-semibold mt-3 rounded-lg bg-primary/10 dark:bg-primary/20/30 px-3 py-2 text-primary dark:text-primary">
               Total: {formatCurrency(expenses.merchandise.total)}
             </p>
           </CardContent>

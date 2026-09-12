@@ -472,7 +472,7 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
                 <Button
                   size="sm"
                   onClick={() => onSplitPayment(order)}
-                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  className="w-full bg-primary hover:bg-primary/90"
                 >
                   <CreditCard className="h-4 w-4 mr-2" />
                   Pagar con dos métodos

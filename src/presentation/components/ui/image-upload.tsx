@@ -159,7 +159,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           disabled={disabled || isUploading}
           className={cn(
             'border border-dashed border-slate-300 dark:border-slate-600',
-            'text-slate-500 dark:text-slate-400 hover:border-blue-400 hover:text-blue-500 transition-colors',
+            'text-slate-500 dark:text-slate-400 hover:border-primary hover:text-primary/80 transition-colors',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             isFeatured
               ? 'flex w-full max-w-[400px] mx-auto aspect-[4/3] flex-col items-center justify-center gap-2 rounded-xl bg-slate-50/60 dark:bg-slate-800/40'

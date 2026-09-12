@@ -107,7 +107,7 @@ const SubscriptionSuccessPage = () => {
             Tu pago fue procesado pero no pudimos confirmar la suscripción. Intenta de nuevo o contacta soporte.
           </p>
           <div className="flex gap-3 justify-center">
-            <Button onClick={handleRetry} className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button onClick={handleRetry} className="bg-primary hover:bg-primary/90 text-white">
               Reintentar
             </Button>
             <Button variant="outline" onClick={() => navigate('/dashboard')}>
@@ -138,7 +138,7 @@ const SubscriptionSuccessPage = () => {
 
         <Button
           onClick={() => navigate('/dashboard')}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
+          className="bg-primary hover:bg-primary/90 text-white"
         >
           Ir al dashboard
         </Button>

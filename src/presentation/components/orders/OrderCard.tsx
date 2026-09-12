@@ -112,7 +112,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   const getBorderColor = () => {
     if (!order.status && !order.delivered) return 'border-l-yellow-500';
     if (!order.status && order.delivered) return 'border-l-orange-500';
-    if (order.status && !order.delivered) return 'border-l-blue-500';
+    if (order.status && !order.delivered) return 'border-l-primary';
     if (order.status && order.delivered) return 'border-l-green-500';
     return 'border-l-gray-500';
   };

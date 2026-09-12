@@ -41,7 +41,7 @@ const saleData: SaleTicketResponse = {
 describe('buildKitchenTicketHtml', () => {
   it('renders a full kitchen ticket with defaults', () => {
     const html = buildKitchenTicketHtml(kitchenData);
-    expect(html).toContain('BIZFLOW');
+    expect(html).toContain('RESTIFY');
     expect(html).toContain('OPERACIONES');
     expect(html).toContain('Orden #23456789');
     expect(html).toContain('Ubicación Mesa 1');
@@ -134,12 +134,12 @@ describe('buildSaleTicketHtml', () => {
     expect(html).toContain('MX$126.00');
     expect(html).toContain('PAGO: Efectivo');
     expect(html).toContain('ESTADO: Entregado');
-    expect(html).toContain('BizFlow');
+    expect(html).toContain('Restify');
   });
 
-  it('falls back to BizFlow when companyName is missing', () => {
+  it('falls back to Restify when companyName is missing', () => {
     const html = buildSaleTicketHtml({ ...saleData, companyName: undefined });
-    expect(html).toContain('<div class="brand-main">BizFlow</div>');
+    expect(html).toContain('<div class="brand-main">Restify</div>');
   });
 
   it('computes the IVA percentage from subtotal', () => {

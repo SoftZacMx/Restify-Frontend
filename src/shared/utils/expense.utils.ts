@@ -23,7 +23,7 @@ export function getExpenseTypeLabel(type: ExpenseType): string {
 export function getExpenseTypeBadgeColor(type: ExpenseType): string {
   const colors: Record<ExpenseType, string> = {
     SERVICE_BUSINESS: 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300',
-    UTILITY: 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300',
+    UTILITY: 'bg-primary/10 dark:bg-primary/20/50 text-primary dark:text-primary',
     RENT: 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300',
     MERCHANDISE: 'bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-300',
     SALARY: 'bg-violet-100 dark:bg-violet-900/50 text-violet-800 dark:text-violet-300',

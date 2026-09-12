@@ -3,7 +3,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from '@/presentation/components/ui/toaster';
 import { ThemeProvider } from '@/presentation/contexts/theme.context';
-import { PaletteProvider } from '@/presentation/contexts/palette.context';
 import { SidebarProvider } from '@/presentation/contexts/sidebar.context';
 import { WebSocketProvider } from '@/presentation/contexts/websocket.context';
 import { ErrorBoundary } from '@/presentation/components/ErrorBoundary';
@@ -97,8 +96,7 @@ function App() {
   return (
     <ThemeProvider>
       <ErrorBoundary>
-        <PaletteProvider>
-          <SidebarProvider>
+        <SidebarProvider>
             <QueryClientProvider client={queryClient}>
               <WebSocketProvider>
                 <BrowserRouter>
@@ -207,7 +205,6 @@ function App() {
               </WebSocketProvider>
             </QueryClientProvider>
           </SidebarProvider>
-        </PaletteProvider>
       </ErrorBoundary>
     </ThemeProvider>
   );

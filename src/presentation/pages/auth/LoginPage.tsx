@@ -58,9 +58,9 @@ export default function LoginPage() {
       {/* Logo Section */}
       <div className="mb-8 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
-          <UtensilsCrossed className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+          <UtensilsCrossed className="h-8 w-8 text-primary" />
           <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
-            BIZFLOW
+            RESTIFY
           </span>
         </div>
       </div>
@@ -137,7 +137,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-medium text-base shadow-sm mt-2"
+              className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-base shadow-sm mt-2"
             >
               {isLoading ? 'Cargando...' : 'Iniciar Sesión'}
             </Button>
@@ -146,7 +146,7 @@ export default function LoginPage() {
             <div className="text-center pt-2">
               <Link
                 to="/auth/forgot-password"
-                className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-medium"
+                className="text-sm text-primary hover:text-primary/80 hover:underline font-medium"
               >
                 ¿Olvidaste tu contraseña?
               </Link>
@@ -156,7 +156,7 @@ export default function LoginPage() {
             <div className="text-center">
               <Link
                 to="/auth/signup"
-                className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-medium"
+                className="text-sm text-primary hover:text-primary/80 hover:underline font-medium"
               >
                 ¿No tienes cuenta? Regístrate
               </Link>

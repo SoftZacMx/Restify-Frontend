@@ -348,7 +348,7 @@ const NavItemComponent = ({ icon, label, isActive, onClick, isCollapsed }: NavIt
         'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
         isCollapsed && 'justify-center px-2',
         isActive
-          ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
+          ? 'bg-primary/10 text-primary'
           : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-100'
       )}
     >
@@ -401,7 +401,7 @@ const NavItemWithSubmenu = ({
         'w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
         isCollapsed && 'justify-center px-2',
         hasActiveChild
-          ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
+          ? 'bg-primary/10 text-primary'
           : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-100'
       )}
     >
@@ -434,7 +434,7 @@ const NavItemWithSubmenu = ({
                     className={cn(
                       'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
                       isSubActive
-                        ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
+                        ? 'bg-primary/10 text-primary'
                         : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-100'
                     )}
                   >

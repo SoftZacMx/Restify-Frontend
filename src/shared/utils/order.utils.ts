@@ -43,8 +43,8 @@ export const getOrderStatusInfo = (order: OrderResponse): OrderStatusInfo => {
     return {
       label: 'Pagada',
       color: 'blue',
-      bgClass: 'bg-blue-100 dark:bg-blue-900/30',
-      textClass: 'text-blue-800 dark:text-blue-300',
+      bgClass: 'bg-primary/10 dark:bg-primary/20/30',
+      textClass: 'text-primary dark:text-primary',
     };
   }
   if (order.status && order.delivered) {

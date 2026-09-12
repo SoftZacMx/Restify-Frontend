@@ -73,7 +73,7 @@ const SubscriptionBlockedPage = () => {
           Tu suscripción ha expirado
         </h1>
         <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto">
-          Tu acceso a BizFlow se encuentra restringido actualmente. Elige un plan
+          Tu acceso a Restify se encuentra restringido actualmente. Elige un plan
           para continuar gestionando tu negocio sin interrupciones.
         </p>
       </div>
@@ -81,7 +81,7 @@ const SubscriptionBlockedPage = () => {
       {/* Plan Cards */}
       {isLoadingPlans ? (
         <div className="flex items-center justify-center mb-10">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
         </div>
       ) : (
         <div className="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
@@ -98,7 +98,7 @@ const SubscriptionBlockedPage = () => {
                 onClick={() => setSelectedPlanId(plan.id)}
                 className={`relative rounded-2xl border-2 bg-white dark:bg-slate-800 p-8 shadow-lg text-left transition-all ${
                   isSelected
-                    ? 'border-blue-500 ring-2 ring-blue-500/20'
+                    ? 'border-primary ring-2 ring-primary/20'
                     : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
                 }`}
               >
@@ -149,7 +149,7 @@ const SubscriptionBlockedPage = () => {
                   <div
                     className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
                       isSelected
-                        ? 'border-blue-500 bg-blue-500'
+                        ? 'border-primary bg-primary'
                         : 'border-slate-300 dark:border-slate-600'
                     }`}
                   >
@@ -169,7 +169,7 @@ const SubscriptionBlockedPage = () => {
         <Button
           onClick={handleSubscribe}
           disabled={isLoading || !selectedPlanId || isLoadingPlans}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl"
+          className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-xl"
           size="lg"
         >
           {isLoading ? (

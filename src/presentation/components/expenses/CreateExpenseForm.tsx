@@ -208,7 +208,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
       {/* Información General */}
       <section className="space-y-4">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-blue-600 text-white">
+          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-white">
             <Info className="h-4 w-4" />
           </div>
           <h3 className="text-base font-semibold text-slate-900 dark:text-white">
@@ -309,7 +309,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Detalles adicionales sobre la compra..."
               rows={3}
-              className="flex w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-base text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-base text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </div>
           <div className="space-y-2">
@@ -430,7 +430,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           {expenseType === 'MERCHANDISE' && (
             <div className="flex gap-3 rounded-lg bg-slate-100 p-4 dark:bg-slate-800/50">
-              <Info className="h-5 w-5 flex-shrink-0 text-blue-600 dark:text-blue-400" />
+              <Info className="h-5 w-5 flex-shrink-0 text-primary dark:text-primary" />
               <p className="text-sm text-slate-600 dark:text-slate-300">
                 Los subtotales y totales se calculan automáticamente basándose en la cantidad y
                 precio unitario ingresado. El IVA se calcula al 19% por defecto.
@@ -448,7 +448,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
             </div>
             <div className="flex justify-between border-t border-slate-200 pt-2 dark:border-slate-700">
               <span className="font-semibold text-slate-900 dark:text-white" data-testid="expense-form-total-label">Total a Pagar</span>
-              <span className="text-lg font-bold text-blue-600 dark:text-blue-400" data-testid="expense-form-total">
+              <span className="text-lg font-bold text-primary dark:text-primary" data-testid="expense-form-total">
                 {formatCurrency(parseFloat(total || '0'))}
               </span>
             </div>
@@ -475,7 +475,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
         >
           Cancelar
         </Button>
-        <Button type="submit" disabled={isLoading} className="bg-blue-600 hover:bg-blue-700">
+        <Button type="submit" disabled={isLoading} className="bg-primary hover:bg-primary/90">
           <Save className="mr-2 h-4 w-4" />
           {isLoading ? 'Guardando...' : 'Guardar Gasto'}
         </Button>

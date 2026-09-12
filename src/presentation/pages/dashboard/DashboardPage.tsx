@@ -89,7 +89,7 @@ const DashboardPage = () => {
   const getOrderStatusStyle = (order: DashboardOrderSummary) => {
     if (order.status && order.delivered)
       return 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400';
-    if (order.status) return 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400';
+    if (order.status) return 'bg-primary/10 dark:bg-primary/20/20 text-primary dark:text-primary';
     return 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400';
   };
 
@@ -344,7 +344,7 @@ const DashboardPage = () => {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <Button
-                  className="h-24 flex flex-col gap-2 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-700 dark:text-blue-300"
+                  className="h-24 flex flex-col gap-2 bg-primary/10 dark:bg-primary/20/20 hover:bg-primary/90 dark:hover:bg-primary/90/30 text-primary dark:text-primary"
                   onClick={() => navigate('/pos')}
                 >
                   <Plus className="h-6 w-6" />
@@ -434,8 +434,8 @@ const DashboardPage = () => {
               <NotificationItem
                 title="Usa Órdenes para ver el detalle de cada orden."
                 time="Información"
-                iconBg="bg-blue-100 dark:bg-blue-900/20"
-                iconColor="text-blue-600 dark:text-blue-400"
+                iconBg="bg-primary/10 dark:bg-primary/20/20"
+                iconColor="text-primary dark:text-primary"
                 IconComponent={ClipboardList}
               />
             </CardContent>
@@ -492,18 +492,18 @@ const ACCENT_STYLES: Record<
     badgeText: 'text-amber-700 dark:text-amber-300',
   },
   blue: {
-    iconBg: 'bg-blue-500/15 dark:bg-blue-400/20',
-    iconColor: 'text-blue-600 dark:text-blue-400',
-    iconRing: 'ring-blue-500/20 dark:ring-blue-400/30',
+    iconBg: 'bg-primary/15 dark:bg-primary/20',
+    iconColor: 'text-primary dark:text-primary',
+    iconRing: 'ring-primary/20 dark:ring-primary/30',
     cardBg:
-      'bg-gradient-to-br from-white via-white to-blue-50/50 dark:from-slate-800 dark:via-slate-800 dark:to-blue-950/25',
-    cardBorder: 'border-blue-200/60 dark:border-blue-800/50',
+      'bg-gradient-to-br from-white via-white to-primary/50 dark:from-slate-800 dark:via-slate-800 dark:to-primary/25',
+    cardBorder: 'border-primary/30/60 dark:border-primary/50',
     cardShadow: 'shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50',
-    cardHoverShadow: 'hover:shadow-xl hover:shadow-blue-500/5 dark:hover:shadow-blue-500/10',
+    cardHoverShadow: 'hover:shadow-xl hover:shadow-primary/5 dark:hover:shadow-primary/10',
     cornerGlow:
-      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-blue-400/15 dark:before:bg-blue-500/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
-    badgeBg: 'bg-blue-100 dark:bg-blue-900/40',
-    badgeText: 'text-blue-700 dark:text-blue-300',
+      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-primary/15 dark:before:bg-primary/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
+    badgeBg: 'bg-primary/10 dark:bg-primary/20/40',
+    badgeText: 'text-primary dark:text-primary',
   },
 };
 
@@ -571,7 +571,7 @@ const Bar = ({
   <div className="flex flex-col items-center gap-2 flex-1 group cursor-pointer" title={title}>
     <div
       className={`w-full rounded-t-md transition-all group-hover:opacity-80 min-h-[24px] ${
-        active ? 'bg-blue-500 dark:bg-blue-400' : 'bg-blue-100 dark:bg-blue-900/30'
+        active ? 'bg-primary dark:bg-primary' : 'bg-primary/10 dark:bg-primary/20/30'
       }`}
       style={{ height }}
     />

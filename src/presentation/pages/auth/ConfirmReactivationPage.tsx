@@ -153,7 +153,7 @@ export default function ConfirmReactivationPage() {
               </Button>
               <Link
                 to="/auth/login"
-                className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-medium"
+                className="text-sm text-primary hover:text-primary/80 dark:text-primary dark:hover:text-primary/80 hover:underline font-medium"
               >
                 Volver al inicio de sesión
               </Link>

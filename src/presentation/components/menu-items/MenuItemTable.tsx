@@ -34,7 +34,7 @@ const STOCK_MODE_META: Record<
   direct: {
     label: 'Directo',
     tooltip: 'Vinculado a un producto único — descuenta 1 unidad al venderse',
-    className: 'bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300',
+    className: 'bg-primary/10 dark:bg-primary/20/40 text-primary dark:text-primary',
     Icon: Package,
   },
   none: {
@@ -149,7 +149,7 @@ export const MenuItemTable: React.FC<MenuItemTableProps> = ({
                       className={cn(
                         'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0',
                         menuItem.isExtra
-                          ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300'
+                          ? 'bg-primary/10 dark:bg-primary/20/50 text-primary dark:text-primary'
                           : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-300'
                       )}
                     >

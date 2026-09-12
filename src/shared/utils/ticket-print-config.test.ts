@@ -17,7 +17,7 @@ describe('mergeTicketPrintConfig', () => {
   it('returns a deep copy, not a reference to the defaults', () => {
     const merged = mergeTicketPrintConfig(undefined);
     merged.sale.footerText = 'modified';
-    expect(DEFAULT_TICKET_PRINT_CONFIG.sale.footerText).toBe('BizFlow');
+    expect(DEFAULT_TICKET_PRINT_CONFIG.sale.footerText).toBe('Restify');
   });
 
   it('applies stored values on top of defaults', () => {
@@ -38,9 +38,9 @@ describe('mergeTicketPrintConfig', () => {
   });
 
   it('falls back to the default footerText when stored footerText is empty or not a string', () => {
-    expect(mergeTicketPrintConfig({ sale: { footerText: '' } }).sale.footerText).toBe('BizFlow');
-    expect(mergeTicketPrintConfig({ sale: { footerText: '   ' } }).sale.footerText).toBe('BizFlow');
-    expect(mergeTicketPrintConfig({ sale: { footerText: 42 } }).sale.footerText).toBe('BizFlow');
+    expect(mergeTicketPrintConfig({ sale: { footerText: '' } }).sale.footerText).toBe('Restify');
+    expect(mergeTicketPrintConfig({ sale: { footerText: '   ' } }).sale.footerText).toBe('Restify');
+    expect(mergeTicketPrintConfig({ sale: { footerText: 42 } }).sale.footerText).toBe('Restify');
   });
 
   it('ignores unknown keys in stored config', () => {

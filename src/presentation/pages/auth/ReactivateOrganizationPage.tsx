@@ -49,7 +49,7 @@ export default function ReactivateOrganizationPage() {
 
         <div className="mb-8 flex flex-col items-center gap-2">
           <div className="flex items-center gap-2">
-            <UtensilsCrossed className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
             <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
               RESTIFY
             </span>
@@ -58,7 +58,7 @@ export default function ReactivateOrganizationPage() {
 
         <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800">
           <CardContent className="flex flex-col items-center gap-4 py-12 px-8">
-            <MailCheck className="h-16 w-16 text-blue-500" />
+            <MailCheck className="h-16 w-16 text-primary" />
             <h2 className="text-xl font-bold text-slate-900 dark:text-white font-serif text-center">
               Revisa tu correo
             </h2>
@@ -68,7 +68,7 @@ export default function ReactivateOrganizationPage() {
             </p>
             <Link
               to="/auth/login"
-              className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-medium inline-flex items-center gap-1 pt-2"
+              className="text-sm text-primary hover:text-primary/80 dark:text-primary dark:hover:text-primary/80 hover:underline font-medium inline-flex items-center gap-1 pt-2"
             >
               <ArrowLeft className="h-4 w-4" />
               Volver al inicio de sesión
@@ -88,7 +88,7 @@ export default function ReactivateOrganizationPage() {
       {/* Logo */}
       <div className="mb-8 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
-          <UtensilsCrossed className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+          <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
           <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
             RESTIFY
           </span>
@@ -97,8 +97,8 @@ export default function ReactivateOrganizationPage() {
 
       <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800">
         <CardHeader className="space-y-3 text-center pb-8 pt-10">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
-            <RotateCcw className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 dark:bg-primary/20/30">
+            <RotateCcw className="h-6 w-6 text-primary dark:text-primary" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white font-serif">
             Reactivar organización
@@ -129,7 +129,7 @@ export default function ReactivateOrganizationPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-medium text-base shadow-sm mt-2"
+              className="w-full h-11 bg-primary hover:bg-primary/90 text-white font-medium text-base shadow-sm mt-2"
             >
               {isLoading ? 'Enviando...' : 'Enviar enlace'}
             </Button>
@@ -137,7 +137,7 @@ export default function ReactivateOrganizationPage() {
             <div className="text-center pt-2">
               <Link
                 to="/auth/login"
-                className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-medium inline-flex items-center gap-1"
+                className="text-sm text-primary hover:text-primary/80 dark:text-primary dark:hover:text-primary/80 hover:underline font-medium inline-flex items-center gap-1"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Volver al inicio de sesión

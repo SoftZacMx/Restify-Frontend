@@ -71,7 +71,7 @@ export default function ResetPasswordPage() {
 
         <div className="mb-8 flex flex-col items-center gap-2">
           <div className="flex items-center gap-2">
-            <UtensilsCrossed className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
             <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
               RESTIFY
             </span>
@@ -105,7 +105,7 @@ export default function ResetPasswordPage() {
 
         <div className="mb-8 flex flex-col items-center gap-2">
           <div className="flex items-center gap-2">
-            <UtensilsCrossed className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
             <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
               RESTIFY
             </span>
@@ -136,7 +136,7 @@ export default function ResetPasswordPage() {
       {/* Logo */}
       <div className="mb-8 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
-          <UtensilsCrossed className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+          <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
           <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
             RESTIFY
           </span>
@@ -230,7 +230,7 @@ export default function ResetPasswordPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-medium text-base shadow-sm mt-2"
+              className="w-full h-11 bg-primary hover:bg-primary/90 text-white font-medium text-base shadow-sm mt-2"
             >
               {isLoading ? 'Cambiando contraseña...' : 'Cambiar Contraseña'}
             </Button>
@@ -238,7 +238,7 @@ export default function ResetPasswordPage() {
             <div className="text-center pt-2">
               <Link
                 to="/auth/login"
-                className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-medium inline-flex items-center gap-1"
+                className="text-sm text-primary hover:text-primary/80 dark:text-primary dark:hover:text-primary/80 hover:underline font-medium inline-flex items-center gap-1"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Volver al inicio de sesión

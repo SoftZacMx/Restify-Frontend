@@ -412,8 +412,8 @@ const MenuItemDetailPage: React.FC = () => {
               </div>
 
               {menuItem.isExtra && (
-                <div className="rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-3">
-                  <p className="text-xs text-blue-700 dark:text-blue-300">
+                <div className="rounded-lg bg-primary/10 dark:bg-primary/20/20 border border-primary/30 dark:border-primary p-3">
+                  <p className="text-xs text-primary dark:text-primary">
                     Este producto es un <strong>extra</strong> — se vende como complemento de
                     otros productos. Su receta también descuenta stock al venderse.
                   </p>

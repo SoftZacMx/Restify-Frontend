@@ -46,18 +46,18 @@ const ACCENT_STYLES: Record<
     badgeText: 'text-amber-700 dark:text-amber-300',
   },
   blue: {
-    iconBg: 'bg-blue-500/15 dark:bg-blue-400/20',
-    iconColor: 'text-blue-600 dark:text-blue-400',
-    iconRing: 'ring-blue-500/20 dark:ring-blue-400/30',
+    iconBg: 'bg-primary/15 dark:bg-primary/20',
+    iconColor: 'text-primary dark:text-primary',
+    iconRing: 'ring-primary/20 dark:ring-primary/30',
     cardBg:
-      'bg-gradient-to-br from-white via-white to-blue-50/50 dark:from-slate-800 dark:via-slate-800 dark:to-blue-950/25',
-    cardBorder: 'border-blue-200/60 dark:border-blue-800/50',
+      'bg-gradient-to-br from-white via-white to-primary/50 dark:from-slate-800 dark:via-slate-800 dark:to-primary/25',
+    cardBorder: 'border-primary/30/60 dark:border-primary/50',
     cardShadow: 'shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50',
-    cardHoverShadow: 'hover:shadow-xl hover:shadow-blue-500/5 dark:hover:shadow-blue-500/10',
+    cardHoverShadow: 'hover:shadow-xl hover:shadow-primary/5 dark:hover:shadow-primary/10',
     cornerGlow:
-      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-blue-400/15 dark:before:bg-blue-500/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
-    badgeBg: 'bg-blue-100 dark:bg-blue-900/40',
-    badgeText: 'text-blue-700 dark:text-blue-300',
+      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-primary/15 dark:before:bg-primary/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
+    badgeBg: 'bg-primary/10 dark:bg-primary/20/40',
+    badgeText: 'text-primary dark:text-primary',
   },
 };
 

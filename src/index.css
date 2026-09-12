@@ -1,6 +1,8 @@
 
 /* Sonner Toast Styles */
 @import 'sonner/dist/styles.css';
+/* Tipografía del sistema de diseño */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,27 +10,43 @@
 
 @layer base {
   :root {
-    /* Fondo off-white suave para no lastimar la vista en tema claro */
-    --background: 220 14% 96%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* ===== Sistema de diseño Restify — light =====
+       Paleta fusionada: carbón + brasa + huerto + ámbar + crema.
+       Se repuntan los tokens shadcn (que consumen los componentes) a la paleta. */
+
+    --background: 40 40% 96%;          /* crema #FAF7F0 (nunca blanco puro) */
+    --foreground: 147 16% 11%;         /* carbón #17201B (texto) */
+    --card: 0 0% 100%;                 /* superficie / tarjetas */
+    --card-foreground: 147 16% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --popover-foreground: 147 16% 11%;
+
+    --primary: 14 78% 54%;             /* brasa #E4572E — acciones/CTA */
+    --primary-foreground: 40 40% 97%;  /* crema sobre brasa */
+
+    --secondary: 40 25% 93%;           /* superficie neutra cálida */
+    --secondary-foreground: 147 16% 11%;
+    --muted: 40 25% 93%;
+    --muted-foreground: 140 4% 43%;    /* texto suave #6B726B */
+    --accent: 40 25% 91%;              /* fondo de hover/selección */
+    --accent-foreground: 147 16% 11%;
+
+    --destructive: 6 64% 46%;          /* rojo de peligro (borrar) */
+    --destructive-foreground: 40 40% 97%;
+
+    --border: 36 22% 90%;              /* hairline crema #ECE7DE */
+    --input: 36 22% 90%;
+    --ring: 14 78% 54%;                /* foco = brasa */
     --radius: 0.5rem;
+
+    /* Roles extra no cubiertos por shadcn (en HEX) */
+    --color-marca:  #17201B;           /* carbón: marca/cabeceras/footer */
+    --color-fresco: #5C9A2E;           /* huerto: positivo/fresco */
+    --color-fresco-suave: #E8F1DC;
+    --color-fresco-texto: #3F6B1F;
+    --color-apoyo:  #F2A65A;           /* ámbar: apoyo/iconos/detalles */
+    --color-apoyo-suave: #FDEBD6;
+    --color-apoyo-texto: #9A5A12;
   }
 
   .dark {
@@ -61,7 +79,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Manrope', system-ui, sans-serif;
   }
 
   /* El preflight de Tailwind le devuelve a los type="search" la apariencia nativa

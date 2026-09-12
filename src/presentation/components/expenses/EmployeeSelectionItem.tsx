@@ -33,7 +33,7 @@ export const EmployeeSelectionItem: React.FC<EmployeeSelectionItemProps> = ({
         'w-full flex items-center gap-4 p-3 rounded-lg border text-left transition-colors',
         'hover:bg-slate-50 dark:hover:bg-slate-800/50',
         selected
-          ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/30 dark:border-blue-500'
+          ? 'border-primary bg-primary/10 dark:bg-primary/20/30 dark:border-primary'
           : 'border-slate-200 dark:border-slate-700'
       )}
     >
@@ -57,7 +57,7 @@ export const EmployeeSelectionItem: React.FC<EmployeeSelectionItemProps> = ({
         className={cn(
           'flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center',
           selected
-            ? 'border-blue-600 bg-blue-600 dark:border-blue-500 dark:bg-blue-500'
+            ? 'border-primary bg-primary dark:border-primary dark:bg-primary'
             : 'border-slate-300 dark:border-slate-600'
         )}
       >

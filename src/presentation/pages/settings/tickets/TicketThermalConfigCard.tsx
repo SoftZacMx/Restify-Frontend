@@ -95,8 +95,8 @@ function CollapsibleSection({
         {Icon ? (
           <span
             className={cn(
-              'flex shrink-0 items-center justify-center rounded-lg text-blue-600 dark:text-sky-400',
-              nested ? 'h-8 w-8 bg-slate-200/80 dark:bg-slate-800/80' : 'h-10 w-10 bg-blue-500/10 dark:bg-sky-500/15'
+              'flex shrink-0 items-center justify-center rounded-lg text-primary dark:text-sky-400',
+              nested ? 'h-8 w-8 bg-slate-200/80 dark:bg-slate-800/80' : 'h-10 w-10 bg-primary/10 dark:bg-sky-500/15'
             )}
             aria-hidden
           >
@@ -459,7 +459,7 @@ export const TicketThermalConfigCard: React.FC<TicketThermalConfigCardProps> = (
           id="tp-footer-text"
           value={s.footerText}
           onChange={(e) => patchSale({ footerText: e.target.value })}
-          placeholder="BizFlow"
+          placeholder="Restify"
           maxLength={120}
           disabled={disabled || !s.showFooter}
         />

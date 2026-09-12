@@ -38,10 +38,10 @@ export function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
                 aria-current={isActive ? 'step' : undefined}
                 className={cn(
                   'flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-bold transition-colors',
-                  isActive && 'border-blue-600 bg-blue-600 text-white',
-                  isCompleted && 'border-blue-600 bg-blue-600 text-white',
+                  isActive && 'border-primary bg-primary text-white',
+                  isCompleted && 'border-primary bg-primary text-white',
                   !isActive && !isCompleted && 'border-slate-300 dark:border-slate-600 text-slate-400 dark:text-slate-500',
-                  isClickable ? 'cursor-pointer hover:bg-blue-700 hover:border-blue-700' : 'cursor-default'
+                  isClickable ? 'cursor-pointer hover:bg-primary/90 hover:border-primary' : 'cursor-default'
                 )}
               >
                 {isCompleted ? <Check className="h-5 w-5" /> : index + 1}
@@ -63,7 +63,7 @@ export function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
               <div
                 className={cn(
                   'mx-2 h-0.5 w-16 sm:w-24 -translate-y-3 transition-colors',
-                  index < currentStep ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'
+                  index < currentStep ? 'bg-primary' : 'bg-slate-300 dark:bg-slate-600'
                 )}
               />
             )}

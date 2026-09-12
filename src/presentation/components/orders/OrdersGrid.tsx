@@ -39,7 +39,7 @@ export const OrdersGrid: React.FC<OrdersGridProps> = ({
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-16">
-        <Loader2 className="h-10 w-10 animate-spin text-blue-500 mb-4" />
+        <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
         <p className="text-slate-500 dark:text-slate-400">Cargando órdenes...</p>
       </div>
     );

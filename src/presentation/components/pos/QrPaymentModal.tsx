@@ -78,7 +78,7 @@ export const QrPaymentModal = ({ orderId, userId, total, onSuccess, onClose }: Q
           {/* Loading */}
           {state === 'loading' && (
             <div className="py-12 flex flex-col items-center gap-3">
-              <Loader2 className="w-10 h-10 text-blue-500 animate-spin" />
+              <Loader2 className="w-10 h-10 text-primary animate-spin" />
               <p className="text-slate-500 dark:text-slate-400">Generando código QR...</p>
             </div>
           )}
@@ -100,7 +100,7 @@ export const QrPaymentModal = ({ orderId, userId, total, onSuccess, onClose }: Q
               <p className="text-center text-2xl font-bold text-slate-900 dark:text-white mb-4">
                 ${total.toFixed(2)} MXN
               </p>
-              <div className="flex items-center gap-2 text-sm text-blue-500">
+              <div className="flex items-center gap-2 text-sm text-primary">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Esperando pago...
               </div>
