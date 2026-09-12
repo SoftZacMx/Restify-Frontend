@@ -131,6 +131,11 @@ export const ERROR_CONFIG = {
     statusCode: 400,
     category: 'BUSINESS',
   },
+  MERCHANT_PAYMENT_ACCOUNT_NOT_CONFIGURED: {
+    message: 'Este restaurante todavía no puede cobrar en línea',
+    statusCode: 404,
+    category: 'BUSINESS',
+  },
   PRODUCT_NOT_FOUND: {
     message: 'Producto no encontrado',
     statusCode: 404,
