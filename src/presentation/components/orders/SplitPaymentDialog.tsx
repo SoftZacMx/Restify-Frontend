@@ -139,8 +139,8 @@ export const SplitPaymentDialog: React.FC<SplitPaymentDialogProps> = ({
         {order ? (
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Total de la orden (solo lectura) */}
-            <div className="rounded-lg bg-slate-100 dark:bg-slate-800 p-4">
-              <Label className="text-slate-500 dark:text-slate-400">Total de la orden</Label>
+            <div className="rounded-lg bg-slate-100 dark:bg-card p-4">
+              <Label className="text-slate-500 dark:text-muted-foreground">Total de la orden</Label>
               <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">
                 {formatCurrency(orderTotal)}
               </p>
@@ -209,8 +209,8 @@ export const SplitPaymentDialog: React.FC<SplitPaymentDialogProps> = ({
 
             {/* Resumen suma */}
             {(a1 > 0 || a2 > 0) && (
-              <div className="flex justify-between text-sm pt-2 border-t border-slate-200 dark:border-slate-700">
-                <span className="text-slate-600 dark:text-slate-400">Suma ingresada:</span>
+              <div className="flex justify-between text-sm pt-2 border-t border-slate-200 dark:border-border">
+                <span className="text-slate-600 dark:text-muted-foreground">Suma ingresada:</span>
                 <span className={sumNotExceedsTotal ? 'text-green-600 dark:text-green-400 font-medium' : 'text-destructive'}>
                   {formatCurrency(sum)}
                   {!sumNotExceedsTotal && orderTotal > 0 && (
@@ -228,7 +228,7 @@ export const SplitPaymentDialog: React.FC<SplitPaymentDialogProps> = ({
               </div>
             )}
 
-            <div className="flex justify-end gap-2 pt-4 border-t border-slate-200 dark:border-slate-700">
+            <div className="flex justify-end gap-2 pt-4 border-t border-slate-200 dark:border-border">
               <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>
                 Cancelar
               </Button>
@@ -245,7 +245,7 @@ export const SplitPaymentDialog: React.FC<SplitPaymentDialogProps> = ({
             </div>
           </form>
         ) : (
-          <p className="text-sm text-slate-500 dark:text-slate-400">No hay orden seleccionada.</p>
+          <p className="text-sm text-slate-500 dark:text-muted-foreground">No hay orden seleccionada.</p>
         )}
       </DialogContent>
     </Dialog>

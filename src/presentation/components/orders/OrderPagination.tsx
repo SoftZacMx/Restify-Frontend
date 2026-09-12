@@ -70,22 +70,22 @@ export const OrderPagination: React.FC<OrderPaginationProps> = ({
   }
 
   return (
-    <div className="px-4 pt-4 pb-6 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-b-lg shrink-0">
+    <div className="px-4 pt-4 pb-6 border-t border-slate-200 dark:border-border bg-white dark:bg-background rounded-b-lg shrink-0">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-          <div className="text-sm text-slate-500 dark:text-slate-400">
+          <div className="text-sm text-slate-500 dark:text-muted-foreground">
             Mostrando{' '}
-            <span className="font-medium text-slate-700 dark:text-slate-300">{startItem}</span>
+            <span className="font-medium text-slate-700 dark:text-foreground">{startItem}</span>
             {' '}a{' '}
-            <span className="font-medium text-slate-700 dark:text-slate-300">{endItem}</span>
+            <span className="font-medium text-slate-700 dark:text-foreground">{endItem}</span>
             {' '}de{' '}
-            <span className="font-medium text-slate-700 dark:text-slate-300">{totalItems}</span>
+            <span className="font-medium text-slate-700 dark:text-foreground">{totalItems}</span>
             {' '}órdenes
           </div>
 
           {showPageSizeSelector && (
             <div className="flex items-center gap-2">
-              <span className="text-sm text-slate-500 dark:text-slate-400">Por página:</span>
+              <span className="text-sm text-slate-500 dark:text-muted-foreground">Por página:</span>
               <Select
                 value={String(itemsPerPage)}
                 onValueChange={(v) => onPageSizeChange?.(Number(v))}

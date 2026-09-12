@@ -73,13 +73,13 @@ export const MenuCategoryForm: React.FC<MenuCategoryFormProps> = ({
           aria-required
         />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
-        <p className="text-xs text-slate-500 dark:text-slate-400">{name.length}/200 caracteres</p>
+        <p className="text-xs text-slate-500 dark:text-muted-foreground">{name.length}/200 caracteres</p>
       </div>
 
-      <div className="flex items-center justify-between space-x-2 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+      <div className="flex items-center justify-between space-x-2 rounded-lg border border-slate-200 dark:border-border p-4">
         <div className="space-y-0.5">
           <Label htmlFor="status" className="text-sm font-medium">Estado</Label>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-xs text-slate-500 dark:text-muted-foreground">
             {status ? 'Categoría activa' : 'Categoría inactiva'}
           </p>
         </div>
@@ -91,7 +91,7 @@ export const MenuCategoryForm: React.FC<MenuCategoryFormProps> = ({
         />
       </div>
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+      <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-border">
         <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>Cancelar</Button>
         <Button type="submit" disabled={isLoading}>
           {isLoading ? 'Guardando...' : isEditMode ? 'Actualizar' : 'Crear'}

@@ -66,7 +66,7 @@ const ProductDetailPage: React.FC = () => {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-slate-500 dark:text-slate-400">Cargando información del producto...</p>
+            <p className="text-slate-500 dark:text-muted-foreground">Cargando información del producto...</p>
           </div>
         </div>
       </MainLayout>
@@ -77,7 +77,7 @@ const ProductDetailPage: React.FC = () => {
     return (
       <MainLayout>
         <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-          <p className="text-slate-500 dark:text-slate-400 text-lg">Producto no encontrado</p>
+          <p className="text-slate-500 dark:text-muted-foreground text-lg">Producto no encontrado</p>
           <Button onClick={() => navigate('/products')} variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Volver a Productos
@@ -94,19 +94,19 @@ const ProductDetailPage: React.FC = () => {
         <div className="flex flex-wrap gap-2 mb-6">
           <Link
             to="/dashboard"
-            className="text-slate-500 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors"
+            className="text-slate-500 dark:text-muted-foreground text-sm font-medium hover:text-primary transition-colors"
           >
             Dashboard
           </Link>
-          <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">/</span>
+          <span className="text-slate-500 dark:text-muted-foreground text-sm font-medium">/</span>
           <Link
             to="/products"
-            className="text-slate-500 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors"
+            className="text-slate-500 dark:text-muted-foreground text-sm font-medium hover:text-primary transition-colors"
           >
             Productos
           </Link>
-          <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">/</span>
-          <span className="text-slate-800 dark:text-slate-200 text-sm font-medium">{product.name}</span>
+          <span className="text-slate-500 dark:text-muted-foreground text-sm font-medium">/</span>
+          <span className="text-slate-800 dark:text-foreground text-sm font-medium">{product.name}</span>
         </div>
 
         {/* Page Heading */}
@@ -120,7 +120,7 @@ const ProductDetailPage: React.FC = () => {
                 'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0',
                 product.status
                   ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300'
-                  : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-300'
+                  : 'bg-slate-100 dark:bg-card text-slate-800 dark:text-foreground'
               )}
             >
               {product.status ? 'Activo' : 'Inactivo'}
@@ -149,36 +149,36 @@ const ProductDetailPage: React.FC = () => {
             </div>
             <div className="space-y-6">
               <div className="flex items-start gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-card text-slate-500 dark:text-foreground">
                   <Tag className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Nombre</p>
+                  <p className="text-xs font-medium text-slate-500 dark:text-muted-foreground">Nombre</p>
                   <p className="text-base font-semibold text-slate-900 dark:text-white mt-0.5">
                     {product.name}
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-card text-slate-500 dark:text-foreground">
                   <AlignLeft className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Descripción</p>
-                  <p className="text-sm text-slate-800 dark:text-slate-200 mt-0.5 break-words">
+                  <p className="text-xs font-medium text-slate-500 dark:text-muted-foreground">Descripción</p>
+                  <p className="text-sm text-slate-800 dark:text-foreground mt-0.5 break-words">
                     {product.description || 'Sin descripción'}
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-card text-slate-500 dark:text-foreground">
                   <UserIcon className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-xs font-medium text-slate-500 dark:text-muted-foreground">
                     Usuario propietario
                   </p>
-                  <p className="text-sm font-mono text-slate-800 dark:text-slate-200 mt-0.5 break-all">
+                  <p className="text-sm font-mono text-slate-800 dark:text-foreground mt-0.5 break-all">
                     {product.userId}
                   </p>
                 </div>
@@ -198,14 +198,14 @@ const ProductDetailPage: React.FC = () => {
             </div>
             <div className="space-y-6">
               <div className="flex items-start gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-card text-slate-500 dark:text-foreground">
                   <CalendarCheck className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-xs font-medium text-slate-500 dark:text-muted-foreground">
                     Fecha de Registro
                   </p>
-                  <p className="text-sm text-slate-800 dark:text-slate-200 mt-0.5">
+                  <p className="text-sm text-slate-800 dark:text-foreground mt-0.5">
                     {new Date(product.registrationDate).toLocaleDateString('es-ES', {
                       day: '2-digit',
                       month: 'long',
@@ -216,14 +216,14 @@ const ProductDetailPage: React.FC = () => {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-card text-slate-500 dark:text-foreground">
                   <CalendarPlus className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-xs font-medium text-slate-500 dark:text-muted-foreground">
                     Fecha de Creación
                   </p>
-                  <p className="text-sm text-slate-800 dark:text-slate-200 mt-0.5">
+                  <p className="text-sm text-slate-800 dark:text-foreground mt-0.5">
                     {new Date(product.createdAt).toLocaleDateString('es-ES', {
                       day: '2-digit',
                       month: 'long',
@@ -236,14 +236,14 @@ const ProductDetailPage: React.FC = () => {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-card text-slate-500 dark:text-foreground">
                   <Clock className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-xs font-medium text-slate-500 dark:text-muted-foreground">
                     Última Actualización
                   </p>
-                  <p className="text-sm text-slate-800 dark:text-slate-200 mt-0.5">
+                  <p className="text-sm text-slate-800 dark:text-foreground mt-0.5">
                     {new Date(product.updatedAt).toLocaleDateString('es-ES', {
                       day: '2-digit',
                       month: 'long',

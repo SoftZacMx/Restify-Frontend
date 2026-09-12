@@ -90,15 +90,15 @@ export const TableForm: React.FC<TableFormProps> = ({
           aria-required
         />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
-        <p className="text-xs text-slate-500 dark:text-slate-400">
+        <p className="text-xs text-slate-500 dark:text-muted-foreground">
           Identificador único para la ubicación (letras, números o ambos). Máximo 64 caracteres.
         </p>
       </div>
 
-      <div className="flex items-center justify-between space-x-2 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+      <div className="flex items-center justify-between space-x-2 rounded-lg border border-slate-200 dark:border-border p-4">
         <div className="space-y-0.5">
           <Label htmlFor="status" className="text-sm font-medium">Estado de la Ubicación</Label>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-xs text-slate-500 dark:text-muted-foreground">
             {status ? 'Ubicación activa en el sistema' : 'Ubicación inactiva (no visible para operaciones)'}
           </p>
         </div>
@@ -110,10 +110,10 @@ export const TableForm: React.FC<TableFormProps> = ({
         />
       </div>
 
-      <div className="flex items-center justify-between space-x-2 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+      <div className="flex items-center justify-between space-x-2 rounded-lg border border-slate-200 dark:border-border p-4">
         <div className="space-y-0.5">
           <Label htmlFor="availabilityStatus" className="text-sm font-medium">Disponibilidad</Label>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-xs text-slate-500 dark:text-muted-foreground">
             {availabilityStatus ? 'Ubicación libre (disponible para nuevas órdenes)' : 'Ubicación ocupada (tiene una orden activa)'}
           </p>
         </div>
@@ -125,17 +125,17 @@ export const TableForm: React.FC<TableFormProps> = ({
         />
       </div>
 
-      <div className="rounded-lg bg-slate-50 dark:bg-slate-800/50 p-4 space-y-2">
-        <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Estado actual de la ubicación:</p>
+      <div className="rounded-lg bg-slate-50 dark:bg-card/50 p-4 space-y-2">
+        <p className="text-sm font-medium text-slate-700 dark:text-foreground">Estado actual de la ubicación:</p>
         <div className="flex items-center gap-2">
           <span className={cn('inline-block w-3 h-3 rounded-full', !status ? 'bg-gray-400' : availabilityStatus ? 'bg-green-500' : 'bg-red-500')} />
-          <span className="text-sm text-slate-600 dark:text-slate-400">
+          <span className="text-sm text-slate-600 dark:text-muted-foreground">
             {!status ? 'Deshabilitada' : availabilityStatus ? 'Libre' : 'Ocupada'}
           </span>
         </div>
       </div>
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+      <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-border">
         <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>Cancelar</Button>
         <Button type="submit" disabled={isLoading}>
           {isLoading ? 'Guardando...' : isEditMode ? 'Actualizar' : 'Crear'}

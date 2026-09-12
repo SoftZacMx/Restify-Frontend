@@ -90,7 +90,7 @@ export const UserPagination: React.FC<UserPaginationProps> = ({
           variant="outline"
           onClick={handlePrevious}
           disabled={currentPage === 1}
-          className="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-700 text-sm font-medium rounded-md text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-border text-sm font-medium rounded-md text-slate-700 dark:text-foreground bg-white dark:bg-card hover:bg-slate-50 dark:hover:bg-card disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Anterior
         </Button>
@@ -99,7 +99,7 @@ export const UserPagination: React.FC<UserPaginationProps> = ({
           variant="outline"
           onClick={handleNext}
           disabled={currentPage === totalPages}
-          className="ml-3 relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-700 text-sm font-medium rounded-md text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="ml-3 relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-border text-sm font-medium rounded-md text-slate-700 dark:text-foreground bg-white dark:bg-card hover:bg-slate-50 dark:hover:bg-card disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Siguiente
         </Button>
@@ -108,7 +108,7 @@ export const UserPagination: React.FC<UserPaginationProps> = ({
       {/* Desktop Pagination */}
       <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-slate-700 dark:text-slate-400">
+          <p className="text-sm text-slate-700 dark:text-muted-foreground">
             Mostrando <span className="font-medium">{startItem}</span> a{' '}
             <span className="font-medium">{endItem}</span> de{' '}
             <span className="font-medium">{totalItems}</span> resultados
@@ -121,7 +121,7 @@ export const UserPagination: React.FC<UserPaginationProps> = ({
               variant="outline"
               onClick={handlePrevious}
               disabled={currentPage === 1}
-              className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-slate-300 dark:border-border bg-white dark:bg-card text-sm font-medium text-slate-500 dark:text-muted-foreground hover:bg-slate-50 dark:hover:bg-card disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -131,7 +131,7 @@ export const UserPagination: React.FC<UserPaginationProps> = ({
                 return (
                   <span
                     key={`ellipsis-${index}`}
-                    className="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium text-slate-700 dark:text-slate-400"
+                    className="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-border bg-white dark:bg-card text-sm font-medium text-slate-700 dark:text-muted-foreground"
                   >
                     ...
                   </span>
@@ -150,7 +150,7 @@ export const UserPagination: React.FC<UserPaginationProps> = ({
                     'relative inline-flex items-center px-4 py-2 border text-sm font-medium',
                     isActive
                       ? 'z-10 bg-primary/20 dark:bg-primary/30 border-primary text-primary dark:text-white'
-                      : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
+                      : 'bg-white dark:bg-card border-slate-300 dark:border-border text-slate-500 dark:text-muted-foreground hover:bg-slate-50 dark:hover:bg-card'
                   )}
                 >
                   {page}
@@ -163,7 +163,7 @@ export const UserPagination: React.FC<UserPaginationProps> = ({
               variant="outline"
               onClick={handleNext}
               disabled={currentPage === totalPages}
-              className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-slate-300 dark:border-border bg-white dark:bg-card text-sm font-medium text-slate-500 dark:text-muted-foreground hover:bg-slate-50 dark:hover:bg-card disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>

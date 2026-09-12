@@ -25,7 +25,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <Loader2 className="h-12 w-12 text-primary animate-spin mb-4" />
-        <p className="text-slate-500 dark:text-slate-400">Cargando productos...</p>
+        <p className="text-slate-500 dark:text-muted-foreground">Cargando productos...</p>
       </div>
     );
   }
@@ -43,7 +43,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <Package className="h-12 w-12 text-slate-400 mb-4" />
-        <p className="text-slate-500 dark:text-slate-400">No hay productos disponibles</p>
+        <p className="text-slate-500 dark:text-muted-foreground">No hay productos disponibles</p>
       </div>
     );
   }
@@ -57,9 +57,9 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
             key={product.id}
             type="button"
             onClick={() => onProductSelect(product)}
-            className="flex items-center gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-3 shadow-sm hover:shadow-md transition-shadow text-left"
+            className="flex items-center gap-3 rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-3 shadow-sm hover:shadow-md transition-shadow text-left"
           >
-            <div className="h-12 w-12 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center overflow-hidden">
+            <div className="h-12 w-12 shrink-0 rounded-lg bg-slate-100 dark:bg-card/50 flex items-center justify-center overflow-hidden">
               {product.imageUrl ? (
                 <img src={product.imageUrl} alt={product.name} className="h-full w-full object-cover" />
               ) : (
@@ -67,7 +67,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-sm text-slate-900 dark:text-slate-100 truncate">
+              <h3 className="font-semibold text-sm text-slate-900 dark:text-foreground truncate">
                 {product.name}
               </h3>
               <p className="text-primary font-semibold text-sm">${product.price.toFixed(2)}</p>
@@ -86,9 +86,9 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
         {products.map((product) => (
           <article
             key={product.id}
-            className="group rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow"
+            className="group rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow"
           >
-            <div className="aspect-square w-full bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center overflow-hidden">
+            <div className="aspect-square w-full bg-slate-100 dark:bg-card/50 flex items-center justify-center overflow-hidden">
               {product.imageUrl ? (
                 <img
                   src={product.imageUrl}
@@ -102,12 +102,12 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
               )}
             </div>
             <div className="p-4 flex flex-col flex-1">
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100 line-clamp-2 mb-1">
+              <h3 className="font-semibold text-slate-900 dark:text-foreground line-clamp-2 mb-1">
                 {product.name}
               </h3>
               <p className="text-primary font-semibold mb-2">${product.price.toFixed(2)}</p>
               {product.description && (
-                <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mb-4">
+                <p className="text-xs text-slate-500 dark:text-muted-foreground line-clamp-2 mb-4">
                   {product.description}
                 </p>
               )}

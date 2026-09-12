@@ -135,7 +135,7 @@ export const RegisterWasteDialog: React.FC<RegisterWasteDialogProps> = ({
           <form onSubmit={submit} className="flex flex-col gap-5 mt-2">
             {/* Producto — botón que abre el dialog */}
             <div>
-              <Label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              <Label className="text-sm font-medium text-slate-700 dark:text-foreground">
                 Producto <span className="text-destructive">*</span>
               </Label>
               <button
@@ -143,11 +143,11 @@ export const RegisterWasteDialog: React.FC<RegisterWasteDialogProps> = ({
                 onClick={() => setIsPickerOpen(true)}
                 className={cn(
                   'mt-1 w-full flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium text-left transition-colors',
-                  'border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800',
-                  !selectedProduct && 'text-slate-400 dark:text-slate-500'
+                  'border-slate-200 dark:border-border hover:bg-slate-50 dark:hover:bg-card',
+                  !selectedProduct && 'text-slate-400 dark:text-muted-foreground'
                 )}
               >
-                <Package className="h-4 w-4 flex-shrink-0 text-slate-500 dark:text-slate-400" />
+                <Package className="h-4 w-4 flex-shrink-0 text-slate-500 dark:text-muted-foreground" />
                 <span className="truncate flex-1">
                   {selectedProduct
                     ? `${selectedProduct.name}${selectedProduct.unitOfMeasure ? ` (${formatUnit(selectedProduct.unitOfMeasure)})` : ''}`
@@ -163,7 +163,7 @@ export const RegisterWasteDialog: React.FC<RegisterWasteDialogProps> = ({
 
             {/* Cantidad */}
             <div>
-              <Label htmlFor="quantity" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              <Label htmlFor="quantity" className="text-sm font-medium text-slate-700 dark:text-foreground">
                 Cantidad <span className="text-destructive">*</span>
               </Label>
               <Input
@@ -176,7 +176,7 @@ export const RegisterWasteDialog: React.FC<RegisterWasteDialogProps> = ({
                 {...register('quantity', { valueAsNumber: true })}
               />
               {selectedProduct?.unitOfMeasure && (
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                <p className="text-xs text-slate-500 dark:text-muted-foreground mt-1">
                   Unidad del producto: <strong>{formatUnit(selectedProduct.unitOfMeasure)}</strong>
                 </p>
               )}
@@ -187,7 +187,7 @@ export const RegisterWasteDialog: React.FC<RegisterWasteDialogProps> = ({
 
             {/* Motivo */}
             <div>
-              <Label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              <Label className="text-sm font-medium text-slate-700 dark:text-foreground">
                 Motivo <span className="text-destructive">*</span>
               </Label>
               <Controller
@@ -210,7 +210,7 @@ export const RegisterWasteDialog: React.FC<RegisterWasteDialogProps> = ({
                             'flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors',
                             checked
                               ? 'border-primary bg-primary/10 text-primary'
-                              : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                              : 'border-slate-200 dark:border-border text-slate-700 dark:text-foreground hover:bg-slate-50 dark:hover:bg-card'
                           )}
                         >
                           <Icon className="h-4 w-4 flex-shrink-0" />
@@ -225,7 +225,7 @@ export const RegisterWasteDialog: React.FC<RegisterWasteDialogProps> = ({
                 <p className="text-sm text-destructive mt-1">{errors.reason.message ?? 'Seleccioná un motivo'}</p>
               )}
               {!errors.reason && !reasonValue && (
-                <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+                <p className="text-xs text-slate-400 dark:text-muted-foreground mt-1">
                   Seleccioná uno antes de registrar.
                 </p>
               )}
@@ -233,7 +233,7 @@ export const RegisterWasteDialog: React.FC<RegisterWasteDialogProps> = ({
 
             {/* Notas */}
             <div>
-              <Label htmlFor="notes" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              <Label htmlFor="notes" className="text-sm font-medium text-slate-700 dark:text-foreground">
                 Notas (opcional)
               </Label>
               <Textarea

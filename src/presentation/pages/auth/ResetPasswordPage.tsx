@@ -64,7 +64,7 @@ export default function ResetPasswordPage() {
   // Sin token el enlace es inválido/incompleto: no tiene sentido mostrar el formulario.
   if (!token) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center p-4">
         <div className="absolute top-4 right-4">
           <ThemeToggle variant="icon" />
         </div>
@@ -78,13 +78,13 @@ export default function ResetPasswordPage() {
           </div>
         </div>
 
-        <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800">
+        <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-border bg-white dark:bg-card">
           <CardContent className="flex flex-col items-center gap-4 py-12 px-8">
             <XCircle className="h-16 w-16 text-destructive" />
             <h2 className="text-xl font-bold text-slate-900 dark:text-white font-serif text-center">
               Enlace inválido
             </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400 text-center">
+            <p className="text-sm text-slate-500 dark:text-muted-foreground text-center">
               El enlace de restablecimiento es inválido o está incompleto. Solicita uno nuevo.
             </p>
             <Button className="mt-2 w-full" onClick={() => navigate('/auth/forgot-password')}>
@@ -98,7 +98,7 @@ export default function ResetPasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center p-4">
         <div className="absolute top-4 right-4">
           <ThemeToggle variant="icon" />
         </div>
@@ -112,13 +112,13 @@ export default function ResetPasswordPage() {
           </div>
         </div>
 
-        <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800">
+        <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-border bg-white dark:bg-card">
           <CardContent className="flex flex-col items-center gap-4 py-12 px-8">
             <CheckCircle2 className="h-16 w-16 text-green-500" />
             <h2 className="text-xl font-bold text-slate-900 dark:text-white font-serif">
               Contraseña actualizada
             </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400 text-center">
+            <p className="text-sm text-slate-500 dark:text-muted-foreground text-center">
               Tu contraseña ha sido cambiada exitosamente. Redirigiendo al inicio de sesión...
             </p>
           </CardContent>
@@ -128,7 +128,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center p-4">
       <div className="absolute top-4 right-4">
         <ThemeToggle variant="icon" />
       </div>
@@ -143,12 +143,12 @@ export default function ResetPasswordPage() {
         </div>
       </div>
 
-      <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800">
+      <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-border bg-white dark:bg-card">
         <CardHeader className="space-y-1 text-center pb-8 pt-10">
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white font-serif">
             Nueva Contraseña
           </h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-slate-500 dark:text-muted-foreground">
             Elige una nueva contraseña para tu cuenta.
           </p>
         </CardHeader>
@@ -166,7 +166,7 @@ export default function ResetPasswordPage() {
 
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              <Label htmlFor="password" className="text-sm font-medium text-slate-700 dark:text-foreground">
                 Nueva Contraseña
               </Label>
               <div className="relative">
@@ -180,7 +180,7 @@ export default function ResetPasswordPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-muted-foreground dark:hover:text-foreground focus:outline-none"
                   aria-label="Toggle password visibility"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -190,7 +190,7 @@ export default function ResetPasswordPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              <Label htmlFor="confirmPassword" className="text-sm font-medium text-slate-700 dark:text-foreground">
                 Confirmar Contraseña
               </Label>
               <div className="relative">
@@ -210,7 +210,7 @@ export default function ResetPasswordPage() {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-muted-foreground dark:hover:text-foreground focus:outline-none"
                   aria-label="Toggle confirm password visibility"
                 >
                   {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}

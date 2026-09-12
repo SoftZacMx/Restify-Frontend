@@ -17,7 +17,7 @@ export const CategorySelectionList: React.FC<CategorySelectionListProps> = ({
 }) => {
   if (categories.length === 0) {
     return (
-      <div className="py-8 text-center text-slate-500 dark:text-slate-400 text-sm">
+      <div className="py-8 text-center text-slate-500 dark:text-muted-foreground text-sm">
         No hay categorías que coincidan con la búsqueda.
       </div>
     );

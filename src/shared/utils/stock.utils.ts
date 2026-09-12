@@ -147,8 +147,8 @@ export const MOVEMENT_TYPE_OPTIONS: MovementTypeOption[] = [
     description: 'Reversa',
     descriptionPlural: 'Reversas',
     icon: RotateCcw,
-    badgeClassName: 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-300',
-    hoverClassName: 'hover:bg-slate-300 dark:hover:bg-slate-600 focus:bg-slate-300 dark:focus:bg-slate-600',
+    badgeClassName: 'bg-slate-200 dark:bg-card text-slate-800 dark:text-foreground',
+    hoverClassName: 'hover:bg-slate-300 dark:hover:bg-card focus:bg-slate-300 dark:focus:bg-card',
   },
 ];
 

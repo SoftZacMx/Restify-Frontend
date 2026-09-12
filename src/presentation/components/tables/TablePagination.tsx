@@ -63,7 +63,7 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
     <div className="px-4 py-4">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Información de items */}
-        <div className="text-sm text-slate-500 dark:text-slate-400">
+        <div className="text-sm text-slate-500 dark:text-muted-foreground">
           Mostrando {startItem} - {endItem} de {totalItems} ubicaciones
         </div>
 
@@ -103,7 +103,7 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
           </div>
 
           {/* Indicador móvil */}
-          <span className="sm:hidden text-sm text-slate-500 dark:text-slate-400">
+          <span className="sm:hidden text-sm text-slate-500 dark:text-muted-foreground">
             Página {currentPage} de {totalPages}
           </span>
 

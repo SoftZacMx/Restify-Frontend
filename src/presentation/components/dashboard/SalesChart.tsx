@@ -30,7 +30,7 @@ function Bar({
         }`}
         style={{ height }}
       />
-      <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{day}</span>
+      <span className="text-xs font-medium text-slate-500 dark:text-muted-foreground">{day}</span>
     </div>
   );
 }
@@ -49,13 +49,13 @@ export function SalesChart({ salesLast7Days }: SalesChartProps) {
       : 1;
 
   return (
-    <Card className="border-slate-100 dark:border-slate-700 shadow-sm bg-white dark:bg-slate-800">
+    <Card className="border-slate-100 dark:border-border shadow-sm bg-white dark:bg-card">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+        <CardTitle className="text-lg font-semibold text-slate-900 dark:text-foreground">
           Ventas de los últimos 7 días
         </CardTitle>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+          <span className="text-3xl font-bold text-slate-900 dark:text-foreground">
             {formatCurrency(salesLast7Days.total)}
           </span>
         </div>
@@ -63,7 +63,7 @@ export function SalesChart({ salesLast7Days }: SalesChartProps) {
       <CardContent>
         <div className="h-64 flex items-end justify-between gap-2 pt-4 px-2">
           {salesLast7Days.byDay.length === 0 ? (
-            <p className="text-sm text-slate-500 dark:text-slate-400 w-full text-center py-8">
+            <p className="text-sm text-slate-500 dark:text-muted-foreground w-full text-center py-8">
               Sin datos de ventas
             </p>
           ) : (

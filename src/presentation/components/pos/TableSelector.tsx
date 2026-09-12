@@ -46,7 +46,7 @@ export const TableSelector: React.FC<TableSelectorProps> = ({
               'flex flex-col items-center justify-center gap-1 h-24 rounded-xl border-2 relative transition-colors',
               isSelected
                 ? 'bg-primary border-primary text-white'
-                : 'border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white hover:border-primary/50',
+                : 'border-slate-200 dark:border-border bg-slate-50 dark:bg-card/50 text-slate-900 dark:text-white hover:border-primary/50',
               (!isAvailable && !isSelected) && 'opacity-60 cursor-not-allowed'
             )}
           >

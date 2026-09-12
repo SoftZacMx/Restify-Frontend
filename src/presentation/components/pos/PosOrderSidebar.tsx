@@ -79,8 +79,8 @@ export function PosOrderSidebar({
 
       {/* Total */}
       {cartItems.length > 0 && (
-        <div className="flex justify-between items-center py-2 px-3 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shrink-0">
-          <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Total</span>
+        <div className="flex justify-between items-center py-2 px-3 rounded-lg bg-slate-100 dark:bg-card border border-slate-200 dark:border-border shrink-0">
+          <span className="text-sm font-medium text-slate-600 dark:text-muted-foreground">Total</span>
           <span className="text-lg font-bold text-primary" data-testid="cart-total" aria-label={`Total de la orden ${cartState.total.toFixed(2)}`}>
             ${cartState.total.toFixed(2)}
           </span>

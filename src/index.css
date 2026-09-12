@@ -50,26 +50,39 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    /* red-400: el vino oscuro de shadcn sirve como fondo de botón, no como texto (1.9:1 sobre el fondo oscuro). */
-    --destructive: 0 90.6% 70.8%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    /* ===== Modo oscuro — misma paleta de marca, roles adaptados ===== */
+    --background: 95 19% 7%;           /* carbón profundo (verdoso) */
+    --foreground: 40 20% 92%;          /* crema */
+    --card: 100 15% 12%;               /* superficie */
+    --card-foreground: 40 20% 92%;
+    --popover: 100 15% 12%;
+    --popover-foreground: 40 20% 92%;
+
+    --primary: 14 78% 54%;             /* brasa — misma acción que en claro */
+    --primary-foreground: 40 40% 97%;
+
+    --secondary: 100 14% 14%;
+    --secondary-foreground: 40 20% 92%;
+    --muted: 100 14% 14%;
+    --muted-foreground: 96 8% 60%;     /* texto suave */
+    --accent: 100 14% 16%;             /* hover/selección */
+    --accent-foreground: 40 20% 92%;
+
+    --destructive: 4 70% 52%;          /* rojo de peligro */
+    --destructive-foreground: 40 40% 97%;
+
+    --border: 95 13% 18%;
+    --input: 95 13% 18%;
+    --ring: 14 78% 54%;
+
+    /* Roles extra en dark */
+    --color-marca:  #F1EEE6;           /* en oscuro la marca/texto va claro */
+    --color-fresco: #93C267;           /* huerto aclarado para contraste */
+    --color-fresco-suave: #202A18;
+    --color-fresco-texto: #ADD388;
+    --color-apoyo:  #F2A65A;
+    --color-apoyo-suave: #2A2416;
+    --color-apoyo-texto: #F2C07A;
   }
 }
 
@@ -105,9 +118,9 @@
   .dark input:-webkit-autofill:hover,
   .dark input:-webkit-autofill:focus,
   .dark input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 1000px #1e293b inset; /* slate-800 */
-    -webkit-text-fill-color: #ffffff;
-    caret-color: #ffffff;
+    -webkit-box-shadow: 0 0 0 1000px #1D231A inset; /* superficie oscura de la paleta */
+    -webkit-text-fill-color: #F1EEE6;
+    caret-color: #F1EEE6;
   }
 }
 

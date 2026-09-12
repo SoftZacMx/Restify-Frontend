@@ -68,10 +68,10 @@ export const SelectCategoryDialog: React.FC<SelectCategoryDialogProps> = ({
             <button
               type="button"
               onClick={() => handleSelect(null)}
-              className="w-full flex items-center gap-4 p-3 rounded-lg border text-left transition-colors border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50"
+              className="w-full flex items-center gap-4 p-3 rounded-lg border text-left transition-colors border-slate-200 dark:border-border hover:bg-slate-50 dark:hover:bg-card/50"
             >
-              <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                <LayoutGrid className="h-6 w-6 text-slate-500 dark:text-slate-400" />
+              <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-slate-100 dark:bg-card flex items-center justify-center">
+                <LayoutGrid className="h-6 w-6 text-slate-500 dark:text-muted-foreground" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-slate-900 dark:text-white truncate">

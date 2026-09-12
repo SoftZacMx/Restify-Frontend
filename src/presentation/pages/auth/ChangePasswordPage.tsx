@@ -70,7 +70,7 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center p-4">
       <div className="absolute top-4 right-4">
         <ThemeToggle variant="icon" />
       </div>
@@ -85,7 +85,7 @@ export default function ChangePasswordPage() {
         </div>
       </div>
 
-      <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800">
+      <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-border bg-white dark:bg-card">
         <CardHeader className="space-y-3 text-center pb-8 pt-10">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
             <ShieldAlert className="h-6 w-6 text-amber-600 dark:text-amber-400" />
@@ -93,7 +93,7 @@ export default function ChangePasswordPage() {
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white font-serif">
             Cambia tu contraseña
           </h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-slate-500 dark:text-muted-foreground">
             Por seguridad debes establecer una nueva contraseña antes de continuar.
           </p>
         </CardHeader>
@@ -112,7 +112,7 @@ export default function ChangePasswordPage() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              <Label htmlFor="password" className="text-sm font-medium text-slate-700 dark:text-foreground">
                 Nueva Contraseña
               </Label>
               <div className="relative">
@@ -126,7 +126,7 @@ export default function ChangePasswordPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-muted-foreground dark:hover:text-foreground focus:outline-none"
                   aria-label="Toggle password visibility"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -136,7 +136,7 @@ export default function ChangePasswordPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              <Label htmlFor="confirmPassword" className="text-sm font-medium text-slate-700 dark:text-foreground">
                 Confirmar Contraseña
               </Label>
               <div className="relative">
@@ -156,7 +156,7 @@ export default function ChangePasswordPage() {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-muted-foreground dark:hover:text-foreground focus:outline-none"
                   aria-label="Toggle confirm password visibility"
                 >
                   {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -185,7 +185,7 @@ export default function ChangePasswordPage() {
               <button
                 type="button"
                 onClick={() => logout().then(() => navigate('/auth/login', { replace: true }))}
-                className="text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:underline font-medium"
+                className="text-sm text-slate-500 hover:text-slate-700 dark:text-muted-foreground dark:hover:text-foreground hover:underline font-medium"
               >
                 Cerrar sesión
               </button>

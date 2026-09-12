@@ -73,7 +73,7 @@ const MenuCategoryDetailPage: React.FC = () => {
     return (
       <MainLayout>
         <div className="px-4 py-8">
-          <div className="text-center text-slate-500 dark:text-slate-400">
+          <div className="text-center text-slate-500 dark:text-muted-foreground">
             Cargando categoría...
           </div>
         </div>
@@ -111,7 +111,7 @@ const MenuCategoryDetailPage: React.FC = () => {
             <h1 className="text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white">
               {category.name}
             </h1>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
+            <p className="text-sm text-slate-500 dark:text-muted-foreground">
               Editar información de la categoría
             </p>
           </div>
@@ -144,7 +144,7 @@ const MenuCategoryDetailPage: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
                     ID
                   </p>
                   <p className="text-sm text-slate-900 dark:text-white font-mono">
@@ -152,7 +152,7 @@ const MenuCategoryDetailPage: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
                     Estado
                   </p>
                   <p className={`text-sm font-medium ${category.status ? 'text-green-600' : 'text-slate-500'}`}>
@@ -160,7 +160,7 @@ const MenuCategoryDetailPage: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
                     Creada
                   </p>
                   <p className="text-sm text-slate-900 dark:text-white">
@@ -175,7 +175,7 @@ const MenuCategoryDetailPage: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
                     Última actualización
                   </p>
                   <p className="text-sm text-slate-900 dark:text-white">

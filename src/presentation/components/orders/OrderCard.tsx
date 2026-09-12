@@ -132,7 +132,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
             </span>
             <OrderStatusBadge order={order} />
           </div>
-          <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400 shrink-0">
+          <div className="flex items-center gap-1 text-slate-500 dark:text-muted-foreground shrink-0">
             <Clock className="h-4 w-4" />
             <span className="text-sm whitespace-nowrap">{formatOrderTime(order.date)}</span>
           </div>
@@ -142,12 +142,12 @@ export const OrderCard: React.FC<OrderCardProps> = ({
       <CardContent className="pb-3">
         <div className="space-y-2">
           {/* Origen + # orden (en local el # va aquí; la ubicación va en el encabezado) */}
-          <div className="flex items-start gap-2 text-slate-600 dark:text-slate-300">
+          <div className="flex items-start gap-2 text-slate-600 dark:text-foreground">
             <MapPin className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />
             <div className="flex flex-col gap-0.5 min-w-0">
               <span className="text-sm font-medium">{originLabel}</span>
               {isLocalWithMesaBlock ? (
-                <span className="text-sm text-slate-700 dark:text-slate-200 font-medium">
+                <span className="text-sm text-slate-700 dark:text-foreground font-medium">
                   {orderNumberLabel}
                 </span>
               ) : null}
@@ -156,7 +156,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
 
           {/* Cliente */}
           {order.client && (
-            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+            <div className="flex items-center gap-2 text-slate-600 dark:text-foreground">
               <User className="h-4 w-4 text-slate-400" />
               <span className="text-sm">{order.client}</span>
             </div>
@@ -164,7 +164,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
 
           {/* Método de pago: solo si la orden está pagada y tiene método asignado */}
           {order.status && order.paymentMethod != null && (
-            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+            <div className="flex items-center gap-2 text-slate-600 dark:text-foreground">
               <CreditCard className="h-4 w-4 text-slate-400" />
               <span className="text-sm">
                 {paymentIcon} {order.paymentMethod === 1 ? 'Efectivo' : order.paymentMethod === 2 ? 'Transferencia' : order.paymentMethod === 3 ? 'Tarjeta' : order.paymentMethod === 4 ? 'Mercado Pago' : 'Pago dividido'}
@@ -173,9 +173,9 @@ export const OrderCard: React.FC<OrderCardProps> = ({
           )}
 
           {/* Total */}
-          <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
+          <div className="mt-3 pt-3 border-t border-slate-200 dark:border-border">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-500 dark:text-slate-400">Total</span>
+              <span className="text-sm text-slate-500 dark:text-muted-foreground">Total</span>
               <span className="text-xl font-bold text-slate-900 dark:text-white">
                 {formatCurrency(order.total)}
               </span>

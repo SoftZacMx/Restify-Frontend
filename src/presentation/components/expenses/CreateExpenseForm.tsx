@@ -229,7 +229,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
               placeholder="Ej. Mercancía Proveedor Central"
               className={cn(errors.title && 'border-red-500')}
             />
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-muted-foreground">
               {title.length}/200 caracteres
             </p>
             {errors.title && (
@@ -309,7 +309,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Detalles adicionales sobre la compra..."
               rows={3}
-              className="flex w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-base text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex w-full rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-card px-3 py-2 text-base text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </div>
           <div className="space-y-2">
@@ -426,12 +426,12 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
       )}
 
       {/* Resumen y totales */}
-      <section className="border-t border-slate-200 pt-6 dark:border-slate-700">
+      <section className="border-t border-slate-200 pt-6 dark:border-border">
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           {expenseType === 'MERCHANDISE' && (
-            <div className="flex gap-3 rounded-lg bg-slate-100 p-4 dark:bg-slate-800/50">
+            <div className="flex gap-3 rounded-lg bg-slate-100 p-4 dark:bg-card/50">
               <Info className="h-5 w-5 flex-shrink-0 text-primary dark:text-primary" />
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-600 dark:text-foreground">
                 Los subtotales y totales se calculan automáticamente basándose en la cantidad y
                 precio unitario ingresado. El IVA se calcula al 19% por defecto.
               </p>
@@ -439,14 +439,14 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
           )}
           <div className={cn('flex flex-col gap-2 md:min-w-[200px]', expenseType !== 'MERCHANDISE' && 'md:ml-auto')} data-testid="expense-form-totals">
             <div className="flex justify-between text-sm">
-              <span className="text-slate-600 dark:text-slate-400">Subtotal:</span>
+              <span className="text-slate-600 dark:text-muted-foreground">Subtotal:</span>
               <span className="font-medium" data-testid="expense-form-subtotal">{formatCurrency(parseFloat(subtotal || '0'))}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-slate-600 dark:text-slate-400">IVA:</span>
+              <span className="text-slate-600 dark:text-muted-foreground">IVA:</span>
               <span className="font-medium" data-testid="expense-form-iva">{formatCurrency(parseFloat(iva || '0'))}</span>
             </div>
-            <div className="flex justify-between border-t border-slate-200 pt-2 dark:border-slate-700">
+            <div className="flex justify-between border-t border-slate-200 pt-2 dark:border-border">
               <span className="font-semibold text-slate-900 dark:text-white" data-testid="expense-form-total-label">Total a Pagar</span>
               <span className="text-lg font-bold text-primary dark:text-primary" data-testid="expense-form-total">
                 {formatCurrency(parseFloat(total || '0'))}
@@ -466,7 +466,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
       </section>
 
       {/* Botones de acción */}
-      <div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:justify-between dark:border-slate-700">
+      <div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:justify-between dark:border-border">
         <Button
           type="button"
           variant="outline"

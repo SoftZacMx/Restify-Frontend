@@ -51,7 +51,7 @@ const PublicOrderTrackingPage = () => {
       <PublicLayout>
         <div className="flex flex-col items-center justify-center py-20">
           <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
-          <p className="text-slate-500 dark:text-slate-400">Cargando estado del pedido...</p>
+          <p className="text-slate-500 dark:text-muted-foreground">Cargando estado del pedido...</p>
         </div>
       </PublicLayout>
     );
@@ -65,7 +65,7 @@ const PublicOrderTrackingPage = () => {
           <p className="text-red-500 dark:text-red-400 font-medium mb-2">
             No se encontró el pedido
           </p>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-slate-500 dark:text-muted-foreground">
             Verifica que el enlace sea correcto.
           </p>
         </div>
@@ -82,7 +82,7 @@ const PublicOrderTrackingPage = () => {
             <p className="text-lg font-semibold text-slate-900 dark:text-white">
               Tu pago no se completó
             </p>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
+            <p className="text-sm text-slate-500 dark:text-muted-foreground">
               No se realizó ningún cargo. Puedes volver a intentarlo.
             </p>
           </div>
@@ -117,13 +117,13 @@ const PublicOrderTrackingPage = () => {
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
             Seguimiento de pedido
           </h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-slate-500 dark:text-muted-foreground">
             {data.customerName} &middot; {data.orderType === 'DELIVERY' ? 'Domicilio' : 'Recolección'}
           </p>
         </div>
 
         {/* Progress steps */}
-        <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6">
+        <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-6">
           <div className="space-y-0">
             {steps.map((step, idx) => {
               const stepOriginalIndex = getStepIndex(step.key);
@@ -141,7 +141,7 @@ const PublicOrderTrackingPage = () => {
                           ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400'
                           : isCurrent
                             ? 'bg-primary text-primary-foreground'
-                            : 'bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500'
+                            : 'bg-slate-100 text-slate-400 dark:bg-card dark:text-muted-foreground'
                       }`}
                     >
                       {step.icon}
@@ -151,7 +151,7 @@ const PublicOrderTrackingPage = () => {
                         className={`w-0.5 h-8 my-1 ${
                           isCompleted
                             ? 'bg-green-300 dark:bg-green-700'
-                            : 'bg-slate-200 dark:bg-slate-700'
+                            : 'bg-slate-200 dark:bg-card'
                         }`}
                       />
                     )}
@@ -165,7 +165,7 @@ const PublicOrderTrackingPage = () => {
                           ? 'text-green-600 dark:text-green-400'
                           : isCurrent
                             ? 'text-slate-900 dark:text-white font-semibold'
-                            : 'text-slate-400 dark:text-slate-500'
+                            : 'text-slate-400 dark:text-muted-foreground'
                       }`}
                     >
                       {step.label}
@@ -178,13 +178,13 @@ const PublicOrderTrackingPage = () => {
         </div>
 
         {/* Order items */}
-        <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 space-y-3">
+        <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-5 space-y-3">
           <h3 className="font-semibold text-slate-900 dark:text-white text-sm">
             Tu pedido
           </h3>
           {data.items.map((item, idx) => (
             <div key={idx} className="flex justify-between text-sm">
-              <span className="text-slate-600 dark:text-slate-300">
+              <span className="text-slate-600 dark:text-foreground">
                 {item.quantity}x {item.name}
               </span>
               <span className="font-medium text-slate-900 dark:text-white">
@@ -192,7 +192,7 @@ const PublicOrderTrackingPage = () => {
               </span>
             </div>
           ))}
-          <div className="pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-between">
+          <div className="pt-3 border-t border-slate-200 dark:border-border flex justify-between">
             <span className="font-bold text-slate-900 dark:text-white">Total</span>
             <span className="font-bold text-primary">${data.total.toFixed(2)}</span>
           </div>
@@ -200,10 +200,10 @@ const PublicOrderTrackingPage = () => {
 
         {/* Scheduled time */}
         {data.scheduledAt && (
-          <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 flex items-center gap-3">
+          <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-4 flex items-center gap-3">
             <Clock className="h-5 w-5 text-slate-400 shrink-0" />
             <div>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-muted-foreground">
                 {data.orderType === 'DELIVERY' ? 'Entrega programada' : 'Hora de recolección'}
               </p>
               <p className="text-sm font-medium text-slate-900 dark:text-white">
@@ -229,7 +229,7 @@ const PublicOrderTrackingPage = () => {
         )}
 
         {/* Footer */}
-        <p className="text-center text-xs text-slate-400 dark:text-slate-500">
+        <p className="text-center text-xs text-slate-400 dark:text-muted-foreground">
           Esta página se actualiza automáticamente cada 15 segundos.
         </p>
       </div>

@@ -83,12 +83,12 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
   const paymentMethods: PaymentMethod[] = [1, 2, 3];
 
   return (
-    <div className="space-y-4 px-4 py-3 border-b border-slate-200 dark:border-slate-800 overflow-x-visible min-w-0">
+    <div className="space-y-4 px-4 py-3 border-b border-slate-200 dark:border-border overflow-x-visible min-w-0">
       {/* Search Input + botón "Filtros" */}
       <div className="flex items-stretch gap-2">
         <label className="flex h-12 flex-1 min-w-0">
-          <div className="flex w-full flex-1 items-stretch rounded-lg h-full bg-slate-100 dark:bg-slate-800">
-            <div className="text-slate-500 dark:text-slate-400 flex items-center justify-center pl-4">
+          <div className="flex w-full flex-1 items-stretch rounded-lg h-full bg-slate-100 dark:bg-card">
+            <div className="text-slate-500 dark:text-muted-foreground flex items-center justify-center pl-4">
               <Search className="h-5 w-5" />
             </div>
             <Input
@@ -96,7 +96,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
               placeholder="Buscar por título o descripción..."
               value={filters.search || ''}
               onChange={handleSearchChange}
-              className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-800 dark:text-slate-200 focus:outline-0 focus:ring-0 border-none bg-slate-100 dark:bg-slate-800 h-full placeholder:text-slate-500 dark:placeholder:text-slate-400 pl-2 text-base font-normal leading-normal"
+              className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-800 dark:text-foreground focus:outline-0 focus:ring-0 border-none bg-slate-100 dark:bg-card h-full placeholder:text-slate-500 dark:placeholder:text-muted-foreground pl-2 text-base font-normal leading-normal"
             />
           </div>
         </label>
@@ -108,7 +108,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
           className={`relative flex h-12 shrink-0 items-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors ${
             showAdvanced
               ? 'border-primary bg-primary/10 text-primary'
-              : 'border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700'
+              : 'border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 dark:border-border dark:bg-card dark:text-foreground dark:hover:bg-card'
           }`}
         >
           <SlidersHorizontal className="h-4 w-4" />
@@ -124,7 +124,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
       {/* Category Filters — select en móvil, pills en desktop */}
       <div className="md:hidden">
         <Select value={getCurrentTypeValue()} onValueChange={handleTypeChange}>
-          <SelectTrigger className="h-9 w-full rounded-lg bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-sm font-medium">
+          <SelectTrigger className="h-9 w-full rounded-lg bg-slate-100 dark:bg-card border-slate-200 dark:border-border text-slate-800 dark:text-foreground text-sm font-medium">
             {(() => {
               const selected = expenseTypes.find((t) => t.value === getCurrentTypeValue());
               if (!selected) return <span>Todos los tipos</span>;
@@ -150,7 +150,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
           </SelectContent>
         </Select>
       </div>
-      <div className="hidden md:block border-b border-slate-200 dark:border-slate-800 -mx-4 px-4">
+      <div className="hidden md:block border-b border-slate-200 dark:border-border -mx-4 px-4">
         <div className="flex items-stretch gap-6 overflow-x-auto scrollbar-thin">
           {([{ value: 'all' as const, title: 'Todos' }, ...expenseTypes] as Array<{ value: string; title: string }>).map(({ value, title }) => {
             const isActive = getCurrentTypeValue() === value;
@@ -162,7 +162,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
                 className={`relative whitespace-nowrap pb-2.5 pt-1 text-sm font-medium transition-colors ${
                   isActive
                     ? 'text-primary'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                    : 'text-slate-500 dark:text-muted-foreground hover:text-slate-700 dark:hover:text-foreground'
                 }`}
               >
                 {title}
@@ -179,11 +179,11 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
       {showAdvanced && (
         <div
           id="expense-advanced-filters"
-          className="space-y-3 rounded-lg border border-slate-200 bg-slate-50/50 p-3 dark:border-slate-800 dark:bg-slate-800/30"
+          className="space-y-3 rounded-lg border border-slate-200 bg-slate-50/50 p-3 dark:border-border dark:bg-card/30"
         >
           {/* Método de pago */}
           <Select value={getCurrentPaymentMethodValue()} onValueChange={handlePaymentMethodChange}>
-            <SelectTrigger className="h-9 rounded-lg bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm font-medium w-full md:w-auto gap-1.5 px-3">
+            <SelectTrigger className="h-9 rounded-lg bg-white dark:bg-background border-slate-200 dark:border-border hover:bg-slate-100 dark:hover:bg-card text-slate-800 dark:text-foreground text-sm font-medium w-full md:w-auto gap-1.5 px-3">
               <CreditCard className="h-3.5 w-3.5 shrink-0" />
               <span className="truncate">
                 {filters.paymentMethod && filters.paymentMethod !== 'all'
@@ -205,24 +205,24 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
           <div className="flex flex-col md:flex-row items-center gap-2">
             <div className="flex items-center gap-2 w-full md:w-auto">
               <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-              <span className="text-xs text-slate-500 dark:text-slate-400 shrink-0">Desde</span>
+              <span className="text-xs text-slate-500 dark:text-muted-foreground shrink-0">Desde</span>
               <Input
                 id="dateFrom"
                 type="date"
                 value={filters.dateFrom ?? ''}
                 onChange={handleDateFromChange}
-                className="h-9 flex-1 md:w-[140px] rounded-lg bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-sm px-2"
+                className="h-9 flex-1 md:w-[140px] rounded-lg bg-white dark:bg-background border-slate-200 dark:border-border text-sm px-2"
               />
             </div>
             <div className="flex items-center gap-2 w-full md:w-auto">
               <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0 md:hidden" />
-              <span className="text-xs text-slate-500 dark:text-slate-400 shrink-0">Hasta</span>
+              <span className="text-xs text-slate-500 dark:text-muted-foreground shrink-0">Hasta</span>
               <Input
                 id="dateTo"
                 type="date"
                 value={filters.dateTo ?? ''}
                 onChange={handleDateToChange}
-                className="h-9 flex-1 md:w-[140px] rounded-lg bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-sm px-2"
+                className="h-9 flex-1 md:w-[140px] rounded-lg bg-white dark:bg-background border-slate-200 dark:border-border text-sm px-2"
               />
             </div>
           </div>

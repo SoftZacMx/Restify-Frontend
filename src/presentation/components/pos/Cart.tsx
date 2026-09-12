@@ -27,7 +27,7 @@ const CartItemTotal: React.FC<{ itemTotal: number; itemSubtotal: number }> = ({
       <div className={`font-bold text-xl text-primary inline-block ${animate ? 'animate-total-bump' : ''}`} data-testid="cart-item-total-value">
         ${itemTotal.toFixed(2)}
       </div>
-      <div className="text-xs text-slate-500 dark:text-slate-400">
+      <div className="text-xs text-slate-500 dark:text-muted-foreground">
         ${itemSubtotal.toFixed(2)} + IVA
       </div>
     </div>
@@ -50,16 +50,16 @@ interface CartProps {
 export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = false, className }) => {
   if (items.length === 0) {
     return (
-      <Card className={`border-2 border-dashed border-slate-200 dark:border-slate-700 ${className ?? ''}`}>
+      <Card className={`border-2 border-dashed border-slate-200 dark:border-border ${className ?? ''}`}>
         <CardContent className="p-12">
           <div className="flex flex-col items-center justify-center text-center">
-            <div className="p-4 rounded-full bg-slate-100 dark:bg-slate-800 mb-4">
+            <div className="p-4 rounded-full bg-slate-100 dark:bg-card mb-4">
               <ShoppingBag className="h-8 w-8 text-slate-400" />
             </div>
-            <p className="text-base font-medium text-slate-600 dark:text-slate-400">
+            <p className="text-base font-medium text-slate-600 dark:text-muted-foreground">
               El carrito está vacío
             </p>
-            <p className="text-sm text-slate-500 dark:text-slate-500 mt-2">
+            <p className="text-sm text-slate-500 dark:text-muted-foreground mt-2">
               Agrega productos para comenzar
             </p>
           </div>
@@ -70,7 +70,7 @@ export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = fals
 
   return (
     <Card className={`shadow-lg border-0 flex flex-col min-h-0 ${className ?? ''}`} data-testid="cart">
-      <CardHeader className="shrink-0 bg-gradient-to-r from-primary/10 to-primary/5 border-b border-slate-200 dark:border-slate-700">
+      <CardHeader className="shrink-0 bg-gradient-to-r from-primary/10 to-primary/5 border-b border-slate-200 dark:border-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ShoppingBag className="h-5 w-5 text-primary" />
@@ -85,14 +85,14 @@ export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = fals
         {items.map((item) => (
           <div
             key={item.id}
-            className="group relative border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3 bg-white dark:bg-slate-800 hover:shadow-md transition-all duration-200 hover:border-primary/30"
+            className="group relative border border-slate-200 dark:border-border rounded-xl p-4 space-y-3 bg-white dark:bg-card hover:shadow-md transition-all duration-200 hover:border-primary/30"
             data-testid="cart-item"
           >
             {/* Nombre del platillo */}
             <div className="flex justify-between items-start gap-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-start gap-2 mb-2">
-                  <h4 className="font-semibold text-base text-slate-900 dark:text-slate-100 leading-tight">
+                  <h4 className="font-semibold text-base text-slate-900 dark:text-foreground leading-tight">
                     {item.product.name}
                   </h4>
                 </div>
@@ -117,17 +117,17 @@ export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = fals
             {/* Nota del item */}
             {item.note && item.note.trim() !== '' && (
               <div className="pt-2">
-                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 uppercase tracking-wide">
+                <p className="text-xs font-semibold text-slate-500 dark:text-muted-foreground mb-1 uppercase tracking-wide">
                   Nota
                 </p>
-                <p className="text-sm text-slate-700 dark:text-slate-300 italic">{item.note}</p>
+                <p className="text-sm text-slate-700 dark:text-foreground italic">{item.note}</p>
               </div>
             )}
 
             {/* Extras */}
             {item.selectedExtras.length > 0 && (
-              <div className="pt-3 border-t border-slate-200 dark:border-slate-700">
-                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">
+              <div className="pt-3 border-t border-slate-200 dark:border-border">
+                <p className="text-xs font-semibold text-slate-500 dark:text-muted-foreground mb-2 uppercase tracking-wide">
                   Extras
                 </p>
                 <div className="flex flex-wrap gap-1.5">
@@ -148,9 +148,9 @@ export const Cart: React.FC<CartProps> = ({ items, onRemoveItem, readOnly = fals
             )}
 
             {/* Total del item */}
-            <div className="pt-3 border-t-2 border-slate-200 dark:border-slate-700">
+            <div className="pt-3 border-t-2 border-slate-200 dark:border-border">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                <span className="text-sm font-medium text-slate-600 dark:text-muted-foreground">
                   Total:
                 </span>
                 <div data-testid="cart-item-total" aria-label={`Total ítem ${item.itemTotal.toFixed(2)}`}>

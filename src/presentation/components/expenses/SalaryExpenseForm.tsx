@@ -54,13 +54,13 @@ export const SalaryExpenseForm: React.FC<SalaryExpenseFormProps> = ({
       <div className="space-y-2">
         <Label>Empleado</Label>
         {selectedEmployee ? (
-          <div className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
-            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
-              <User className="h-5 w-5 text-slate-500 dark:text-slate-400" />
+          <div className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-border bg-slate-50 dark:bg-card/50">
+            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-slate-200 dark:bg-card flex items-center justify-center">
+              <User className="h-5 w-5 text-slate-500 dark:text-muted-foreground" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-medium text-slate-900 dark:text-white">{fullName}</p>
-              <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{selectedEmployee.email}</p>
+              <p className="text-sm text-slate-500 dark:text-muted-foreground truncate">{selectedEmployee.email}</p>
             </div>
             <Button type="button" variant="outline" size="sm" onClick={() => setDialogOpen(true)}>
               Cambiar

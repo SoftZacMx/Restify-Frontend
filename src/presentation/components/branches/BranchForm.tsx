@@ -17,7 +17,7 @@ interface BranchFormProps {
 }
 
 const inputClass =
-  'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 focus:border-primary';
+  'bg-slate-100 dark:bg-card border-slate-200 dark:border-border focus:border-primary';
 
 const sectionTitleClass =
   'text-xs font-semibold uppercase tracking-widest text-primary';
@@ -169,8 +169,8 @@ export const BranchForm: React.FC<BranchFormProps> = ({
         {/* Branding */}
         <div className="space-y-4">
           <h3 className={sectionTitleClass}>Branding</h3>
-          <div className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 p-4 h-[140px]">
-            <div className="w-20 h-20 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+          <div className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-200 dark:border-border bg-slate-50 dark:bg-card/40 p-4 h-[140px]">
+            <div className="w-20 h-20 rounded-lg bg-slate-100 dark:bg-card flex items-center justify-center overflow-hidden">
               {logoIsValid && !logoBroken ? (
                 <img
                   src={logoUrl.trim()}
@@ -179,10 +179,10 @@ export const BranchForm: React.FC<BranchFormProps> = ({
                   onError={() => setLogoBroken(true)}
                 />
               ) : (
-                <ImageIcon className="h-8 w-8 text-slate-400 dark:text-slate-500" />
+                <ImageIcon className="h-8 w-8 text-slate-400 dark:text-muted-foreground" />
               )}
             </div>
-            <span className="text-xs text-slate-500 dark:text-slate-400 text-center">
+            <span className="text-xs text-slate-500 dark:text-muted-foreground text-center">
               Vista previa del logo
             </span>
           </div>
@@ -203,7 +203,7 @@ export const BranchForm: React.FC<BranchFormProps> = ({
         </div>
       </div>
 
-      <div className="h-px bg-slate-200 dark:bg-slate-700" />
+      <div className="h-px bg-slate-200 dark:bg-card" />
 
       {/* Ubicación Geográfica */}
       <div className="space-y-4">
@@ -274,7 +274,7 @@ export const BranchForm: React.FC<BranchFormProps> = ({
         </div>
       </div>
 
-      <div className="h-px bg-slate-200 dark:bg-slate-700" />
+      <div className="h-px bg-slate-200 dark:bg-card" />
 
       {/* Horarios de operación */}
       <div className="space-y-4">
@@ -292,7 +292,7 @@ export const BranchForm: React.FC<BranchFormProps> = ({
                 className={cn(inputClass, 'pr-10', errors.startOperations && 'border-destructive')}
                 disabled={isLoading}
               />
-              <Clock className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
+              <Clock className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-muted-foreground" />
             </div>
             {errors.startOperations && (
               <p className="text-sm text-destructive mt-1">{errors.startOperations.message}</p>
@@ -310,7 +310,7 @@ export const BranchForm: React.FC<BranchFormProps> = ({
                 className={cn(inputClass, 'pr-10', errors.endOperations && 'border-destructive')}
                 disabled={isLoading}
               />
-              <Clock className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
+              <Clock className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-muted-foreground" />
             </div>
             {errors.endOperations && (
               <p className="text-sm text-destructive mt-1">{errors.endOperations.message}</p>
@@ -319,7 +319,7 @@ export const BranchForm: React.FC<BranchFormProps> = ({
         </div>
       </div>
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+      <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-border">
         <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
           Cancelar
         </Button>

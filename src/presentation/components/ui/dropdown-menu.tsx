@@ -158,7 +158,7 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       data-dropdown-content
       className={cn(
-        'fixed z-[9999] min-w-[18rem] overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg',
+        'fixed z-[9999] min-w-[18rem] overflow-hidden rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-card shadow-lg',
         className
       )}
       style={{
@@ -196,7 +196,7 @@ const DropdownMenuItem = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        'relative flex cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none transition-colors text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700 focus:bg-slate-100 dark:focus:bg-slate-700',
+        'relative flex cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none transition-colors text-slate-900 dark:text-foreground hover:bg-slate-100 dark:hover:bg-card focus:bg-slate-100 dark:focus:bg-card',
         className
       )}
       onClick={handleClick}
@@ -216,7 +216,7 @@ const DropdownMenuSeparator = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        '-mx-1 my-1 h-px bg-slate-200 dark:bg-slate-700',
+        '-mx-1 my-1 h-px bg-slate-200 dark:bg-card',
         className
       )}
       {...props}

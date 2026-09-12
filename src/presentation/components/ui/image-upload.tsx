@@ -106,9 +106,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
             className={cn(
               'relative flex items-center justify-center overflow-hidden cursor-pointer',
               isFeatured
-                ? 'group w-full max-w-[400px] mx-auto aspect-[4/3] rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 shadow-sm'
+                ? 'group w-full max-w-[400px] mx-auto aspect-[4/3] rounded-xl border border-slate-100 dark:border-border bg-slate-50 dark:bg-card/80 shadow-sm'
                 : cn(
-                    'rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/80',
+                    'rounded-lg border border-slate-200 dark:border-border bg-slate-50 dark:bg-card/80',
                     boxSizeClass
                   ),
               disabled && 'cursor-default'
@@ -158,11 +158,11 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           onClick={() => inputRef.current?.click()}
           disabled={disabled || isUploading}
           className={cn(
-            'border border-dashed border-slate-300 dark:border-slate-600',
-            'text-slate-500 dark:text-slate-400 hover:border-primary hover:text-primary/80 transition-colors',
+            'border border-dashed border-slate-300 dark:border-border',
+            'text-slate-500 dark:text-muted-foreground hover:border-primary hover:text-primary/80 transition-colors',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             isFeatured
-              ? 'flex w-full max-w-[400px] mx-auto aspect-[4/3] flex-col items-center justify-center gap-2 rounded-xl bg-slate-50/60 dark:bg-slate-800/40'
+              ? 'flex w-full max-w-[400px] mx-auto aspect-[4/3] flex-col items-center justify-center gap-2 rounded-xl bg-slate-50/60 dark:bg-card/40'
               : emptyAsBox
                 ? cn('flex flex-col items-center justify-center gap-2 text-xs rounded-lg', boxSizeClass)
                 : 'flex items-center gap-2 px-4 py-2 text-sm rounded-lg'
@@ -170,10 +170,10 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         >
           {isFeatured ? (
             <>
-              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700">
-                <Upload className="h-5 w-5 text-slate-500 dark:text-slate-400" />
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-100 dark:bg-card">
+                <Upload className="h-5 w-5 text-slate-500 dark:text-muted-foreground" />
               </span>
-              <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
+              <span className="text-sm font-medium text-slate-600 dark:text-foreground">
                 {isUploading ? 'Subiendo...' : 'Subir imagen'}
               </span>
             </>

@@ -39,8 +39,8 @@ export const MenuCategoryTable: React.FC<MenuCategoryTableProps> = ({
   if (isLoading) {
     return (
       <div className="px-4 py-5">
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark">
-          <div className="p-8 text-center text-slate-500 dark:text-slate-400">
+        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
+          <div className="p-8 text-center text-slate-500 dark:text-muted-foreground">
             Cargando categorías...
           </div>
         </div>
@@ -51,8 +51,8 @@ export const MenuCategoryTable: React.FC<MenuCategoryTableProps> = ({
   if (categories.length === 0) {
     return (
       <div className="px-4 py-5">
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark">
-          <div className="p-8 text-center text-slate-500 dark:text-slate-400">
+        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
+          <div className="p-8 text-center text-slate-500 dark:text-muted-foreground">
             No se encontraron categorías
           </div>
         </div>
@@ -62,21 +62,21 @@ export const MenuCategoryTable: React.FC<MenuCategoryTableProps> = ({
 
   return (
     <div className="px-4 py-5">
-      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark">
+      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="bg-slate-50 dark:bg-slate-800/50">
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              <TableRow className="bg-slate-50 dark:bg-card/50">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                   Nombre
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                   Estado
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                   Fecha de creación
                 </TableHead>
-                <TableHead className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                   Acciones
                 </TableHead>
               </TableRow>
@@ -85,7 +85,7 @@ export const MenuCategoryTable: React.FC<MenuCategoryTableProps> = ({
               {categories.map((category) => (
                 <TableRow
                   key={category.id}
-                  className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                  className="hover:bg-slate-50 dark:hover:bg-card/50 transition-colors"
                 >
                   <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <Link
@@ -101,13 +101,13 @@ export const MenuCategoryTable: React.FC<MenuCategoryTableProps> = ({
                         'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0',
                         category.statusLabel === 'Activa'
                           ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300'
-                          : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-300'
+                          : 'bg-slate-100 dark:bg-card text-slate-800 dark:text-foreground'
                       )}
                     >
                       {category.statusLabel}
                     </Badge>
                   </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-muted-foreground">
                     {new Date(category.createdAt).toLocaleDateString('es-ES', {
                       day: '2-digit',
                       month: '2-digit',
@@ -118,7 +118,7 @@ export const MenuCategoryTable: React.FC<MenuCategoryTableProps> = ({
                   <TableCell className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <DropdownMenu>
                       <DropdownMenuTrigger
-                        className="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+                        className="p-2 rounded-full text-slate-500 dark:text-muted-foreground hover:bg-slate-200 dark:hover:bg-card hover:text-slate-700 dark:hover:text-foreground transition-colors"
                       >
                         <MoreVertical className="h-4 w-4" />
                       </DropdownMenuTrigger>

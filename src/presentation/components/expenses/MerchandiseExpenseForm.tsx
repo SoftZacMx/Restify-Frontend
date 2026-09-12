@@ -127,7 +127,7 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
   );
 
   return (
-    <section className="space-y-4 border-t border-slate-200 pt-6 dark:border-slate-700">
+    <section className="space-y-4 border-t border-slate-200 pt-6 dark:border-border">
       <SelectProductDialog
         open={productDialogTarget !== null}
         onOpenChange={(open) => !open && setProductDialogTarget(null)}
@@ -156,10 +156,10 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
       </div>
 
       {/* Tabla de ítems */}
-      <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+      <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-border">
         <div className="min-w-[640px]">
           {/* Encabezados */}
-          <div className="grid grid-cols-12 gap-2 border-b border-slate-200 bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400">
+          <div className="grid grid-cols-12 gap-2 border-b border-slate-200 bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:border-border dark:bg-card/50 dark:text-muted-foreground">
             <div className="col-span-3">Item / Producto</div>
             <div className="col-span-2">Cant.</div>
             <div className="col-span-2">Unidad</div>
@@ -170,7 +170,7 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
           {items.map((item, index) => (
             <div
               key={index}
-              className="grid grid-cols-12 gap-2 border-b border-slate-100 px-4 py-3 last:border-b-0 dark:border-slate-700/50"
+              className="grid grid-cols-12 gap-2 border-b border-slate-100 px-4 py-3 last:border-b-0 dark:border-border/50"
             >
               <div className="col-span-3">
                 <Button

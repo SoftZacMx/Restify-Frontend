@@ -57,13 +57,13 @@ export const MenuItemPagination: React.FC<MenuItemPaginationProps> = ({
   }
 
   return (
-    <div className="px-4 py-4 border-t border-slate-200 dark:border-slate-800">
+    <div className="px-4 py-4 border-t border-slate-200 dark:border-border">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Información de resultados */}
-        <div className="text-sm text-slate-500 dark:text-slate-400">
-          Mostrando <span className="font-medium text-slate-700 dark:text-slate-300">{startItem}</span> a{' '}
-          <span className="font-medium text-slate-700 dark:text-slate-300">{endItem}</span> de{' '}
-          <span className="font-medium text-slate-700 dark:text-slate-300">{totalItems}</span> productos
+        <div className="text-sm text-slate-500 dark:text-muted-foreground">
+          Mostrando <span className="font-medium text-slate-700 dark:text-foreground">{startItem}</span> a{' '}
+          <span className="font-medium text-slate-700 dark:text-foreground">{endItem}</span> de{' '}
+          <span className="font-medium text-slate-700 dark:text-foreground">{totalItems}</span> productos
         </div>
 
         {/* Controles de paginación */}

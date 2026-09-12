@@ -61,7 +61,7 @@ const SubscriptionBlockedPage = () => {
       : null;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center px-4 py-12">
       {/* Header */}
       <div className="text-center mb-10">
         <div className="flex justify-center mb-4">
@@ -72,7 +72,7 @@ const SubscriptionBlockedPage = () => {
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
           Tu suscripción ha expirado
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+        <p className="text-slate-500 dark:text-muted-foreground max-w-md mx-auto">
           Tu acceso a Restify se encuentra restringido actualmente. Elige un plan
           para continuar gestionando tu negocio sin interrupciones.
         </p>
@@ -96,10 +96,10 @@ const SubscriptionBlockedPage = () => {
                 key={plan.id}
                 type="button"
                 onClick={() => setSelectedPlanId(plan.id)}
-                className={`relative rounded-2xl border-2 bg-white dark:bg-slate-800 p-8 shadow-lg text-left transition-all ${
+                className={`relative rounded-2xl border-2 bg-white dark:bg-card p-8 shadow-lg text-left transition-all ${
                   isSelected
                     ? 'border-primary ring-2 ring-primary/20'
-                    : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                    : 'border-slate-200 dark:border-border hover:border-slate-300 dark:hover:border-border'
                 }`}
               >
                 {/* Best value badge */}
@@ -121,12 +121,12 @@ const SubscriptionBlockedPage = () => {
                     <span className="text-4xl font-bold text-slate-900 dark:text-white">
                       {priceDisplay}
                     </span>
-                    <span className="text-slate-500 dark:text-slate-400">
+                    <span className="text-slate-500 dark:text-muted-foreground">
                       {periodLabel}
                     </span>
                   </div>
                   {isAnnual && monthlyPlan && (
-                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+                    <p className="text-xs text-slate-400 dark:text-muted-foreground mt-1">
                       equivale a {formatCurrency(plan.price / 100 / 12)}/mes
                     </p>
                   )}
@@ -137,7 +137,7 @@ const SubscriptionBlockedPage = () => {
                   {FEATURES.map((feature) => (
                     <li key={feature} className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                      <span className="text-sm text-slate-600 dark:text-slate-300">
+                      <span className="text-sm text-slate-600 dark:text-foreground">
                         {feature}
                       </span>
                     </li>
@@ -150,7 +150,7 @@ const SubscriptionBlockedPage = () => {
                     className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
                       isSelected
                         ? 'border-primary bg-primary'
-                        : 'border-slate-300 dark:border-slate-600'
+                        : 'border-slate-300 dark:border-border'
                     }`}
                   >
                     {isSelected && (
@@ -183,14 +183,14 @@ const SubscriptionBlockedPage = () => {
       {/* Footer actions */}
       <div className="flex items-center gap-6 text-sm">
         <button
-          className="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+          className="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-foreground transition-colors"
         >
           <MessageCircle className="w-4 h-4" />
           Hablar con soporte
         </button>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+          className="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-foreground transition-colors"
         >
           <LogOut className="w-4 h-4" />
           Cerrar sesión

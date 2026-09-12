@@ -81,7 +81,7 @@ const SelectTrigger = React.forwardRef<
       type="button"
       ref={ref}
       className={cn(
-        'flex h-11 w-full items-center justify-between rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-base text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+        'flex h-11 w-full items-center justify-between rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-card px-3 py-2 text-base text-slate-900 dark:text-foreground placeholder:text-slate-400 dark:placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
         className
       )}
       onClick={(e) => {
@@ -150,7 +150,7 @@ const SelectContent = React.forwardRef<
       ref={ref}
       data-select-content
       className={cn(
-        'z-[9999] max-h-[min(20rem,75vh)] min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-lg border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800',
+        'z-[9999] max-h-[min(20rem,75vh)] min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-lg border border-slate-200 bg-white shadow-lg dark:border-border dark:bg-card',
         className
       )}
       style={{
@@ -190,8 +190,8 @@ const SelectItem = React.forwardRef<
         else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
       }}
       className={cn(
-        'relative flex w-full cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700 focus:bg-slate-100 dark:focus:bg-slate-700',
-        isSelected && 'bg-slate-100 dark:bg-slate-700',
+        'relative flex w-full cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none text-slate-900 dark:text-foreground hover:bg-slate-100 dark:hover:bg-card focus:bg-slate-100 dark:focus:bg-card',
+        isSelected && 'bg-slate-100 dark:bg-card',
         className
       )}
       onClick={(e) => {

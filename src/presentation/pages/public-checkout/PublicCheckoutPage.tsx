@@ -38,7 +38,7 @@ const PublicCheckoutPage = () => {
     return (
       <PublicLayout>
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <p className="text-slate-500 dark:text-slate-400 mb-4">
+          <p className="text-slate-500 dark:text-muted-foreground mb-4">
             No hay items en el carrito
           </p>
           <Button onClick={() => navigate(`/menu/${slug}`)}>
@@ -69,7 +69,7 @@ const PublicCheckoutPage = () => {
     return (
       <PublicLayout>
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <p className="text-slate-500 dark:text-slate-400 mb-4">
+          <p className="text-slate-500 dark:text-muted-foreground mb-4">
             No hay items en el carrito
           </p>
           <Button onClick={() => navigate(`/menu/${slug}`)}>
@@ -142,7 +142,7 @@ const PublicCheckoutPage = () => {
         <button
           type="button"
           onClick={() => navigate(`/menu/${slug}`)}
-          className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
+          className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 dark:hover:text-foreground transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Volver al catálogo
@@ -156,7 +156,7 @@ const PublicCheckoutPage = () => {
           {/* Left: Form */}
           <div className="space-y-6">
             {/* Customer info */}
-            <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 space-y-4">
+            <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-5 space-y-4">
               <h3 className="font-semibold text-slate-900 dark:text-white">
                 Datos del cliente
               </h3>
@@ -190,7 +190,7 @@ const PublicCheckoutPage = () => {
             </div>
 
             {/* Order type */}
-            <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 space-y-4">
+            <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-5 space-y-4">
               <h3 className="font-semibold text-slate-900 dark:text-white">
                 Tipo de pedido *
               </h3>
@@ -201,7 +201,7 @@ const PublicCheckoutPage = () => {
                   className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
                     orderType === 'DELIVERY'
                       ? 'border-primary bg-primary/5 text-primary'
-                      : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 text-slate-600 dark:text-slate-400'
+                      : 'border-slate-200 dark:border-border hover:border-slate-300 text-slate-600 dark:text-muted-foreground'
                   }`}
                 >
                   <MapPin className="h-6 w-6" />
@@ -213,7 +213,7 @@ const PublicCheckoutPage = () => {
                   className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
                     orderType === 'PICKUP'
                       ? 'border-primary bg-primary/5 text-primary'
-                      : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 text-slate-600 dark:text-slate-400'
+                      : 'border-slate-200 dark:border-border hover:border-slate-300 text-slate-600 dark:text-muted-foreground'
                   }`}
                 >
                   <Clock className="h-6 w-6" />
@@ -224,7 +224,7 @@ const PublicCheckoutPage = () => {
 
             {/* Delivery: map + address */}
             {orderType === 'DELIVERY' && (
-              <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 space-y-4">
+              <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-5 space-y-4">
                 <h3 className="font-semibold text-slate-900 dark:text-white">
                   Dirección de entrega
                 </h3>
@@ -249,7 +249,7 @@ const PublicCheckoutPage = () => {
 
             {/* Pickup: scheduled time */}
             {orderType === 'PICKUP' && (
-              <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 space-y-4">
+              <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-5 space-y-4">
                 <h3 className="font-semibold text-slate-900 dark:text-white">
                   Hora de recolección
                 </h3>
@@ -272,12 +272,12 @@ const PublicCheckoutPage = () => {
           {/* Right: Order summary */}
           <div className="space-y-4">
             <div className="sticky top-20 space-y-4">
-              <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 space-y-4">
+              <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-5 space-y-4">
                 <h3 className="font-semibold text-slate-900 dark:text-white">
                   Resumen del pedido
                 </h3>
                 <Cart items={cartItems} onRemoveItem={() => {}} readOnly />
-                <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
+                <div className="pt-4 border-t border-slate-200 dark:border-border">
                   <div className="flex justify-between items-center">
                     <span className="text-base font-bold text-slate-900 dark:text-white">Total</span>
                     <span className="text-xl font-bold text-primary">

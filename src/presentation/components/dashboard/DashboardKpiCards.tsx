@@ -22,7 +22,7 @@ const ACCENT_STYLES: Record<
     iconColor: 'text-emerald-600 dark:text-emerald-400',
     iconRing: 'ring-emerald-500/20 dark:ring-emerald-400/30',
     cardBg:
-      'bg-gradient-to-br from-white via-white to-emerald-50/60 dark:from-slate-800 dark:via-slate-800 dark:to-emerald-950/30',
+      'bg-gradient-to-br from-white via-white to-emerald-50/60 dark:from-card dark:via-card dark:to-emerald-950/30',
     cardBorder: 'border-emerald-200/60 dark:border-emerald-800/50',
     cardShadow: 'shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50',
     cardHoverShadow: 'hover:shadow-xl hover:shadow-emerald-500/5 dark:hover:shadow-emerald-500/10',
@@ -36,7 +36,7 @@ const ACCENT_STYLES: Record<
     iconColor: 'text-amber-600 dark:text-amber-400',
     iconRing: 'ring-amber-500/20 dark:ring-amber-400/30',
     cardBg:
-      'bg-gradient-to-br from-white via-white to-amber-50/50 dark:from-slate-800 dark:via-slate-800 dark:to-amber-950/25',
+      'bg-gradient-to-br from-white via-white to-amber-50/50 dark:from-card dark:via-card dark:to-amber-950/25',
     cardBorder: 'border-amber-200/60 dark:border-amber-800/50',
     cardShadow: 'shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50',
     cardHoverShadow: 'hover:shadow-xl hover:shadow-amber-500/5 dark:hover:shadow-amber-500/10',
@@ -50,7 +50,7 @@ const ACCENT_STYLES: Record<
     iconColor: 'text-primary dark:text-primary',
     iconRing: 'ring-primary/20 dark:ring-primary/30',
     cardBg:
-      'bg-gradient-to-br from-white via-white to-primary/50 dark:from-slate-800 dark:via-slate-800 dark:to-primary/25',
+      'bg-gradient-to-br from-white via-white to-primary/50 dark:from-card dark:via-card dark:to-primary/25',
     cardBorder: 'border-primary/30/60 dark:border-primary/50',
     cardShadow: 'shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50',
     cardHoverShadow: 'hover:shadow-xl hover:shadow-primary/5 dark:hover:shadow-primary/10',
@@ -90,10 +90,10 @@ function StatCard({
                 {subtitle}
               </span>
             )}
-            <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1">
+            <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-muted-foreground mb-1">
               {title}
             </p>
-            <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100 tabular-nums tracking-tight drop-shadow-sm">
+            <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-foreground tabular-nums tracking-tight drop-shadow-sm">
               {value}
             </h3>
           </div>

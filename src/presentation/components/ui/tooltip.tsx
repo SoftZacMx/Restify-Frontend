@@ -49,7 +49,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, content, side = 'rig
       {isVisible && (
         <div
           role="tooltip"
-          className="fixed z-[100] px-2 py-1 text-xs font-medium text-white bg-slate-900 dark:bg-slate-700 rounded shadow-lg whitespace-nowrap pointer-events-none"
+          className="fixed z-[100] px-2 py-1 text-xs font-medium text-white bg-slate-900 dark:bg-card rounded shadow-lg whitespace-nowrap pointer-events-none"
           style={style}
         >
           {content}

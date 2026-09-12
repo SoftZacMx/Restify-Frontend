@@ -73,7 +73,7 @@ const PaymentResultPage: React.FC = () => {
   }, [navigate, searchParams]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-background px-4">
       <div className="w-full max-w-sm text-center">
         <div className={`w-24 h-24 rounded-full ${bg} flex items-center justify-center mx-auto mb-6`}>
           {icon}
@@ -81,10 +81,10 @@ const PaymentResultPage: React.FC = () => {
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
           {title}
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">
+        <p className="text-sm text-slate-500 dark:text-muted-foreground mb-8">
           {description}
         </p>
-        <p className="text-xs text-slate-400 dark:text-slate-500">
+        <p className="text-xs text-slate-400 dark:text-muted-foreground">
           Restify
         </p>
       </div>

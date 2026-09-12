@@ -11,9 +11,9 @@ interface ActiveOrdersCardProps {
 
 export function ActiveOrdersCard({ activeOrders, onOrderClick }: ActiveOrdersCardProps) {
   return (
-    <Card className="border-slate-100 dark:border-slate-700 shadow-sm bg-white dark:bg-slate-800">
+    <Card className="border-slate-100 dark:border-border shadow-sm bg-white dark:bg-card">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+        <CardTitle className="text-lg font-semibold text-slate-900 dark:text-foreground">
           Órdenes activas ({activeOrders.count})
         </CardTitle>
         <Link
@@ -25,13 +25,13 @@ export function ActiveOrdersCard({ activeOrders, onOrderClick }: ActiveOrdersCar
       </CardHeader>
       <CardContent>
         {activeOrders.items.length === 0 ? (
-          <p className="text-sm text-slate-500 dark:text-slate-400 py-4 text-center">
+          <p className="text-sm text-slate-500 dark:text-muted-foreground py-4 text-center">
             No hay órdenes activas
           </p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50/50 dark:bg-slate-700/50">
+              <thead className="text-xs text-slate-500 dark:text-muted-foreground uppercase bg-slate-50/50 dark:bg-card/50">
                 <tr>
                   <th className="px-4 py-3 font-medium rounded-l-lg">Orden</th>
                   <th className="px-4 py-3 font-medium">Ubicación</th>
@@ -39,23 +39,23 @@ export function ActiveOrdersCard({ activeOrders, onOrderClick }: ActiveOrdersCar
                   <th className="px-4 py-3 font-medium text-right rounded-r-lg">Total</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+              <tbody className="divide-y divide-slate-100 dark:divide-border">
                 {activeOrders.items.map((order) => (
                   <tr
                     key={order.id}
-                    className="hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer"
+                    className="hover:bg-slate-50/50 dark:hover:bg-card/50 transition-colors cursor-pointer"
                     onClick={() => onOrderClick(order.id)}
                   >
-                    <td className="px-4 py-3 font-medium text-slate-900 dark:text-slate-100">
+                    <td className="px-4 py-3 font-medium text-slate-900 dark:text-foreground">
                       #{order.id.slice(0, 8)}
                     </td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-slate-400">
+                    <td className="px-4 py-3 text-slate-600 dark:text-muted-foreground">
                       {getTableDisplay(order)}
                     </td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-slate-400">
+                    <td className="px-4 py-3 text-slate-600 dark:text-muted-foreground">
                       {formatOrderTime(order.date)}
                     </td>
-                    <td className="px-4 py-3 text-right font-bold text-slate-900 dark:text-slate-100">
+                    <td className="px-4 py-3 text-right font-bold text-slate-900 dark:text-foreground">
                       {formatCurrency(order.total)}
                     </td>
                   </tr>

@@ -38,7 +38,7 @@ const FILTER_TYPE_OPTIONS: FilterTypeOption[] = [
     label: 'Todos',
     Icon: ListFilter,
     // "Todos" no tiene un tipo asociado → hover slate neutro.
-    hoverClassName: 'hover:bg-slate-100 dark:hover:bg-slate-700/50 focus:bg-slate-100 dark:focus:bg-slate-700/50',
+    hoverClassName: 'hover:bg-slate-100 dark:hover:bg-card/50 focus:bg-slate-100 dark:focus:bg-card/50',
   },
   ...MOVEMENT_TYPE_OPTIONS.map<FilterTypeOption>((opt) => ({
     value: opt.value,
@@ -54,9 +54,9 @@ export const MovementsFilters: React.FC<MovementsFiltersProps> = ({ filters, onF
   const reset = () => onFiltersChange({ type: 'ALL', from: '', to: '' });
 
   return (
-    <div className="flex flex-col md:flex-row gap-3 px-4 py-3 border-b border-slate-200 dark:border-slate-800">
+    <div className="flex flex-col md:flex-row gap-3 px-4 py-3 border-b border-slate-200 dark:border-border">
       <div className="flex flex-col">
-        <Label htmlFor="movFrom" className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">
+        <Label htmlFor="movFrom" className="text-xs font-medium text-slate-500 dark:text-muted-foreground mb-1">
           Desde
         </Label>
         <Input
@@ -69,7 +69,7 @@ export const MovementsFilters: React.FC<MovementsFiltersProps> = ({ filters, onF
       </div>
 
       <div className="flex flex-col">
-        <Label htmlFor="movTo" className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">
+        <Label htmlFor="movTo" className="text-xs font-medium text-slate-500 dark:text-muted-foreground mb-1">
           Hasta
         </Label>
         <Input
@@ -82,7 +82,7 @@ export const MovementsFilters: React.FC<MovementsFiltersProps> = ({ filters, onF
       </div>
 
       <div className="flex flex-col flex-grow">
-        <Label htmlFor="movType" className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">
+        <Label htmlFor="movType" className="text-xs font-medium text-slate-500 dark:text-muted-foreground mb-1">
           Tipo de movimiento
         </Label>
         <Select
@@ -99,7 +99,7 @@ export const MovementsFilters: React.FC<MovementsFiltersProps> = ({ filters, onF
                 const TriggerIcon = sel.Icon;
                 return (
                   <span className="flex items-center gap-2">
-                    <TriggerIcon className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                    <TriggerIcon className="h-4 w-4 text-slate-500 dark:text-muted-foreground" />
                     {sel.label}
                   </span>
                 );
@@ -112,7 +112,7 @@ export const MovementsFilters: React.FC<MovementsFiltersProps> = ({ filters, onF
               return (
                 <SelectItem key={opt.value} value={opt.value}>
                   <span className="flex items-center gap-2">
-                    <ItemIcon className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                    <ItemIcon className="h-4 w-4 text-slate-500 dark:text-muted-foreground" />
                     {opt.label}
                   </span>
                 </SelectItem>

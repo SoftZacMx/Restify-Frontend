@@ -40,7 +40,7 @@ export const OrdersGrid: React.FC<OrdersGridProps> = ({
     return (
       <div className="flex flex-col items-center justify-center py-16">
         <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
-        <p className="text-slate-500 dark:text-slate-400">Cargando órdenes...</p>
+        <p className="text-slate-500 dark:text-muted-foreground">Cargando órdenes...</p>
       </div>
     );
   }
@@ -53,7 +53,7 @@ export const OrdersGrid: React.FC<OrdersGridProps> = ({
           <PackageOpen className="h-10 w-10 text-red-500" />
         </div>
         <p className="text-red-600 dark:text-red-400 font-medium mb-2">Error al cargar órdenes</p>
-        <p className="text-slate-500 dark:text-slate-400 text-sm">{error}</p>
+        <p className="text-slate-500 dark:text-muted-foreground text-sm">{error}</p>
       </div>
     );
   }
@@ -62,13 +62,13 @@ export const OrdersGrid: React.FC<OrdersGridProps> = ({
   if (orders.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16">
-        <div className="bg-slate-100 dark:bg-slate-800 rounded-full p-4 mb-4">
+        <div className="bg-slate-100 dark:bg-card rounded-full p-4 mb-4">
           <PackageOpen className="h-10 w-10 text-slate-400" />
         </div>
-        <p className="text-slate-600 dark:text-slate-300 font-medium mb-1">
+        <p className="text-slate-600 dark:text-foreground font-medium mb-1">
           No hay órdenes
         </p>
-        <p className="text-slate-500 dark:text-slate-400 text-sm">
+        <p className="text-slate-500 dark:text-muted-foreground text-sm">
           Las órdenes aparecerán aquí cuando se creen
         </p>
       </div>

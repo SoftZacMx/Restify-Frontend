@@ -45,14 +45,14 @@ export function CloseOrganizationDialog({
         </DialogHeader>
 
         <div className="space-y-4">
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <p className="text-sm text-slate-600 dark:text-muted-foreground">
             Esta acción cerrará tu organización y cerrará la sesión de todos sus usuarios.
             Podrás reactivarla dentro de los próximos 30 días; después se eliminará de forma
             permanente.
           </p>
 
-          <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 px-4 py-3">
-            <p className="text-xs text-slate-500 dark:text-slate-400 mb-1">
+          <div className="rounded-lg border border-slate-200 dark:border-border bg-slate-50 dark:bg-card/50 px-4 py-3">
+            <p className="text-xs text-slate-500 dark:text-muted-foreground mb-1">
               Nombre de tu organización
             </p>
             <p className="text-sm font-semibold text-slate-900 dark:text-white select-all break-words">
@@ -61,7 +61,7 @@ export function CloseOrganizationDialog({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirmationName" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+            <Label htmlFor="confirmationName" className="text-sm font-medium text-slate-700 dark:text-foreground">
               Escribe el nombre para confirmar
             </Label>
             <Input

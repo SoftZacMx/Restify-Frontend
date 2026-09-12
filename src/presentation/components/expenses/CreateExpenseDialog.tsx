@@ -42,7 +42,7 @@ export const CreateExpenseDialog: React.FC<CreateExpenseDialogProps> = ({
             <DialogTitle className="text-xl font-bold text-slate-900 dark:text-white">
               Nuevo Gasto
             </DialogTitle>
-            <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-0.5 text-sm text-slate-500 dark:text-muted-foreground">
               Registro de compra de mercancía para inventario.
             </p>
           </div>

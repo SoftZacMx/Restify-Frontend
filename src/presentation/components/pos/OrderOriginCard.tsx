@@ -54,20 +54,20 @@ export const OrderOriginCard: React.FC<OrderOriginCardProps> = ({
               <button
                 type="button"
                 onClick={onSelectTableClick}
-                className="w-full flex items-center gap-3 p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 hover:border-primary/30 transition-colors text-left"
+                className="w-full flex items-center gap-3 p-4 rounded-xl border border-slate-200 dark:border-border bg-slate-50 dark:bg-card/50 hover:border-primary/30 transition-colors text-left"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-sky-500/20 dark:bg-sky-400/20 shrink-0">
                   <LayoutGrid className="h-6 w-6 text-sky-600 dark:text-sky-400" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-muted-foreground">
                     Ubicación seleccionada
                   </p>
                   <p className="text-lg font-bold text-slate-900 dark:text-white mt-0.5">
                     Ubicación {selectedTable.name}
                   </p>
                   {selectedTable.location?.trim() && (
-                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+                    <p className="text-sm text-slate-500 dark:text-muted-foreground mt-0.5">
                       {selectedTable.location.trim()}
                     </p>
                   )}
@@ -78,16 +78,16 @@ export const OrderOriginCard: React.FC<OrderOriginCardProps> = ({
               <button
                 type="button"
                 onClick={onSelectTableClick}
-                className="w-full flex items-center gap-3 p-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-600 bg-slate-50/50 dark:bg-slate-800/30 hover:border-primary/40 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors text-left"
+                className="w-full flex items-center gap-3 p-4 rounded-xl border border-dashed border-slate-300 dark:border-border bg-slate-50/50 dark:bg-card/30 hover:border-primary/40 hover:bg-slate-100 dark:hover:bg-card/50 transition-colors text-left"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-sky-500/20 dark:bg-sky-400/20 shrink-0">
                   <LayoutGrid className="h-6 w-6 text-sky-600 dark:text-sky-400" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-muted-foreground">
                     Sin ubicación asignada
                   </p>
-                  <p className="text-base font-semibold text-slate-700 dark:text-slate-300 mt-0.5">
+                  <p className="text-base font-semibold text-slate-700 dark:text-foreground mt-0.5">
                     Toca para elegir ubicación
                   </p>
                 </div>

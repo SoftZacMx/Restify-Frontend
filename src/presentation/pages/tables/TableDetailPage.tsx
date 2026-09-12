@@ -75,7 +75,7 @@ const TableDetailPage: React.FC = () => {
     return (
       <MainLayout>
         <div className="px-4 py-8">
-          <div className="text-center text-slate-500 dark:text-slate-400">
+          <div className="text-center text-slate-500 dark:text-muted-foreground">
             Cargando ubicación...
           </div>
         </div>
@@ -110,14 +110,14 @@ const TableDetailPage: React.FC = () => {
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center justify-center min-w-12 max-w-[140px] min-h-12 px-2 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-lg text-center break-words">
+            <span className="inline-flex items-center justify-center min-w-12 max-w-[140px] min-h-12 px-2 rounded-xl bg-slate-100 dark:bg-card text-slate-700 dark:text-foreground font-bold text-lg text-center break-words">
               {table.name}
             </span>
             <div>
               <h1 className="text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white">
                 Ubicación {table.name}
               </h1>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
+              <p className="text-sm text-slate-500 dark:text-muted-foreground">
                 Editar información de la ubicación
               </p>
             </div>
@@ -191,7 +191,7 @@ const TableDetailPage: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
                     ID
                   </p>
                   <p className="text-sm text-slate-900 dark:text-white font-mono">
@@ -199,7 +199,7 @@ const TableDetailPage: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
                     Estado del Sistema
                   </p>
                   <p className={`text-sm font-medium ${table.status ? 'text-green-600' : 'text-slate-500'}`}>
@@ -207,7 +207,7 @@ const TableDetailPage: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
                     Disponibilidad
                   </p>
                   <p className={`text-sm font-medium ${table.availabilityStatus ? 'text-emerald-600' : 'text-orange-600'}`}>
@@ -215,7 +215,7 @@ const TableDetailPage: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
                     Creada
                   </p>
                   <p className="text-sm text-slate-900 dark:text-white">
@@ -230,7 +230,7 @@ const TableDetailPage: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
                     Última actualización
                   </p>
                   <p className="text-sm text-slate-900 dark:text-white">

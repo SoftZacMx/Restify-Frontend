@@ -27,7 +27,7 @@ export const BranchPublicUrl: React.FC<BranchPublicUrlProps> = ({ slug }) => {
   };
 
   return (
-    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 p-4 space-y-3">
+    <div className="rounded-xl border border-slate-200 dark:border-border bg-slate-50 dark:bg-card/40 p-4 space-y-3">
       <div className="flex items-center gap-2">
         <Globe className="h-4 w-4 text-primary" />
         <h3 className="text-xs font-semibold uppercase tracking-widest text-primary">
@@ -38,7 +38,7 @@ export const BranchPublicUrl: React.FC<BranchPublicUrlProps> = ({ slug }) => {
         Comparte este enlace con tus clientes para que vean el menú de la sucursal.
       </p>
       <div className="flex flex-col sm:flex-row gap-2">
-        <code className="flex-1 truncate rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm text-slate-700 dark:text-slate-200">
+        <code className="flex-1 truncate rounded-lg bg-slate-100 dark:bg-card border border-slate-200 dark:border-border px-3 py-2 text-sm text-slate-700 dark:text-foreground">
           {publicUrl}
         </code>
         <div className="flex gap-2">

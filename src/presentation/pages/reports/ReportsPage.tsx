@@ -104,20 +104,20 @@ const ReportsPage = () => {
     <MainLayout>
       <LoadingOverlay open={isLoading || isLoadingSummary} message={viewMode === 'summary' ? 'Cargando resumen...' : 'Generando reporte...'} />
       <div className="flex flex-col h-full">
-        <div className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
-          <div className="px-4 py-4 bg-gradient-to-br from-slate-50 via-white to-primary/5 dark:from-slate-900/80 dark:via-slate-900/50 dark:to-primary/10">
+        <div className="border-b border-slate-200 dark:border-border bg-white dark:bg-background/50">
+          <div className="px-4 py-4 bg-gradient-to-br from-slate-50 via-white to-primary/5 dark:from-card/80 dark:via-card/50 dark:to-primary/10">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
                   Reportes
                 </h1>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
+                <p className="text-sm text-slate-500 dark:text-muted-foreground mt-2 max-w-xl">
                   {viewMode === 'summary'
                     ? 'Resumen con gráficas: ventas, órdenes, gastos y utilidad por período.'
                     : 'Genera reportes de flujo de caja, desempeño de ventas o análisis de gastos.'}
                 </p>
               </div>
-              <div className="flex rounded-lg border border-slate-200 dark:border-slate-700 p-1 bg-slate-100/80 dark:bg-slate-800/80">
+              <div className="flex rounded-lg border border-slate-200 dark:border-border p-1 bg-slate-100/80 dark:bg-card/80">
                 <Button
                   variant={viewMode === 'summary' ? 'default' : 'ghost'}
                   size="sm"
@@ -140,14 +140,14 @@ const ReportsPage = () => {
             </div>
 
             {viewMode === 'summary' && (
-              <div className="mt-4 flex flex-wrap items-end gap-4 px-4 py-3 border-t border-slate-200/80 dark:border-slate-700/80">
+              <div className="mt-4 flex flex-wrap items-end gap-4 px-4 py-3 border-t border-slate-200/80 dark:border-border/80">
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-medium text-slate-500">Desde</label>
                   <input
                     type="date"
                     value={summaryFilters.dateFrom}
                     onChange={(e) => setSummaryFilters((p) => ({ ...p, dateFrom: e.target.value }))}
-                    className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm"
+                    className="rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-card px-3 py-2 text-sm"
                   />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -156,7 +156,7 @@ const ReportsPage = () => {
                     type="date"
                     value={summaryFilters.dateTo}
                     onChange={(e) => setSummaryFilters((p) => ({ ...p, dateTo: e.target.value }))}
-                    className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm"
+                    className="rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-card px-3 py-2 text-sm"
                   />
                 </div>
                 <Button onClick={handleLoadSummary} disabled={isLoadingSummary} className="gap-2">
@@ -176,18 +176,18 @@ const ReportsPage = () => {
         </div>
         </div>
 
-        <div className="flex-1 overflow-auto bg-slate-50 dark:bg-slate-900/30">
+        <div className="flex-1 overflow-auto bg-slate-50 dark:bg-background/30">
           {viewMode === 'summary' && summaryData && (
             <ReportsSummaryView data={summaryData} />
           )}
           {viewMode === 'summary' && !summaryData && !isLoadingSummary && (
             <div className="flex flex-col items-center justify-center py-20 px-4">
-              <div className="rounded-2xl bg-slate-100 dark:bg-slate-800/60 p-8 max-w-md text-center border border-slate-200/80 dark:border-slate-700/80 shadow-inner">
+              <div className="rounded-2xl bg-slate-100 dark:bg-card/60 p-8 max-w-md text-center border border-slate-200/80 dark:border-border/80 shadow-inner">
                 <div className="mx-auto w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
                   <LayoutDashboard className="h-8 w-8 text-primary" />
                 </div>
-                <p className="text-slate-600 dark:text-slate-300 font-medium mb-2">Resumen con gráficas</p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-slate-600 dark:text-foreground font-medium mb-2">Resumen con gráficas</p>
+                <p className="text-sm text-slate-500 dark:text-muted-foreground">
                   Elige un rango de fechas y haz clic en &quot;Cargar resumen&quot; para ver ventas, órdenes, gastos y utilidad.
                 </p>
               </div>
@@ -197,7 +197,7 @@ const ReportsPage = () => {
           {viewMode === 'document' && report && (
             <div className="py-4">
               <div className="px-4 mb-3 flex flex-wrap items-center gap-2 text-sm">
-                <span className="rounded-full bg-slate-200/80 dark:bg-slate-700/80 px-3 py-1 text-slate-600 dark:text-slate-300">
+                <span className="rounded-full bg-slate-200/80 dark:bg-card/80 px-3 py-1 text-slate-600 dark:text-foreground">
                   Generado: {new Date(report.generatedAt).toLocaleString('es-MX', { timeZone: APP_TIMEZONE })}
                 </span>
                 {report.filters.dateFrom && report.filters.dateTo && (
@@ -219,14 +219,14 @@ const ReportsPage = () => {
           )}
           {viewMode === 'document' && !report && !isLoading && (
             <div className="flex flex-col items-center justify-center py-20 px-4">
-              <div className="rounded-2xl bg-slate-100 dark:bg-slate-800/60 p-8 max-w-md text-center border border-slate-200/80 dark:border-slate-700/80 shadow-inner">
+              <div className="rounded-2xl bg-slate-100 dark:bg-card/60 p-8 max-w-md text-center border border-slate-200/80 dark:border-border/80 shadow-inner">
                 <div className="mx-auto w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
                   <BarChart3 className="h-8 w-8 text-primary" />
                 </div>
-                <p className="text-slate-600 dark:text-slate-300 font-medium mb-2">
+                <p className="text-slate-600 dark:text-foreground font-medium mb-2">
                   Listo para generar tu reporte
                 </p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-sm text-slate-500 dark:text-muted-foreground">
                   Selecciona el tipo de reporte y opcionalmente un rango de fechas, luego haz clic en &quot;Generar reporte&quot;.
                 </p>
               </div>

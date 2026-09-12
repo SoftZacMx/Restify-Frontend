@@ -32,7 +32,7 @@ export default function SelectBranchPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center p-4">
       <div className="absolute top-4 right-4">
         <ThemeToggle variant="icon" />
       </div>
@@ -45,7 +45,7 @@ export default function SelectBranchPage() {
           </span>
         </div>
         <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Selecciona una sucursal</h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-sm text-slate-500 dark:text-muted-foreground">
           Elige dónde quieres trabajar para comenzar.
         </p>
       </div>

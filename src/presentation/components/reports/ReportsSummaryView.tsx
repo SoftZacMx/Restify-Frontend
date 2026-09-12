@@ -52,7 +52,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <Card className="border-l-4 border-l-emerald-500">
           <CardHeader className="pb-1">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
               <DollarSign className="h-4 w-4" />
               Ventas totales
             </CardTitle>
@@ -66,7 +66,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
         </Card>
         <Card className="border-l-4 border-l-primary">
           <CardHeader className="pb-1">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
               <ShoppingCart className="h-4 w-4" />
               Órdenes procesadas
             </CardTitle>
@@ -80,7 +80,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
         </Card>
         <Card className="border-l-4 border-l-violet-500">
           <CardHeader className="pb-1">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
               Promedio por orden
             </CardTitle>
@@ -94,7 +94,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
         </Card>
         <Card className="border-l-4 border-l-amber-500">
           <CardHeader className="pb-1">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
               <Receipt className="h-4 w-4" />
               Gastos totales
             </CardTitle>
@@ -108,7 +108,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
         </Card>
         <Card className="border-l-4 border-l-green-500">
           <CardHeader className="pb-1">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
               <Wallet className="h-4 w-4" />
               Utilidad neta
             </CardTitle>
@@ -234,10 +234,10 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
           <CardTitle>Resumen por día</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+          <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-border">
             <Table>
               <TableHeader>
-                <TableRow className="bg-slate-50 dark:bg-slate-800/50">
+                <TableRow className="bg-slate-50 dark:bg-card/50">
                   <TableHead>Fecha</TableHead>
                   <TableHead className="text-right">Ventas</TableHead>
                   <TableHead className="text-right">Órdenes</TableHead>

@@ -12,9 +12,9 @@ interface PublicLayoutProps {
  */
 export const PublicLayout: React.FC<PublicLayoutProps> = ({ children, title = 'Menú' }) => {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-900 dark:text-slate-100">
+    <div className="min-h-screen bg-slate-50 dark:bg-background font-sans text-slate-900 dark:text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm">
+      <header className="sticky top-0 z-30 bg-white dark:bg-card border-b border-slate-200 dark:border-border shadow-sm">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary">
             <UtensilsCrossed className="h-5 w-5 text-primary-foreground" />

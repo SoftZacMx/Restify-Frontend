@@ -43,7 +43,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
 
   return (
     // Fondo de página desde el token --background: las cards blancas se despegan del fondo.
-    <div className="flex h-screen bg-background dark:bg-slate-900 font-sans text-slate-900 dark:text-slate-100">
+    <div className="flex h-screen bg-background dark:bg-background font-sans text-slate-900 dark:text-foreground">
       {/* Sidebar */}
       <Sidebar />
 
@@ -60,7 +60,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
             onClick={handleToggle}
             variant="outline"
             size="icon"
-            className="fixed top-4 left-4 z-50 bg-white dark:bg-slate-800 shadow-md"
+            className="fixed top-4 left-4 z-50 bg-white dark:bg-card shadow-md"
             aria-label="Toggle sidebar"
           >
             {isMobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}

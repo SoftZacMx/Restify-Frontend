@@ -86,9 +86,9 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="w-[min(26rem,95vw)] max-h-[90vh] flex flex-col p-0 overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+        <DialogContent className="w-[min(26rem,95vw)] max-h-[90vh] flex flex-col p-0 overflow-hidden bg-white dark:bg-card border border-slate-200 dark:border-border">
           {/* Header: icono + título + subtítulo + cerrar */}
-          <DialogHeader className="flex-row items-start gap-3 px-5 pt-5 pb-4 shrink-0 border-b border-slate-200 dark:border-slate-700">
+          <DialogHeader className="flex-row items-start gap-3 px-5 pt-5 pb-4 shrink-0 border-b border-slate-200 dark:border-border">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary">
               <UtensilsCrossed className="h-6 w-6 text-primary-foreground" />
             </div>
@@ -96,7 +96,7 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
               <DialogTitle className="text-xl font-bold text-slate-900 dark:text-white leading-tight">
                 {product.name}
               </DialogTitle>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+              <p className="text-sm text-slate-500 dark:text-muted-foreground mt-0.5">
                 Personaliza tu producto favorito
               </p>
             </div>
@@ -104,7 +104,7 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
           </DialogHeader>
 
           {/* Botón Agregar al Carrito fijo arriba */}
-          <div className="shrink-0 px-5 py-3 border-b border-slate-200 dark:border-slate-700">
+          <div className="shrink-0 px-5 py-3 border-b border-slate-200 dark:border-border">
             <Button
               onClick={handleAddToCart}
               className="w-full h-12 text-base font-semibold rounded-lg bg-primary hover:bg-primary/90"
@@ -117,7 +117,7 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
 
           <div className="flex flex-col flex-1 min-h-0 overflow-y-auto">
             {/* Imagen del producto: tamaño fijo, no se compacta */}
-            <div className="shrink-0 w-full h-44 bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center overflow-hidden">
+            <div className="shrink-0 w-full h-44 bg-slate-100 dark:bg-card/50 flex items-center justify-center overflow-hidden">
               {product.imageUrl ? (
                 <img
                   src={product.imageUrl}
@@ -134,10 +134,10 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
             <div className="p-5 space-y-5">
               {/* Cantidad */}
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-muted-foreground">
                   Cantidad
                 </span>
-                <div className="flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 p-0.5">
+                <div className="flex items-center gap-1 rounded-lg border border-slate-200 dark:border-border bg-slate-50 dark:bg-card/50 p-0.5">
                   <Button
                     type="button"
                     variant="ghost"
@@ -166,7 +166,7 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
               {/* Extras seleccionados + Agregar más */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-muted-foreground">
                     Extras seleccionados
                   </span>
                   {selectedExtras.length > 0 && (
@@ -207,13 +207,13 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
                   </Button>
                 )}
                 {availableExtras.length === 0 && (
-                  <p className="text-sm text-slate-500 dark:text-slate-400">No hay extras disponibles</p>
+                  <p className="text-sm text-slate-500 dark:text-muted-foreground">No hay extras disponibles</p>
                 )}
               </div>
 
               {/* Nota del item (opcional, máx 50 caracteres) */}
               <div className="space-y-2">
-                <Label htmlFor="item-note" className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <Label htmlFor="item-note" className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-muted-foreground">
                   Nota (opcional)
                 </Label>
                 <Input
@@ -223,35 +223,35 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
                   maxLength={50}
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
-                  className="bg-slate-50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600"
+                  className="bg-slate-50 dark:bg-card/50 border-slate-200 dark:border-border"
                   aria-describedby="item-note-count"
                 />
-                <p id="item-note-count" className="text-xs text-slate-500 dark:text-slate-400 text-right">
+                <p id="item-note-count" className="text-xs text-slate-500 dark:text-muted-foreground text-right">
                   {note.length}/50
                 </p>
               </div>
 
               {/* Desglose de precio */}
-              <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-700">
+              <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-border">
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500 dark:text-slate-400">Precio Base</span>
+                  <span className="text-slate-500 dark:text-muted-foreground">Precio Base</span>
                   <span className="font-medium text-slate-900 dark:text-white">
                     ${product.price.toFixed(2)}
                   </span>
                 </div>
                 {selectedExtras.length > 0 && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-slate-500 dark:text-slate-400">Extras ({selectedExtras.length})</span>
+                    <span className="text-slate-500 dark:text-muted-foreground">Extras ({selectedExtras.length})</span>
                     <span className="font-medium text-slate-900 dark:text-white">
                       ${extrasTotal.toFixed(2)}
                     </span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500 dark:text-slate-400">Cantidad</span>
+                  <span className="text-slate-500 dark:text-muted-foreground">Cantidad</span>
                   <span className="font-medium text-slate-900 dark:text-white">x {quantity}</span>
                 </div>
-                <div className="flex justify-between items-center pt-2 border-t border-slate-200 dark:border-slate-700">
+                <div className="flex justify-between items-center pt-2 border-t border-slate-200 dark:border-border">
                   <span className="text-base font-bold text-slate-900 dark:text-white">Total</span>
                   <span
                     className={`text-xl font-bold text-primary inline-block ${animateTotal ? 'animate-total-bump' : ''}`}

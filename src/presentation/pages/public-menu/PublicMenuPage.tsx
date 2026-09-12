@@ -53,7 +53,7 @@ const PublicMenuPage = () => {
           <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
             Menú no disponible
           </h2>
-          <p className="text-slate-500 dark:text-slate-400">
+          <p className="text-slate-500 dark:text-muted-foreground">
             No encontramos esta sucursal. Verifica el enlace e intenta de nuevo.
           </p>
         </div>
@@ -72,7 +72,7 @@ const PublicMenuPage = () => {
             placeholder="Buscar en el catálogo..."
             value={productSearch}
             onChange={(e) => setProductSearch(e.target.value)}
-            className="pl-10 h-11 bg-white dark:bg-slate-800"
+            className="pl-10 h-11 bg-white dark:bg-card"
           />
         </div>
 
@@ -143,8 +143,8 @@ const PublicMenuPage = () => {
             className="absolute inset-0 bg-black/50"
             onClick={() => setIsCartSheetOpen(false)}
           />
-          <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] bg-white dark:bg-slate-900 rounded-t-2xl shadow-2xl flex flex-col animate-in slide-in-from-bottom duration-300">
-            <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-slate-200 dark:border-slate-700 shrink-0">
+          <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] bg-white dark:bg-background rounded-t-2xl shadow-2xl flex flex-col animate-in slide-in-from-bottom duration-300">
+            <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-slate-200 dark:border-border shrink-0">
               <div className="flex items-center gap-2">
                 <ShoppingCart className="h-5 w-5 text-primary" />
                 <span className="font-semibold text-slate-900 dark:text-white">
@@ -154,7 +154,7 @@ const PublicMenuPage = () => {
               <button
                 type="button"
                 onClick={() => setIsCartSheetOpen(false)}
-                className="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-card transition-colors"
               >
                 <X className="h-5 w-5 text-slate-500" />
               </button>

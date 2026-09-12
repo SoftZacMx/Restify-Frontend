@@ -88,7 +88,7 @@ export default function ConfirmReactivationPage() {
   }, [token, loginStore, navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-background px-4">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>

@@ -55,14 +55,14 @@ function normalizeTimeForInput(value: string | null | undefined): string {
 
 function ConfigFieldLabel({ children }: { children: React.ReactNode }) {
   return (
-    <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1.5">
+    <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 dark:text-muted-foreground block mb-1.5">
       {children}
     </span>
   );
 }
 
 const configCardClass =
-  'rounded-xl border-slate-200 dark:border-slate-700/80 bg-card dark:bg-slate-900/30 shadow-sm';
+  'rounded-xl border-slate-200 dark:border-border/80 bg-card dark:bg-background/30 shadow-sm';
 
 /** Mapea el detalle de la sucursal al estado del formulario. */
 function branchToForm(branch: {
@@ -170,8 +170,8 @@ const CompanyConfigPage: React.FC = () => {
     <form className="space-y-6" onSubmit={handleSubmit}>
       <Card className={configCardClass}>
         <CardHeader className="space-y-1.5">
-          <CardTitle className="text-lg text-slate-900 dark:text-slate-100">Identidad</CardTitle>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <CardTitle className="text-lg text-slate-900 dark:text-foreground">Identidad</CardTitle>
+          <p className="text-sm text-slate-500 dark:text-muted-foreground">
             Nombre y logo del negocio. Aparecen en tickets y documentos donde aplique.
           </p>
         </CardHeader>
@@ -188,7 +188,7 @@ const CompanyConfigPage: React.FC = () => {
                 size="lg"
                 emptyAsBox
               />
-              <p className="text-xs text-slate-500 dark:text-slate-500 mt-2 max-w-40">
+              <p className="text-xs text-slate-500 dark:text-muted-foreground mt-2 max-w-40">
                 PNG, JPG o WebP. Fondo transparente recomendado.
               </p>
             </div>
@@ -203,7 +203,7 @@ const CompanyConfigPage: React.FC = () => {
                 placeholder="Nombre comercial"
                 required
               />
-              <p className="text-xs text-slate-500 dark:text-slate-500 mt-2">
+              <p className="text-xs text-slate-500 dark:text-muted-foreground mt-2">
                 Nombre comercial con el que se identifica esta sucursal.
               </p>
             </div>
@@ -213,10 +213,10 @@ const CompanyConfigPage: React.FC = () => {
 
       <Card className={configCardClass}>
         <CardHeader className="space-y-1.5">
-          <CardTitle className="text-lg text-slate-900 dark:text-slate-100">
+          <CardTitle className="text-lg text-slate-900 dark:text-foreground">
             Dirección y contacto
           </CardTitle>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-slate-500 dark:text-muted-foreground">
             Ubicación física, teléfono y datos fiscales de la sucursal.
           </p>
         </CardHeader>
@@ -305,11 +305,11 @@ const CompanyConfigPage: React.FC = () => {
 
       <Card className={configCardClass}>
         <CardHeader className="space-y-1.5">
-          <CardTitle className="flex items-center gap-2 text-lg text-slate-900 dark:text-slate-100">
+          <CardTitle className="flex items-center gap-2 text-lg text-slate-900 dark:text-foreground">
             <Clock className="h-4 w-4 text-primary dark:text-sky-400 shrink-0" aria-hidden />
             Horario de operación
           </CardTitle>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-slate-500 dark:text-muted-foreground">
             Rango para permitir creación de órdenes según la lógica del negocio.
           </p>
         </CardHeader>
@@ -327,7 +327,7 @@ const CompanyConfigPage: React.FC = () => {
               }
               aria-label="Hora de apertura"
             />
-            <span className="text-sm text-slate-500 dark:text-slate-400">al</span>
+            <span className="text-sm text-slate-500 dark:text-muted-foreground">al</span>
             <Input
               type="time"
               className="w-[min(100%,160px)]"
@@ -344,7 +344,7 @@ const CompanyConfigPage: React.FC = () => {
         </CardContent>
       </Card>
 
-      <div className="flex flex-wrap justify-end gap-3 border-t border-slate-200 dark:border-slate-700/80 pt-5">
+      <div className="flex flex-wrap justify-end gap-3 border-t border-slate-200 dark:border-border/80 pt-5">
         <Button type="button" variant="outline" onClick={handleCancel} className="gap-2">
           <X className="h-4 w-4" />
           Cancelar

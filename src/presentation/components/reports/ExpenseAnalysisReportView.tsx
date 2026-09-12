@@ -60,13 +60,13 @@ function CategoryCard({
     <Card className={`overflow-hidden border-l-4 ${borderColor} shadow-md hover:shadow-lg transition-shadow`}>
       <CardHeader className="pb-2">
         <CardTitle className="text-base flex items-center gap-2">
-          <span className="rounded-lg bg-slate-200/80 dark:bg-slate-700 p-1.5">
-            <Icon className="h-4 w-4 text-slate-600 dark:text-slate-300" />
+          <span className="rounded-lg bg-slate-200/80 dark:bg-card p-1.5">
+            <Icon className="h-4 w-4 text-slate-600 dark:text-foreground" />
           </span>
           {title}
         </CardTitle>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Total: {formatCurrency(total)}</p>
+          <p className="text-sm font-semibold text-slate-700 dark:text-foreground">Total: {formatCurrency(total)}</p>
           <span className="rounded-full bg-primary/10 dark:bg-primary/20 px-2 py-0.5 text-xs font-medium text-primary">
             {percentage.toFixed(1)}%
           </span>
@@ -85,7 +85,7 @@ function CategoryCard({
             </TableHeader>
             <TableBody>
               {items.map((i) => (
-                <TableRow key={i.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                <TableRow key={i.id} className="hover:bg-slate-50 dark:hover:bg-card/50">
                   <TableCell>{formatExpenseDate(i.date)}</TableCell>
                   <TableCell className="font-medium">{formatCurrency(i.total)}</TableCell>
                 </TableRow>
@@ -104,9 +104,9 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
   return (
     <div className="space-y-6 p-4">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="overflow-hidden border-l-4 border-l-red-500 dark:border-l-red-600 bg-gradient-to-br from-white to-red-50/30 dark:from-slate-800 dark:to-red-950/20 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="overflow-hidden border-l-4 border-l-red-500 dark:border-l-red-600 bg-gradient-to-br from-white to-red-50/30 dark:from-card dark:to-red-950/20 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
               <span className="rounded-lg bg-red-100 dark:bg-red-900/40 p-1.5">
                 <Wallet className="h-4 w-4 text-red-600 dark:text-red-400" />
               </span>
@@ -117,9 +117,9 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
             <p className="text-2xl font-bold text-red-600 dark:text-red-400">{formatCurrency(summary.totalExpenses)}</p>
           </CardContent>
         </Card>
-        <Card className="overflow-hidden border-l-4 border-l-violet-500 dark:border-l-violet-600 bg-gradient-to-br from-white to-violet-50/30 dark:from-slate-800 dark:to-violet-950/20 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="overflow-hidden border-l-4 border-l-violet-500 dark:border-l-violet-600 bg-gradient-to-br from-white to-violet-50/30 dark:from-card dark:to-violet-950/20 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
               <span className="rounded-lg bg-violet-100 dark:bg-violet-900/40 p-1.5">
                 <PieChart className="h-4 w-4 text-violet-600 dark:text-violet-400" />
               </span>
@@ -130,9 +130,9 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
             <p className="text-2xl font-bold text-violet-600 dark:text-violet-400">{formatCurrency(summary.averageExpense)}</p>
           </CardContent>
         </Card>
-        <Card className="overflow-hidden border-l-4 border-l-amber-500 dark:border-l-amber-600 bg-gradient-to-br from-white to-amber-50/30 dark:from-slate-800 dark:to-amber-950/20 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="overflow-hidden border-l-4 border-l-amber-500 dark:border-l-amber-600 bg-gradient-to-br from-white to-amber-50/30 dark:from-card dark:to-amber-950/20 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
               <span className="rounded-lg bg-amber-100 dark:bg-amber-900/40 p-1.5">
                 <Award className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               </span>
@@ -147,8 +147,8 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
         </Card>
       </div>
 
-      <Card className="shadow-md border-slate-200 dark:border-slate-700">
-        <CardHeader className="bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700">
+      <Card className="shadow-md border-slate-200 dark:border-border">
+        <CardHeader className="bg-slate-50/80 dark:bg-card/50 border-b border-slate-200 dark:border-border">
           <CardTitle className="flex items-center gap-2 text-base">
             <CreditCard className="h-5 w-5 text-primary" />
             Por método de pago
@@ -192,7 +192,7 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
             Nómina (empleados)
           </CardTitle>
           <div className="flex items-center gap-2 mt-1">
-            <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Total: {formatCurrency(employeeSalaries.total)}</p>
+            <p className="text-sm font-semibold text-slate-700 dark:text-foreground">Total: {formatCurrency(employeeSalaries.total)}</p>
             <span className="rounded-full bg-indigo-100 dark:bg-indigo-900/40 px-2 py-0.5 text-xs font-medium text-indigo-800 dark:text-indigo-200">
               {employeeSalaries.percentage.toFixed(1)}%
             </span>
@@ -211,7 +211,7 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
               </TableHeader>
               <TableBody>
                 {employeeSalaries.items.map((i) => (
-                  <TableRow key={i.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                  <TableRow key={i.id} className="hover:bg-slate-50 dark:hover:bg-card/50">
                     <TableCell>{formatExpenseDate(i.date)}</TableCell>
                     <TableCell className="font-medium">{formatCurrency(i.amount)}</TableCell>
                   </TableRow>

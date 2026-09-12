@@ -42,7 +42,7 @@ export default function ReactivateOrganizationPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center p-4">
         <div className="absolute top-4 right-4">
           <ThemeToggle variant="icon" />
         </div>
@@ -56,13 +56,13 @@ export default function ReactivateOrganizationPage() {
           </div>
         </div>
 
-        <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800">
+        <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-border bg-white dark:bg-card">
           <CardContent className="flex flex-col items-center gap-4 py-12 px-8">
             <MailCheck className="h-16 w-16 text-primary" />
             <h2 className="text-xl font-bold text-slate-900 dark:text-white font-serif text-center">
               Revisa tu correo
             </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400 text-center">
+            <p className="text-sm text-slate-500 dark:text-muted-foreground text-center">
               Si el correo corresponde al propietario de una organización reactivable, te
               enviamos un enlace para reactivarla. El enlace caduca en 10 minutos.
             </p>
@@ -80,7 +80,7 @@ export default function ReactivateOrganizationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center p-4">
       <div className="absolute top-4 right-4">
         <ThemeToggle variant="icon" />
       </div>
@@ -95,7 +95,7 @@ export default function ReactivateOrganizationPage() {
         </div>
       </div>
 
-      <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800">
+      <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-border bg-white dark:bg-card">
         <CardHeader className="space-y-3 text-center pb-8 pt-10">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 dark:bg-primary/20/30">
             <RotateCcw className="h-6 w-6 text-primary dark:text-primary" />
@@ -103,7 +103,7 @@ export default function ReactivateOrganizationPage() {
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white font-serif">
             Reactivar organización
           </h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-slate-500 dark:text-muted-foreground">
             Ingresa el correo del propietario y te enviaremos un enlace para reactivarla.
           </p>
         </CardHeader>
@@ -111,7 +111,7 @@ export default function ReactivateOrganizationPage() {
         <CardContent className="space-y-6 px-8 pb-10">
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              <Label htmlFor="email" className="text-sm font-medium text-slate-700 dark:text-foreground">
                 Email
               </Label>
               <Input

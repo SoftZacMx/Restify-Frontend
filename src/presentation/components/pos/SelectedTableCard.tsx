@@ -25,7 +25,7 @@ export const SelectedTableCard: React.FC<SelectedTableCardProps> = ({
   return (
     <Card
       className={cn(
-        'overflow-hidden border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800',
+        'overflow-hidden border-slate-200 dark:border-border bg-white dark:bg-card',
         onClick && 'cursor-pointer hover:border-primary/30 transition-colors',
         className
       )}
@@ -41,7 +41,7 @@ export const SelectedTableCard: React.FC<SelectedTableCardProps> = ({
 
         {/* Identificador */}
         <div className="text-center">
-          <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+          <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-muted-foreground">
             Identificador
           </p>
           <p className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">

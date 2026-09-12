@@ -133,7 +133,7 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
           aria-required
         />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
-        <p className="text-xs text-slate-500 dark:text-slate-400">{name.length}/200 caracteres</p>
+        <p className="text-xs text-slate-500 dark:text-muted-foreground">{name.length}/200 caracteres</p>
       </div>
 
       <div className="space-y-2">
@@ -151,7 +151,7 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
           Precio <span className="text-destructive">*</span>
         </Label>
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400">$</span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-muted-foreground">$</span>
           <Input
             id="price"
             type="text"
@@ -165,20 +165,20 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
           />
         </div>
         {errors.price && <p className="text-sm text-destructive">{errors.price.message}</p>}
-        <p className="text-xs text-slate-500 dark:text-slate-400">Máximo 2 decimales (ej: 15.50)</p>
+        <p className="text-xs text-slate-500 dark:text-muted-foreground">Máximo 2 decimales (ej: 15.50)</p>
       </div>
 
       <div className="space-y-2">
         <Label className="text-sm font-medium">Categoría</Label>
         {isLoadingCategories ? (
-          <div className="flex items-center gap-2 h-10 px-3 text-sm text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded-md">
+          <div className="flex items-center gap-2 h-10 px-3 text-sm text-slate-500 dark:text-muted-foreground border border-slate-200 dark:border-border rounded-md">
             <Loader2 className="h-4 w-4 animate-spin" />
             <span>Cargando categorías...</span>
           </div>
         ) : categoryId ? (
-          <div className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
-            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
-              <FolderOpen className="h-5 w-5 text-slate-500 dark:text-slate-400" />
+          <div className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-border bg-slate-50 dark:bg-card/50">
+            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-slate-200 dark:bg-card flex items-center justify-center">
+              <FolderOpen className="h-5 w-5 text-slate-500 dark:text-muted-foreground" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-medium text-slate-900 dark:text-white">
@@ -206,30 +206,30 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
           onSelect={(category) => setValue('categoryId', category?.id ?? undefined)}
         />
         {errors.categoryId && <p className="text-sm text-destructive">{errors.categoryId.message}</p>}
-        <p className="text-xs text-slate-500 dark:text-slate-400">Selecciona la categoría del catálogo a la que pertenece el producto</p>
+        <p className="text-xs text-slate-500 dark:text-muted-foreground">Selecciona la categoría del catálogo a la que pertenece el producto</p>
       </div>
 
       <div className="flex items-center justify-between space-x-2 rounded-lg border  p-4">
         <div className="space-y-0.5">
           <Label htmlFor="isExtra" className="text-sm font-medium">Es un Extra</Label>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-xs text-slate-500 dark:text-muted-foreground">
             {isExtra ? 'Este producto es un extra que se puede agregar a otros productos' : 'Este es un producto normal del catálogo'}
           </p>
         </div>
         <Switch id="isExtra" checked={isExtra} onCheckedChange={(checked) => setValue('isExtra', checked)} disabled={isLoading} />
       </div>
 
-      <div className="flex items-center justify-between space-x-2 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+      <div className="flex items-center justify-between space-x-2 rounded-lg border border-slate-200 dark:border-border p-4">
         <div className="space-y-0.5">
           <Label htmlFor="status" className="text-sm font-medium">Estado</Label>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-xs text-slate-500 dark:text-muted-foreground">
             {status ? 'Producto activo' : 'Producto inactivo'}
           </p>
         </div>
         <Switch id="status" checked={status} onCheckedChange={(checked) => setValue('status', checked)} disabled={isLoading} />
       </div>
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+      <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-border">
         <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>Cancelar</Button>
         <Button type="submit" disabled={isLoading}>
           {isLoading ? 'Guardando...' : isEditMode ? 'Actualizar' : 'Crear'}

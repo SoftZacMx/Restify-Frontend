@@ -89,14 +89,14 @@ export const StockConfigSection: React.FC<StockConfigSectionProps> = ({
   };
 
   return (
-    <section className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark p-6">
+    <section className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark p-6">
       <header className="flex items-center gap-3 mb-4">
         <div className="rounded-lg bg-primary/10 p-2 text-primary">
           <Boxes className="h-5 w-5" />
         </div>
         <div>
           <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Inventario</h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-slate-500 dark:text-muted-foreground">
             Activá el tracking para que las compras sumen stock y las ventas lo descuenten automáticamente.
           </p>
         </div>
@@ -106,10 +106,10 @@ export const StockConfigSection: React.FC<StockConfigSectionProps> = ({
         {/* Toggle trackStock */}
         <div className="flex items-center justify-between gap-4 py-2">
           <div className="min-w-0">
-            <Label htmlFor="trackStock" className="text-sm font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
+            <Label htmlFor="trackStock" className="text-sm font-medium text-slate-700 dark:text-foreground cursor-pointer">
               Trackear stock
             </Label>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 dark:text-muted-foreground mt-1">
               Si está activo, el producto aparece en la pantalla de Stock y participa de movimientos.
             </p>
           </div>
@@ -122,9 +122,9 @@ export const StockConfigSection: React.FC<StockConfigSectionProps> = ({
 
         {/* Campos dependientes */}
         {trackStock && (
-          <div className="space-y-4 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="space-y-4 pt-2 border-t border-slate-100 dark:border-border">
             <div>
-              <Label htmlFor="unitOfMeasure" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              <Label htmlFor="unitOfMeasure" className="text-sm font-medium text-slate-700 dark:text-foreground">
                 Unidad de medida <span className="text-destructive">*</span>
               </Label>
               <Select
@@ -153,7 +153,7 @@ export const StockConfigSection: React.FC<StockConfigSectionProps> = ({
             </div>
 
             <div>
-              <Label htmlFor="minStockAlert" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              <Label htmlFor="minStockAlert" className="text-sm font-medium text-slate-700 dark:text-foreground">
                 Stock mínimo de alerta
               </Label>
               <Input
@@ -166,7 +166,7 @@ export const StockConfigSection: React.FC<StockConfigSectionProps> = ({
                 onChange={(e) => setMinStockAlertInput(e.target.value)}
                 className="mt-1"
               />
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              <p className="text-xs text-slate-500 dark:text-muted-foreground mt-1">
                 Dejalo vacío si no querés alertas. Cuando el stock cae a este valor o menos, aparece en alertas.
               </p>
             </div>

@@ -31,7 +31,7 @@ export function PosHeader({
         </div>
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-foreground">
               {loadedOrder
                 ? `Orden ${formatOrderNumber(loadedOrder.id)}`
                 : posMode === 'ORDER_BUILDING'
@@ -55,7 +55,7 @@ export function PosHeader({
             )}
           </div>
           {(currentOrderId || loadedOrder) && (
-            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-2">
+            <p className="text-sm text-slate-500 dark:text-muted-foreground mt-1 flex items-center gap-2">
               <span className="font-medium">
                 ID: {loadedOrder?.id || currentOrderId}
               </span>

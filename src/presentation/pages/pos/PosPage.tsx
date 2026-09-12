@@ -518,7 +518,7 @@ const PosPage = () => {
       <MainLayout>
         <div className="flex flex-col items-center justify-center min-h-[60vh]">
           <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-          <p className="text-slate-600 dark:text-slate-300 text-lg">Cargando orden...</p>
+          <p className="text-slate-600 dark:text-foreground text-lg">Cargando orden...</p>
         </div>
       </MainLayout>
     );
@@ -535,7 +535,7 @@ const PosPage = () => {
           <p className="text-red-600 dark:text-red-400 font-medium text-lg mb-2">
             Error al cargar la orden
           </p>
-          <p className="text-slate-500 dark:text-slate-400 mb-6">{loadOrderError}</p>
+          <p className="text-slate-500 dark:text-muted-foreground mb-6">{loadOrderError}</p>
           <div className="flex gap-3">
             <Button variant="outline" onClick={() => navigate('/orders')}>
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -580,7 +580,7 @@ const PosPage = () => {
               : 'Guardando orden...'
         }
       />
-      <div className="space-y-6 p-6 bg-slate-50 dark:bg-slate-900 min-h-screen">
+      <div className="space-y-6 p-6 bg-slate-50 dark:bg-background min-h-screen">
         {/* Banner de orden cargada */}
         {loadedOrder && (
           <PosOrderBanner order={loadedOrder} onBack={() => navigate('/orders')} />
@@ -706,9 +706,9 @@ const PosPage = () => {
                 onClick={() => setIsCartSheetOpen(false)}
               />
               {/* Panel */}
-              <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] bg-white dark:bg-slate-900 rounded-t-2xl shadow-2xl flex flex-col animate-in slide-in-from-bottom duration-300">
+              <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] bg-white dark:bg-background rounded-t-2xl shadow-2xl flex flex-col animate-in slide-in-from-bottom duration-300">
                 {/* Handle + close */}
-                <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-slate-200 dark:border-slate-700 shrink-0">
+                <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-slate-200 dark:border-border shrink-0">
                   <div className="flex items-center gap-2">
                     <ShoppingCart className="h-5 w-5 text-primary" />
                     <span className="font-semibold text-slate-900 dark:text-white">
@@ -718,7 +718,7 @@ const PosPage = () => {
                   <button
                     type="button"
                     onClick={() => setIsCartSheetOpen(false)}
-                    className="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                    className="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-card transition-colors"
                   >
                     <X className="h-5 w-5 text-slate-500" />
                   </button>
@@ -785,7 +785,7 @@ const PosPage = () => {
           <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
             <Button
               variant="outline"
-              className="bg-white dark:bg-slate-800 shadow-lg"
+              className="bg-white dark:bg-card shadow-lg"
               onClick={() => {
                 cancelQrPayment();
                 showErrorToast('Cancelado', 'Se canceló la espera del pago QR');

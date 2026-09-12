@@ -33,7 +33,7 @@ export const UserAccountInfo: React.FC<UserAccountInfoProps> = ({ user }) => {
           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${
             user.status
               ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200'
-              : 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-200'
+              : 'bg-slate-100 text-slate-800 dark:bg-card dark:text-foreground'
           }`}
         >
           {statusLabel}
@@ -44,7 +44,7 @@ export const UserAccountInfo: React.FC<UserAccountInfoProps> = ({ user }) => {
       icon: UserCog,
       label: 'Rol',
       value: (
-        <span className="text-slate-800 dark:text-slate-200 font-medium bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-xs">
+        <span className="text-slate-800 dark:text-foreground font-medium bg-slate-100 dark:bg-card px-2 py-1 rounded text-xs">
           {roleLabel}
         </span>
       ),
@@ -54,7 +54,7 @@ export const UserAccountInfo: React.FC<UserAccountInfoProps> = ({ user }) => {
   ];
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 border border-slate-200 dark:border-slate-700 h-full">
+    <div className="bg-white dark:bg-card rounded-xl shadow-sm p-6 border border-slate-200 dark:border-border h-full">
       <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] mb-6">
         Información de la Cuenta
       </h3>
@@ -64,10 +64,10 @@ export const UserAccountInfo: React.FC<UserAccountInfoProps> = ({ user }) => {
           return (
             <div key={row.label} className="flex justify-between items-center gap-4">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-card text-slate-500 dark:text-foreground">
                   <Icon className="h-4 w-4" />
                 </div>
-                <p className="text-slate-500 dark:text-slate-400 font-medium">{row.label}</p>
+                <p className="text-slate-500 dark:text-muted-foreground font-medium">{row.label}</p>
               </div>
               <div className="min-w-0 text-right">{row.value}</div>
             </div>

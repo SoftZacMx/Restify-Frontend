@@ -22,7 +22,7 @@ export function PosOrderBanner({ order, onBack }: PosOrderBannerProps) {
             <p className="font-semibold text-slate-900 dark:text-white">
               Orden {formatOrderNumber(order.id)}
             </p>
-            <p className="text-sm text-slate-600 dark:text-slate-300">
+            <p className="text-sm text-slate-600 dark:text-foreground">
               {order.table ? `Ubicación ${order.table.name}` : order.origin}
               {order.client && ` • ${order.client}`}
             </p>
@@ -44,7 +44,7 @@ export function PosOrderBanner({ order, onBack }: PosOrderBannerProps) {
             <p className="text-2xl font-bold text-slate-900 dark:text-white">
               ${order.total.toFixed(2)}
             </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-muted-foreground">
               {order.orderItems?.length || 0} items
             </p>
           </div>

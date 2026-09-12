@@ -60,7 +60,7 @@ const UserDetailPage: React.FC = () => {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-slate-500 dark:text-slate-400">Cargando información del usuario...</p>
+            <p className="text-slate-500 dark:text-muted-foreground">Cargando información del usuario...</p>
           </div>
         </div>
       </MainLayout>
@@ -71,7 +71,7 @@ const UserDetailPage: React.FC = () => {
     return (
       <MainLayout>
         <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-          <p className="text-slate-500 dark:text-slate-400 text-lg">Usuario no encontrado</p>
+          <p className="text-slate-500 dark:text-muted-foreground text-lg">Usuario no encontrado</p>
           <Button onClick={() => navigate('/users')} variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Volver a Usuarios
@@ -90,19 +90,19 @@ const UserDetailPage: React.FC = () => {
         <div className="flex flex-wrap gap-2 mb-6">
           <Link
             to="/dashboard"
-            className="text-slate-500 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors"
+            className="text-slate-500 dark:text-muted-foreground text-sm font-medium hover:text-primary transition-colors"
           >
             Dashboard
           </Link>
-          <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">/</span>
+          <span className="text-slate-500 dark:text-muted-foreground text-sm font-medium">/</span>
           <Link
             to="/users"
-            className="text-slate-500 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors"
+            className="text-slate-500 dark:text-muted-foreground text-sm font-medium hover:text-primary transition-colors"
           >
             Usuarios
           </Link>
-          <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">/</span>
-          <span className="text-slate-800 dark:text-slate-200 text-sm font-medium">{fullName}</span>
+          <span className="text-slate-500 dark:text-muted-foreground text-sm font-medium">/</span>
+          <span className="text-slate-800 dark:text-foreground text-sm font-medium">{fullName}</span>
         </div>
 
         {/* Page Heading */}

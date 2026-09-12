@@ -38,7 +38,7 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
 
   if (!hasHydrated) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-900">
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-background">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
       </div>
     );

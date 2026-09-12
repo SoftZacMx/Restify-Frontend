@@ -189,7 +189,7 @@ const MenuItemDetailPage: React.FC = () => {
     return (
       <MainLayout>
         <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-          <p className="text-slate-500 dark:text-slate-400 text-lg">Cargando producto...</p>
+          <p className="text-slate-500 dark:text-muted-foreground text-lg">Cargando producto...</p>
         </div>
       </MainLayout>
     );
@@ -202,12 +202,12 @@ const MenuItemDetailPage: React.FC = () => {
         <div className="flex flex-wrap gap-2 mb-4 text-sm">
           <Link
             to="/menu/items"
-            className="text-slate-500 dark:text-slate-400 font-medium hover:text-primary transition-colors"
+            className="text-slate-500 dark:text-muted-foreground font-medium hover:text-primary transition-colors"
           >
             Productos
           </Link>
-          <span className="text-slate-500 dark:text-slate-400">/</span>
-          <span className="text-slate-800 dark:text-slate-200 font-medium">{menuItem.name}</span>
+          <span className="text-slate-500 dark:text-muted-foreground">/</span>
+          <span className="text-slate-800 dark:text-foreground font-medium">{menuItem.name}</span>
         </div>
 
         {/* Header */}
@@ -222,7 +222,7 @@ const MenuItemDetailPage: React.FC = () => {
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div>
-              <p className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
+              <p className="text-xs uppercase tracking-wider text-slate-500 dark:text-muted-foreground font-semibold">
                 Editando producto
               </p>
               <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
@@ -269,7 +269,7 @@ const MenuItemDetailPage: React.FC = () => {
                   'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold border-0',
                   menuItem.status
                     ? 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300'
-                    : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                    : 'bg-slate-100 dark:bg-card text-slate-700 dark:text-foreground'
                 )}
               >
                 {menuItem.status ? 'Activo' : 'Inactivo'}
@@ -281,7 +281,7 @@ const MenuItemDetailPage: React.FC = () => {
                 <div>
                   <Label
                     htmlFor="name"
-                    className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold"
+                    className="text-xs uppercase tracking-wider text-slate-500 dark:text-muted-foreground font-semibold"
                   >
                     Nombre del producto
                   </Label>
@@ -300,12 +300,12 @@ const MenuItemDetailPage: React.FC = () => {
                 <div>
                   <Label
                     htmlFor="price"
-                    className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold"
+                    className="text-xs uppercase tracking-wider text-slate-500 dark:text-muted-foreground font-semibold"
                   >
                     Precio (MXN)
                   </Label>
                   <div className="relative mt-1">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-muted-foreground">
                       $
                     </span>
                     <Input
@@ -326,7 +326,7 @@ const MenuItemDetailPage: React.FC = () => {
               </div>
 
               <div>
-                <Label className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
+                <Label className="text-xs uppercase tracking-wider text-slate-500 dark:text-muted-foreground font-semibold">
                   Imagen
                 </Label>
                 <div className="mt-1">
@@ -340,7 +340,7 @@ const MenuItemDetailPage: React.FC = () => {
               </div>
 
               <div>
-                <Label className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
+                <Label className="text-xs uppercase tracking-wider text-slate-500 dark:text-muted-foreground font-semibold">
                   Categoría
                 </Label>
                 <button
@@ -348,11 +348,11 @@ const MenuItemDetailPage: React.FC = () => {
                   onClick={() => setCategoryDialogOpen(true)}
                   className={cn(
                     'mt-1 w-full flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium text-left transition-colors h-10',
-                    'border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800',
-                    !selectedCategory && 'text-slate-400 dark:text-slate-500'
+                    'border-slate-200 dark:border-border hover:bg-slate-50 dark:hover:bg-card',
+                    !selectedCategory && 'text-slate-400 dark:text-muted-foreground'
                   )}
                 >
-                  <FolderOpen className="h-4 w-4 flex-shrink-0 text-slate-500 dark:text-slate-400" />
+                  <FolderOpen className="h-4 w-4 flex-shrink-0 text-slate-500 dark:text-muted-foreground" />
                   <span className="truncate flex-1">
                     {selectedCategory?.name ?? 'Sin categoría'}
                   </span>
@@ -376,7 +376,7 @@ const MenuItemDetailPage: React.FC = () => {
                   <Calendar className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
+                  <p className="text-xs uppercase tracking-wider text-slate-500 dark:text-muted-foreground font-semibold">
                     Fecha de creación
                   </p>
                   <p className="text-sm font-medium text-slate-900 dark:text-white mt-0.5">
@@ -395,7 +395,7 @@ const MenuItemDetailPage: React.FC = () => {
                   <Clock className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
+                  <p className="text-xs uppercase tracking-wider text-slate-500 dark:text-muted-foreground font-semibold">
                     Última actualización
                   </p>
                   <p className="text-sm font-medium text-slate-900 dark:text-white mt-0.5">

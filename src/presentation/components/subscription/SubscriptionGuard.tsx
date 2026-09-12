@@ -39,7 +39,7 @@ export const SubscriptionGuard = ({ children }: SubscriptionGuardProps) => {
   // Mientras no termine el fetch, mostrar spinner (children NUNCA se monta antes)
   if (!isReady) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-900">
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-background">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
       </div>
     );

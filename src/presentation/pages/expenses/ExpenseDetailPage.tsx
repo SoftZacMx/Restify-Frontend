@@ -100,7 +100,7 @@ const ExpenseDetailPage: React.FC = () => {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-            <p className="text-slate-500 dark:text-slate-400">Cargando información del gasto...</p>
+            <p className="text-slate-500 dark:text-muted-foreground">Cargando información del gasto...</p>
           </div>
         </div>
       </MainLayout>
@@ -111,7 +111,7 @@ const ExpenseDetailPage: React.FC = () => {
     return (
       <MainLayout>
         <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-          <p className="text-slate-500 dark:text-slate-400 text-lg">Gasto no encontrado</p>
+          <p className="text-slate-500 dark:text-muted-foreground text-lg">Gasto no encontrado</p>
           <Button onClick={() => navigate('/expenses')} variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Volver a Gastos
@@ -132,19 +132,19 @@ const ExpenseDetailPage: React.FC = () => {
         <div className="flex flex-wrap gap-2 mb-6">
           <Link
             to="/dashboard"
-            className="text-slate-500 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors"
+            className="text-slate-500 dark:text-muted-foreground text-sm font-medium hover:text-primary transition-colors"
           >
             Dashboard
           </Link>
-          <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">/</span>
+          <span className="text-slate-500 dark:text-muted-foreground text-sm font-medium">/</span>
           <Link
             to="/expenses"
-            className="text-slate-500 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors"
+            className="text-slate-500 dark:text-muted-foreground text-sm font-medium hover:text-primary transition-colors"
           >
             Gastos
           </Link>
-          <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">/</span>
-          <span className="text-slate-800 dark:text-slate-200 text-sm font-medium truncate max-w-[200px]">
+          <span className="text-slate-500 dark:text-muted-foreground text-sm font-medium">/</span>
+          <span className="text-slate-800 dark:text-foreground text-sm font-medium truncate max-w-[200px]">
             {expense.title || typeLabel}
           </span>
         </div>
@@ -178,29 +178,29 @@ const ExpenseDetailPage: React.FC = () => {
             </h2>
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-slate-500 dark:text-slate-400">Título</label>
+                <label className="text-sm font-medium text-slate-500 dark:text-muted-foreground">Título</label>
                 <p className="text-base text-slate-900 dark:text-white mt-1">{expense.title || '—'}</p>
               </div>
               <div>
-                <label className="text-sm font-medium text-slate-500 dark:text-slate-400">Descripción</label>
+                <label className="text-sm font-medium text-slate-500 dark:text-muted-foreground">Descripción</label>
                 <p className="text-base text-slate-900 dark:text-white mt-1">
                   {expense.description || 'Sin descripción'}
                 </p>
               </div>
               <div>
-                <label className="text-sm font-medium text-slate-500 dark:text-slate-400">Fecha</label>
+                <label className="text-sm font-medium text-slate-500 dark:text-muted-foreground">Fecha</label>
                 <p className="text-base text-slate-900 dark:text-white mt-1">
                   {formatExpenseDate(expense.date)}
                 </p>
               </div>
               <div>
-                <label className="text-sm font-medium text-slate-500 dark:text-slate-400">Método de pago</label>
+                <label className="text-sm font-medium text-slate-500 dark:text-muted-foreground">Método de pago</label>
                 <p className="text-base text-slate-900 dark:text-white mt-1">
                   {getPaymentMethodLabel(expense.paymentMethod)}
                 </p>
               </div>
               <div>
-                <label className="text-sm font-medium text-slate-500 dark:text-slate-400">Usuario</label>
+                <label className="text-sm font-medium text-slate-500 dark:text-muted-foreground">Usuario</label>
                 <p className="text-base text-slate-900 dark:text-white mt-1">
                   {expense.user
                     ? `${expense.user.name} ${expense.user.last_name}`
@@ -218,18 +218,18 @@ const ExpenseDetailPage: React.FC = () => {
             </h2>
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Subtotal</span>
+                <span className="text-sm font-medium text-slate-500 dark:text-muted-foreground">Subtotal</span>
                 <span className="text-base font-medium text-slate-900 dark:text-white">
                   {formatCurrency(expense.subtotal)}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium text-slate-500 dark:text-slate-400">IVA</span>
+                <span className="text-sm font-medium text-slate-500 dark:text-muted-foreground">IVA</span>
                 <span className="text-base font-medium text-slate-900 dark:text-white">
                   {formatCurrency(expense.iva)}
                 </span>
               </div>
-              <div className="flex justify-between items-center pt-4 border-t border-slate-200 dark:border-slate-700">
+              <div className="flex justify-between items-center pt-4 border-t border-slate-200 dark:border-border">
                 <span className="text-base font-semibold text-slate-900 dark:text-white">Total</span>
                 <span className="text-lg font-bold text-slate-900 dark:text-white">
                   {formatCurrency(expense.total)}
@@ -248,37 +248,37 @@ const ExpenseDetailPage: React.FC = () => {
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-slate-50 dark:bg-slate-800/50">
-                    <TableHead className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  <TableRow className="bg-slate-50 dark:bg-card/50">
+                    <TableHead className="text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                       Producto
                     </TableHead>
-                    <TableHead className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    <TableHead className="text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                       Cantidad
                     </TableHead>
-                    <TableHead className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    <TableHead className="text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                       Unidad
                     </TableHead>
-                    <TableHead className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">
+                    <TableHead className="text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider text-right">
                       Subtotal
                     </TableHead>
-                    <TableHead className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">
+                    <TableHead className="text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider text-right">
                       Total
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {expense.items!.map((item) => (
-                    <TableRow key={item.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                    <TableRow key={item.id} className="hover:bg-slate-50 dark:hover:bg-card/50">
                       <TableCell className="text-sm font-medium text-slate-900 dark:text-white">
                         {getProductName(item.productId, item)}
                       </TableCell>
-                      <TableCell className="text-sm text-slate-600 dark:text-slate-300">
+                      <TableCell className="text-sm text-slate-600 dark:text-foreground">
                         {item.amount}
                       </TableCell>
-                      <TableCell className="text-sm text-slate-600 dark:text-slate-300">
+                      <TableCell className="text-sm text-slate-600 dark:text-foreground">
                         {getUnitOfMeasureLabel(item.unitOfMeasure)}
                       </TableCell>
-                      <TableCell className="text-sm text-slate-600 dark:text-slate-300 text-right">
+                      <TableCell className="text-sm text-slate-600 dark:text-foreground text-right">
                         {formatCurrency(item.subtotal)}
                       </TableCell>
                       <TableCell className="text-sm font-medium text-slate-900 dark:text-white text-right">

@@ -20,11 +20,11 @@ const INITIAL_FORM: FormState = {
 };
 
 const configCardClass =
-  'rounded-xl border-slate-200 dark:border-slate-700/80 bg-card dark:bg-slate-900/30 shadow-sm';
+  'rounded-xl border-slate-200 dark:border-border/80 bg-card dark:bg-background/30 shadow-sm';
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
   return (
-    <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 block mb-1.5">
+    <span className="text-sm font-semibold text-slate-700 dark:text-foreground block mb-1.5">
       {children}
     </span>
   );
@@ -32,7 +32,7 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
 
 function FieldHint({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-xs text-slate-500 dark:text-slate-500 mt-1.5">{children}</p>
+    <p className="text-xs text-slate-500 dark:text-muted-foreground mt-1.5">{children}</p>
   );
 }
 
@@ -61,7 +61,7 @@ function PasswordInput({
       <button
         type="button"
         onClick={() => setShow(!show)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-foreground transition-colors"
       >
         {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
       </button>
@@ -156,7 +156,7 @@ const PaymentConfigPage: React.FC = () => {
             </span>
           )}
         </div>
-        <p className="text-sm text-slate-500 dark:text-slate-400 max-w-2xl">
+        <p className="text-sm text-slate-500 dark:text-muted-foreground max-w-2xl">
           Configura las credenciales de tu cuenta de Mercado Pago para recibir pagos con QR en
           tu negocio. Obtén estas credenciales desde tu panel de Mercado Pago en{' '}
           <span className="text-primary dark:text-primary font-medium">
@@ -169,8 +169,8 @@ const PaymentConfigPage: React.FC = () => {
         {/* Credenciales de Producción */}
         <Card className={configCardClass}>
           <CardHeader className="space-y-1 pb-2">
-            <CardTitle className="text-lg text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <KeyRound className="h-5 w-5 text-slate-500 dark:text-slate-400" />
+            <CardTitle className="text-lg text-slate-900 dark:text-foreground flex items-center gap-2">
+              <KeyRound className="h-5 w-5 text-slate-500 dark:text-muted-foreground" />
               Credenciales de Producción
             </CardTitle>
           </CardHeader>

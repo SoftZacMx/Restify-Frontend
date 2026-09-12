@@ -128,7 +128,7 @@ const StockPage: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
             <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Stock</h1>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
+            <p className="text-sm text-slate-500 dark:text-muted-foreground">
               Inventario actual de productos trackeados, costo promedio y alertas de mínimos.
             </p>
           </div>

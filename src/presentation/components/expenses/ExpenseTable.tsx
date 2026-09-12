@@ -37,8 +37,8 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
   if (isLoading) {
     return (
       <div className="px-4 py-5">
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark">
-          <div className="p-8 text-center text-slate-500 dark:text-slate-400">
+        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
+          <div className="p-8 text-center text-slate-500 dark:text-muted-foreground">
             Cargando gastos...
           </div>
         </div>
@@ -49,10 +49,10 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
   if (expenses.length === 0) {
     return (
       <div className="px-4 py-5">
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark">
-          <div className="p-8 text-center text-slate-500 dark:text-slate-400">
+        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
+          <div className="p-8 text-center text-slate-500 dark:text-muted-foreground">
             <div className="flex flex-col items-center gap-4">
-              <div className="rounded-full bg-slate-100 dark:bg-slate-800 p-4">
+              <div className="rounded-full bg-slate-100 dark:bg-card p-4">
                 <svg
                   className="h-8 w-8 text-slate-400"
                   fill="none"
@@ -68,10 +68,10 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
                 </svg>
               </div>
               <div>
-                <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                <p className="text-sm font-medium text-slate-900 dark:text-foreground">
                   No se encontraron gastos
                 </p>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                <p className="text-sm text-slate-500 dark:text-muted-foreground mt-1">
                   Intenta ajustar los filtros o registra un nuevo gasto para comenzar.
                 </p>
               </div>
@@ -89,18 +89,18 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
         {expenses.map((expense) => (
           <div
             key={expense.id}
-            className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 p-4"
+            className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card/50 p-4"
           >
             <div className="flex items-start justify-between gap-2 mb-2">
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-sm text-slate-900 dark:text-slate-100 truncate">
+                <h3 className="font-semibold text-sm text-slate-900 dark:text-foreground truncate">
                   {expense.title || '-'}
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-muted-foreground mt-0.5">
                   {formatExpenseDate(expense.date)}
                 </p>
               </div>
-              <span className="text-sm font-bold text-slate-900 dark:text-slate-100 shrink-0">
+              <span className="text-sm font-bold text-slate-900 dark:text-foreground shrink-0">
                 {formatCurrency(expense.total)}
               </span>
             </div>
@@ -114,12 +114,12 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
                 >
                   {expense.typeLabel}
                 </Badge>
-                <span className="text-xs text-slate-400 dark:text-slate-500">
+                <span className="text-xs text-slate-400 dark:text-muted-foreground">
                   {expense.paymentMethodLabel}
                 </span>
               </div>
               <DropdownMenu>
-                <DropdownMenuTrigger className="p-1.5 rounded-full text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                <DropdownMenuTrigger className="p-1.5 rounded-full text-slate-400 hover:bg-slate-100 dark:hover:bg-card transition-colors">
                   <MoreVertical className="h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-40">
@@ -145,33 +145,33 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
       </div>
 
       {/* Vista tabla en desktop */}
-      <div className="hidden md:block overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark">
+      <div className="hidden md:block overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
         <div className="overflow-x-auto scrollbar-thin">
           <Table>
             <TableHeader>
-              <TableRow className="bg-slate-50 dark:bg-slate-800/50">
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              <TableRow className="bg-slate-50 dark:bg-card/50">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                   FECHA
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                   TIPO
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                   TÍTULO
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                   DESCRIPCIÓN
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                   TOTAL
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                   MÉTODO DE PAGO
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                   USUARIO
                 </TableHead>
-                <TableHead className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
                   ACCIONES
                 </TableHead>
               </TableRow>
@@ -180,9 +180,9 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
               {expenses.map((expense) => (
                 <TableRow
                   key={expense.id}
-                  className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                  className="hover:bg-slate-50 dark:hover:bg-card/50 transition-colors"
                 >
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-muted-foreground">
                     {formatExpenseDate(expense.date)}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap">
@@ -195,29 +195,29 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
                       {expense.typeLabel}
                     </Badge>
                   </TableCell>
-                  <TableCell className="px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100 max-w-[200px]">
+                  <TableCell className="px-6 py-4 text-sm font-medium text-slate-900 dark:text-foreground max-w-[200px]">
                     <div className="truncate" title={expense.title}>
                       {expense.title || '-'}
                     </div>
                   </TableCell>
-                  <TableCell className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400 max-w-md">
+                  <TableCell className="px-6 py-4 text-sm text-slate-500 dark:text-muted-foreground max-w-md">
                     <div className="truncate" title={expense.description || ''}>
                       {expense.description || '-'}
                     </div>
                   </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 dark:text-slate-100">
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 dark:text-foreground">
                     {formatCurrency(expense.total)}
                   </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-muted-foreground">
                     {expense.paymentMethodLabel}
                   </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-muted-foreground">
                     {expense.userName}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <DropdownMenu>
                       <DropdownMenuTrigger
-                        className="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+                        className="p-2 rounded-full text-slate-500 dark:text-muted-foreground hover:bg-slate-200 dark:hover:bg-card hover:text-slate-700 dark:hover:text-foreground transition-colors"
                       >
                         <MoreVertical className="h-4 w-4" />
                       </DropdownMenuTrigger>

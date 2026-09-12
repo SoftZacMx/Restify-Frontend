@@ -108,7 +108,7 @@ export const PaymentMethods: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4">
+      <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-muted-foreground mb-4">
         Método de pago
       </h3>
 
@@ -127,7 +127,7 @@ export const PaymentMethods: React.FC = () => {
                 'flex-1 flex flex-col items-center justify-center gap-2 py-4 px-3 rounded-xl border-2 transition-colors',
                 isSelected
                   ? 'border-primary bg-primary text-primary-foreground'
-                  : 'border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-500'
+                  : 'border-slate-200 dark:border-border bg-slate-50 dark:bg-card/50 text-slate-700 dark:text-foreground hover:border-slate-300 dark:hover:border-border'
               )}
             >
               {method.icon}
@@ -140,11 +140,11 @@ export const PaymentMethods: React.FC = () => {
       {/* Amount Received (no aplica para QR MP — se paga el total completo) */}
       {selectedMethod1 && selectedMethod1 !== 'QR_MP' && (
         <div className="space-y-2 mb-4">
-          <Label htmlFor="amount1" className="text-slate-600 dark:text-slate-300">
+          <Label htmlFor="amount1" className="text-slate-600 dark:text-foreground">
             Monto recibido
           </Label>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 font-semibold">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 dark:text-muted-foreground font-semibold">
               $
             </span>
             <Input
@@ -179,7 +179,7 @@ export const PaymentMethods: React.FC = () => {
       {change > 0 && (
         <div className="flex items-center justify-between gap-3 p-4 rounded-xl bg-primary/10 dark:bg-primary/20 border border-primary/20 mb-4">
           <div>
-            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Cambio a devolver</p>
+            <p className="text-sm font-medium text-slate-600 dark:text-muted-foreground">Cambio a devolver</p>
             <p className="text-2xl font-bold text-primary">${change.toFixed(2)}</p>
           </div>
           <button
@@ -194,10 +194,10 @@ export const PaymentMethods: React.FC = () => {
       )}
 
       {/* Split Payment */}
-      <div className="flex items-center justify-between gap-3 py-3 border-t border-slate-200 dark:border-slate-700">
+      <div className="flex items-center justify-between gap-3 py-3 border-t border-slate-200 dark:border-border">
         <div>
-          <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Dividir pago</p>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-sm font-medium text-slate-700 dark:text-foreground">Dividir pago</p>
+          <p className="text-xs text-slate-500 dark:text-muted-foreground">
             Repartir la cuenta entre varios métodos
           </p>
         </div>
@@ -212,7 +212,7 @@ export const PaymentMethods: React.FC = () => {
       {/* Segundo método (cuando split está activo) — mismos botones que el primer método */}
       {showSecondPaymentMethod && (
         <div className="space-y-2 mb-4">
-          <Label className="text-slate-600 dark:text-slate-300">Segundo método de pago</Label>
+          <Label className="text-slate-600 dark:text-foreground">Segundo método de pago</Label>
           <div className="flex gap-2">
             {availableMethodsForMethod2.map((method) => {
               const isSelected = selectedMethod2 === method.value;
@@ -227,7 +227,7 @@ export const PaymentMethods: React.FC = () => {
                     'flex-1 flex flex-col items-center justify-center gap-2 py-4 px-3 rounded-xl border-2 transition-colors',
                     isSelected
                       ? 'border-primary bg-primary text-primary-foreground'
-                      : 'border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-500'
+                      : 'border-slate-200 dark:border-border bg-slate-50 dark:bg-card/50 text-slate-700 dark:text-foreground hover:border-slate-300 dark:hover:border-border'
                   )}
                 >
                   {method.icon}
@@ -268,7 +268,7 @@ export const PaymentMethods: React.FC = () => {
 
       {/* Total a pagar (referencia) */}
       <div className="flex justify-between text-sm py-2 mb-2">
-        <span className="text-slate-500 dark:text-slate-400">Total a pagar</span>
+        <span className="text-slate-500 dark:text-muted-foreground">Total a pagar</span>
         <span className="font-semibold" data-testid="payment-total" aria-label={`Total a pagar ${paymentState.total.toFixed(2)}`}>
           ${paymentState.total.toFixed(2)}
         </span>
@@ -280,8 +280,8 @@ export const PaymentMethods: React.FC = () => {
         </div>
       )}
       {selectedMethod1 && totalEntered > 0 && (
-        <div className="flex justify-between text-sm font-semibold py-2 border-t border-slate-200 dark:border-slate-700 mb-4">
-          <span className="text-slate-600 dark:text-slate-400">Total ingresado</span>
+        <div className="flex justify-between text-sm font-semibold py-2 border-t border-slate-200 dark:border-border mb-4">
+          <span className="text-slate-600 dark:text-muted-foreground">Total ingresado</span>
           <span data-testid="payment-total-entered" aria-label={`Total ingresado ${totalEntered.toFixed(2)}`}>
             ${totalEntered.toFixed(2)}
           </span>
@@ -301,7 +301,7 @@ export const PaymentMethods: React.FC = () => {
             <Check className="h-5 w-5 mr-2" />
             Procesar pago e imprimir ticket
           </Button>
-          <p className="text-xs text-slate-500 dark:text-slate-400 text-center">
+          <p className="text-xs text-slate-500 dark:text-muted-foreground text-center">
             Al procesar, confirmas que el monto fue recibido en su totalidad.
           </p>
         </div>

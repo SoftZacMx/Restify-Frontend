@@ -483,7 +483,7 @@ const OrdersPage: React.FC = () => {
             )}
           </Button>
           {showFilters && (
-            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-4">
+            <div className="bg-white dark:bg-background rounded-lg border border-slate-200 dark:border-border p-4">
               <OrderSearchBar
                 filters={filters}
                 onFiltersChange={handleFiltersChange}
@@ -495,7 +495,7 @@ const OrdersPage: React.FC = () => {
         </div>
 
         {/* Grid de órdenes con paginación */}
-        <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
+        <div className="bg-white dark:bg-background rounded-lg border border-slate-200 dark:border-border">
           <OrdersGrid
             orders={displayOrders}
             tableNameById={tableNameById}

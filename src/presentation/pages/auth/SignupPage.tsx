@@ -42,9 +42,9 @@ const STEPS: StepperStep[] = [
 ];
 
 const labelClass =
-  "text-xs font-bold uppercase tracking-wide text-slate-700 dark:text-slate-300";
+  "text-xs font-bold uppercase tracking-wide text-slate-700 dark:text-foreground";
 const iconClass =
-  "pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 dark:text-slate-500";
+  "pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 dark:text-muted-foreground";
 const primaryButtonClass =
   "bg-gradient-to-r from-primary to-primary hover:from-primary hover:to-primary text-white font-semibold shadow-lg shadow-primary/30";
 
@@ -118,7 +118,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center p-4">
       <div className="absolute top-4 right-4">
         <ThemeToggle variant="icon" />
       </div>
@@ -149,7 +149,7 @@ export default function SignupPage() {
             ? "Datos Personales y Organización"
             : "Primera Sucursal"}
         </h2>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+        <p className="mt-1 text-sm text-slate-500 dark:text-muted-foreground">
           {step === "owner"
             ? "Comienza configurando tu perfil de administrador y los detalles de tu negocio."
             : "Configura los detalles operativos de tu ubicación principal para comenzar a recibir pedidos."}
@@ -158,7 +158,7 @@ export default function SignupPage() {
 
       {/* Paso 1: Owner + Organización */}
       {step === "owner" && (
-        <Card className="w-full max-w-[640px] shadow-lg border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800">
+        <Card className="w-full max-w-[640px] shadow-lg border-slate-100 dark:border-border bg-white dark:bg-card">
           <CardContent className="space-y-5 px-8 py-8">
             {error && (
               <div
@@ -277,7 +277,7 @@ export default function SignupPage() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 focus:outline-none"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-muted-foreground dark:hover:text-foreground focus:outline-none"
                       aria-label="Toggle password visibility"
                     >
                       {showPassword ? (
@@ -311,7 +311,7 @@ export default function SignupPage() {
                       onClick={() =>
                         setShowConfirmPassword(!showConfirmPassword)
                       }
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 focus:outline-none"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-muted-foreground dark:hover:text-foreground focus:outline-none"
                       aria-label="Toggle confirm password visibility"
                     >
                       {showConfirmPassword ? (
@@ -350,7 +350,7 @@ export default function SignupPage() {
               </Button>
 
               <div className="text-center pt-1">
-                <span className="text-sm text-slate-500 dark:text-slate-400">
+                <span className="text-sm text-slate-500 dark:text-muted-foreground">
                   ¿Ya tienes una cuenta?{" "}
                 </span>
                 <Link
@@ -367,7 +367,7 @@ export default function SignupPage() {
 
       {/* Paso 2: Primera sucursal */}
       {step === "branch" && (
-        <Card className="w-full max-w-[640px] shadow-lg border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800">
+        <Card className="w-full max-w-[640px] shadow-lg border-slate-100 dark:border-border bg-white dark:bg-card">
           <CardContent className="space-y-5 px-8 py-8">
             {error && (
               <div

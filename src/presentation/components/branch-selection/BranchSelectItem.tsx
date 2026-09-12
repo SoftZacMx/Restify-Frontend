@@ -31,7 +31,7 @@ export const BranchSelectItem: React.FC<BranchSelectItemProps> = ({
         'disabled:cursor-not-allowed disabled:opacity-50',
         selected
           ? 'border-primary bg-primary/10'
-          : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800'
+          : 'border-slate-200 dark:border-border bg-slate-50 dark:bg-card/40 hover:bg-slate-100 dark:hover:bg-card'
       )}
     >
       <span
@@ -39,7 +39,7 @@ export const BranchSelectItem: React.FC<BranchSelectItemProps> = ({
           'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg',
           selected
             ? 'bg-primary text-primary-foreground'
-            : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+            : 'bg-slate-200 dark:bg-card text-slate-500 dark:text-muted-foreground'
         )}
       >
         <Store className="h-5 w-5" />

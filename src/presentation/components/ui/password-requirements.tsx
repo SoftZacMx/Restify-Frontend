@@ -30,9 +30,9 @@ export function PasswordRequirements({ password, requireSpecialChar = true }: Pa
             {met ? (
               <Check className="h-3.5 w-3.5 text-green-500" />
             ) : (
-              <Circle className="h-3.5 w-3.5 text-slate-300 dark:text-slate-600" />
+              <Circle className="h-3.5 w-3.5 text-slate-300 dark:text-muted-foreground" />
             )}
-            <span className={`text-xs ${met ? 'text-green-600 dark:text-green-400' : 'text-slate-400 dark:text-slate-500'}`}>
+            <span className={`text-xs ${met ? 'text-green-600 dark:text-green-400' : 'text-slate-400 dark:text-muted-foreground'}`}>
               {req.label}
             </span>
           </li>

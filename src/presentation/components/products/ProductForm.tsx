@@ -130,7 +130,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         size="featured"
       />
 
-      <div className="rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800 shadow-lg p-6">
+      <div className="rounded-xl border border-slate-100 dark:border-border bg-white dark:bg-card shadow-lg p-6">
         <div className="flex items-center gap-3 mb-6">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
             <Package className="h-4 w-4" />
@@ -156,13 +156,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               aria-required
             />
             {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
-            <p className="text-xs text-slate-500 dark:text-slate-400">{name.length}/200 caracteres</p>
+            <p className="text-xs text-slate-500 dark:text-muted-foreground">{name.length}/200 caracteres</p>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="status" className="text-sm font-medium">Estado</Label>
-            <div className="flex h-[3.75rem] items-center justify-between gap-3 rounded-lg border border-slate-200 dark:border-slate-700 px-4">
-              <p className="truncate text-sm text-slate-500 dark:text-slate-400">
+            <div className="flex h-[3.75rem] items-center justify-between gap-3 rounded-lg border border-slate-200 dark:border-border px-4">
+              <p className="truncate text-sm text-slate-500 dark:text-muted-foreground">
                 {status ? 'Producto activo' : 'Producto inactivo'}
               </p>
               <Switch
@@ -186,13 +186,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             disabled={isLoading}
           />
           {errors.description && <p className="text-sm text-destructive">{errors.description.message}</p>}
-          <p className="text-xs text-slate-500 dark:text-slate-400">{(description || '').length}/1000 caracteres</p>
+          <p className="text-xs text-slate-500 dark:text-muted-foreground">{(description || '').length}/1000 caracteres</p>
         </div>
       </div>
 
       {/* Stock config — solo visible en creación (edición se hace desde StockConfigSection del detalle). */}
       {!isEditMode && (
-        <div className="rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800 shadow-lg p-6 space-y-4">
+        <div className="rounded-xl border border-slate-100 dark:border-border bg-white dark:bg-card shadow-lg p-6 space-y-4">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <Boxes className="h-4 w-4" />
@@ -207,7 +207,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <Label htmlFor="trackStock" className="text-sm font-medium cursor-pointer">
                 Trackear stock
               </Label>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-muted-foreground mt-0.5">
                 Activado por defecto. Si lo desactivás, el producto se crea sin tracking
                 y no podrá usarse en recetas hasta que lo actives.
               </p>
@@ -221,9 +221,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           </div>
 
           {trackStock && (
-            <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-border">
               <div>
-                <Label htmlFor="unitOfMeasure" className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
+                <Label htmlFor="unitOfMeasure" className="text-xs uppercase tracking-wider text-slate-500 dark:text-muted-foreground font-semibold">
                   Unidad de medida <span className="text-destructive">*</span>
                 </Label>
                 <Select
@@ -250,7 +250,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               </div>
 
               <div>
-                <Label htmlFor="minStockAlert" className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
+                <Label htmlFor="minStockAlert" className="text-xs uppercase tracking-wider text-slate-500 dark:text-muted-foreground font-semibold">
                   Stock mínimo de alerta
                 </Label>
                 <Input
@@ -264,7 +264,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   onChange={handleMinStockChange}
                   disabled={isLoading}
                 />
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                <p className="text-xs text-slate-500 dark:text-muted-foreground mt-1">
                   Dejalo vacío si no querés alertas automáticas.
                 </p>
               </div>
@@ -273,7 +273,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         </div>
       )}
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+      <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-border">
         <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>Cancelar</Button>
         <Button type="submit" disabled={isLoading}>
           {isLoading ? 'Guardando...' : isEditMode ? 'Actualizar' : 'Crear'}

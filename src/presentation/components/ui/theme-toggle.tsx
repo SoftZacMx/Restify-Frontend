@@ -38,7 +38,7 @@ export function ThemeToggle({ className, variant = 'default' }: ThemeToggleProps
       <button
         onClick={toggleTheme}
         className={cn(
-          'inline-flex items-center justify-center rounded-lg p-2 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors',
+          'inline-flex items-center justify-center rounded-lg p-2 text-slate-600 hover:bg-slate-100 dark:text-foreground dark:hover:bg-card transition-colors',
           className
         )}
         aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}

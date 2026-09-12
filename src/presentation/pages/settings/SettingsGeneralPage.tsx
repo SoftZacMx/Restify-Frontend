@@ -63,7 +63,7 @@ const SettingsGeneralPage = () => {
                 <p className="text-sm font-medium text-slate-900 dark:text-white">
                   Cerrar organización
                 </p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-sm text-slate-500 dark:text-muted-foreground">
                   Esta acción no es inmediata: la organización se elimina de forma permanente a los 30 días.
                 </p>
               </div>

@@ -37,8 +37,8 @@ function RowSwitch({
   disabled?: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 py-2 border-b border-slate-200/80 dark:border-slate-700/80 last:border-0">
-      <Label htmlFor={id} className="text-sm font-normal cursor-pointer flex-1 text-slate-700 dark:text-slate-200">
+    <div className="flex items-center justify-between gap-3 py-2 border-b border-slate-200/80 dark:border-border/80 last:border-0">
+      <Label htmlFor={id} className="text-sm font-normal cursor-pointer flex-1 text-slate-700 dark:text-foreground">
         {label}
       </Label>
       <Switch
@@ -52,7 +52,7 @@ function RowSwitch({
 }
 
 const fieldLabelClass =
-  'text-[10px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1.5';
+  'text-[10px] font-semibold uppercase tracking-wider text-slate-500 dark:text-muted-foreground block mb-1.5';
 
 function CollapsibleSection({
   id,
@@ -78,8 +78,8 @@ function CollapsibleSection({
       className={cn(
         'rounded-xl overflow-hidden border transition-colors',
         nested
-          ? 'border-slate-200/90 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-950/40'
-          : 'border-slate-200 dark:border-slate-700/80 bg-white dark:bg-slate-900/35'
+          ? 'border-slate-200/90 dark:border-border/60 bg-slate-50/50 dark:bg-background/40'
+          : 'border-slate-200 dark:border-border/80 bg-white dark:bg-background/35'
       )}
     >
       <button
@@ -88,7 +88,7 @@ function CollapsibleSection({
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          'flex w-full items-center gap-3 text-left transition-colors hover:bg-slate-100/80 dark:hover:bg-slate-800/40',
+          'flex w-full items-center gap-3 text-left transition-colors hover:bg-slate-100/80 dark:hover:bg-card/40',
           nested ? 'p-2.5' : 'p-3.5'
         )}
       >
@@ -96,7 +96,7 @@ function CollapsibleSection({
           <span
             className={cn(
               'flex shrink-0 items-center justify-center rounded-lg text-primary dark:text-sky-400',
-              nested ? 'h-8 w-8 bg-slate-200/80 dark:bg-slate-800/80' : 'h-10 w-10 bg-primary/10 dark:bg-sky-500/15'
+              nested ? 'h-8 w-8 bg-slate-200/80 dark:bg-card/80' : 'h-10 w-10 bg-primary/10 dark:bg-sky-500/15'
             )}
             aria-hidden
           >
@@ -106,19 +106,19 @@ function CollapsibleSection({
         <div className="min-w-0 flex-1">
           <div
             className={cn(
-              'font-semibold text-slate-900 dark:text-slate-100',
+              'font-semibold text-slate-900 dark:text-foreground',
               nested ? 'text-xs' : 'text-sm'
             )}
           >
             {title}
           </div>
           {description ? (
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">{description}</p>
+            <p className="text-[11px] text-slate-500 dark:text-muted-foreground mt-0.5 leading-snug">{description}</p>
           ) : null}
         </div>
         <ChevronDown
           className={cn(
-            'h-4 w-4 shrink-0 text-slate-500 dark:text-slate-400 transition-transform',
+            'h-4 w-4 shrink-0 text-slate-500 dark:text-muted-foreground transition-transform',
             open && 'rotate-180'
           )}
           aria-hidden
@@ -127,7 +127,7 @@ function CollapsibleSection({
       {open ? (
         <div
           className={cn(
-            'border-t border-slate-200 dark:border-slate-700/80',
+            'border-t border-slate-200 dark:border-border/80',
             nested ? 'px-3 pb-3 pt-1' : 'px-4 pb-4 pt-2'
           )}
         >
@@ -139,7 +139,7 @@ function CollapsibleSection({
 }
 
 const switchListClass =
-  'rounded-lg border border-slate-200/90 dark:border-slate-700/60 divide-y divide-slate-200/90 dark:divide-slate-700/60 px-2 bg-white/50 dark:bg-slate-950/25';
+  'rounded-lg border border-slate-200/90 dark:border-border/60 divide-y divide-slate-200/90 dark:divide-border/60 px-2 bg-white/50 dark:bg-background/25';
 
 /**
  * Configuración de tickets térmicos (venta y cocina): layout, visibilidad y pie.
@@ -527,10 +527,10 @@ export const TicketThermalConfigCard: React.FC<TicketThermalConfigCardProps> = (
   );
 
   return (
-    <Card className="rounded-xl border-slate-200 dark:border-slate-700/80 bg-card dark:bg-slate-900/30 shadow-sm overflow-hidden">
+    <Card className="rounded-xl border-slate-200 dark:border-border/80 bg-card dark:bg-background/30 shadow-sm overflow-hidden">
       <CardHeader className="space-y-1 pb-2">
-        <CardTitle className="text-lg text-slate-900 dark:text-slate-100">Configuración de ticket</CardTitle>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <CardTitle className="text-lg text-slate-900 dark:text-foreground">Configuración de ticket</CardTitle>
+        <p className="text-sm text-slate-500 dark:text-muted-foreground">
           Visibilidad y medidas del ticket. Se guarda con &quot;Guardar cambios&quot;.
         </p>
       </CardHeader>

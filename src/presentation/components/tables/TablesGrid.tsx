@@ -36,7 +36,7 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
           {[...Array(12)].map((_, i) => (
             <div
               key={i}
-              className="h-32 rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse"
+              className="h-32 rounded-xl bg-slate-200 dark:bg-card animate-pulse"
             />
           ))}
         </div>
@@ -48,13 +48,13 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
     return (
       <div className="px-4 py-12">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 dark:bg-card mb-4">
             <Square className="h-8 w-8 text-slate-400" />
           </div>
           <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
             No hay ubicaciones
           </h3>
-          <p className="text-slate-500 dark:text-slate-400">
+          <p className="text-slate-500 dark:text-muted-foreground">
             Crea tu primera ubicación para comenzar
           </p>
         </div>
@@ -67,7 +67,7 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
    */
   const getTableColor = (table: TableResponse) => {
     if (!table.status) {
-      return 'bg-slate-300 dark:bg-slate-600 text-slate-600 dark:text-slate-300';
+      return 'bg-slate-300 dark:bg-card text-slate-600 dark:text-foreground';
     }
     if (table.availabilityStatus) {
       return 'bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-emerald-200 dark:shadow-emerald-900/30';
@@ -99,15 +99,15 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
       <div className="flex flex-wrap items-center gap-6 mb-6 px-2">
         <div className="flex items-center gap-2">
           <span className="w-4 h-4 rounded-full bg-emerald-500" />
-          <span className="text-sm text-slate-600 dark:text-slate-400">Libre</span>
+          <span className="text-sm text-slate-600 dark:text-muted-foreground">Libre</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-4 h-4 rounded-full bg-rose-500" />
-          <span className="text-sm text-slate-600 dark:text-slate-400">Ocupada</span>
+          <span className="text-sm text-slate-600 dark:text-muted-foreground">Ocupada</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-4 h-4 rounded-full bg-slate-400" />
-          <span className="text-sm text-slate-600 dark:text-slate-400">Deshabilitada</span>
+          <span className="text-sm text-slate-600 dark:text-muted-foreground">Deshabilitada</span>
         </div>
       </div>
 
@@ -138,7 +138,7 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
                   'absolute top-2 right-2 p-1.5 rounded-lg transition-colors',
                   table.status
                     ? 'hover:bg-white/20 text-white/80 hover:text-white'
-                    : 'hover:bg-slate-400/20 text-slate-500 hover:text-slate-600 dark:text-slate-400'
+                    : 'hover:bg-slate-400/20 text-slate-500 hover:text-slate-600 dark:text-muted-foreground'
                 )}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -211,9 +211,9 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
 
       {/* Resumen de ubicaciones */}
       <div className="mt-8 px-2">
-        <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+        <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-muted-foreground">
           <span>
-            <strong className="text-slate-700 dark:text-slate-300">{tables.length}</strong> ubicaciones en total
+            <strong className="text-slate-700 dark:text-foreground">{tables.length}</strong> ubicaciones en total
           </span>
           <span>•</span>
           <span>
