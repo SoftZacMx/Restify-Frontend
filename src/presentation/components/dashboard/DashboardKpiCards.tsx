@@ -18,32 +18,32 @@ const ACCENT_STYLES: Record<
   }
 > = {
   emerald: {
-    iconBg: 'bg-emerald-500/15 dark:bg-emerald-400/20',
-    iconColor: 'text-emerald-600 dark:text-emerald-400',
-    iconRing: 'ring-emerald-500/20 dark:ring-emerald-400/30',
+    iconBg: 'bg-fresco/15',
+    iconColor: 'text-fresco',
+    iconRing: 'ring-fresco/20',
     cardBg:
-      'bg-gradient-to-br from-white via-white to-emerald-50/60 dark:from-card dark:via-card dark:to-emerald-950/30',
-    cardBorder: 'border-emerald-200/60 dark:border-emerald-800/50',
+      'bg-gradient-to-br from-white via-white to-fresco-suave/60 dark:from-card dark:via-card',
+    cardBorder: 'border-fresco/60',
     cardShadow: 'shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50',
     cardHoverShadow: 'hover:shadow-xl hover:shadow-emerald-500/5 dark:hover:shadow-emerald-500/10',
     cornerGlow:
-      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-emerald-400/15 dark:before:bg-emerald-500/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
-    badgeBg: 'bg-emerald-100 dark:bg-emerald-900/40',
-    badgeText: 'text-emerald-700 dark:text-emerald-300',
+      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-fresco/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
+    badgeBg: 'bg-fresco-suave',
+    badgeText: 'text-fresco-texto',
   },
   amber: {
-    iconBg: 'bg-amber-500/15 dark:bg-amber-400/20',
-    iconColor: 'text-amber-600 dark:text-amber-400',
-    iconRing: 'ring-amber-500/20 dark:ring-amber-400/30',
+    iconBg: 'bg-apoyo/15',
+    iconColor: 'text-apoyo',
+    iconRing: 'ring-apoyo/20',
     cardBg:
-      'bg-gradient-to-br from-white via-white to-amber-50/50 dark:from-card dark:via-card dark:to-amber-950/25',
-    cardBorder: 'border-amber-200/60 dark:border-amber-800/50',
+      'bg-gradient-to-br from-white via-white to-apoyo-suave/50 dark:from-card dark:via-card',
+    cardBorder: 'border-apoyo/60',
     cardShadow: 'shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50',
     cardHoverShadow: 'hover:shadow-xl hover:shadow-amber-500/5 dark:hover:shadow-amber-500/10',
     cornerGlow:
-      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-amber-400/15 dark:before:bg-amber-500/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
-    badgeBg: 'bg-amber-100 dark:bg-amber-900/40',
-    badgeText: 'text-amber-700 dark:text-amber-300',
+      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-apoyo/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
+    badgeBg: 'bg-apoyo-suave',
+    badgeText: 'text-apoyo-texto',
   },
   blue: {
     iconBg: 'bg-primary/15 dark:bg-primary/20',
@@ -51,12 +51,12 @@ const ACCENT_STYLES: Record<
     iconRing: 'ring-primary/20 dark:ring-primary/30',
     cardBg:
       'bg-gradient-to-br from-white via-white to-primary/50 dark:from-card dark:via-card dark:to-primary/25',
-    cardBorder: 'border-primary/30/60 dark:border-primary/50',
+    cardBorder: 'border-primary/30 dark:border-primary/50',
     cardShadow: 'shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50',
     cardHoverShadow: 'hover:shadow-xl hover:shadow-primary/5 dark:hover:shadow-primary/10',
     cornerGlow:
       'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-primary/15 dark:before:bg-primary/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
-    badgeBg: 'bg-primary/10 dark:bg-primary/20/40',
+    badgeBg: 'bg-primary/10 dark:bg-primary/20',
     badgeText: 'text-primary dark:text-primary',
   },
 };
@@ -90,10 +90,10 @@ function StatCard({
                 {subtitle}
               </span>
             )}
-            <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-muted-foreground mb-1">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-1">
               {title}
             </p>
-            <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-foreground tabular-nums tracking-tight drop-shadow-sm">
+            <h3 className="text-2xl md:text-3xl font-bold text-foreground tabular-nums tracking-tight drop-shadow-sm">
               {value}
             </h3>
           </div>

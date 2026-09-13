@@ -37,10 +37,10 @@ export const EmailVerificationBanner = () => {
   };
 
   return (
-    <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-yellow-300 bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-700 px-4 py-3">
+    <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-apoyo bg-apoyo-suave px-4 py-3">
       <div className="flex items-center gap-2">
-        <MailWarning className="h-4 w-4 shrink-0 text-yellow-600 dark:text-yellow-400" />
-        <span className="text-sm text-yellow-700 dark:text-yellow-300">
+        <MailWarning className="h-4 w-4 shrink-0 text-apoyo" />
+        <span className="text-sm text-apoyo-texto">
           Verifica tu correo para asegurar tu cuenta. Enviamos un enlace a{' '}
           <strong>{user.email}</strong>.
         </span>
@@ -50,13 +50,13 @@ export const EmailVerificationBanner = () => {
           size="sm"
           variant="outline"
           disabled={isResending}
-          className="h-7 text-xs border-yellow-400 text-yellow-700 hover:bg-yellow-100 dark:text-yellow-300 dark:hover:bg-yellow-900/40"
+          className="h-7 text-xs border-apoyo text-apoyo-texto hover:bg-apoyo-suave"
           onClick={handleResend}
         >
           {isResending ? 'Enviando...' : 'Reenviar correo'}
         </Button>
         <button onClick={() => setDismissed(true)} aria-label="Descartar aviso">
-          <X className="h-4 w-4 text-yellow-500" />
+          <X className="h-4 w-4 text-apoyo" />
         </button>
       </div>
     </div>

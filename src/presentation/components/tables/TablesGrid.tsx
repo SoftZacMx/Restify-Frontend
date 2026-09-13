@@ -36,7 +36,7 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
           {[...Array(12)].map((_, i) => (
             <div
               key={i}
-              className="h-32 rounded-xl bg-slate-200 dark:bg-card animate-pulse"
+              className="h-32 rounded-xl bg-secondary animate-pulse"
             />
           ))}
         </div>
@@ -48,13 +48,13 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
     return (
       <div className="px-4 py-12">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 dark:bg-card mb-4">
-            <Square className="h-8 w-8 text-slate-400" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
+            <Square className="h-8 w-8 text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
+          <h3 className="text-lg font-medium text-foreground mb-2">
             No hay ubicaciones
           </h3>
-          <p className="text-slate-500 dark:text-muted-foreground">
+          <p className="text-muted-foreground">
             Crea tu primera ubicación para comenzar
           </p>
         </div>
@@ -67,12 +67,12 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
    */
   const getTableColor = (table: TableResponse) => {
     if (!table.status) {
-      return 'bg-slate-300 dark:bg-card text-slate-600 dark:text-foreground';
+      return 'bg-secondary text-muted-foreground';
     }
     if (table.availabilityStatus) {
-      return 'bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-emerald-200 dark:shadow-emerald-900/30';
+      return 'bg-gradient-to-br from-fresco to-fresco text-white shadow-fresco';
     }
-    return 'bg-gradient-to-br from-rose-400 to-rose-600 text-white shadow-rose-200 dark:shadow-rose-900/30';
+    return 'bg-gradient-to-br from-destructive to-destructive text-white shadow-destructive';
   };
 
   /**
@@ -88,9 +88,9 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
    * Obtiene el color del indicador
    */
   const getIndicatorColor = (table: TableResponse) => {
-    if (!table.status) return 'bg-slate-400';
-    if (table.availabilityStatus) return 'bg-emerald-300 animate-pulse';
-    return 'bg-rose-300';
+    if (!table.status) return 'bg-muted-foreground';
+    if (table.availabilityStatus) return 'bg-fresco-suave animate-pulse';
+    return 'bg-destructive-suave';
   };
 
   return (
@@ -98,16 +98,16 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
       {/* Leyenda de estados */}
       <div className="flex flex-wrap items-center gap-6 mb-6 px-2">
         <div className="flex items-center gap-2">
-          <span className="w-4 h-4 rounded-full bg-emerald-500" />
-          <span className="text-sm text-slate-600 dark:text-muted-foreground">Libre</span>
+          <span className="w-4 h-4 rounded-full bg-fresco" />
+          <span className="text-sm text-muted-foreground">Libre</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-4 h-4 rounded-full bg-rose-500" />
-          <span className="text-sm text-slate-600 dark:text-muted-foreground">Ocupada</span>
+          <span className="w-4 h-4 rounded-full bg-destructive" />
+          <span className="text-sm text-muted-foreground">Ocupada</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-4 h-4 rounded-full bg-slate-400" />
-          <span className="text-sm text-slate-600 dark:text-muted-foreground">Deshabilitada</span>
+          <span className="w-4 h-4 rounded-full bg-muted-foreground" />
+          <span className="text-sm text-muted-foreground">Deshabilitada</span>
         </div>
       </div>
 
@@ -137,8 +137,8 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
                 className={cn(
                   'absolute top-2 right-2 p-1.5 rounded-lg transition-colors',
                   table.status
-                    ? 'hover:bg-white/20 text-white/80 hover:text-white'
-                    : 'hover:bg-slate-400/20 text-slate-500 hover:text-slate-600 dark:text-muted-foreground'
+                    ? 'hover:bg-card/20 text-white/80 hover:text-white'
+                    : 'hover:bg-muted-foreground/20 text-muted-foreground hover:text-muted-foreground'
                 )}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -174,7 +174,7 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onSelect={() => onTableAction?.(table.id, 'delete')}
-                  className="cursor-pointer text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20"
+                  className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive-suave"
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
                   <span>Eliminar</span>
@@ -211,21 +211,21 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
 
       {/* Resumen de ubicaciones */}
       <div className="mt-8 px-2">
-        <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
           <span>
-            <strong className="text-slate-700 dark:text-foreground">{tables.length}</strong> ubicaciones en total
+            <strong className="text-foreground">{tables.length}</strong> ubicaciones en total
           </span>
           <span>•</span>
           <span>
-            <strong className="text-emerald-600">{tables.filter(t => t.status && t.availabilityStatus).length}</strong> libres
+            <strong className="text-fresco">{tables.filter(t => t.status && t.availabilityStatus).length}</strong> libres
           </span>
           <span>•</span>
           <span>
-            <strong className="text-rose-600">{tables.filter(t => t.status && !t.availabilityStatus).length}</strong> ocupadas
+            <strong className="text-destructive">{tables.filter(t => t.status && !t.availabilityStatus).length}</strong> ocupadas
           </span>
           <span>•</span>
           <span>
-            <strong className="text-slate-500">{tables.filter(t => !t.status).length}</strong> deshabilitadas
+            <strong className="text-muted-foreground">{tables.filter(t => !t.status).length}</strong> deshabilitadas
           </span>
         </div>
       </div>

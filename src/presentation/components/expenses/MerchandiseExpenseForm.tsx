@@ -127,7 +127,7 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
   );
 
   return (
-    <section className="space-y-4 border-t border-slate-200 pt-6 dark:border-border">
+    <section className="space-y-4 border-t border-border pt-6 dark:border-border">
       <SelectProductDialog
         open={productDialogTarget !== null}
         onOpenChange={(open) => !open && setProductDialogTarget(null)}
@@ -140,7 +140,7 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
           <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-primary text-white">
             <LayoutGrid className="h-4 w-4" />
           </div>
-          <h3 className="text-base font-semibold text-slate-900 dark:text-white">
+          <h3 className="text-base font-semibold text-foreground">
             Detalle de la Compra
           </h3>
         </div>
@@ -156,10 +156,10 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
       </div>
 
       {/* Tabla de ítems */}
-      <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-border">
+      <div className="overflow-x-auto rounded-lg border border-border">
         <div className="min-w-[640px]">
           {/* Encabezados */}
-          <div className="grid grid-cols-12 gap-2 border-b border-slate-200 bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:border-border dark:bg-card/50 dark:text-muted-foreground">
+          <div className="grid grid-cols-12 gap-2 border-b border-border bg-muted px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground dark:border-border dark:bg-card/50 dark:text-muted-foreground">
             <div className="col-span-3">Item / Producto</div>
             <div className="col-span-2">Cant.</div>
             <div className="col-span-2">Unidad</div>
@@ -170,7 +170,7 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
           {items.map((item, index) => (
             <div
               key={index}
-              className="grid grid-cols-12 gap-2 border-b border-slate-100 px-4 py-3 last:border-b-0 dark:border-border/50"
+              className="grid grid-cols-12 gap-2 border-b border-border px-4 py-3 last:border-b-0 dark:border-border/50"
             >
               <div className="col-span-3">
                 <Button
@@ -230,7 +230,7 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
                 />
               </div>
               <div className="col-span-3 flex items-center justify-between gap-2">
-                <span className="font-semibold text-slate-900 dark:text-white">
+                <span className="font-semibold text-foreground">
                   ${(item.subtotal || '0.00').replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 </span>
                 <Button
@@ -238,7 +238,7 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
                   variant="ghost"
                   size="sm"
                   onClick={() => removeItem(index)}
-                  className="h-8 w-8 shrink-0 p-0 text-slate-400 hover:text-red-600 dark:hover:text-red-400"
+                  className="h-8 w-8 shrink-0 p-0 text-muted-foreground hover:text-destructive"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

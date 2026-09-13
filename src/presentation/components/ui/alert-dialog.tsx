@@ -67,7 +67,7 @@ const AlertDialogContent = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        'bg-white dark:bg-card rounded-xl shadow-lg p-6',
+        'bg-card rounded-xl shadow-lg p-6',
         className
       )}
       onClick={(e) => e.stopPropagation()}
@@ -100,7 +100,7 @@ const AlertDialogTitle = React.forwardRef<
   return (
     <h2
       ref={ref}
-      className={cn('text-lg font-semibold text-slate-900 dark:text-white', className)}
+      className={cn('text-lg font-semibold text-foreground', className)}
       {...props}
     />
   );
@@ -114,7 +114,7 @@ const AlertDialogDescription = React.forwardRef<
   return (
     <p
       ref={ref}
-      className={cn('text-sm text-slate-500 dark:text-muted-foreground', className)}
+      className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
   );

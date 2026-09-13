@@ -16,7 +16,7 @@ import { cn } from '@/shared/lib/utils';
 
 /** Fila del bloque inferior (tema, cerrar sesión): mismo look que un NavItem inactivo. */
 const bottomRowClass =
-  'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-600 dark:text-muted-foreground hover:bg-slate-50 dark:hover:bg-card hover:text-slate-900 dark:hover:text-foreground';
+  'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-muted-foreground hover:bg-muted dark:hover:bg-card hover:text-foreground dark:hover:text-foreground';
 
 /**
  * Componente Sidebar
@@ -126,7 +126,7 @@ export const Sidebar = () => {
       {/* Sidebar */}
       <aside
         className={cn(
-          'bg-white dark:bg-card border-r border-slate-200 dark:border-border flex flex-col fixed h-full z-50 transition-all duration-300',
+          'bg-card border-r border-border flex flex-col fixed h-full z-50 transition-all duration-300',
           sidebarWidth,
           isMobile && !isMobileOpen && '-translate-x-full',
           isMobile && isMobileOpen && 'translate-x-0'
@@ -141,7 +141,7 @@ export const Sidebar = () => {
             'relative flex flex-col items-center gap-3',
             isCollapsed
               ? 'px-2 pt-4 pb-3'
-              : 'bg-slate-200/30 px-4 pt-6 pb-6 dark:bg-background/30'
+              : 'bg-secondary/30 px-4 pt-6 pb-6 dark:bg-background/30'
           )}
         >
           {!isCollapsed && (
@@ -154,7 +154,7 @@ export const Sidebar = () => {
               {/* Línea del límite: marca dónde termina la sección y se apaga en los costados. */}
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent dark:via-card"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-border to-transparent dark:via-card"
               />
             </>
           )}
@@ -185,13 +185,13 @@ export const Sidebar = () => {
           {!isCollapsed && (
             <div className="w-full text-center">
               <p
-                className="text-base font-semibold leading-snug text-slate-900 dark:text-foreground line-clamp-2"
+                className="text-base font-semibold leading-snug text-foreground line-clamp-2"
                 title={businessName}
               >
                 {businessName}
               </p>
               {branchDetail?.city && (
-                <p className="mt-0.5 truncate text-xs text-slate-500 dark:text-muted-foreground">
+                <p className="mt-0.5 truncate text-xs text-muted-foreground">
                   {branchDetail.city}
                 </p>
               )}
@@ -220,7 +220,7 @@ export const Sidebar = () => {
           <button
             type="button"
             onClick={handleChangeBranch}
-            className="mx-4 mb-2 flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-600 dark:text-muted-foreground hover:bg-slate-100 dark:hover:bg-card hover:text-slate-900 dark:hover:text-foreground transition-colors"
+            className="mx-4 mb-2 flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted dark:hover:bg-card hover:text-foreground dark:hover:text-foreground transition-colors"
           >
             <Store className="h-4 w-4 shrink-0" />
             Cambiar de sucursal
@@ -269,7 +269,7 @@ export const Sidebar = () => {
         </nav>
 
         {/* Bottom Navigation */}
-        <div className={cn('border-t border-slate-100 dark:border-border space-y-1', isCollapsed ? 'p-2' : 'p-4')}>
+        <div className={cn('border-t border-border space-y-1', isCollapsed ? 'p-2' : 'p-4')}>
           {bottomNavItems.map((item: NavItem) => {
             const IconComponent = item.icon;
             const path = item.path ?? '';
@@ -349,7 +349,7 @@ const NavItemComponent = ({ icon, label, isActive, onClick, isCollapsed }: NavIt
         isCollapsed && 'justify-center px-2',
         isActive
           ? 'bg-primary/10 text-primary'
-          : 'text-slate-600 dark:text-muted-foreground hover:bg-slate-50 dark:hover:bg-card hover:text-slate-900 dark:hover:text-foreground'
+          : 'text-muted-foreground hover:bg-muted dark:hover:bg-card hover:text-foreground dark:hover:text-foreground'
       )}
     >
       <span className="flex-shrink-0">{icon}</span>
@@ -402,7 +402,7 @@ const NavItemWithSubmenu = ({
         isCollapsed && 'justify-center px-2',
         hasActiveChild
           ? 'bg-primary/10 text-primary'
-          : 'text-slate-600 dark:text-muted-foreground hover:bg-slate-50 dark:hover:bg-card hover:text-slate-900 dark:hover:text-foreground'
+          : 'text-muted-foreground hover:bg-muted dark:hover:bg-card hover:text-foreground dark:hover:text-foreground'
       )}
     >
       <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -423,7 +423,7 @@ const NavItemWithSubmenu = ({
         <>
           {parentButton}
           {isExpanded && (
-            <div className="ml-4 mt-1 space-y-1 border-l-2 border-slate-200 dark:border-border pl-2">
+            <div className="ml-4 mt-1 space-y-1 border-l-2 border-border pl-2">
               {subItems.map((subItem) => {
                 const SubIconComponent = subItem.icon;
                 const isSubActive = isActive(subItem.path);
@@ -435,7 +435,7 @@ const NavItemWithSubmenu = ({
                       'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
                       isSubActive
                         ? 'bg-primary/10 text-primary'
-                        : 'text-slate-600 dark:text-muted-foreground hover:bg-slate-50 dark:hover:bg-card hover:text-slate-900 dark:hover:text-foreground'
+                        : 'text-muted-foreground hover:bg-muted dark:hover:bg-card hover:text-foreground dark:hover:text-foreground'
                     )}
                   >
                     <SubIconComponent size={18} className="flex-shrink-0" />

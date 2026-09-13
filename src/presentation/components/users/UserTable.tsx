@@ -45,9 +45,9 @@ export const UserTable: React.FC<UserTableProps> = ({
   const getRoleBadgeColor = (role: string): string => {
     const colors: Record<string, string> = {
       Administrador: 'bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300',
-      Gerente: 'bg-primary/10 dark:bg-primary/20/50 text-primary dark:text-primary',
-      Empleado: 'bg-primary/10 dark:bg-primary/20/50 text-primary dark:text-primary',
-      Operario: 'bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-300',
+      Gerente: 'bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary',
+      Empleado: 'bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary',
+      Operario: 'bg-apoyo-suave text-apoyo-texto',
     };
     return colors[role] || '';
   };
@@ -55,8 +55,8 @@ export const UserTable: React.FC<UserTableProps> = ({
   if (isLoading) {
     return (
       <div className="px-4 py-5">
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
-          <div className="p-8 text-center text-slate-500 dark:text-muted-foreground">
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          <div className="p-8 text-center text-muted-foreground">
             Cargando usuarios...
           </div>
         </div>
@@ -67,8 +67,8 @@ export const UserTable: React.FC<UserTableProps> = ({
   if (users.length === 0) {
     return (
       <div className="px-4 py-5">
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
-          <div className="p-8 text-center text-slate-500 dark:text-muted-foreground">
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          <div className="p-8 text-center text-muted-foreground">
             No se encontraron usuarios
           </div>
         </div>
@@ -78,27 +78,27 @@ export const UserTable: React.FC<UserTableProps> = ({
 
   return (
     <div className="px-4 py-5">
-      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="bg-slate-50 dark:bg-card/50">
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+              <TableRow className="bg-muted">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Nombre completo
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Email
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Rol
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Estado
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Fecha de creación
                 </TableHead>
-                <TableHead className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Acciones
                 </TableHead>
               </TableRow>
@@ -107,17 +107,17 @@ export const UserTable: React.FC<UserTableProps> = ({
               {users.map((user) => (
                 <TableRow
                   key={user.id}
-                  className="hover:bg-slate-50 dark:hover:bg-card/50 transition-colors"
+                  className="hover:bg-muted dark:hover:bg-card/50 transition-colors"
                 >
                   <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <Link
                       to={`/users/${user.id}`}
-                      className="text-slate-900 dark:text-white hover:text-primary transition-colors"
+                      className="text-foreground hover:text-primary transition-colors"
                     >
                     {user.fullName}
                     </Link>
                   </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-muted-foreground">
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                     {user.email}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap">
@@ -135,14 +135,14 @@ export const UserTable: React.FC<UserTableProps> = ({
                       className={cn(
                         'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0',
                         user.statusLabel === 'Activo'
-                          ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300'
-                          : 'bg-slate-100 dark:bg-card text-slate-800 dark:text-foreground'
+                          ? 'bg-fresco-suave text-fresco-texto'
+                          : 'bg-muted text-foreground'
                       )}
                     >
                       {user.statusLabel}
                     </Badge>
                   </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-muted-foreground">
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                     {new Date(user.createdAt).toLocaleDateString('es-ES', {
                       day: '2-digit',
                       month: '2-digit',
@@ -153,7 +153,7 @@ export const UserTable: React.FC<UserTableProps> = ({
                   <TableCell className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <DropdownMenu>
                       <DropdownMenuTrigger
-                        className="p-2 rounded-full text-slate-500 dark:text-muted-foreground hover:bg-slate-200 dark:hover:bg-card hover:text-slate-700 dark:hover:text-foreground transition-colors"
+                        className="p-2 rounded-full text-muted-foreground hover:bg-secondary dark:hover:bg-card hover:text-foreground dark:hover:text-foreground transition-colors"
                       >
                         <MoreVertical className="h-4 w-4" />
                       </DropdownMenuTrigger>
@@ -177,7 +177,7 @@ export const UserTable: React.FC<UserTableProps> = ({
                         {user.statusLabel === 'Activo' ? (
                         <DropdownMenuItem
                           onSelect={() => onUserAction?.(user.id, 'delete')}
-                          className="cursor-pointer text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20"
+                          className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive-suave"
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
                             <span>Desactivar</span>
@@ -185,7 +185,7 @@ export const UserTable: React.FC<UserTableProps> = ({
                         ) : (
                           <DropdownMenuItem
                             onSelect={() => onUserAction?.(user.id, 'reactivate')}
-                            className="cursor-pointer text-green-600 dark:text-green-400 focus:text-green-600 dark:focus:text-green-400 focus:bg-green-50 dark:focus:bg-green-900/20"
+                            className="cursor-pointer text-fresco focus:text-fresco focus:bg-fresco-suave"
                           >
                             <RotateCw className="mr-2 h-4 w-4" />
                             <span>Reactivar</span>

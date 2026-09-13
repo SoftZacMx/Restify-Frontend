@@ -51,7 +51,7 @@ const PublicOrderTrackingPage = () => {
       <PublicLayout>
         <div className="flex flex-col items-center justify-center py-20">
           <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
-          <p className="text-slate-500 dark:text-muted-foreground">Cargando estado del pedido...</p>
+          <p className="text-muted-foreground">Cargando estado del pedido...</p>
         </div>
       </PublicLayout>
     );
@@ -61,11 +61,11 @@ const PublicOrderTrackingPage = () => {
     return (
       <PublicLayout>
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <AlertCircle className="h-10 w-10 text-red-400 mb-4" />
-          <p className="text-red-500 dark:text-red-400 font-medium mb-2">
+          <AlertCircle className="h-10 w-10 text-destructive mb-4" />
+          <p className="text-destructive font-medium mb-2">
             No se encontró el pedido
           </p>
-          <p className="text-sm text-slate-500 dark:text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Verifica que el enlace sea correcto.
           </p>
         </div>
@@ -77,12 +77,12 @@ const PublicOrderTrackingPage = () => {
     return (
       <PublicLayout>
         <div className="max-w-lg mx-auto flex flex-col items-center justify-center py-20 text-center space-y-4">
-          <XCircle className="h-12 w-12 text-red-400" />
+          <XCircle className="h-12 w-12 text-destructive" />
           <div className="space-y-1">
-            <p className="text-lg font-semibold text-slate-900 dark:text-white">
+            <p className="text-lg font-semibold text-foreground">
               Tu pago no se completó
             </p>
-            <p className="text-sm text-slate-500 dark:text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               No se realizó ningún cargo. Puedes volver a intentarlo.
             </p>
           </div>
@@ -114,16 +114,16 @@ const PublicOrderTrackingPage = () => {
       <div className="max-w-lg mx-auto space-y-6">
         {/* Header */}
         <div className="text-center space-y-1">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-2xl font-bold text-foreground">
             Seguimiento de pedido
           </h2>
-          <p className="text-sm text-slate-500 dark:text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             {data.customerName} &middot; {data.orderType === 'DELIVERY' ? 'Domicilio' : 'Recolección'}
           </p>
         </div>
 
         {/* Progress steps */}
-        <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-6">
+        <div className="rounded-xl border border-border bg-card p-6">
           <div className="space-y-0">
             {steps.map((step, idx) => {
               const stepOriginalIndex = getStepIndex(step.key);
@@ -138,10 +138,10 @@ const PublicOrderTrackingPage = () => {
                     <div
                       className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors ${
                         isCompleted
-                          ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400'
+                          ? 'bg-fresco-suave text-fresco'
                           : isCurrent
                             ? 'bg-primary text-primary-foreground'
-                            : 'bg-slate-100 text-slate-400 dark:bg-card dark:text-muted-foreground'
+                            : 'bg-muted text-muted-foreground dark:bg-card dark:text-muted-foreground'
                       }`}
                     >
                       {step.icon}
@@ -150,8 +150,8 @@ const PublicOrderTrackingPage = () => {
                       <div
                         className={`w-0.5 h-8 my-1 ${
                           isCompleted
-                            ? 'bg-green-300 dark:bg-green-700'
-                            : 'bg-slate-200 dark:bg-card'
+                            ? 'bg-fresco-suave'
+                            : 'bg-secondary'
                         }`}
                       />
                     )}
@@ -162,10 +162,10 @@ const PublicOrderTrackingPage = () => {
                     <p
                       className={`text-sm font-medium ${
                         isCompleted
-                          ? 'text-green-600 dark:text-green-400'
+                          ? 'text-fresco'
                           : isCurrent
-                            ? 'text-slate-900 dark:text-white font-semibold'
-                            : 'text-slate-400 dark:text-muted-foreground'
+                            ? 'text-foreground font-semibold'
+                            : 'text-muted-foreground'
                       }`}
                     >
                       {step.label}
@@ -178,35 +178,35 @@ const PublicOrderTrackingPage = () => {
         </div>
 
         {/* Order items */}
-        <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-5 space-y-3">
-          <h3 className="font-semibold text-slate-900 dark:text-white text-sm">
+        <div className="rounded-xl border border-border bg-card p-5 space-y-3">
+          <h3 className="font-semibold text-foreground text-sm">
             Tu pedido
           </h3>
           {data.items.map((item, idx) => (
             <div key={idx} className="flex justify-between text-sm">
-              <span className="text-slate-600 dark:text-foreground">
+              <span className="text-muted-foreground">
                 {item.quantity}x {item.name}
               </span>
-              <span className="font-medium text-slate-900 dark:text-white">
+              <span className="font-medium text-foreground">
                 ${item.total.toFixed(2)}
               </span>
             </div>
           ))}
-          <div className="pt-3 border-t border-slate-200 dark:border-border flex justify-between">
-            <span className="font-bold text-slate-900 dark:text-white">Total</span>
+          <div className="pt-3 border-t border-border flex justify-between">
+            <span className="font-bold text-foreground">Total</span>
             <span className="font-bold text-primary">${data.total.toFixed(2)}</span>
           </div>
         </div>
 
         {/* Scheduled time */}
         {data.scheduledAt && (
-          <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-4 flex items-center gap-3">
-            <Clock className="h-5 w-5 text-slate-400 shrink-0" />
+          <div className="rounded-xl border border-border bg-card p-4 flex items-center gap-3">
+            <Clock className="h-5 w-5 text-muted-foreground shrink-0" />
             <div>
-              <p className="text-xs text-slate-500 dark:text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 {data.orderType === 'DELIVERY' ? 'Entrega programada' : 'Hora de recolección'}
               </p>
-              <p className="text-sm font-medium text-slate-900 dark:text-white">
+              <p className="text-sm font-medium text-foreground">
                 {new Date(data.scheduledAt).toLocaleString('es-MX', {
                   dateStyle: 'medium',
                   timeStyle: 'short',
@@ -229,7 +229,7 @@ const PublicOrderTrackingPage = () => {
         )}
 
         {/* Footer */}
-        <p className="text-center text-xs text-slate-400 dark:text-muted-foreground">
+        <p className="text-center text-xs text-muted-foreground">
           Esta página se actualiza automáticamente cada 15 segundos.
         </p>
       </div>

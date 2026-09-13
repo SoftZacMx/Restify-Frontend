@@ -53,7 +53,7 @@ export const SelectCategoryDialog: React.FC<SelectCategoryDialogProps> = ({
 
         <div className="space-y-4 flex-1 min-h-0 flex flex-col">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
               placeholder="Buscar por nombre..."
@@ -68,13 +68,13 @@ export const SelectCategoryDialog: React.FC<SelectCategoryDialogProps> = ({
             <button
               type="button"
               onClick={() => handleSelect(null)}
-              className="w-full flex items-center gap-4 p-3 rounded-lg border text-left transition-colors border-slate-200 dark:border-border hover:bg-slate-50 dark:hover:bg-card/50"
+              className="w-full flex items-center gap-4 p-3 rounded-lg border text-left transition-colors border-border hover:bg-muted dark:hover:bg-card/50"
             >
-              <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-slate-100 dark:bg-card flex items-center justify-center">
-                <LayoutGrid className="h-6 w-6 text-slate-500 dark:text-muted-foreground" />
+              <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-muted flex items-center justify-center">
+                <LayoutGrid className="h-6 w-6 text-muted-foreground" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-slate-900 dark:text-white truncate">
+                <p className="font-medium text-foreground truncate">
                   Sin categoría
                 </p>
               </div>

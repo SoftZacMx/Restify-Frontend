@@ -73,7 +73,7 @@ const MenuCategoryDetailPage: React.FC = () => {
     return (
       <MainLayout>
         <div className="px-4 py-8">
-          <div className="text-center text-slate-500 dark:text-muted-foreground">
+          <div className="text-center text-muted-foreground">
             Cargando categoría...
           </div>
         </div>
@@ -86,7 +86,7 @@ const MenuCategoryDetailPage: React.FC = () => {
       <MainLayout>
         <div className="px-4 py-8">
           <div className="text-center">
-            <p className="text-red-500 dark:text-red-400 mb-4">
+            <p className="text-destructive mb-4">
               {error instanceof AppError ? error.message : 'No se pudo cargar la categoría'}
             </p>
             <Button variant="outline" onClick={handleBack}>
@@ -108,10 +108,10 @@ const MenuCategoryDetailPage: React.FC = () => {
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white">
+            <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
               {category.name}
             </h1>
-            <p className="text-sm text-slate-500 dark:text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               Editar información de la categoría
             </p>
           </div>
@@ -144,26 +144,26 @@ const MenuCategoryDetailPage: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
+                  <p className="text-sm font-medium text-muted-foreground">
                     ID
                   </p>
-                  <p className="text-sm text-slate-900 dark:text-white font-mono">
+                  <p className="text-sm text-foreground font-mono">
                     {category.id}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
+                  <p className="text-sm font-medium text-muted-foreground">
                     Estado
                   </p>
-                  <p className={`text-sm font-medium ${category.status ? 'text-green-600' : 'text-slate-500'}`}>
+                  <p className={`text-sm font-medium ${category.status ? 'text-fresco' : 'text-muted-foreground'}`}>
                     {category.status ? 'Activa' : 'Inactiva'}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
+                  <p className="text-sm font-medium text-muted-foreground">
                     Creada
                   </p>
-                  <p className="text-sm text-slate-900 dark:text-white">
+                  <p className="text-sm text-foreground">
                     {new Date(category.createdAt).toLocaleDateString('es-ES', {
                       day: '2-digit',
                       month: 'long',
@@ -175,10 +175,10 @@ const MenuCategoryDetailPage: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
+                  <p className="text-sm font-medium text-muted-foreground">
                     Última actualización
                   </p>
-                  <p className="text-sm text-slate-900 dark:text-white">
+                  <p className="text-sm text-foreground">
                     {new Date(category.updatedAt).toLocaleDateString('es-ES', {
                       day: '2-digit',
                       month: 'long',

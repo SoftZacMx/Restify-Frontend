@@ -75,7 +75,7 @@ const TableDetailPage: React.FC = () => {
     return (
       <MainLayout>
         <div className="px-4 py-8">
-          <div className="text-center text-slate-500 dark:text-muted-foreground">
+          <div className="text-center text-muted-foreground">
             Cargando ubicación...
           </div>
         </div>
@@ -88,7 +88,7 @@ const TableDetailPage: React.FC = () => {
       <MainLayout>
         <div className="px-4 py-8">
           <div className="text-center">
-            <p className="text-red-500 dark:text-red-400 mb-4">
+            <p className="text-destructive mb-4">
               {error instanceof AppError ? error.message : 'No se pudo cargar la ubicación'}
             </p>
             <Button variant="outline" onClick={handleBack}>
@@ -110,14 +110,14 @@ const TableDetailPage: React.FC = () => {
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center justify-center min-w-12 max-w-[140px] min-h-12 px-2 rounded-xl bg-slate-100 dark:bg-card text-slate-700 dark:text-foreground font-bold text-lg text-center break-words">
+            <span className="inline-flex items-center justify-center min-w-12 max-w-[140px] min-h-12 px-2 rounded-xl bg-muted text-foreground font-bold text-lg text-center break-words">
               {table.name}
             </span>
             <div>
-              <h1 className="text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white">
+              <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
                 Ubicación {table.name}
               </h1>
-              <p className="text-sm text-slate-500 dark:text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Editar información de la ubicación
               </p>
             </div>
@@ -156,10 +156,10 @@ const TableDetailPage: React.FC = () => {
                     className={cn(
                       'w-20 min-h-20 max-w-[200px] rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg px-2 py-2 text-center break-words',
                       !table.status
-                        ? 'bg-gray-400'
+                        ? 'bg-muted-foreground'
                         : table.availabilityStatus
-                          ? 'bg-green-500'
-                          : 'bg-red-500'
+                          ? 'bg-fresco'
+                          : 'bg-destructive'
                     )}
                   >
                     {table.name}
@@ -168,10 +168,10 @@ const TableDetailPage: React.FC = () => {
                     className={cn(
                       'px-4 py-1 text-sm border-0',
                       !table.status
-                        ? 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
+                        ? 'bg-muted text-foreground'
                         : table.availabilityStatus
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
-                          : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                          ? 'bg-fresco-suave text-fresco-texto'
+                          : 'bg-destructive-suave text-destructive-texto'
                     )}
                   >
                     {!table.status
@@ -191,34 +191,34 @@ const TableDetailPage: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
+                  <p className="text-sm font-medium text-muted-foreground">
                     ID
                   </p>
-                  <p className="text-sm text-slate-900 dark:text-white font-mono">
+                  <p className="text-sm text-foreground font-mono">
                     {table.id}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
+                  <p className="text-sm font-medium text-muted-foreground">
                     Estado del Sistema
                   </p>
-                  <p className={`text-sm font-medium ${table.status ? 'text-green-600' : 'text-slate-500'}`}>
+                  <p className={`text-sm font-medium ${table.status ? 'text-fresco' : 'text-muted-foreground'}`}>
                     {table.status ? 'Activa' : 'Inactiva'}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
+                  <p className="text-sm font-medium text-muted-foreground">
                     Disponibilidad
                   </p>
-                  <p className={`text-sm font-medium ${table.availabilityStatus ? 'text-emerald-600' : 'text-orange-600'}`}>
+                  <p className={`text-sm font-medium ${table.availabilityStatus ? 'text-fresco' : 'text-apoyo'}`}>
                     {table.availabilityStatus ? 'Libre' : 'Ocupada'}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
+                  <p className="text-sm font-medium text-muted-foreground">
                     Creada
                   </p>
-                  <p className="text-sm text-slate-900 dark:text-white">
+                  <p className="text-sm text-foreground">
                     {new Date(table.createdAt).toLocaleDateString('es-ES', {
                       day: '2-digit',
                       month: 'long',
@@ -230,10 +230,10 @@ const TableDetailPage: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
+                  <p className="text-sm font-medium text-muted-foreground">
                     Última actualización
                   </p>
-                  <p className="text-sm text-slate-900 dark:text-white">
+                  <p className="text-sm text-foreground">
                     {new Date(table.updatedAt).toLocaleDateString('es-ES', {
                       day: '2-digit',
                       month: 'long',

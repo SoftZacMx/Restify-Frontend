@@ -61,18 +61,18 @@ const SubscriptionBlockedPage = () => {
       : null;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-muted flex flex-col items-center justify-center px-4 py-12">
       {/* Header */}
       <div className="text-center mb-10">
         <div className="flex justify-center mb-4">
-          <div className="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-            <AlertTriangle className="w-8 h-8 text-red-500" />
+          <div className="w-16 h-16 rounded-full bg-destructive-suave flex items-center justify-center">
+            <AlertTriangle className="w-8 h-8 text-destructive" />
           </div>
         </div>
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
+        <h1 className="text-3xl font-bold text-foreground mb-2">
           Tu suscripción ha expirado
         </h1>
-        <p className="text-slate-500 dark:text-muted-foreground max-w-md mx-auto">
+        <p className="text-muted-foreground max-w-md mx-auto">
           Tu acceso a Restify se encuentra restringido actualmente. Elige un plan
           para continuar gestionando tu negocio sin interrupciones.
         </p>
@@ -96,16 +96,16 @@ const SubscriptionBlockedPage = () => {
                 key={plan.id}
                 type="button"
                 onClick={() => setSelectedPlanId(plan.id)}
-                className={`relative rounded-2xl border-2 bg-white dark:bg-card p-8 shadow-lg text-left transition-all ${
+                className={`relative rounded-2xl border-2 bg-card p-8 shadow-lg text-left transition-all ${
                   isSelected
                     ? 'border-primary ring-2 ring-primary/20'
-                    : 'border-slate-200 dark:border-border hover:border-slate-300 dark:hover:border-border'
+                    : 'border-border hover:border-border dark:hover:border-border'
                 }`}
               >
                 {/* Best value badge */}
                 {isAnnual && savingsPercent && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="bg-emerald-500 text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1">
+                    <span className="bg-fresco text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1">
                       <Crown className="w-3 h-3" />
                       Ahorra {savingsPercent}%
                     </span>
@@ -114,19 +114,19 @@ const SubscriptionBlockedPage = () => {
 
                 {/* Plan name */}
                 <div className="text-center mb-6 mt-1">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-1">
+                  <h3 className="text-lg font-semibold text-foreground mb-1">
                     {plan.name}
                   </h3>
                   <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-4xl font-bold text-slate-900 dark:text-white">
+                    <span className="text-4xl font-bold text-foreground">
                       {priceDisplay}
                     </span>
-                    <span className="text-slate-500 dark:text-muted-foreground">
+                    <span className="text-muted-foreground">
                       {periodLabel}
                     </span>
                   </div>
                   {isAnnual && monthlyPlan && (
-                    <p className="text-xs text-slate-400 dark:text-muted-foreground mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       equivale a {formatCurrency(plan.price / 100 / 12)}/mes
                     </p>
                   )}
@@ -136,8 +136,8 @@ const SubscriptionBlockedPage = () => {
                 <ul className="space-y-3">
                   {FEATURES.map((feature) => (
                     <li key={feature} className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                      <span className="text-sm text-slate-600 dark:text-foreground">
+                      <Check className="w-4 h-4 text-fresco flex-shrink-0" />
+                      <span className="text-sm text-muted-foreground">
                         {feature}
                       </span>
                     </li>
@@ -150,11 +150,11 @@ const SubscriptionBlockedPage = () => {
                     className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
                       isSelected
                         ? 'border-primary bg-primary'
-                        : 'border-slate-300 dark:border-border'
+                        : 'border-border'
                     }`}
                   >
                     {isSelected && (
-                      <div className="w-2 h-2 rounded-full bg-white" />
+                      <div className="w-2 h-2 rounded-full bg-card" />
                     )}
                   </div>
                 </div>
@@ -183,14 +183,14 @@ const SubscriptionBlockedPage = () => {
       {/* Footer actions */}
       <div className="flex items-center gap-6 text-sm">
         <button
-          className="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-foreground transition-colors"
+          className="flex items-center gap-1.5 text-muted-foreground hover:text-muted-foreground dark:hover:text-foreground transition-colors"
         >
           <MessageCircle className="w-4 h-4" />
           Hablar con soporte
         </button>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-foreground transition-colors"
+          className="flex items-center gap-1.5 text-muted-foreground hover:text-muted-foreground dark:hover:text-foreground transition-colors"
         >
           <LogOut className="w-4 h-4" />
           Cerrar sesión

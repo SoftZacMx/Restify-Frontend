@@ -13,23 +13,23 @@ export function PosOrderBanner({ order, onBack }: PosOrderBannerProps) {
   return (
     <div className={`rounded-lg p-4 mb-4 border ${
       order.status
-        ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
-        : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800'
+        ? 'bg-fresco-suave border-fresco'
+        : 'bg-apoyo-suave border-apoyo'
     }`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div>
-            <p className="font-semibold text-slate-900 dark:text-white">
+            <p className="font-semibold text-foreground">
               Orden {formatOrderNumber(order.id)}
             </p>
-            <p className="text-sm text-slate-600 dark:text-foreground">
+            <p className="text-sm text-muted-foreground">
               {order.table ? `Ubicación ${order.table.name}` : order.origin}
               {order.client && ` • ${order.client}`}
             </p>
           </div>
           <Badge className={order.status
-            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
-            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
+            ? 'bg-fresco-suave text-fresco-texto'
+            : 'bg-apoyo-suave text-apoyo-texto'
           }>
             {order.status ? 'Pagada' : 'Pendiente'}
           </Badge>
@@ -41,10 +41,10 @@ export function PosOrderBanner({ order, onBack }: PosOrderBannerProps) {
         </div>
         <div className="flex items-center gap-4">
           <div className="text-right">
-            <p className="text-2xl font-bold text-slate-900 dark:text-white">
+            <p className="text-2xl font-bold text-foreground">
               ${order.total.toFixed(2)}
             </p>
-            <p className="text-xs text-slate-500 dark:text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               {order.orderItems?.length || 0} items
             </p>
           </div>

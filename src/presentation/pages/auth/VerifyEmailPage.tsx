@@ -47,7 +47,7 @@ export default function VerifyEmailPage() {
   }, [token]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-background px-4">
+    <div className="min-h-screen flex items-center justify-center bg-muted px-4">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
@@ -56,13 +56,13 @@ export default function VerifyEmailPage() {
         <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
           <div className="flex items-center gap-2 text-primary">
             <UtensilsCrossed className="h-6 w-6" />
-            <span className="text-lg font-bold text-slate-900 dark:text-white">RESTIFY</span>
+            <span className="text-lg font-bold text-foreground">RESTIFY</span>
           </div>
 
           {status === 'verifying' && (
             <>
               <Loader2 className="h-12 w-12 animate-spin text-primary" />
-              <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+              <h1 className="text-xl font-bold text-foreground">
                 Verificando tu correo...
               </h1>
               <p className="text-sm text-muted-foreground">Esto solo tomará un momento.</p>
@@ -71,8 +71,8 @@ export default function VerifyEmailPage() {
 
           {status === 'success' && (
             <>
-              <CheckCircle2 className="h-12 w-12 text-green-500" />
-              <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+              <CheckCircle2 className="h-12 w-12 text-fresco" />
+              <h1 className="text-xl font-bold text-foreground">
                 ¡Correo verificado!
               </h1>
               <p className="text-sm text-muted-foreground">
@@ -87,7 +87,7 @@ export default function VerifyEmailPage() {
           {status === 'already' && (
             <>
               <MailCheck className="h-12 w-12 text-primary" />
-              <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+              <h1 className="text-xl font-bold text-foreground">
                 Tu correo ya estaba verificado
               </h1>
               <p className="text-sm text-muted-foreground">
@@ -102,7 +102,7 @@ export default function VerifyEmailPage() {
           {status === 'error' && (
             <>
               <XCircle className="h-12 w-12 text-destructive" />
-              <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+              <h1 className="text-xl font-bold text-foreground">
                 No pudimos verificar tu correo
               </h1>
               <p className="text-sm text-muted-foreground">{message}</p>

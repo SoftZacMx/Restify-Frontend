@@ -7,22 +7,22 @@ type PaymentResultStatus = 'success' | 'failure' | 'pending';
 
 const config: Record<PaymentResultStatus, { icon: React.ReactNode; title: string; description: string; bg: string }> = {
   success: {
-    icon: <CheckCircle className="w-12 h-12 text-green-500" />,
+    icon: <CheckCircle className="w-12 h-12 text-fresco" />,
     title: 'Pago Exitoso',
     description: 'Tu pago se ha procesado correctamente. Puedes cerrar esta ventana.',
-    bg: 'bg-green-100 dark:bg-green-900/30',
+    bg: 'bg-fresco-suave',
   },
   failure: {
-    icon: <XCircle className="w-12 h-12 text-red-500" />,
+    icon: <XCircle className="w-12 h-12 text-destructive" />,
     title: 'Pago Fallido',
     description: 'No se pudo procesar tu pago. Intenta de nuevo o usa otro método de pago.',
-    bg: 'bg-red-100 dark:bg-red-900/30',
+    bg: 'bg-destructive-suave',
   },
   pending: {
-    icon: <Clock className="w-12 h-12 text-amber-500" />,
+    icon: <Clock className="w-12 h-12 text-apoyo" />,
     title: 'Pago Pendiente',
     description: 'Tu pago está siendo procesado. Recibirás la confirmación en breve.',
-    bg: 'bg-amber-100 dark:bg-amber-900/30',
+    bg: 'bg-apoyo-suave',
   },
 };
 
@@ -73,18 +73,18 @@ const PaymentResultPage: React.FC = () => {
   }, [navigate, searchParams]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-background px-4">
+    <div className="min-h-screen flex items-center justify-center bg-muted px-4">
       <div className="w-full max-w-sm text-center">
         <div className={`w-24 h-24 rounded-full ${bg} flex items-center justify-center mx-auto mb-6`}>
           {icon}
         </div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+        <h1 className="text-2xl font-bold text-foreground mb-2">
           {title}
         </h1>
-        <p className="text-sm text-slate-500 dark:text-muted-foreground mb-8">
+        <p className="text-sm text-muted-foreground mb-8">
           {description}
         </p>
-        <p className="text-xs text-slate-400 dark:text-muted-foreground">
+        <p className="text-xs text-muted-foreground">
           Restify
         </p>
       </div>

@@ -49,8 +49,8 @@ export const MovementsTable: React.FC<MovementsTableProps> = ({
   if (isLoading) {
     return (
       <div className="px-4 py-5">
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
-          <div className="p-8 text-center text-slate-500 dark:text-muted-foreground">
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          <div className="p-8 text-center text-muted-foreground">
             Cargando movimientos...
           </div>
         </div>
@@ -61,8 +61,8 @@ export const MovementsTable: React.FC<MovementsTableProps> = ({
   if (items.length === 0) {
     return (
       <div className="px-4 py-5">
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
-          <div className="p-8 text-center text-slate-500 dark:text-muted-foreground">
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          <div className="p-8 text-center text-muted-foreground">
             No hay movimientos para los filtros aplicados.
           </div>
         </div>
@@ -72,27 +72,27 @@ export const MovementsTable: React.FC<MovementsTableProps> = ({
 
   return (
     <div className="px-4 py-5">
-      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="bg-slate-50 dark:bg-card/50">
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+              <TableRow className="bg-muted">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Fecha
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Tipo
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Cantidad
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Motivo
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Origen
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Usuario
                 </TableHead>
               </TableRow>
@@ -105,7 +105,7 @@ export const MovementsTable: React.FC<MovementsTableProps> = ({
                 const isNegative = item.quantity < 0;
                 return (
                   <TableRow key={item.id}>
-                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-foreground">
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                       {new Date(item.createdAt).toLocaleString('es-ES', {
                         day: '2-digit',
                         month: '2-digit',
@@ -130,31 +130,31 @@ export const MovementsTable: React.FC<MovementsTableProps> = ({
                       <span
                         className={cn(
                           'font-medium',
-                          isPositive && 'text-green-700 dark:text-green-400',
-                          isNegative && 'text-red-700 dark:text-red-400',
-                          !isPositive && !isNegative && 'text-slate-700 dark:text-foreground'
+                          isPositive && 'text-fresco-texto',
+                          isNegative && 'text-destructive-texto',
+                          !isPositive && !isNegative && 'text-foreground'
                         )}
                       >
                         {formatSignedQuantity(item.quantity, unitOfMeasure)}
                       </span>
                     </TableCell>
-                    <TableCell className="px-6 py-4 text-sm text-slate-700 dark:text-foreground max-w-xs">
+                    <TableCell className="px-6 py-4 text-sm text-foreground max-w-xs">
                       {(() => {
                         const reasonText = getMovementReasonDescription(item.reason);
                         return (
                           <div className="truncate" title={[reasonText, item.notes].filter(Boolean).join(' — ')}>
                             {reasonText || '—'}
                             {item.notes && (
-                              <span className="text-xs text-slate-400 dark:text-muted-foreground"> · {item.notes}</span>
+                              <span className="text-xs text-muted-foreground"> · {item.notes}</span>
                             )}
                           </div>
                         );
                       })()}
                     </TableCell>
-                    <TableCell className="px-6 py-4 whitespace-nowrap text-xs text-slate-500 dark:text-muted-foreground">
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-xs text-muted-foreground">
                       {originLabel(item)}
                     </TableCell>
-                    <TableCell className="px-6 py-4 whitespace-nowrap text-xs text-slate-500 dark:text-muted-foreground">
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-xs text-muted-foreground">
                       {userDisplay(item)}
                     </TableCell>
                   </TableRow>

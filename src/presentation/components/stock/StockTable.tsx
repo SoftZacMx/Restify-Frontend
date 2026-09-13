@@ -26,18 +26,18 @@ const HEALTH_BADGE: Record<
 > = {
   healthy: {
     label: 'OK',
-    className: 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300',
-    dotClassName: 'bg-green-500',
+    className: 'bg-fresco-suave text-fresco-texto',
+    dotClassName: 'bg-fresco',
   },
   warning: {
     label: 'Cerca del mínimo',
-    className: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300',
-    dotClassName: 'bg-yellow-500',
+    className: 'bg-apoyo-suave text-apoyo-texto',
+    dotClassName: 'bg-apoyo',
   },
   critical: {
     label: 'Bajo mínimo',
-    className: 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300',
-    dotClassName: 'bg-red-500',
+    className: 'bg-destructive-suave text-destructive-texto',
+    dotClassName: 'bg-destructive',
   },
 };
 
@@ -54,8 +54,8 @@ export const StockTable: React.FC<StockTableProps> = ({
   if (isLoading) {
     return (
       <div className="px-4 py-5">
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
-          <div className="p-8 text-center text-slate-500 dark:text-muted-foreground">
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          <div className="p-8 text-center text-muted-foreground">
             Cargando stock...
           </div>
         </div>
@@ -66,8 +66,8 @@ export const StockTable: React.FC<StockTableProps> = ({
   if (items.length === 0) {
     return (
       <div className="px-4 py-5">
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
-          <div className="p-8 text-center text-slate-500 dark:text-muted-foreground">
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          <div className="p-8 text-center text-muted-foreground">
             No hay productos trackeados con los filtros aplicados.
           </div>
         </div>
@@ -77,27 +77,27 @@ export const StockTable: React.FC<StockTableProps> = ({
 
   return (
     <div className="px-4 py-5">
-      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="bg-slate-50 dark:bg-card/50">
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+              <TableRow className="bg-muted">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Producto
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Stock actual
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Mínimo
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Costo promedio
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Estado
                 </TableHead>
-                <TableHead className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Acciones
                 </TableHead>
               </TableRow>
@@ -119,12 +119,12 @@ export const StockTable: React.FC<StockTableProps> = ({
                           className={cn('h-2.5 w-2.5 rounded-full flex-shrink-0', badge.dotClassName)}
                         />
                         <div className="min-w-0">
-                          <div className="text-slate-900 dark:text-white truncate" title={item.name}>
+                          <div className="text-foreground truncate" title={item.name}>
                             {item.name}
                           </div>
                           {item.description && (
                             <div
-                              className="text-xs text-slate-500 dark:text-muted-foreground truncate max-w-xs"
+                              className="text-xs text-muted-foreground truncate max-w-xs"
                               title={item.description}
                             >
                               {item.description}
@@ -133,22 +133,22 @@ export const StockTable: React.FC<StockTableProps> = ({
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-foreground">
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                       {formatStockQuantity(item.stockActual, item.unitOfMeasure)}
                       {!item.unitOfMeasure && (
-                        <span className="text-xs text-slate-400 dark:text-muted-foreground ml-1">
+                        <span className="text-xs text-muted-foreground ml-1">
                           (sin unidad)
                         </span>
                       )}
                     </TableCell>
-                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-muted-foreground">
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                       {minLabel}
                     </TableCell>
-                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-foreground">
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                       <div className="flex flex-col">
                         <span>{formatAverageCost(item.averageCost)}</span>
                         {item.unitOfMeasure && (
-                          <span className="text-xs text-slate-400 dark:text-muted-foreground">
+                          <span className="text-xs text-muted-foreground">
                             por {formatUnit(item.unitOfMeasure)}
                           </span>
                         )}
@@ -168,7 +168,7 @@ export const StockTable: React.FC<StockTableProps> = ({
                       <Tooltip content="Ver historial">
                         <button
                           onClick={() => onViewHistory?.(item.productId)}
-                          className="p-2 rounded-full text-slate-500 dark:text-muted-foreground hover:bg-slate-200 dark:hover:bg-card hover:text-slate-700 dark:hover:text-foreground transition-colors"
+                          className="p-2 rounded-full text-muted-foreground hover:bg-secondary dark:hover:bg-card hover:text-foreground dark:hover:text-foreground transition-colors"
                           aria-label={`Ver historial de ${item.name}`}
                         >
                           <History className="h-4 w-4" />

@@ -211,14 +211,14 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
           <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-white">
             <Info className="h-4 w-4" />
           </div>
-          <h3 className="text-base font-semibold text-slate-900 dark:text-white">
+          <h3 className="text-base font-semibold text-foreground">
             Información General
           </h3>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="title">
-              Título del Gasto <span className="text-red-500">*</span>
+              Título del Gasto <span className="text-destructive">*</span>
             </Label>
             <Input
               id="title"
@@ -227,9 +227,9 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Ej. Mercancía Proveedor Central"
-              className={cn(errors.title && 'border-red-500')}
+              className={cn(errors.title && 'border-destructive')}
             />
-            <p className="text-xs text-slate-500 dark:text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               {title.length}/200 caracteres
             </p>
             {errors.title && (
@@ -238,7 +238,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
           </div>
           <div className="space-y-2">
             <Label htmlFor="type">
-              Tipo de Gasto <span className="text-red-500">*</span>
+              Tipo de Gasto <span className="text-destructive">*</span>
             </Label>
             <Select
               value={expenseType}
@@ -252,7 +252,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
             >
               <SelectTrigger
                 id="type"
-                className={cn(errors.type && 'border-red-500')}
+                className={cn(errors.type && 'border-destructive')}
               >
                 {expenseType ? (
                   <span className="flex items-center gap-2">
@@ -285,7 +285,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
           </div>
           <div className="space-y-2 md:col-span-2 md:max-w-xs">
             <Label htmlFor="date">
-              Fecha de Compra <span className="text-red-500">*</span>
+              Fecha de Compra <span className="text-destructive">*</span>
             </Label>
             <div className="relative">
               <Input
@@ -293,9 +293,9 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className={cn('pr-10', errors.date && 'border-red-500')}
+                className={cn('pr-10', errors.date && 'border-destructive')}
               />
-              <Calendar className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              <Calendar className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             </div>
             {errors.date && (
               <p className="text-sm text-destructive">{errors.date}</p>
@@ -309,12 +309,12 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Detalles adicionales sobre la compra..."
               rows={3}
-              className="flex w-full rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-card px-3 py-2 text-base text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex w-full rounded-lg border border-border bg-card px-3 py-2 text-base text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="paymentMethod">
-              Método de Pago <span className="text-red-500">*</span>
+              Método de Pago <span className="text-destructive">*</span>
             </Label>
             <div className="relative">
               <Select
@@ -323,7 +323,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
               >
                 <SelectTrigger
                   id="paymentMethod"
-                  className={cn('pl-10', errors.paymentMethod && 'border-red-500')}
+                  className={cn('pl-10', errors.paymentMethod && 'border-destructive')}
                 >
                   {paymentMethod
                     ? getPaymentMethodLabel(paymentMethod)
@@ -337,7 +337,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
                   ))}
                 </SelectContent>
               </Select>
-              <CreditCard className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              <CreditCard className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             </div>
             {errors.paymentMethod && (
               <p className="text-sm text-destructive">{errors.paymentMethod}</p>
@@ -426,12 +426,12 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
       )}
 
       {/* Resumen y totales */}
-      <section className="border-t border-slate-200 pt-6 dark:border-border">
+      <section className="border-t border-border pt-6 dark:border-border">
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           {expenseType === 'MERCHANDISE' && (
-            <div className="flex gap-3 rounded-lg bg-slate-100 p-4 dark:bg-card/50">
+            <div className="flex gap-3 rounded-lg bg-muted p-4 dark:bg-card/50">
               <Info className="h-5 w-5 flex-shrink-0 text-primary dark:text-primary" />
-              <p className="text-sm text-slate-600 dark:text-foreground">
+              <p className="text-sm text-muted-foreground">
                 Los subtotales y totales se calculan automáticamente basándose en la cantidad y
                 precio unitario ingresado. El IVA se calcula al 19% por defecto.
               </p>
@@ -439,15 +439,15 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
           )}
           <div className={cn('flex flex-col gap-2 md:min-w-[200px]', expenseType !== 'MERCHANDISE' && 'md:ml-auto')} data-testid="expense-form-totals">
             <div className="flex justify-between text-sm">
-              <span className="text-slate-600 dark:text-muted-foreground">Subtotal:</span>
+              <span className="text-muted-foreground">Subtotal:</span>
               <span className="font-medium" data-testid="expense-form-subtotal">{formatCurrency(parseFloat(subtotal || '0'))}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-slate-600 dark:text-muted-foreground">IVA:</span>
+              <span className="text-muted-foreground">IVA:</span>
               <span className="font-medium" data-testid="expense-form-iva">{formatCurrency(parseFloat(iva || '0'))}</span>
             </div>
-            <div className="flex justify-between border-t border-slate-200 pt-2 dark:border-border">
-              <span className="font-semibold text-slate-900 dark:text-white" data-testid="expense-form-total-label">Total a Pagar</span>
+            <div className="flex justify-between border-t border-border pt-2 dark:border-border">
+              <span className="font-semibold text-foreground" data-testid="expense-form-total-label">Total a Pagar</span>
               <span className="text-lg font-bold text-primary dark:text-primary" data-testid="expense-form-total">
                 {formatCurrency(parseFloat(total || '0'))}
               </span>
@@ -466,7 +466,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
       </section>
 
       {/* Botones de acción */}
-      <div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:justify-between dark:border-border">
+      <div className="flex flex-col-reverse gap-3 border-t border-border pt-4 sm:flex-row sm:justify-between dark:border-border">
         <Button
           type="button"
           variant="outline"

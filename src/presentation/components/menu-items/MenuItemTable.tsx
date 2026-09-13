@@ -28,19 +28,19 @@ const STOCK_MODE_META: Record<
   recipe: {
     label: 'Receta',
     tooltip: 'Tiene ingredientes cargados — descuenta stock al venderse',
-    className: 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300',
+    className: 'bg-fresco-suave text-fresco-texto',
     Icon: ChefHat,
   },
   direct: {
     label: 'Directo',
     tooltip: 'Vinculado a un producto único — descuenta 1 unidad al venderse',
-    className: 'bg-primary/10 dark:bg-primary/20/40 text-primary dark:text-primary',
+    className: 'bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary',
     Icon: Package,
   },
   none: {
     label: 'Sin receta',
     tooltip: 'No descuenta stock al venderse — falta cargar receta o vincular un producto',
-    className: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300',
+    className: 'bg-apoyo-suave text-apoyo-texto',
     Icon: AlertTriangle,
   },
 };
@@ -64,8 +64,8 @@ export const MenuItemTable: React.FC<MenuItemTableProps> = ({
   if (isLoading) {
     return (
       <div className="px-4 py-5">
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
-          <div className="p-8 text-center text-slate-500 dark:text-muted-foreground">
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          <div className="p-8 text-center text-muted-foreground">
             Cargando productos...
           </div>
         </div>
@@ -76,8 +76,8 @@ export const MenuItemTable: React.FC<MenuItemTableProps> = ({
   if (menuItems.length === 0) {
     return (
       <div className="px-4 py-5">
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
-          <div className="p-8 text-center text-slate-500 dark:text-muted-foreground">
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          <div className="p-8 text-center text-muted-foreground">
             No se encontraron productos
           </div>
         </div>
@@ -87,30 +87,30 @@ export const MenuItemTable: React.FC<MenuItemTableProps> = ({
 
   return (
     <div className="px-4 py-5">
-      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="bg-slate-50 dark:bg-card/50">
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+              <TableRow className="bg-muted">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Nombre
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Precio
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Estado
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Es Extra
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Stock
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Fecha de creación
                 </TableHead>
-                <TableHead className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Acciones
                 </TableHead>
               </TableRow>
@@ -119,17 +119,17 @@ export const MenuItemTable: React.FC<MenuItemTableProps> = ({
               {menuItems.map((menuItem) => (
                 <TableRow
                   key={menuItem.id}
-                  className="hover:bg-slate-50 dark:hover:bg-card/50 transition-colors"
+                  className="hover:bg-muted dark:hover:bg-card/50 transition-colors"
                 >
                   <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <Link
                       to={`/menu/items/${menuItem.id}`}
-                      className="text-slate-900 dark:text-white hover:text-primary transition-colors"
+                      className="text-foreground hover:text-primary transition-colors"
                     >
                       {menuItem.name}
                     </Link>
                   </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-muted-foreground">
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                     ${menuItem.price.toFixed(2)}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap">
@@ -137,8 +137,8 @@ export const MenuItemTable: React.FC<MenuItemTableProps> = ({
                       className={cn(
                         'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0',
                         menuItem.statusLabel === 'Activo'
-                          ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300'
-                          : 'bg-slate-100 dark:bg-card text-slate-800 dark:text-foreground'
+                          ? 'bg-fresco-suave text-fresco-texto'
+                          : 'bg-muted text-foreground'
                       )}
                     >
                       {menuItem.statusLabel}
@@ -149,8 +149,8 @@ export const MenuItemTable: React.FC<MenuItemTableProps> = ({
                       className={cn(
                         'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0',
                         menuItem.isExtra
-                          ? 'bg-primary/10 dark:bg-primary/20/50 text-primary dark:text-primary'
-                          : 'bg-slate-100 dark:bg-card text-slate-800 dark:text-foreground'
+                          ? 'bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary'
+                          : 'bg-muted text-foreground'
                       )}
                     >
                       {menuItem.isExtraLabel}
@@ -175,7 +175,7 @@ export const MenuItemTable: React.FC<MenuItemTableProps> = ({
                       );
                     })()}
                   </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-muted-foreground">
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                     {new Date(menuItem.createdAt).toLocaleDateString('es-ES', {
                       day: '2-digit',
                       month: '2-digit',
@@ -186,7 +186,7 @@ export const MenuItemTable: React.FC<MenuItemTableProps> = ({
                   <TableCell className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <DropdownMenu>
                       <DropdownMenuTrigger
-                        className="p-2 rounded-full text-slate-500 dark:text-muted-foreground hover:bg-slate-200 dark:hover:bg-card hover:text-slate-700 dark:hover:text-foreground transition-colors"
+                        className="p-2 rounded-full text-muted-foreground hover:bg-secondary dark:hover:bg-card hover:text-foreground dark:hover:text-foreground transition-colors"
                       >
                         <MoreVertical className="h-4 w-4" />
                       </DropdownMenuTrigger>
@@ -200,7 +200,7 @@ export const MenuItemTable: React.FC<MenuItemTableProps> = ({
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onSelect={() => onMenuItemAction?.(menuItem.id, 'delete')}
-                          className="cursor-pointer text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20"
+                          className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive-suave"
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
                           <span>Eliminar</span>

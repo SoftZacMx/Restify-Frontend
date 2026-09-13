@@ -50,74 +50,74 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
     <div className="space-y-8 p-4 max-w-7xl mx-auto">
       {/* KPIs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <Card className="border-l-4 border-l-emerald-500">
+        <Card className="border-l-4 border-l-fresco">
           <CardHeader className="pb-1">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <DollarSign className="h-4 w-4" />
               Ventas totales
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">{formatCurrency(kpis.totalSales)}</p>
-            <p className={`text-xs font-medium ${kpis.totalSalesChangePercent >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+            <p className={`text-xs font-medium ${kpis.totalSalesChangePercent >= 0 ? 'text-fresco' : 'text-destructive'}`}>
               {formatPercent(kpis.totalSalesChangePercent)}
             </p>
           </CardContent>
         </Card>
         <Card className="border-l-4 border-l-primary">
           <CardHeader className="pb-1">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <ShoppingCart className="h-4 w-4" />
               Órdenes procesadas
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">{kpis.ordersProcessed}</p>
-            <p className={`text-xs font-medium ${kpis.ordersProcessedChangePercent >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+            <p className={`text-xs font-medium ${kpis.ordersProcessedChangePercent >= 0 ? 'text-fresco' : 'text-destructive'}`}>
               {formatPercent(kpis.ordersProcessedChangePercent)}
             </p>
           </CardContent>
         </Card>
         <Card className="border-l-4 border-l-violet-500">
           <CardHeader className="pb-1">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
               Promedio por orden
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">{formatCurrency(kpis.averagePerOrder)}</p>
-            <p className={`text-xs font-medium ${kpis.averagePerOrderChangePercent >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+            <p className={`text-xs font-medium ${kpis.averagePerOrderChangePercent >= 0 ? 'text-fresco' : 'text-destructive'}`}>
               {formatPercent(kpis.averagePerOrderChangePercent)}
             </p>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-apoyo">
           <CardHeader className="pb-1">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <Receipt className="h-4 w-4" />
               Gastos totales
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">{formatCurrency(kpis.totalExpenses)}</p>
-            <p className={`text-xs font-medium ${kpis.totalExpensesChangePercent <= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+            <p className={`text-xs font-medium ${kpis.totalExpensesChangePercent <= 0 ? 'text-fresco' : 'text-destructive'}`}>
               {formatPercent(kpis.totalExpensesChangePercent)}
             </p>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-fresco">
           <CardHeader className="pb-1">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <Wallet className="h-4 w-4" />
               Utilidad neta
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className={`text-2xl font-bold ${kpis.netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <p className={`text-2xl font-bold ${kpis.netProfit >= 0 ? 'text-fresco' : 'text-destructive'}`}>
               {formatCurrency(kpis.netProfit)}
             </p>
-            <p className={`text-xs font-medium ${kpis.netProfitChangePercent >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+            <p className={`text-xs font-medium ${kpis.netProfitChangePercent >= 0 ? 'text-fresco' : 'text-destructive'}`}>
               {formatPercent(kpis.netProfitChangePercent)}
             </p>
           </CardContent>
@@ -159,7 +159,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
         <Card>
           <CardHeader>
             <CardTitle>Distribución por método de pago</CardTitle>
-            <p className="text-sm text-slate-500">{kpis.ordersProcessed} órdenes</p>
+            <p className="text-sm text-muted-foreground">{kpis.ordersProcessed} órdenes</p>
           </CardHeader>
           <CardContent>
             <div className="h-[260px] w-full">
@@ -234,10 +234,10 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
           <CardTitle>Resumen por día</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-border">
+          <div className="overflow-x-auto rounded-lg border border-border">
             <Table>
               <TableHeader>
-                <TableRow className="bg-slate-50 dark:bg-card/50">
+                <TableRow className="bg-muted">
                   <TableHead>Fecha</TableHead>
                   <TableHead className="text-right">Ventas</TableHead>
                   <TableHead className="text-right">Órdenes</TableHead>
@@ -252,7 +252,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
                     <TableCell className="text-right">{formatCurrency(row.sales)}</TableCell>
                     <TableCell className="text-right">{row.orders}</TableCell>
                     <TableCell className="text-right">{formatCurrency(row.expenses)}</TableCell>
-                    <TableCell className={`text-right font-medium ${row.profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <TableCell className={`text-right font-medium ${row.profit >= 0 ? 'text-fresco' : 'text-destructive'}`}>
                       {formatCurrency(row.profit)}
                     </TableCell>
                   </TableRow>

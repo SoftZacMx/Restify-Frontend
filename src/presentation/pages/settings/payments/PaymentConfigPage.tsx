@@ -20,11 +20,11 @@ const INITIAL_FORM: FormState = {
 };
 
 const configCardClass =
-  'rounded-xl border-slate-200 dark:border-border/80 bg-card dark:bg-background/30 shadow-sm';
+  'rounded-xl border-border bg-card dark:bg-background/30 shadow-sm';
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
   return (
-    <span className="text-sm font-semibold text-slate-700 dark:text-foreground block mb-1.5">
+    <span className="text-sm font-semibold text-foreground block mb-1.5">
       {children}
     </span>
   );
@@ -32,7 +32,7 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
 
 function FieldHint({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-xs text-slate-500 dark:text-muted-foreground mt-1.5">{children}</p>
+    <p className="text-xs text-muted-foreground mt-1.5">{children}</p>
   );
 }
 
@@ -61,7 +61,7 @@ function PasswordInput({
       <button
         type="button"
         onClick={() => setShow(!show)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-foreground transition-colors"
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground dark:hover:text-foreground transition-colors"
       >
         {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
       </button>
@@ -143,20 +143,20 @@ const PaymentConfigPage: React.FC = () => {
       {/* Header con badge */}
       <div>
         <div className="flex items-center gap-3 mb-2">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-2xl font-bold text-foreground">
             Configuración de Mercado Pago
           </h2>
           {config?.isConfigured ? (
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 uppercase tracking-wider">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-fresco-suave text-fresco-texto uppercase tracking-wider">
               Configurado
             </span>
           ) : (
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 uppercase tracking-wider">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-apoyo-suave text-apoyo-texto uppercase tracking-wider">
               Pendiente
             </span>
           )}
         </div>
-        <p className="text-sm text-slate-500 dark:text-muted-foreground max-w-2xl">
+        <p className="text-sm text-muted-foreground max-w-2xl">
           Configura las credenciales de tu cuenta de Mercado Pago para recibir pagos con QR en
           tu negocio. Obtén estas credenciales desde tu panel de Mercado Pago en{' '}
           <span className="text-primary dark:text-primary font-medium">
@@ -169,8 +169,8 @@ const PaymentConfigPage: React.FC = () => {
         {/* Credenciales de Producción */}
         <Card className={configCardClass}>
           <CardHeader className="space-y-1 pb-2">
-            <CardTitle className="text-lg text-slate-900 dark:text-foreground flex items-center gap-2">
-              <KeyRound className="h-5 w-5 text-slate-500 dark:text-muted-foreground" />
+            <CardTitle className="text-lg text-foreground flex items-center gap-2">
+              <KeyRound className="h-5 w-5 text-muted-foreground" />
               Credenciales de Producción
             </CardTitle>
           </CardHeader>
@@ -201,7 +201,7 @@ const PaymentConfigPage: React.FC = () => {
         </Card>
 
         {/* Info note */}
-        <div className="flex items-start gap-3 rounded-xl border border-primary/30 dark:border-primary/50 bg-primary/10/50 dark:bg-primary/20/20 p-4">
+        <div className="flex items-start gap-3 rounded-xl border border-primary/30 dark:border-primary/50 bg-primary/10 dark:bg-primary/20 p-4">
           <Info className="h-5 w-5 text-primary dark:text-primary shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-medium text-primary dark:text-primary">Prueba de Conexión</p>

@@ -33,6 +33,8 @@
 
     --destructive: 6 64% 46%;          /* rojo de peligro (borrar) */
     --destructive-foreground: 40 40% 97%;
+    --destructive-suave: 8 75% 95%;    /* fondo suave de error/estado */
+    --destructive-texto: 6 60% 40%;    /* texto de error legible */
 
     --border: 36 22% 90%;              /* hairline crema #ECE7DE */
     --input: 36 22% 90%;
@@ -70,6 +72,8 @@
 
     --destructive: 4 70% 52%;          /* rojo de peligro */
     --destructive-foreground: 40 40% 97%;
+    --destructive-suave: 6 45% 15%;    /* fondo suave de error en oscuro */
+    --destructive-texto: 8 75% 74%;    /* texto de error en oscuro */
 
     --border: 95 13% 18%;
     --input: 95 13% 18%;

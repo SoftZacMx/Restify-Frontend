@@ -201,7 +201,7 @@ const UsersPage: React.FC = () => {
   return (
     <MainLayout>
       <div className="flex flex-wrap justify-between items-center gap-4 px-4 py-2">
-        <h1 className="text-3xl lg:text-4xl font-black text-slate-800 dark:text-white leading-tight tracking-tight">Usuarios</h1>
+        <h1 className="text-3xl lg:text-4xl font-black text-foreground leading-tight tracking-tight">Usuarios</h1>
         <Button onClick={() => setIsCreateModalOpen(true)} className="flex items-center justify-center gap-2 min-w-[84px] cursor-pointer overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-sm hover:bg-primary/90 transition-colors">
           <Plus className="h-4 w-4" />
           <span className="truncate">Nuevo Usuario</span>
@@ -239,7 +239,7 @@ const UsersPage: React.FC = () => {
         open={deleteDialog.isOpen}
         onClose={deleteDialog.close}
         title="¿Desactivar usuario?"
-        description={deleteDialog.data && (<>Estás a punto de desactivar al usuario <strong className="text-slate-900 dark:text-white">{deleteDialog.data.name}</strong>.<br /><br />El usuario será desactivado y no podrá iniciar sesión, pero sus datos se mantendrán en el sistema. Puedes reactivarlo más tarde si es necesario.</>)}
+        description={deleteDialog.data && (<>Estás a punto de desactivar al usuario <strong className="text-foreground">{deleteDialog.data.name}</strong>.<br /><br />El usuario será desactivado y no podrá iniciar sesión, pero sus datos se mantendrán en el sistema. Puedes reactivarlo más tarde si es necesario.</>)}
         confirmLabel="Desactivar"
         isLoading={isDeleting}
         onConfirm={handleConfirmDelete}
@@ -249,7 +249,7 @@ const UsersPage: React.FC = () => {
         open={resetDialog.isOpen}
         onClose={resetDialog.close}
         title="¿Resetear contraseña?"
-        description={resetDialog.data && (<>Vas a resetear la contraseña de <strong className="text-slate-900 dark:text-white">{resetDialog.data.name}</strong>.<br /><br />Se cerrarán sus sesiones activas y deberá definir una nueva contraseña la próxima vez que inicie sesión.</>)}
+        description={resetDialog.data && (<>Vas a resetear la contraseña de <strong className="text-foreground">{resetDialog.data.name}</strong>.<br /><br />Se cerrarán sus sesiones activas y deberá definir una nueva contraseña la próxima vez que inicie sesión.</>)}
         confirmLabel="Resetear contraseña"
         isLoading={isResetting}
         onConfirm={handleConfirmReset}

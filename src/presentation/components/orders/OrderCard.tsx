@@ -110,10 +110,10 @@ export const OrderCard: React.FC<OrderCardProps> = ({
 
   // Determinar color del borde según estado
   const getBorderColor = () => {
-    if (!order.status && !order.delivered) return 'border-l-yellow-500';
-    if (!order.status && order.delivered) return 'border-l-orange-500';
+    if (!order.status && !order.delivered) return 'border-l-apoyo';
+    if (!order.status && order.delivered) return 'border-l-apoyo';
     if (order.status && !order.delivered) return 'border-l-primary';
-    if (order.status && order.delivered) return 'border-l-green-500';
+    if (order.status && order.delivered) return 'border-l-fresco';
     return 'border-l-gray-500';
   };
 
@@ -127,12 +127,12 @@ export const OrderCard: React.FC<OrderCardProps> = ({
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-lg font-bold text-slate-900 dark:text-white min-w-0 break-all">
+            <span className="text-lg font-bold text-foreground min-w-0 break-all">
               {isLocalWithMesaBlock ? mesaLine : orderNumberLabel}
             </span>
             <OrderStatusBadge order={order} />
           </div>
-          <div className="flex items-center gap-1 text-slate-500 dark:text-muted-foreground shrink-0">
+          <div className="flex items-center gap-1 text-muted-foreground shrink-0">
             <Clock className="h-4 w-4" />
             <span className="text-sm whitespace-nowrap">{formatOrderTime(order.date)}</span>
           </div>
@@ -142,12 +142,12 @@ export const OrderCard: React.FC<OrderCardProps> = ({
       <CardContent className="pb-3">
         <div className="space-y-2">
           {/* Origen + # orden (en local el # va aquí; la ubicación va en el encabezado) */}
-          <div className="flex items-start gap-2 text-slate-600 dark:text-foreground">
-            <MapPin className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />
+          <div className="flex items-start gap-2 text-muted-foreground">
+            <MapPin className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
             <div className="flex flex-col gap-0.5 min-w-0">
               <span className="text-sm font-medium">{originLabel}</span>
               {isLocalWithMesaBlock ? (
-                <span className="text-sm text-slate-700 dark:text-foreground font-medium">
+                <span className="text-sm text-foreground font-medium">
                   {orderNumberLabel}
                 </span>
               ) : null}
@@ -156,16 +156,16 @@ export const OrderCard: React.FC<OrderCardProps> = ({
 
           {/* Cliente */}
           {order.client && (
-            <div className="flex items-center gap-2 text-slate-600 dark:text-foreground">
-              <User className="h-4 w-4 text-slate-400" />
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <User className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm">{order.client}</span>
             </div>
           )}
 
           {/* Método de pago: solo si la orden está pagada y tiene método asignado */}
           {order.status && order.paymentMethod != null && (
-            <div className="flex items-center gap-2 text-slate-600 dark:text-foreground">
-              <CreditCard className="h-4 w-4 text-slate-400" />
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <CreditCard className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm">
                 {paymentIcon} {order.paymentMethod === 1 ? 'Efectivo' : order.paymentMethod === 2 ? 'Transferencia' : order.paymentMethod === 3 ? 'Tarjeta' : order.paymentMethod === 4 ? 'Mercado Pago' : 'Pago dividido'}
               </span>
@@ -173,10 +173,10 @@ export const OrderCard: React.FC<OrderCardProps> = ({
           )}
 
           {/* Total */}
-          <div className="mt-3 pt-3 border-t border-slate-200 dark:border-border">
+          <div className="mt-3 pt-3 border-t border-border">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-500 dark:text-muted-foreground">Total</span>
-              <span className="text-xl font-bold text-slate-900 dark:text-white">
+              <span className="text-sm text-muted-foreground">Total</span>
+              <span className="text-xl font-bold text-foreground">
                 {formatCurrency(order.total)}
               </span>
             </div>
@@ -202,7 +202,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
             variant="outline"
             size="sm"
             onClick={handlePayInPos}
-            className="flex-1 text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-900/20"
+            className="flex-1 text-fresco hover:text-fresco-texto hover:bg-fresco-suave"
           >
             <CreditCard className="h-4 w-4 mr-1" />
             Pagar
@@ -281,7 +281,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onSelect={() => onDelete(order.id)}
-                  className="text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400"
+                  className="text-destructive focus:text-destructive"
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
                   Eliminar orden

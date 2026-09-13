@@ -42,9 +42,9 @@ const STEPS: StepperStep[] = [
 ];
 
 const labelClass =
-  "text-xs font-bold uppercase tracking-wide text-slate-700 dark:text-foreground";
+  "text-xs font-bold uppercase tracking-wide text-foreground";
 const iconClass =
-  "pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 dark:text-muted-foreground";
+  "pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground";
 const primaryButtonClass =
   "bg-gradient-to-r from-primary to-primary hover:from-primary hover:to-primary text-white font-semibold shadow-lg shadow-primary/30";
 
@@ -118,7 +118,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-muted flex flex-col items-center justify-center p-4">
       <div className="absolute top-4 right-4">
         <ThemeToggle variant="icon" />
       </div>
@@ -127,7 +127,7 @@ export default function SignupPage() {
       <div className="mb-6 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
           <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
-          <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
+          <span className="text-2xl font-serif font-bold tracking-wide text-foreground">
             RESTIFY
           </span>
         </div>
@@ -144,12 +144,12 @@ export default function SignupPage() {
 
       {/* Título + subtítulo del paso */}
       <div className="mb-6 max-w-[640px] text-center">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+        <h2 className="text-lg font-bold text-foreground">
           {step === "owner"
             ? "Datos Personales y Organización"
             : "Primera Sucursal"}
         </h2>
-        <p className="mt-1 text-sm text-slate-500 dark:text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
           {step === "owner"
             ? "Comienza configurando tu perfil de administrador y los detalles de tu negocio."
             : "Configura los detalles operativos de tu ubicación principal para comenzar a recibir pedidos."}
@@ -158,11 +158,11 @@ export default function SignupPage() {
 
       {/* Paso 1: Owner + Organización */}
       {step === "owner" && (
-        <Card className="w-full max-w-[640px] shadow-lg border-slate-100 dark:border-border bg-white dark:bg-card">
+        <Card className="w-full max-w-[640px] shadow-lg border-border bg-card">
           <CardContent className="space-y-5 px-8 py-8">
             {error && (
               <div
-                className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg"
+                className="bg-destructive-suave border border-destructive text-destructive-texto px-4 py-3 rounded-lg"
                 role="alert"
               >
                 <strong className="font-bold">Error:</strong>
@@ -186,7 +186,7 @@ export default function SignupPage() {
                     placeholder="Juan"
                     className={
                       ownerForm.formState.errors.name
-                        ? "border-red-500 focus-visible:ring-red-500"
+                        ? "border-destructive focus-visible:ring-destructive"
                         : ""
                     }
                   />
@@ -207,7 +207,7 @@ export default function SignupPage() {
                     placeholder="Pérez"
                     className={
                       ownerForm.formState.errors.lastName
-                        ? "border-red-500 focus-visible:ring-red-500"
+                        ? "border-destructive focus-visible:ring-destructive"
                         : ""
                     }
                   />
@@ -230,7 +230,7 @@ export default function SignupPage() {
                     {...ownerForm.register("email")}
                     placeholder="correo@ejemplo.com"
                     type="email"
-                    className={`pl-10 ${ownerForm.formState.errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                    className={`pl-10 ${ownerForm.formState.errors.email ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   />
                 </div>
                 {ownerForm.formState.errors.email && (
@@ -251,7 +251,7 @@ export default function SignupPage() {
                     {...ownerForm.register("organizationName")}
                     maxLength={SIGNUP_LIMITS.branchName}
                     placeholder="Mi Restaurante"
-                    className={`pl-10 ${ownerForm.formState.errors.organizationName ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                    className={`pl-10 ${ownerForm.formState.errors.organizationName ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   />
                 </div>
                 {ownerForm.formState.errors.organizationName && (
@@ -272,12 +272,12 @@ export default function SignupPage() {
                       {...ownerForm.register("password")}
                       placeholder="Crea una contraseña"
                       type={showPassword ? "text" : "password"}
-                      className={`pr-10 ${ownerForm.formState.errors.password ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                      className={`pr-10 ${ownerForm.formState.errors.password ? "border-destructive focus-visible:ring-destructive" : ""}`}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-muted-foreground dark:hover:text-foreground focus:outline-none"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground dark:hover:text-foreground focus:outline-none"
                       aria-label="Toggle password visibility"
                     >
                       {showPassword ? (
@@ -300,9 +300,9 @@ export default function SignupPage() {
                       type={showConfirmPassword ? "text" : "password"}
                       className={`pr-10 ${
                         watchConfirmPassword.length > 0 && !doPasswordsMatch
-                          ? "border-red-500 focus-visible:ring-red-500"
+                          ? "border-destructive focus-visible:ring-destructive"
                           : doPasswordsMatch
-                            ? "border-green-500 focus-visible:ring-green-500"
+                            ? "border-fresco focus-visible:ring-fresco"
                             : ""
                       }`}
                     />
@@ -311,7 +311,7 @@ export default function SignupPage() {
                       onClick={() =>
                         setShowConfirmPassword(!showConfirmPassword)
                       }
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-muted-foreground dark:hover:text-foreground focus:outline-none"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground dark:hover:text-foreground focus:outline-none"
                       aria-label="Toggle confirm password visibility"
                     >
                       {showConfirmPassword ? (
@@ -335,7 +335,7 @@ export default function SignupPage() {
                 </span>
               )}
               {doPasswordsMatch && (
-                <span className="text-green-600 dark:text-green-400 text-xs flex items-center gap-1">
+                <span className="text-fresco text-xs flex items-center gap-1">
                   <Check className="h-3.5 w-3.5" />
                   Las contraseñas coinciden
                 </span>
@@ -350,7 +350,7 @@ export default function SignupPage() {
               </Button>
 
               <div className="text-center pt-1">
-                <span className="text-sm text-slate-500 dark:text-muted-foreground">
+                <span className="text-sm text-muted-foreground">
                   ¿Ya tienes una cuenta?{" "}
                 </span>
                 <Link
@@ -367,11 +367,11 @@ export default function SignupPage() {
 
       {/* Paso 2: Primera sucursal */}
       {step === "branch" && (
-        <Card className="w-full max-w-[640px] shadow-lg border-slate-100 dark:border-border bg-white dark:bg-card">
+        <Card className="w-full max-w-[640px] shadow-lg border-border bg-card">
           <CardContent className="space-y-5 px-8 py-8">
             {error && (
               <div
-                className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg"
+                className="bg-destructive-suave border border-destructive text-destructive-texto px-4 py-3 rounded-lg"
                 role="alert"
               >
                 <strong className="font-bold">Error:</strong>
@@ -394,7 +394,7 @@ export default function SignupPage() {
                     {...branchForm.register("name")}
                     maxLength={SIGNUP_LIMITS.branchName}
                     placeholder="Sucursal Centro"
-                    className={`pl-10 ${branchForm.formState.errors.name ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                    className={`pl-10 ${branchForm.formState.errors.name ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   />
                 </div>
                 {branchForm.formState.errors.name && (
@@ -415,7 +415,7 @@ export default function SignupPage() {
                     placeholder="Jalisco"
                     className={
                       branchForm.formState.errors.state
-                        ? "border-red-500 focus-visible:ring-red-500"
+                        ? "border-destructive focus-visible:ring-destructive"
                         : ""
                     }
                   />
@@ -435,7 +435,7 @@ export default function SignupPage() {
                     placeholder="Guadalajara"
                     className={
                       branchForm.formState.errors.city
-                        ? "border-red-500 focus-visible:ring-red-500"
+                        ? "border-destructive focus-visible:ring-destructive"
                         : ""
                     }
                   />
@@ -458,7 +458,7 @@ export default function SignupPage() {
                     placeholder="Av. Juárez"
                     className={
                       branchForm.formState.errors.street
-                        ? "border-red-500 focus-visible:ring-red-500"
+                        ? "border-destructive focus-visible:ring-destructive"
                         : ""
                     }
                   />
@@ -478,7 +478,7 @@ export default function SignupPage() {
                     placeholder="123"
                     className={
                       branchForm.formState.errors.exteriorNumber
-                        ? "border-red-500 focus-visible:ring-red-500"
+                        ? "border-destructive focus-visible:ring-destructive"
                         : ""
                     }
                   />
@@ -504,7 +504,7 @@ export default function SignupPage() {
                       inputMode="numeric"
                       maxLength={SIGNUP_LIMITS.phoneDigits}
                       placeholder="3312345678"
-                      className={`pl-10 ${branchForm.formState.errors.phone ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                      className={`pl-10 ${branchForm.formState.errors.phone ? "border-destructive focus-visible:ring-destructive" : ""}`}
                     />
                   </div>
                   {branchForm.formState.errors.phone && (

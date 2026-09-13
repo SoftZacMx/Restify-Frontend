@@ -34,10 +34,10 @@ const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>
 };
 
 const CATEGORY_BORDER: Record<string, string> = {
-  businessServices: 'border-l-amber-500 dark:border-l-amber-600',
+  businessServices: 'border-l-apoyo',
   utilities: 'border-l-primary dark:border-l-primary',
-  rent: 'border-l-red-500 dark:border-l-red-600',
-  merchandise: 'border-l-emerald-500 dark:border-l-emerald-600',
+  rent: 'border-l-destructive',
+  merchandise: 'border-l-fresco',
   other: 'border-l-slate-500 dark:border-l-slate-600',
 };
 
@@ -60,13 +60,13 @@ function CategoryCard({
     <Card className={`overflow-hidden border-l-4 ${borderColor} shadow-md hover:shadow-lg transition-shadow`}>
       <CardHeader className="pb-2">
         <CardTitle className="text-base flex items-center gap-2">
-          <span className="rounded-lg bg-slate-200/80 dark:bg-card p-1.5">
-            <Icon className="h-4 w-4 text-slate-600 dark:text-foreground" />
+          <span className="rounded-lg bg-secondary/80 dark:bg-card p-1.5">
+            <Icon className="h-4 w-4 text-muted-foreground" />
           </span>
           {title}
         </CardTitle>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-sm font-semibold text-slate-700 dark:text-foreground">Total: {formatCurrency(total)}</p>
+          <p className="text-sm font-semibold text-foreground">Total: {formatCurrency(total)}</p>
           <span className="rounded-full bg-primary/10 dark:bg-primary/20 px-2 py-0.5 text-xs font-medium text-primary">
             {percentage.toFixed(1)}%
           </span>
@@ -74,7 +74,7 @@ function CategoryCard({
       </CardHeader>
       <CardContent>
         {items.length === 0 ? (
-          <p className="text-sm text-slate-500">Sin registros.</p>
+          <p className="text-sm text-muted-foreground">Sin registros.</p>
         ) : (
           <Table>
             <TableHeader>
@@ -85,7 +85,7 @@ function CategoryCard({
             </TableHeader>
             <TableBody>
               {items.map((i) => (
-                <TableRow key={i.id} className="hover:bg-slate-50 dark:hover:bg-card/50">
+                <TableRow key={i.id} className="hover:bg-muted dark:hover:bg-card/50">
                   <TableCell>{formatExpenseDate(i.date)}</TableCell>
                   <TableCell className="font-medium">{formatCurrency(i.total)}</TableCell>
                 </TableRow>
@@ -104,22 +104,22 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
   return (
     <div className="space-y-6 p-4">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="overflow-hidden border-l-4 border-l-red-500 dark:border-l-red-600 bg-gradient-to-br from-white to-red-50/30 dark:from-card dark:to-red-950/20 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="overflow-hidden border-l-4 border-l-destructive bg-gradient-to-br from-white to-destructive-suave/30 dark:from-card shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
-              <span className="rounded-lg bg-red-100 dark:bg-red-900/40 p-1.5">
-                <Wallet className="h-4 w-4 text-red-600 dark:text-red-400" />
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <span className="rounded-lg bg-destructive-suave p-1.5">
+                <Wallet className="h-4 w-4 text-destructive" />
               </span>
               Total gastos
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-red-600 dark:text-red-400">{formatCurrency(summary.totalExpenses)}</p>
+            <p className="text-2xl font-bold text-destructive">{formatCurrency(summary.totalExpenses)}</p>
           </CardContent>
         </Card>
         <Card className="overflow-hidden border-l-4 border-l-violet-500 dark:border-l-violet-600 bg-gradient-to-br from-white to-violet-50/30 dark:from-card dark:to-violet-950/20 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <span className="rounded-lg bg-violet-100 dark:bg-violet-900/40 p-1.5">
                 <PieChart className="h-4 w-4 text-violet-600 dark:text-violet-400" />
               </span>
@@ -130,25 +130,25 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
             <p className="text-2xl font-bold text-violet-600 dark:text-violet-400">{formatCurrency(summary.averageExpense)}</p>
           </CardContent>
         </Card>
-        <Card className="overflow-hidden border-l-4 border-l-amber-500 dark:border-l-amber-600 bg-gradient-to-br from-white to-amber-50/30 dark:from-card dark:to-amber-950/20 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="overflow-hidden border-l-4 border-l-apoyo bg-gradient-to-br from-white to-apoyo-suave/30 dark:from-card shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
-              <span className="rounded-lg bg-amber-100 dark:bg-amber-900/40 p-1.5">
-                <Award className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <span className="rounded-lg bg-apoyo-suave p-1.5">
+                <Award className="h-4 w-4 text-apoyo" />
               </span>
               Categoría con mayor gasto
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg font-bold text-amber-700 dark:text-amber-300 capitalize">
+            <p className="text-lg font-bold text-apoyo-texto capitalize">
               {CATEGORY_LABELS[summary.largestExpenseCategory] ?? summary.largestExpenseCategory}
             </p>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="shadow-md border-slate-200 dark:border-border">
-        <CardHeader className="bg-slate-50/80 dark:bg-card/50 border-b border-slate-200 dark:border-border">
+      <Card className="shadow-md border-border">
+        <CardHeader className="bg-muted/80 dark:bg-card/50 border-b border-border">
           <CardTitle className="flex items-center gap-2 text-base">
             <CreditCard className="h-5 w-5 text-primary" />
             Por método de pago
@@ -156,10 +156,10 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
         </CardHeader>
         <CardContent className="pt-4">
           <div className="flex flex-wrap gap-3">
-            <span className="rounded-lg bg-amber-100 dark:bg-amber-900/40 px-3 py-1.5 text-sm font-medium text-amber-800 dark:text-amber-200">
+            <span className="rounded-lg bg-apoyo-suave px-3 py-1.5 text-sm font-medium text-apoyo-texto">
               Efectivo: {formatCurrency(summary.totalByPaymentMethod.cash)}
             </span>
-            <span className="rounded-lg bg-primary/10 dark:bg-primary/20/40 px-3 py-1.5 text-sm font-medium text-primary dark:text-primary">
+            <span className="rounded-lg bg-primary/10 dark:bg-primary/20 px-3 py-1.5 text-sm font-medium text-primary dark:text-primary">
               Transferencia: {formatCurrency(summary.totalByPaymentMethod.transfer)}
             </span>
             <span className="rounded-lg bg-violet-100 dark:bg-violet-900/40 px-3 py-1.5 text-sm font-medium text-violet-800 dark:text-violet-200">
@@ -178,29 +178,29 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
             total={expensesByCategory[key].total}
             percentage={expensesByCategory[key].percentage}
             icon={CATEGORY_ICONS[key] ?? FolderOpen}
-            borderColor={`border-l-4 ${CATEGORY_BORDER[key] ?? 'border-l-slate-500'}`}
+            borderColor={`border-l-4 ${CATEGORY_BORDER[key] ?? 'border-l-muted-foreground'}`}
           />
         ))}
       </div>
 
-      <Card className="overflow-hidden border-l-4 border-l-indigo-500 dark:border-l-indigo-600 shadow-md hover:shadow-lg transition-shadow">
-        <CardHeader className="bg-indigo-50/50 dark:bg-indigo-950/30 border-b border-indigo-200/50 dark:border-indigo-800/50">
+      <Card className="overflow-hidden border-l-4 border-l-apoyo shadow-md hover:shadow-lg transition-shadow">
+        <CardHeader className="bg-apoyo-suave border-b border-apoyo">
           <CardTitle className="flex items-center gap-2 text-base">
-            <span className="rounded-lg bg-indigo-100 dark:bg-indigo-900/40 p-1.5">
-              <Users className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+            <span className="rounded-lg bg-apoyo-suave p-1.5">
+              <Users className="h-5 w-5 text-apoyo-texto" />
             </span>
             Nómina (empleados)
           </CardTitle>
           <div className="flex items-center gap-2 mt-1">
-            <p className="text-sm font-semibold text-slate-700 dark:text-foreground">Total: {formatCurrency(employeeSalaries.total)}</p>
-            <span className="rounded-full bg-indigo-100 dark:bg-indigo-900/40 px-2 py-0.5 text-xs font-medium text-indigo-800 dark:text-indigo-200">
+            <p className="text-sm font-semibold text-foreground">Total: {formatCurrency(employeeSalaries.total)}</p>
+            <span className="rounded-full bg-apoyo-suave px-2 py-0.5 text-xs font-medium text-apoyo-texto">
               {employeeSalaries.percentage.toFixed(1)}%
             </span>
           </div>
         </CardHeader>
         <CardContent className="pt-4">
           {employeeSalaries.items.length === 0 ? (
-            <p className="text-sm text-slate-500">Sin registros.</p>
+            <p className="text-sm text-muted-foreground">Sin registros.</p>
           ) : (
             <Table>
               <TableHeader>
@@ -211,7 +211,7 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
               </TableHeader>
               <TableBody>
                 {employeeSalaries.items.map((i) => (
-                  <TableRow key={i.id} className="hover:bg-slate-50 dark:hover:bg-card/50">
+                  <TableRow key={i.id} className="hover:bg-muted dark:hover:bg-card/50">
                     <TableCell>{formatExpenseDate(i.date)}</TableCell>
                     <TableCell className="font-medium">{formatCurrency(i.amount)}</TableCell>
                   </TableRow>

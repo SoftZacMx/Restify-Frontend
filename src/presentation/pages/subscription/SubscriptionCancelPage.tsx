@@ -20,18 +20,18 @@ const SubscriptionCancelPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen bg-muted flex flex-col items-center justify-center px-4">
       <div className="text-center">
         <div className="flex justify-center mb-6">
-          <div className="w-20 h-20 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
-            <XCircle className="w-10 h-10 text-orange-500" />
+          <div className="w-20 h-20 rounded-full bg-apoyo-suave flex items-center justify-center">
+            <XCircle className="w-10 h-10 text-apoyo" />
           </div>
         </div>
 
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
+        <h1 className="text-3xl font-bold text-foreground mb-2">
           No se realizó el pago
         </h1>
-        <p className="text-slate-500 dark:text-muted-foreground mb-8">
+        <p className="text-muted-foreground mb-8">
           Puedes intentar de nuevo cuando quieras
         </p>
 

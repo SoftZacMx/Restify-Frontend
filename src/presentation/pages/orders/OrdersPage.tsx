@@ -391,7 +391,7 @@ const OrdersPage: React.FC = () => {
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between gap-2">
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
             <FileText className="h-7 w-7 hidden sm:block" />
             Órdenes
           </h1>
@@ -432,13 +432,13 @@ const OrdersPage: React.FC = () => {
 
         {/* Banner de advertencia cuando no hay conexión WebSocket */}
         {!isConnected && (
-          <div className="flex items-center gap-3 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-            <WifiOff className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+          <div className="flex items-center gap-3 p-4 bg-apoyo-suave border border-apoyo rounded-lg">
+            <WifiOff className="h-5 w-5 text-apoyo flex-shrink-0" />
             <div>
-              <p className="font-medium text-amber-800 dark:text-amber-200">
+              <p className="font-medium text-apoyo-texto">
                 Sin conexión en tiempo real
               </p>
-              <p className="text-sm text-amber-700 dark:text-amber-300">
+              <p className="text-sm text-apoyo-texto">
                 Las notificaciones de nuevas órdenes no están disponibles. Usa el botón "Actualizar" para ver cambios.
               </p>
             </div>
@@ -447,17 +447,17 @@ const OrdersPage: React.FC = () => {
 
         {/* Contadores rápidos */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg px-3 py-2.5 border border-yellow-200 dark:border-yellow-800 flex items-center gap-3">
-            <span className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">
+          <div className="bg-apoyo-suave rounded-lg px-3 py-2.5 border border-apoyo flex items-center gap-3">
+            <span className="text-2xl font-bold text-apoyo-texto">
               {orderCounts.pending}
             </span>
-            <span className="text-xs text-yellow-600 dark:text-yellow-400 leading-tight">Pendientes</span>
+            <span className="text-xs text-apoyo leading-tight">Pendientes</span>
           </div>
-          <div className="bg-green-50 dark:bg-green-900/20 rounded-lg px-3 py-2.5 border border-green-200 dark:border-green-800 flex items-center gap-3">
-            <span className="text-2xl font-bold text-green-700 dark:text-green-300">
+          <div className="bg-fresco-suave rounded-lg px-3 py-2.5 border border-fresco flex items-center gap-3">
+            <span className="text-2xl font-bold text-fresco-texto">
               {orderCounts.paid}
             </span>
-            <span className="text-xs text-green-600 dark:text-green-400 leading-tight">Pagadas</span>
+            <span className="text-xs text-fresco leading-tight">Pagadas</span>
           </div>
         </div>
 
@@ -483,7 +483,7 @@ const OrdersPage: React.FC = () => {
             )}
           </Button>
           {showFilters && (
-            <div className="bg-white dark:bg-background rounded-lg border border-slate-200 dark:border-border p-4">
+            <div className="bg-card rounded-lg border border-border p-4">
               <OrderSearchBar
                 filters={filters}
                 onFiltersChange={handleFiltersChange}
@@ -495,7 +495,7 @@ const OrdersPage: React.FC = () => {
         </div>
 
         {/* Grid de órdenes con paginación */}
-        <div className="bg-white dark:bg-background rounded-lg border border-slate-200 dark:border-border">
+        <div className="bg-card rounded-lg border border-border">
           <OrdersGrid
             orders={displayOrders}
             tableNameById={tableNameById}
@@ -559,7 +559,7 @@ const OrdersPage: React.FC = () => {
               <AlertDialogTitle>¿Eliminar orden?</AlertDialogTitle>
               <AlertDialogDescription>
                 Estás a punto de eliminar la orden{' '}
-                <strong className="text-slate-900 dark:text-white">
+                <strong className="text-foreground">
                   #{deleteDialog.data?.id.slice(-8).toUpperCase()}
                 </strong>
                 .
@@ -574,7 +574,7 @@ const OrdersPage: React.FC = () => {
               <AlertDialogAction
                 onClick={confirmDelete}
                 disabled={isDeleting}
-                className="bg-red-600 hover:bg-red-700 text-white"
+                className="bg-destructive hover:bg-destructive text-white"
               >
                 {isDeleting ? 'Eliminando...' : 'Eliminar'}
               </AlertDialogAction>

@@ -46,9 +46,9 @@ const SettingsGeneralPage = () => {
     <div className="space-y-6">
       {/* Zona de peligro — solo owner */}
       {isOwner && (
-        <Card className="border-red-200 dark:border-red-900/50 shadow-sm">
+        <Card className="border-destructive shadow-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg text-red-600 dark:text-red-400">
+            <CardTitle className="flex items-center gap-2 text-lg text-destructive">
               <AlertTriangle className="h-5 w-5" />
               Zona de peligro
             </CardTitle>
@@ -58,19 +58,19 @@ const SettingsGeneralPage = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-lg border border-red-200 dark:border-red-900/50 p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-lg border border-destructive p-4">
               <div>
-                <p className="text-sm font-medium text-slate-900 dark:text-white">
+                <p className="text-sm font-medium text-foreground">
                   Cerrar organización
                 </p>
-                <p className="text-sm text-slate-500 dark:text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Esta acción no es inmediata: la organización se elimina de forma permanente a los 30 días.
                 </p>
               </div>
               <Button
                 type="button"
                 onClick={() => setIsCloseDialogOpen(true)}
-                className="bg-red-600 hover:bg-red-700 text-white shrink-0"
+                className="bg-destructive hover:bg-destructive text-white shrink-0"
               >
                 Cerrar organización
               </Button>

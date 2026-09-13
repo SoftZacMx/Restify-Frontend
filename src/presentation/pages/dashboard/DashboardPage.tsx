@@ -88,9 +88,9 @@ const DashboardPage = () => {
 
   const getOrderStatusStyle = (order: DashboardOrderSummary) => {
     if (order.status && order.delivered)
-      return 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400';
-    if (order.status) return 'bg-primary/10 dark:bg-primary/20/20 text-primary dark:text-primary';
-    return 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400';
+      return 'bg-fresco-suave text-fresco-texto';
+    if (order.status) return 'bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary';
+    return 'bg-apoyo-suave text-apoyo-texto';
   };
 
   const getTableDisplay = (order: DashboardOrderSummary) => {
@@ -104,7 +104,7 @@ const DashboardPage = () => {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-            <p className="text-slate-500 dark:text-muted-foreground">Cargando dashboard...</p>
+            <p className="text-muted-foreground">Cargando dashboard...</p>
           </div>
         </div>
       </MainLayout>
@@ -130,12 +130,12 @@ const DashboardPage = () => {
         <div className="flex items-center gap-4">
           <Button
             variant="ghost"
-            className="relative text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-card h-10 w-10 p-0"
+            className="relative text-muted-foreground hover:text-foreground hover:bg-muted dark:hover:bg-card h-10 w-10 p-0"
           >
             <Bell className="h-5 w-5" />
-            <span className="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full border-2 border-white dark:border-border" />
+            <span className="absolute top-2 right-2 h-2 w-2 bg-destructive rounded-full border-2 border-white dark:border-border" />
           </Button>
-          <div className="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-border">
+          <div className="flex items-center gap-3 pl-4 border-l border-border">
             <Avatar className="h-9 w-9">
               <AvatarImage src={undefined} />
               <AvatarFallback>
@@ -143,10 +143,10 @@ const DashboardPage = () => {
               </AvatarFallback>
             </Avatar>
             <div className="text-sm">
-              <p className="font-medium text-slate-900 dark:text-foreground leading-none">
+              <p className="font-medium text-foreground leading-none">
                 {user ? `${user.name} ${user.last_name}` : 'Usuario'}
               </p>
-              <p className="text-slate-500 dark:text-muted-foreground text-xs mt-1">
+              <p className="text-muted-foreground text-xs mt-1">
                 {user?.email || 'email@example.com'}
               </p>
             </div>
@@ -187,13 +187,13 @@ const DashboardPage = () => {
         {/* Main: Chart + Active Orders + Recent */}
         <div className="lg:col-span-2 space-y-8">
           {/* Chart: Ventas últimos 7 días */}
-          <Card className="border-slate-100 dark:border-border shadow-sm bg-white dark:bg-card">
+          <Card className="border-border shadow-sm bg-card">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold text-slate-900 dark:text-foreground">
+              <CardTitle className="text-lg font-semibold text-foreground">
                 Ventas de los últimos 7 días
               </CardTitle>
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-bold text-slate-900 dark:text-foreground">
+                <span className="text-3xl font-bold text-foreground">
                   {formatCurrency(salesLast7Days.total)}
                 </span>
               </div>
@@ -201,7 +201,7 @@ const DashboardPage = () => {
             <CardContent>
               <div className="h-64 flex items-end justify-between gap-2 pt-4 px-2">
                 {salesLast7Days.byDay.length === 0 ? (
-                  <p className="text-sm text-slate-500 dark:text-muted-foreground w-full text-center py-8">
+                  <p className="text-sm text-muted-foreground w-full text-center py-8">
                     Sin datos de ventas
                   </p>
                 ) : (
@@ -224,9 +224,9 @@ const DashboardPage = () => {
           </Card>
 
           {/* Órdenes activas */}
-          <Card className="border-slate-100 dark:border-border shadow-sm bg-white dark:bg-card">
+          <Card className="border-border shadow-sm bg-card">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-lg font-semibold text-slate-900 dark:text-foreground">
+              <CardTitle className="text-lg font-semibold text-foreground">
                 Órdenes activas ({activeOrders.count})
               </CardTitle>
               <Link
@@ -238,13 +238,13 @@ const DashboardPage = () => {
             </CardHeader>
             <CardContent>
               {activeOrders.items.length === 0 ? (
-                <p className="text-sm text-slate-500 dark:text-muted-foreground py-4 text-center">
+                <p className="text-sm text-muted-foreground py-4 text-center">
                   No hay órdenes activas
                 </p>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm text-left">
-                    <thead className="text-xs text-slate-500 dark:text-muted-foreground uppercase bg-slate-50/50 dark:bg-card/50">
+                    <thead className="text-xs text-muted-foreground uppercase bg-muted/50 dark:bg-card/50">
                       <tr>
                         <th className="px-4 py-3 font-medium rounded-l-lg">Orden</th>
                         <th className="px-4 py-3 font-medium">Ubicación</th>
@@ -256,19 +256,19 @@ const DashboardPage = () => {
                       {activeOrders.items.map((order) => (
                         <tr
                           key={order.id}
-                          className="hover:bg-slate-50/50 dark:hover:bg-card/50 transition-colors cursor-pointer"
+                          className="hover:bg-muted/50 dark:hover:bg-card/50 transition-colors cursor-pointer"
                           onClick={() => navigate('/orders', { state: { openOrderId: order.id } })}
                         >
-                          <td className="px-4 py-3 font-medium text-slate-900 dark:text-foreground">
+                          <td className="px-4 py-3 font-medium text-foreground">
                             #{order.id.slice(0, 8)}
                           </td>
-                          <td className="px-4 py-3 text-slate-600 dark:text-muted-foreground">
+                          <td className="px-4 py-3 text-muted-foreground">
                             {getTableDisplay(order)}
                           </td>
-                          <td className="px-4 py-3 text-slate-600 dark:text-muted-foreground">
+                          <td className="px-4 py-3 text-muted-foreground">
                             {formatOrderTime(order.date)}
                           </td>
-                          <td className="px-4 py-3 text-right font-bold text-slate-900 dark:text-foreground">
+                          <td className="px-4 py-3 text-right font-bold text-foreground">
                             {formatCurrency(order.total)}
                           </td>
                         </tr>
@@ -281,9 +281,9 @@ const DashboardPage = () => {
           </Card>
 
           {/* Órdenes recientes */}
-          <Card className="border-slate-100 dark:border-border shadow-sm bg-white dark:bg-card">
+          <Card className="border-border shadow-sm bg-card">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-lg font-semibold text-slate-900 dark:text-foreground">
+              <CardTitle className="text-lg font-semibold text-foreground">
                 Órdenes recientes
               </CardTitle>
               <Link
@@ -295,13 +295,13 @@ const DashboardPage = () => {
             </CardHeader>
             <CardContent>
               {recentOrders.length === 0 ? (
-                <p className="text-sm text-slate-500 dark:text-muted-foreground py-4 text-center">
+                <p className="text-sm text-muted-foreground py-4 text-center">
                   No hay órdenes recientes
                 </p>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm text-left">
-                    <thead className="text-xs text-slate-500 dark:text-muted-foreground uppercase bg-slate-50/50 dark:bg-card/50">
+                    <thead className="text-xs text-muted-foreground uppercase bg-muted/50 dark:bg-card/50">
                       <tr>
                         <th className="px-4 py-3 font-medium rounded-l-lg">Orden</th>
                         <th className="px-4 py-3 font-medium">Ubicación</th>
@@ -335,16 +335,16 @@ const DashboardPage = () => {
         {/* Sidebar */}
         <div className="space-y-8">
           {/* Acciones rápidas */}
-          <Card className="border-slate-100 dark:border-border shadow-sm bg-white dark:bg-card">
+          <Card className="border-border shadow-sm bg-card">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold text-slate-900 dark:text-foreground">
+              <CardTitle className="text-lg font-semibold text-foreground">
                 Acciones rápidas
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <Button
-                  className="h-24 flex flex-col gap-2 bg-primary/10 dark:bg-primary/20/20 hover:bg-primary/90 dark:hover:bg-primary/90/30 text-primary dark:text-primary"
+                  className="h-24 flex flex-col gap-2 bg-primary/10 dark:bg-primary/20 hover:bg-primary/90 dark:hover:bg-primary/90 text-primary dark:text-primary"
                   onClick={() => navigate('/pos')}
                 >
                   <Plus className="h-6 w-6" />
@@ -352,10 +352,10 @@ const DashboardPage = () => {
                 </Button>
                 <Button
                   variant="outline"
-                  className="h-24 flex flex-col gap-2 bg-slate-100 dark:bg-card hover:bg-slate-200 dark:hover:bg-card"
+                  className="h-24 flex flex-col gap-2 bg-muted hover:bg-secondary dark:hover:bg-card"
                   onClick={() => navigate('/expenses')}
                 >
-                  <DollarSign className="h-6 w-6 text-slate-600 dark:text-muted-foreground" />
+                  <DollarSign className="h-6 w-6 text-muted-foreground" />
                   <span className="text-sm font-medium">Registrar Gasto</span>
                 </Button>
               </div>
@@ -371,9 +371,9 @@ const DashboardPage = () => {
           </Card>
 
           {/* Últimas completadas */}
-          <Card className="border-slate-100 dark:border-border shadow-sm bg-white dark:bg-card">
+          <Card className="border-border shadow-sm bg-card">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-lg font-semibold text-slate-900 dark:text-foreground">
+              <CardTitle className="text-lg font-semibold text-foreground">
                 Últimas completadas
               </CardTitle>
               <Link
@@ -385,7 +385,7 @@ const DashboardPage = () => {
             </CardHeader>
             <CardContent>
               {lastCompletedOrders.length === 0 ? (
-                <p className="text-sm text-slate-500 dark:text-muted-foreground py-2">
+                <p className="text-sm text-muted-foreground py-2">
                   No hay órdenes completadas recientes
                 </p>
               ) : (
@@ -393,20 +393,20 @@ const DashboardPage = () => {
                   {lastCompletedOrders.map((order) => (
                     <li
                       key={order.id}
-                      className="flex items-center justify-between text-sm border-b border-slate-100 dark:border-border pb-3 last:border-0 last:pb-0 cursor-pointer hover:opacity-80"
+                      className="flex items-center justify-between text-sm border-b border-border pb-3 last:border-0 last:pb-0 cursor-pointer hover:opacity-80"
                       onClick={() =>
                         navigate('/orders', { state: { openOrderId: order.id } })
                       }
                     >
                       <div>
-                        <span className="font-medium text-slate-900 dark:text-foreground">
+                        <span className="font-medium text-foreground">
                           #{order.id.slice(0, 8)}
                         </span>
-                        <span className="text-slate-500 dark:text-muted-foreground ml-2">
+                        <span className="text-muted-foreground ml-2">
                           {getTableDisplay(order)} · {formatOrderTime(order.date)}
                         </span>
                       </div>
-                      <span className="font-semibold text-slate-900 dark:text-foreground">
+                      <span className="font-semibold text-foreground">
                         {formatCurrency(order.total)}
                       </span>
                     </li>
@@ -417,9 +417,9 @@ const DashboardPage = () => {
           </Card>
 
           {/* Notificaciones (placeholder) */}
-          <Card className="border-slate-100 dark:border-border shadow-sm bg-white dark:bg-card">
+          <Card className="border-border shadow-sm bg-card">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold text-slate-900 dark:text-foreground">
+              <CardTitle className="text-lg font-semibold text-foreground">
                 Notificaciones recientes
               </CardTitle>
             </CardHeader>
@@ -427,14 +427,14 @@ const DashboardPage = () => {
               <NotificationItem
                 title="Dashboard conectado al API. Los datos se actualizan automáticamente."
                 time="Ahora"
-                iconBg="bg-green-100 dark:bg-green-900/20"
-                iconColor="text-green-600 dark:text-green-400"
+                iconBg="bg-fresco-suave"
+                iconColor="text-fresco"
                 IconComponent={CheckCircle2}
               />
               <NotificationItem
                 title="Usa Órdenes para ver el detalle de cada orden."
                 time="Información"
-                iconBg="bg-primary/10 dark:bg-primary/20/20"
+                iconBg="bg-primary/10 dark:bg-primary/20"
                 iconColor="text-primary dark:text-primary"
                 IconComponent={ClipboardList}
               />
@@ -464,32 +464,32 @@ const ACCENT_STYLES: Record<
   }
 > = {
   emerald: {
-    iconBg: 'bg-emerald-500/15 dark:bg-emerald-400/20',
-    iconColor: 'text-emerald-600 dark:text-emerald-400',
-    iconRing: 'ring-emerald-500/20 dark:ring-emerald-400/30',
+    iconBg: 'bg-fresco/15',
+    iconColor: 'text-fresco',
+    iconRing: 'ring-fresco/20',
     cardBg:
-      'bg-gradient-to-br from-white via-white to-emerald-50/60 dark:from-card dark:via-card dark:to-emerald-950/30',
-    cardBorder: 'border-emerald-200/60 dark:border-emerald-800/50',
+      'bg-gradient-to-br from-white via-white to-fresco-suave/60 dark:from-card dark:via-card',
+    cardBorder: 'border-fresco/60',
     cardShadow: 'shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50',
     cardHoverShadow: 'hover:shadow-xl hover:shadow-emerald-500/5 dark:hover:shadow-emerald-500/10',
     cornerGlow:
-      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-emerald-400/15 dark:before:bg-emerald-500/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
-    badgeBg: 'bg-emerald-100 dark:bg-emerald-900/40',
-    badgeText: 'text-emerald-700 dark:text-emerald-300',
+      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-fresco/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
+    badgeBg: 'bg-fresco-suave',
+    badgeText: 'text-fresco-texto',
   },
   amber: {
-    iconBg: 'bg-amber-500/15 dark:bg-amber-400/20',
-    iconColor: 'text-amber-600 dark:text-amber-400',
-    iconRing: 'ring-amber-500/20 dark:ring-amber-400/30',
+    iconBg: 'bg-apoyo/15',
+    iconColor: 'text-apoyo',
+    iconRing: 'ring-apoyo/20',
     cardBg:
-      'bg-gradient-to-br from-white via-white to-amber-50/50 dark:from-card dark:via-card dark:to-amber-950/25',
-    cardBorder: 'border-amber-200/60 dark:border-amber-800/50',
+      'bg-gradient-to-br from-white via-white to-apoyo-suave/50 dark:from-card dark:via-card',
+    cardBorder: 'border-apoyo/60',
     cardShadow: 'shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50',
     cardHoverShadow: 'hover:shadow-xl hover:shadow-amber-500/5 dark:hover:shadow-amber-500/10',
     cornerGlow:
-      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-amber-400/15 dark:before:bg-amber-500/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
-    badgeBg: 'bg-amber-100 dark:bg-amber-900/40',
-    badgeText: 'text-amber-700 dark:text-amber-300',
+      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-apoyo/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
+    badgeBg: 'bg-apoyo-suave',
+    badgeText: 'text-apoyo-texto',
   },
   blue: {
     iconBg: 'bg-primary/15 dark:bg-primary/20',
@@ -497,12 +497,12 @@ const ACCENT_STYLES: Record<
     iconRing: 'ring-primary/20 dark:ring-primary/30',
     cardBg:
       'bg-gradient-to-br from-white via-white to-primary/50 dark:from-card dark:via-card dark:to-primary/25',
-    cardBorder: 'border-primary/30/60 dark:border-primary/50',
+    cardBorder: 'border-primary/30 dark:border-primary/50',
     cardShadow: 'shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50',
     cardHoverShadow: 'hover:shadow-xl hover:shadow-primary/5 dark:hover:shadow-primary/10',
     cornerGlow:
       'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-primary/15 dark:before:bg-primary/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
-    badgeBg: 'bg-primary/10 dark:bg-primary/20/40',
+    badgeBg: 'bg-primary/10 dark:bg-primary/20',
     badgeText: 'text-primary dark:text-primary',
   },
 };
@@ -536,10 +536,10 @@ const StatCard = ({
                 {subtitle}
               </span>
             )}
-            <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-muted-foreground mb-1">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-1">
               {title}
             </p>
-            <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-foreground tabular-nums tracking-tight drop-shadow-sm">
+            <h3 className="text-2xl md:text-3xl font-bold text-foreground tabular-nums tracking-tight drop-shadow-sm">
               {value}
             </h3>
           </div>
@@ -571,11 +571,11 @@ const Bar = ({
   <div className="flex flex-col items-center gap-2 flex-1 group cursor-pointer" title={title}>
     <div
       className={`w-full rounded-t-md transition-all group-hover:opacity-80 min-h-[24px] ${
-        active ? 'bg-primary dark:bg-primary' : 'bg-primary/10 dark:bg-primary/20/30'
+        active ? 'bg-primary dark:bg-primary' : 'bg-primary/10 dark:bg-primary/20'
       }`}
       style={{ height }}
     />
-    <span className="text-xs font-medium text-slate-500 dark:text-muted-foreground">{day}</span>
+    <span className="text-xs font-medium text-muted-foreground">{day}</span>
   </div>
 );
 
@@ -596,13 +596,13 @@ function DashboardOrderRow({
 }) {
   return (
     <tr
-      className="hover:bg-slate-50/50 dark:hover:bg-card/50 transition-colors cursor-pointer"
+      className="hover:bg-muted/50 dark:hover:bg-card/50 transition-colors cursor-pointer"
       onClick={onRowClick}
     >
-      <td className="px-4 py-4 font-medium text-slate-900 dark:text-foreground">
+      <td className="px-4 py-4 font-medium text-foreground">
         #{order.id.slice(0, 8)}
       </td>
-      <td className="px-4 py-4 text-slate-600 dark:text-muted-foreground">
+      <td className="px-4 py-4 text-muted-foreground">
         {getTableDisplay(order)}
       </td>
       <td className="px-4 py-4">
@@ -610,10 +610,10 @@ function DashboardOrderRow({
           {getOrderStatusLabel(order)}
         </Badge>
       </td>
-      <td className="px-4 py-4 text-slate-600 dark:text-muted-foreground">
+      <td className="px-4 py-4 text-muted-foreground">
         {formatOrderTime(order.date)}
       </td>
-      <td className="px-4 py-4 text-right font-bold text-slate-900 dark:text-foreground">
+      <td className="px-4 py-4 text-right font-bold text-foreground">
         {formatCurrency(order.total)}
       </td>
     </tr>
@@ -640,8 +640,8 @@ const NotificationItem = ({
       <IconComponent className={`h-5 w-5 ${iconColor}`} />
     </div>
     <div>
-      <p className="text-sm font-medium text-slate-900 dark:text-foreground leading-snug">{title}</p>
-      <p className="text-xs text-slate-500 dark:text-muted-foreground mt-1">{time}</p>
+      <p className="text-sm font-medium text-foreground leading-snug">{title}</p>
+      <p className="text-xs text-muted-foreground mt-1">{time}</p>
     </div>
   </div>
 );

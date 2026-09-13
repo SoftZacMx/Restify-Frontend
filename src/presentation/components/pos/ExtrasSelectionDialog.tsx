@@ -108,22 +108,22 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(28rem,95vw)] max-h-[90vh] flex flex-col bg-white dark:bg-background border border-slate-200 dark:border-border p-0 overflow-hidden">
-        <DialogHeader className="flex-row items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-200 dark:border-border shrink-0">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 dark:bg-card">
-            <SlidersHorizontal className="h-5 w-5 text-slate-600 dark:text-muted-foreground" />
+      <DialogContent className="w-[min(28rem,95vw)] max-h-[90vh] flex flex-col bg-card border border-border p-0 overflow-hidden">
+        <DialogHeader className="flex-row items-center gap-3 px-6 pt-6 pb-4 border-b border-border shrink-0">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
+            <SlidersHorizontal className="h-5 w-5 text-muted-foreground" />
           </div>
-          <DialogTitle className="text-xl font-semibold text-slate-900 dark:text-white flex-1">
+          <DialogTitle className="text-xl font-semibold text-foreground flex-1">
             Personaliza tu plato
           </DialogTitle>
           <DialogClose />
         </DialogHeader>
 
         {/* Search: filter extras by name (and description) as user types */}
-        <div className="shrink-0 px-6 pb-3 border-b border-slate-200 dark:border-border">
+        <div className="shrink-0 px-6 pb-3 border-b border-border">
           <div className="relative">
             <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none"
+              className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none"
               aria-hidden
             />
             <Input
@@ -146,7 +146,7 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
         <div className="flex flex-col flex-1 min-h-0 overflow-y-auto px-6 py-4">
           <div className="space-y-5">
             {grouped.length === 0 ? (
-              <p className="text-sm text-slate-500 dark:text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 {availableExtras.length === 0
                   ? 'No hay extras disponibles'
                   : 'No hay extras que coincidan con la búsqueda'}
@@ -154,7 +154,7 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
             ) : (
               grouped.map(({ categoryName, extras: items }) => (
                 <div key={categoryName}>
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3">
+                  <h3 className="text-sm font-bold text-foreground mb-3">
                     {categoryName}
                   </h3>
                   <ul className="space-y-3">
@@ -164,16 +164,16 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
                         <li
                           key={extra.id}
                           className={cn(
-                            'flex items-center justify-between gap-3 py-2 border-b border-slate-100 dark:border-border/50 last:border-0 cursor-pointer rounded-lg px-2 -mx-2 hover:bg-slate-50 dark:hover:bg-card/50',
+                            'flex items-center justify-between gap-3 py-2 border-b border-border last:border-0 cursor-pointer rounded-lg px-2 -mx-2 hover:bg-muted dark:hover:bg-card/50',
                             isSelected && 'bg-primary/5 dark:bg-primary/10'
                           )}
                           onClick={() => handleExtraToggle(extra)}
                         >
                           <div className="min-w-0 flex-1">
-                            <p className="font-medium text-slate-900 dark:text-white">
+                            <p className="font-medium text-foreground">
                               {extra.name}
                             </p>
-                            <p className="text-sm text-slate-500 dark:text-muted-foreground">
+                            <p className="text-sm text-muted-foreground">
                               +${extra.price.toFixed(2)}
                             </p>
                           </div>
@@ -182,7 +182,7 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
                               'flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors',
                               isSelected
                                 ? 'border-primary bg-primary text-primary-foreground'
-                                : 'border-slate-300 dark:border-border bg-transparent'
+                                : 'border-border bg-transparent'
                             )}
                             aria-hidden
                           >
@@ -213,13 +213,13 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
         </div>
 
         {/* Sección fija de ítems seleccionados: altura fija con overflow */}
-        <div className="shrink-0 px-6 py-3 border-t border-slate-200 dark:border-border bg-slate-50/80 dark:bg-card/50">
-          <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-muted-foreground mb-2">
+        <div className="shrink-0 px-6 py-3 border-t border-border bg-muted/80 dark:bg-card/50">
+          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-2">
             Extras seleccionados
           </p>
-          <div className="h-24 min-h-24 max-h-28 overflow-y-auto rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-background p-3">
+          <div className="h-24 min-h-24 max-h-28 overflow-y-auto rounded-lg border border-border bg-card p-3">
             {selectedExtras.length === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center text-slate-400 dark:text-muted-foreground">
+              <div className="h-full flex flex-col items-center justify-center text-muted-foreground">
                 <UtensilsCrossed className="h-10 w-10 mb-1 opacity-60" />
                 <span className="text-xs font-medium">Ninguno</span>
               </div>
@@ -234,7 +234,7 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
                     <button
                       type="button"
                       onClick={() => removeExtra(extra)}
-                      className="rounded-full p-0.5 hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white/50"
+                      className="rounded-full p-0.5 hover:bg-card/20 focus-visible:ring-2 focus-visible:ring-white/50"
                       aria-label={`Quitar ${extra.name}`}
                     >
                       <X className="h-3.5 w-3.5" />
@@ -246,9 +246,9 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
           </div>
         </div>
 
-        <footer className="shrink-0 px-6 py-4 border-t border-slate-200 dark:border-border bg-slate-50 dark:bg-card/50 space-y-4">
+        <footer className="shrink-0 px-6 py-4 border-t border-border bg-muted space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-slate-700 dark:text-foreground">
+            <span className="text-sm font-medium text-foreground">
               Total de Extras
             </span>
             <span className="text-lg font-bold text-primary">${extrasTotal.toFixed(2)}</span>
@@ -256,7 +256,7 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
           <div className="flex gap-3">
             <Button
               variant="outline"
-              className="flex-1 border-slate-300 dark:border-border text-slate-700 dark:text-foreground"
+              className="flex-1 border-border text-foreground"
               onClick={() => onOpenChange(false)}
             >
               Cancelar

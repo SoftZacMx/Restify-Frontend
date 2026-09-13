@@ -30,20 +30,20 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({ on
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-background text-slate-900 dark:text-foreground">
+    <div className="min-h-screen flex flex-col bg-muted text-foreground">
       {/* Contenido centrado - sin header */}
       <main className="flex-1 flex flex-col items-center justify-center px-6 py-12">
         <div className="max-w-md w-full flex flex-col items-center text-center space-y-6">
           {/* Icon */}
-          <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-slate-300 dark:border-border bg-primary/10 dark:bg-primary/20">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-border bg-primary/10 dark:bg-primary/20">
             <AlertTriangle className="h-10 w-10 text-primary dark:text-primary" strokeWidth={2} />
           </div>
 
           <div className="space-y-2">
-            <h1 className="text-2xl font-bold text-slate-800 dark:text-foreground">
+            <h1 className="text-2xl font-bold text-foreground">
               ¡Ups! Algo salió mal
             </h1>
-            <p className="text-sm text-slate-600 dark:text-muted-foreground leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed">
               Ha ocurrido un error inesperado en el sistema. No te preocupes, tus datos están a
               salvo. Por favor, intenta realizar la acción nuevamente.
             </p>
@@ -61,21 +61,21 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({ on
             <button
               type="button"
               onClick={handleGoToDashboard}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-slate-200 dark:bg-card px-5 py-2.5 text-sm font-medium text-slate-900 dark:text-white hover:bg-slate-300 dark:hover:bg-card focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-slate-50 dark:focus:ring-offset-slate-900 transition-colors"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-5 py-2.5 text-sm font-medium text-foreground hover:bg-secondary dark:hover:bg-card focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-slate-50 dark:focus:ring-offset-slate-900 transition-colors"
             >
               <LayoutDashboard className="h-4 w-4" />
               Volver al Dashboard
             </button>
           </div>
 
-          <p className="text-xs text-slate-500 dark:text-muted-foreground mt-2">
+          <p className="text-xs text-muted-foreground mt-2">
             CÓDIGO DE ERROR: {ERROR_CODE}
           </p>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="py-4 text-center text-sm text-slate-500 dark:text-muted-foreground border-t border-slate-200 dark:border-border/50">
+      <footer className="py-4 text-center text-sm text-muted-foreground border-t border-border">
         © 2024 RESTIFY Admin Panel. Todos los derechos reservados.
       </footer>
     </div>

@@ -38,30 +38,30 @@ export function CloseOrganizationDialog({
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-red-600 dark:text-red-400">
+          <DialogTitle className="flex items-center gap-2 text-destructive">
             <AlertTriangle className="h-5 w-5" />
             Cerrar organización
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
-          <p className="text-sm text-slate-600 dark:text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Esta acción cerrará tu organización y cerrará la sesión de todos sus usuarios.
             Podrás reactivarla dentro de los próximos 30 días; después se eliminará de forma
             permanente.
           </p>
 
-          <div className="rounded-lg border border-slate-200 dark:border-border bg-slate-50 dark:bg-card/50 px-4 py-3">
-            <p className="text-xs text-slate-500 dark:text-muted-foreground mb-1">
+          <div className="rounded-lg border border-border bg-muted px-4 py-3">
+            <p className="text-xs text-muted-foreground mb-1">
               Nombre de tu organización
             </p>
-            <p className="text-sm font-semibold text-slate-900 dark:text-white select-all break-words">
+            <p className="text-sm font-semibold text-foreground select-all break-words">
               {organizationName}
             </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirmationName" className="text-sm font-medium text-slate-700 dark:text-foreground">
+            <Label htmlFor="confirmationName" className="text-sm font-medium text-foreground">
               Escribe el nombre para confirmar
             </Label>
             <Input
@@ -83,7 +83,7 @@ export function CloseOrganizationDialog({
             type="button"
             onClick={onConfirm}
             disabled={!matches || isLoading}
-            className="bg-red-600 hover:bg-red-700 text-white"
+            className="bg-destructive hover:bg-destructive text-white"
           >
             {isLoading ? 'Cerrando...' : 'Cerrar organización'}
           </Button>

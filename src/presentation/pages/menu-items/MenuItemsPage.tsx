@@ -157,7 +157,7 @@ const MenuItemsPage: React.FC = () => {
   return (
     <MainLayout>
       <div className="flex flex-wrap justify-between items-center gap-4 px-4 py-2">
-        <h1 className="text-3xl lg:text-4xl font-black text-slate-800 dark:text-white leading-tight tracking-tight">Productos</h1>
+        <h1 className="text-3xl lg:text-4xl font-black text-foreground leading-tight tracking-tight">Productos</h1>
         <Button onClick={() => setIsCreateModalOpen(true)} className="flex items-center justify-center gap-2 min-w-[84px] cursor-pointer overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-sm hover:bg-primary/90 transition-colors">
           <Plus className="h-4 w-4" />
           <span className="truncate">Nuevo Producto</span>
@@ -188,7 +188,7 @@ const MenuItemsPage: React.FC = () => {
         open={deleteDialog.isOpen}
         onClose={deleteDialog.close}
         title="¿Eliminar producto?"
-        description={deleteDialog.data && (<>Estás a punto de eliminar el producto <strong className="text-slate-900 dark:text-white">{deleteDialog.data.name}</strong>.<br /><br />Esta acción no se puede deshacer.</>)}
+        description={deleteDialog.data && (<>Estás a punto de eliminar el producto <strong className="text-foreground">{deleteDialog.data.name}</strong>.<br /><br />Esta acción no se puede deshacer.</>)}
         confirmLabel="Eliminar"
         isLoading={isDeleting}
         onConfirm={handleConfirmDelete}

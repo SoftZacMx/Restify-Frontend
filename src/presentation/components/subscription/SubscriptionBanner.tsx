@@ -15,10 +15,10 @@ export const SubscriptionBanner = () => {
   // Banner amarillo: cancelación pendiente
   if (status.isActive && status.cancelAtPeriodEnd) {
     return (
-      <div className="mb-4 flex items-center justify-between rounded-lg border border-yellow-300 bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-700 px-4 py-3">
+      <div className="mb-4 flex items-center justify-between rounded-lg border border-apoyo bg-apoyo-suave px-4 py-3">
         <div className="flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
-          <span className="text-sm text-yellow-700 dark:text-yellow-300">
+          <AlertTriangle className="w-4 h-4 text-apoyo" />
+          <span className="text-sm text-apoyo-texto">
             Tu suscripción se cancelará en {status.daysRemaining} días.
           </span>
         </div>
@@ -27,7 +27,7 @@ export const SubscriptionBanner = () => {
             size="sm"
             variant="outline"
             disabled={isReactivating}
-            className="text-xs h-7 border-yellow-400 text-yellow-700 hover:bg-yellow-100 dark:text-yellow-300 dark:hover:bg-yellow-900/40"
+            className="text-xs h-7 border-apoyo text-apoyo-texto hover:bg-apoyo-suave"
             onClick={async () => {
               setIsReactivating(true);
               try {
@@ -43,7 +43,7 @@ export const SubscriptionBanner = () => {
             {isReactivating ? 'Reactivando...' : 'Reactivar'}
           </Button>
           <button onClick={() => setDismissed(true)}>
-            <X className="w-4 h-4 text-yellow-500" />
+            <X className="w-4 h-4 text-apoyo" />
           </button>
         </div>
       </div>
@@ -53,15 +53,15 @@ export const SubscriptionBanner = () => {
   // Banner rojo: pago fallido
   if (status.status === 'PAST_DUE') {
     return (
-      <div className="mb-4 flex items-center justify-between rounded-lg border border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-700 px-4 py-3">
+      <div className="mb-4 flex items-center justify-between rounded-lg border border-destructive bg-destructive-suave px-4 py-3">
         <div className="flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400" />
-          <span className="text-sm text-red-700 dark:text-red-300">
+          <AlertTriangle className="w-4 h-4 text-destructive" />
+          <span className="text-sm text-destructive-texto">
             Tu pago falló. Tienes {status.daysRemaining} días para actualizar tu método de pago.
           </span>
         </div>
         <button onClick={() => setDismissed(true)}>
-          <X className="w-4 h-4 text-red-500" />
+          <X className="w-4 h-4 text-destructive" />
         </button>
       </div>
     );

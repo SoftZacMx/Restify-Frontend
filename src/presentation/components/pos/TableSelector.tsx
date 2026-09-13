@@ -46,21 +46,21 @@ export const TableSelector: React.FC<TableSelectorProps> = ({
               'flex flex-col items-center justify-center gap-1 h-24 rounded-xl border-2 relative transition-colors',
               isSelected
                 ? 'bg-primary border-primary text-white'
-                : 'border-slate-200 dark:border-border bg-slate-50 dark:bg-card/50 text-slate-900 dark:text-white hover:border-primary/50',
+                : 'border-border bg-muted text-foreground hover:border-primary/50',
               (!isAvailable && !isSelected) && 'opacity-60 cursor-not-allowed'
             )}
           >
             {/* Indicador: check seleccionada, verde libre, rojo ocupada */}
             <div className="absolute top-2 right-2">
               {isSelected ? (
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-card/20">
                   <Check className="h-3.5 w-3.5" />
                 </div>
               ) : (
                 <div
                   className={cn(
                     'w-3 h-3 rounded-full',
-                    isAvailable ? 'bg-green-500' : 'bg-red-500'
+                    isAvailable ? 'bg-fresco' : 'bg-destructive'
                   )}
                   title={isAvailable ? 'Libre' : 'Ocupada'}
                 />

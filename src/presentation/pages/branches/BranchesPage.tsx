@@ -232,7 +232,7 @@ const BranchesPage: React.FC = () => {
       <section className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Sucursales</h1>
+            <h1 className="text-3xl font-bold text-foreground">Sucursales</h1>
             <p className="text-sm text-muted-foreground">
               Gestión y control centralizado de unidades operativas
             </p>
@@ -338,7 +338,7 @@ const BranchesPage: React.FC = () => {
             disableDialog.data && (
               <>
                 Estás a punto de deshabilitar{' '}
-                <strong className="text-slate-900 dark:text-white">{disableDialog.data.name}</strong>.
+                <strong className="text-foreground">{disableDialog.data.name}</strong>.
                 <br />
                 <br />
                 La sucursal dejará de operar y su menú público dejará de estar disponible. Podrás
@@ -361,7 +361,7 @@ const BranchesPage: React.FC = () => {
             enableDialog.data && (
               <>
                 Estás a punto de habilitar{' '}
-                <strong className="text-slate-900 dark:text-white">{enableDialog.data.name}</strong>.
+                <strong className="text-foreground">{enableDialog.data.name}</strong>.
                 <br />
                 <br />
                 La sucursal volverá a operar y su menú público estará disponible de nuevo.

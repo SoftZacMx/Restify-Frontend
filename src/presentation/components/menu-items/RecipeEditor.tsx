@@ -220,14 +220,14 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
 
   if (isDirectItem) {
     return (
-      <section className="rounded-xl border border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-900/20 p-6">
+      <section className="rounded-xl border border-apoyo bg-apoyo-suave p-6">
         <div className="flex items-start gap-3">
-          <ChefHat className="h-5 w-5 text-yellow-700 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+          <ChefHat className="h-5 w-5 text-apoyo-texto flex-shrink-0 mt-0.5" />
           <div>
-            <h3 className="text-base font-semibold text-yellow-900 dark:text-yellow-200">
+            <h3 className="text-base font-semibold text-apoyo-texto">
               Este producto es un ítem directo
             </h3>
-            <p className="text-sm text-yellow-800 dark:text-yellow-300 mt-1">
+            <p className="text-sm text-apoyo-texto mt-1">
               No puede tener receta porque ya está vinculado a un producto único.
             </p>
           </div>
@@ -248,15 +248,15 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
     : [];
 
   return (
-    <section className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark p-6">
+    <section className="rounded-xl border border-border bg-card p-6">
       <header className="flex items-start justify-between gap-3 mb-5">
         <div className="flex items-center gap-3">
           <div className="rounded-lg bg-primary/10 p-2 text-primary">
             <ChefHat className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Receta</h3>
-            <p className="text-sm text-slate-500 dark:text-muted-foreground">
+            <h3 className="text-lg font-semibold text-foreground">Receta</h3>
+            <p className="text-sm text-muted-foreground">
               {isExtra
                 ? 'Ingredientes que se descuentan del stock cuando este extra se vende junto con un producto.'
                 : 'Ingredientes que se descuentan del stock al vender este producto.'}
@@ -278,30 +278,30 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
       </header>
 
       {isLoadingRecipe || isLoadingProducts ? (
-        <div className="text-center text-slate-500 dark:text-muted-foreground py-6">
+        <div className="text-center text-muted-foreground py-6">
           Cargando receta...
         </div>
       ) : (
         <>
           {drafts.length === 0 ? (
-            <div className="text-center text-slate-500 dark:text-muted-foreground py-8 border border-dashed border-slate-200 dark:border-border rounded-lg">
+            <div className="text-center text-muted-foreground py-8 border border-dashed border-border rounded-lg">
               Este producto no tiene receta. Agregá ingredientes para empezar a trackear.
             </div>
           ) : (
             <div className="overflow-x-auto -mx-2">
               <div className="px-2">
                 {/* Cabecera de tabla */}
-                <div className="grid grid-cols-12 gap-3 px-3 pb-2 border-b border-slate-200 dark:border-border">
-                  <div className="col-span-12 md:col-span-6 text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-muted-foreground">
+                <div className="grid grid-cols-12 gap-3 px-3 pb-2 border-b border-border">
+                  <div className="col-span-12 md:col-span-6 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                     Ingrediente
                   </div>
-                  <div className="col-span-4 md:col-span-2 text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-muted-foreground">
+                  <div className="col-span-4 md:col-span-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                     Cantidad
                   </div>
-                  <div className="col-span-4 md:col-span-3 text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-muted-foreground">
+                  <div className="col-span-4 md:col-span-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                     Unidad
                   </div>
-                  <div className="col-span-4 md:col-span-1 text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-muted-foreground text-right">
+                  <div className="col-span-4 md:col-span-1 text-xs font-medium uppercase tracking-wider text-muted-foreground text-right">
                     Acciones
                   </div>
                 </div>
@@ -313,7 +313,7 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
                     return (
                       <div
                         key={draft.rowId}
-                        className="grid grid-cols-12 gap-3 px-3 py-3 items-center border-b border-slate-100 dark:border-border/60 hover:bg-slate-50 dark:hover:bg-card/30 transition-colors"
+                        className="grid grid-cols-12 gap-3 px-3 py-3 items-center border-b border-border hover:bg-muted dark:hover:bg-card/30 transition-colors"
                       >
                         {/* Ingrediente con avatar */}
                         <div className="col-span-12 md:col-span-6">
@@ -322,7 +322,7 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
                             onClick={() => setPickerRowId(draft.rowId)}
                             className={cn(
                               'w-full flex items-center gap-3 text-left rounded-lg p-1 transition-colors',
-                              'hover:bg-slate-100 dark:hover:bg-card/50'
+                              'hover:bg-muted dark:hover:bg-card/50'
                             )}
                           >
                             <div
@@ -337,8 +337,8 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
                               className={cn(
                                 'truncate text-sm font-medium',
                                 draft.productName
-                                  ? 'text-slate-900 dark:text-white'
-                                  : 'text-slate-400 dark:text-muted-foreground'
+                                  ? 'text-foreground'
+                                  : 'text-muted-foreground'
                               )}
                             >
                               {draft.productName || 'Elegir producto...'}
@@ -384,7 +384,7 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
                               </SelectContent>
                             </Select>
                           ) : (
-                            <div className="h-10 flex items-center px-3 rounded-lg border border-slate-200 dark:border-border bg-slate-50 dark:bg-card/50 text-sm text-slate-600 dark:text-foreground">
+                            <div className="h-10 flex items-center px-3 rounded-lg border border-border bg-muted text-sm text-muted-foreground">
                               {draft.unit
                                 ? getUnitName(draft.unit)
                                 : draft.productUnit
@@ -415,11 +415,11 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
           )}
 
           {/* Footer con guardar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 mt-5 pt-4 border-t border-slate-100 dark:border-border/60">
+          <div className="flex flex-wrap items-center justify-between gap-3 mt-5 pt-4 border-t border-border">
             {!validation.valid && validation.message ? (
               <span className="text-sm text-destructive">{validation.message}</span>
             ) : (
-              <span className="text-xs text-slate-400 dark:text-muted-foreground">
+              <span className="text-xs text-muted-foreground">
                 {drafts.length} {drafts.length === 1 ? 'ingrediente' : 'ingredientes'}
               </span>
             )}

@@ -49,7 +49,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-muted flex flex-col items-center justify-center p-4">
       {/* Theme Toggle - Top Right */}
       <div className="absolute top-4 right-4">
         <ThemeToggle variant="icon" />
@@ -59,19 +59,19 @@ export default function LoginPage() {
       <div className="mb-8 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
           <UtensilsCrossed className="h-8 w-8 text-primary" />
-          <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
+          <span className="text-2xl font-serif font-bold tracking-wide text-foreground">
             RESTIFY
           </span>
         </div>
       </div>
 
       {/* Login Card */}
-      <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-border bg-white dark:bg-card">
+      <Card className="w-full max-w-[450px] shadow-lg border-border bg-card">
         <CardHeader className="space-y-1 text-center pb-8 pt-10">
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white font-serif">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground font-serif">
             Bienvenido de Nuevo
           </h2>
-          <p className="text-sm text-slate-500 dark:text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Inicia sesión para gestionar tu negocio.
           </p>
         </CardHeader>
@@ -80,7 +80,7 @@ export default function LoginPage() {
           {/* Error Message */}
           {error && (
             <div
-              className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg relative"
+              className="bg-destructive-suave border border-destructive text-destructive-texto px-4 py-3 rounded-lg relative"
               role="alert"
             >
               <strong className="font-bold">Error:</strong>
@@ -91,7 +91,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Email Field */}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-slate-700 dark:text-foreground">
+              <Label htmlFor="email" className="text-sm font-medium text-foreground">
                 Email
               </Label>
               <Input
@@ -99,7 +99,7 @@ export default function LoginPage() {
                 {...register('email')}
                 placeholder="correo@ejemplo.com"
                 type="email"
-                className={errors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}
+                className={errors.email ? 'border-destructive focus-visible:ring-destructive' : ''}
               />
               {errors.email && (
                 <span className="text-destructive text-sm">{errors.email.message}</span>
@@ -108,7 +108,7 @@ export default function LoginPage() {
 
             {/* Password Field */}
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium text-slate-700 dark:text-foreground">
+              <Label htmlFor="password" className="text-sm font-medium text-foreground">
                 Contraseña
               </Label>
               <div className="relative">
@@ -117,12 +117,12 @@ export default function LoginPage() {
                   {...register('password')}
                   placeholder="Introduce tu contraseña"
                   type={showPassword ? 'text' : 'password'}
-                  className={`pr-10 ${errors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                  className={`pr-10 ${errors.password ? 'border-destructive focus-visible:ring-destructive' : ''}`}
                 />
                 <button
                   type="button"
                   onClick={togglePasswordVisibility}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-muted-foreground dark:hover:text-foreground focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground dark:hover:text-foreground focus:outline-none"
                   aria-label="Toggle password visibility"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -166,7 +166,7 @@ export default function LoginPage() {
             <div className="text-center">
               <Link
                 to="/auth/reactivate-organization"
-                className="text-sm text-slate-500 hover:text-slate-700 dark:text-muted-foreground dark:hover:text-foreground hover:underline font-medium"
+                className="text-sm text-muted-foreground hover:text-foreground dark:hover:text-foreground hover:underline font-medium"
               >
                 ¿Tu organización está cerrada? Reactívala
               </Link>

@@ -28,11 +28,11 @@ export function PasswordRequirements({ password, requireSpecialChar = true }: Pa
         return (
           <li key={req.label} className="flex items-center gap-2">
             {met ? (
-              <Check className="h-3.5 w-3.5 text-green-500" />
+              <Check className="h-3.5 w-3.5 text-fresco" />
             ) : (
-              <Circle className="h-3.5 w-3.5 text-slate-300 dark:text-muted-foreground" />
+              <Circle className="h-3.5 w-3.5 text-muted-foreground" />
             )}
-            <span className={`text-xs ${met ? 'text-green-600 dark:text-green-400' : 'text-slate-400 dark:text-muted-foreground'}`}>
+            <span className={`text-xs ${met ? 'text-fresco' : 'text-muted-foreground'}`}>
               {req.label}
             </span>
           </li>

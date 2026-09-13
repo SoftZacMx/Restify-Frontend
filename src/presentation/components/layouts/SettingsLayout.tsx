@@ -63,17 +63,17 @@ export const SettingsLayout: React.FC = () => {
         <div className="flex flex-wrap gap-2 mb-4">
           <Link
             to="/settings/company"
-            className="text-slate-500 dark:text-muted-foreground text-sm font-medium hover:text-primary transition-colors"
+            className="text-muted-foreground text-sm font-medium hover:text-primary transition-colors"
           >
             Configuración
           </Link>
-          <span className="text-slate-500 dark:text-muted-foreground text-sm font-medium">/</span>
-          <span className="text-slate-800 dark:text-foreground text-sm font-medium">{breadcrumbLabel}</span>
+          <span className="text-muted-foreground text-sm font-medium">/</span>
+          <span className="text-foreground text-sm font-medium">{breadcrumbLabel}</span>
         </div>
 
-        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white mb-2">{pageTitle}</h1>
+        <h1 className="text-2xl font-semibold text-foreground mb-2">{pageTitle}</h1>
         {pageDescription && (
-          <p className="text-sm text-slate-500 dark:text-muted-foreground mb-8">{pageDescription}</p>
+          <p className="text-sm text-muted-foreground mb-8">{pageDescription}</p>
         )}
         {!pageDescription && <div className="mb-8" />}
 
@@ -95,7 +95,7 @@ export const SettingsLayout: React.FC = () => {
                         'flex items-center gap-3 rounded-r-lg border-l-2 px-3 py-2.5 text-sm transition-colors',
                         isActive
                           ? 'border-primary bg-primary/5 font-semibold text-primary dark:bg-primary/10'
-                          : 'border-transparent font-medium text-slate-600 dark:text-muted-foreground hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 dark:hover:border-border dark:hover:bg-card dark:hover:text-foreground'
+                          : 'border-transparent font-medium text-muted-foreground hover:border-border hover:bg-muted hover:text-foreground dark:hover:border-border dark:hover:bg-card dark:hover:text-foreground'
                       )}
                     >
                       <Icon className="h-5 w-5 shrink-0" />

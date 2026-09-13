@@ -518,7 +518,7 @@ const PosPage = () => {
       <MainLayout>
         <div className="flex flex-col items-center justify-center min-h-[60vh]">
           <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-          <p className="text-slate-600 dark:text-foreground text-lg">Cargando orden...</p>
+          <p className="text-muted-foreground text-lg">Cargando orden...</p>
         </div>
       </MainLayout>
     );
@@ -529,13 +529,13 @@ const PosPage = () => {
     return (
       <MainLayout>
         <div className="flex flex-col items-center justify-center min-h-[60vh]">
-          <div className="bg-red-50 dark:bg-red-900/20 rounded-full p-4 mb-4">
-            <Receipt className="h-12 w-12 text-red-500" />
+          <div className="bg-destructive-suave rounded-full p-4 mb-4">
+            <Receipt className="h-12 w-12 text-destructive" />
           </div>
-          <p className="text-red-600 dark:text-red-400 font-medium text-lg mb-2">
+          <p className="text-destructive font-medium text-lg mb-2">
             Error al cargar la orden
           </p>
-          <p className="text-slate-500 dark:text-muted-foreground mb-6">{loadOrderError}</p>
+          <p className="text-muted-foreground mb-6">{loadOrderError}</p>
           <div className="flex gap-3">
             <Button variant="outline" onClick={() => navigate('/orders')}>
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -580,7 +580,7 @@ const PosPage = () => {
               : 'Guardando orden...'
         }
       />
-      <div className="space-y-6 p-6 bg-slate-50 dark:bg-background min-h-screen">
+      <div className="space-y-6 p-6 bg-muted min-h-screen">
         {/* Banner de orden cargada */}
         {loadedOrder && (
           <PosOrderBanner order={loadedOrder} onBack={() => navigate('/orders')} />
@@ -706,21 +706,21 @@ const PosPage = () => {
                 onClick={() => setIsCartSheetOpen(false)}
               />
               {/* Panel */}
-              <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] bg-white dark:bg-background rounded-t-2xl shadow-2xl flex flex-col animate-in slide-in-from-bottom duration-300">
+              <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] bg-card rounded-t-2xl shadow-2xl flex flex-col animate-in slide-in-from-bottom duration-300">
                 {/* Handle + close */}
-                <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-slate-200 dark:border-border shrink-0">
+                <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-border shrink-0">
                   <div className="flex items-center gap-2">
                     <ShoppingCart className="h-5 w-5 text-primary" />
-                    <span className="font-semibold text-slate-900 dark:text-white">
+                    <span className="font-semibold text-foreground">
                       Carrito ({cartItems.length})
                     </span>
                   </div>
                   <button
                     type="button"
                     onClick={() => setIsCartSheetOpen(false)}
-                    className="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-card transition-colors"
+                    className="p-1 rounded-full hover:bg-muted dark:hover:bg-card transition-colors"
                   >
-                    <X className="h-5 w-5 text-slate-500" />
+                    <X className="h-5 w-5 text-muted-foreground" />
                   </button>
                 </div>
                 {/* Contenido del sidebar dentro del sheet */}
@@ -785,7 +785,7 @@ const PosPage = () => {
           <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
             <Button
               variant="outline"
-              className="bg-white dark:bg-card shadow-lg"
+              className="bg-card shadow-lg"
               onClick={() => {
                 cancelQrPayment();
                 showErrorToast('Cancelado', 'Se canceló la espera del pago QR');

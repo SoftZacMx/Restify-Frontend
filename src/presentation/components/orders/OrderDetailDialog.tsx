@@ -117,43 +117,43 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
         </DialogHeader>
 
         {isLoading ? (
-          <div className="flex items-center justify-center py-12 text-slate-500 dark:text-muted-foreground">
+          <div className="flex items-center justify-center py-12 text-muted-foreground">
             <Loader2 className="h-8 w-8 animate-spin mr-2" />
             Cargando orden...
           </div>
         ) : !order ? (
-          <p className="text-sm text-slate-500 dark:text-muted-foreground py-4">No se pudo cargar la orden.</p>
+          <p className="text-sm text-muted-foreground py-4">No se pudo cargar la orden.</p>
         ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* ===== LEFT COLUMN: Order Details + Timeline ===== */}
           <div className="space-y-4">
             {/* Order info card */}
-            <div className="bg-slate-50 dark:bg-card rounded-lg p-4 space-y-3">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-muted-foreground">
+            <div className="bg-muted rounded-lg p-4 space-y-3">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Detalles
               </h4>
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-foreground">
-                  <Clock className="h-4 w-4 text-slate-400 shrink-0" />
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Clock className="h-4 w-4 text-muted-foreground shrink-0" />
                   <span>{formatOrderDateTime(order.date)}</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-foreground">
-                  <MapPin className="h-4 w-4 text-slate-400 shrink-0" />
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <MapPin className="h-4 w-4 text-muted-foreground shrink-0" />
                   <span>{getOrderOriginLabel(order)}</span>
                 </div>
                 {order.table && (
-                  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-foreground">
-                    <Package className="h-4 w-4 text-slate-400 shrink-0" />
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Package className="h-4 w-4 text-muted-foreground shrink-0" />
                     <span>Ubicación {order.table.name}</span>
                   </div>
                 )}
-                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-foreground">
-                  <CreditCard className="h-4 w-4 text-slate-400 shrink-0" />
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CreditCard className="h-4 w-4 text-muted-foreground shrink-0" />
                   <span>{paymentIcon} {paymentMethod}</span>
                 </div>
                 {order.client && (
-                  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-foreground">
-                    <User className="h-4 w-4 text-slate-400 shrink-0" />
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <User className="h-4 w-4 text-muted-foreground shrink-0" />
                     <span>{order.client}</span>
                   </div>
                 )}
@@ -162,19 +162,19 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
 
             {/* Note */}
             {order.note && (
-              <div className="bg-slate-50 dark:bg-card rounded-lg p-4">
+              <div className="bg-muted rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-1">
-                  <FileText className="h-4 w-4 text-slate-400" />
-                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-muted-foreground">Nota</span>
+                  <FileText className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Nota</span>
                 </div>
-                <p className="text-sm text-slate-600 dark:text-foreground">{order.note}</p>
+                <p className="text-sm text-muted-foreground">{order.note}</p>
               </div>
             )}
 
             {/* Status Timeline (online orders) */}
             {isOnline && order.deliveryStatus && (
-              <div className="bg-slate-50 dark:bg-card rounded-lg p-4">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-muted-foreground mb-3">
+              <div className="bg-muted rounded-lg p-4">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
                   Estado
                 </h4>
                 <div className="space-y-0">
@@ -190,10 +190,10 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
                           <div
                             className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
                               isCompleted
-                                ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400'
+                                ? 'bg-fresco-suave text-fresco'
                                 : isCurrent
                                   ? 'bg-primary text-primary-foreground'
-                                  : 'bg-slate-200 text-slate-400 dark:bg-card dark:text-muted-foreground'
+                                  : 'bg-secondary text-muted-foreground dark:bg-card dark:text-muted-foreground'
                             }`}
                           >
                             {step.icon}
@@ -201,7 +201,7 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
                           {!isLast && (
                             <div
                               className={`w-0.5 h-5 my-0.5 ${
-                                isCompleted ? 'bg-green-300 dark:bg-green-700' : 'bg-slate-200 dark:bg-card'
+                                isCompleted ? 'bg-fresco-suave' : 'bg-secondary'
                               }`}
                             />
                           )}
@@ -210,10 +210,10 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
                           <p
                             className={`text-xs font-medium ${
                               isCompleted
-                                ? 'text-green-600 dark:text-green-400'
+                                ? 'text-fresco'
                                 : isCurrent
-                                  ? 'text-slate-900 dark:text-white font-semibold'
-                                  : 'text-slate-400 dark:text-muted-foreground'
+                                  ? 'text-foreground font-semibold'
+                                  : 'text-muted-foreground'
                             }`}
                           >
                             {step.label}
@@ -228,19 +228,19 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
 
             {/* Non-online order status */}
             {!isOnline && (
-              <div className="bg-slate-50 dark:bg-card rounded-lg p-4 space-y-2">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-muted-foreground mb-2">
+              <div className="bg-muted rounded-lg p-4 space-y-2">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
                   Estado
                 </h4>
                 <div className="flex items-center gap-2">
-                  <span className={`w-2.5 h-2.5 rounded-full ${order.status ? 'bg-green-500' : 'bg-slate-300'}`} />
-                  <span className="text-sm text-slate-600 dark:text-foreground">
+                  <span className={`w-2.5 h-2.5 rounded-full ${order.status ? 'bg-fresco' : 'bg-secondary'}`} />
+                  <span className="text-sm text-muted-foreground">
                     {order.status ? 'Pagada' : 'Pendiente de pago'}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`w-2.5 h-2.5 rounded-full ${order.delivered ? 'bg-green-500' : 'bg-slate-300'}`} />
-                  <span className="text-sm text-slate-600 dark:text-foreground">
+                  <span className={`w-2.5 h-2.5 rounded-full ${order.delivered ? 'bg-fresco' : 'bg-secondary'}`} />
+                  <span className="text-sm text-muted-foreground">
                     {order.delivered ? 'Entregada' : 'No entregada'}
                   </span>
                 </div>
@@ -251,38 +251,38 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
           {/* ===== CENTER COLUMN: Items ===== */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-muted-foreground flex items-center gap-2">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                 <Package className="h-4 w-4" />
                 Items ({order.orderItems?.length || 0})
               </h4>
             </div>
             <div className="space-y-2">
               {!order.orderItems?.length ? (
-                <p className="text-sm text-slate-500 dark:text-muted-foreground py-4 text-center">Sin items</p>
+                <p className="text-sm text-muted-foreground py-4 text-center">Sin items</p>
               ) : order.orderItems.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-start gap-3 bg-slate-50 dark:bg-card rounded-lg p-3"
+                  className="flex items-start gap-3 bg-muted rounded-lg p-3"
                 >
                   {/* Icon placeholder */}
-                  <div className="h-10 w-10 shrink-0 rounded-lg bg-slate-200 dark:bg-card flex items-center justify-center">
-                    <UtensilsCrossed className="h-5 w-5 text-slate-400" />
+                  <div className="h-10 w-10 shrink-0 rounded-lg bg-secondary flex items-center justify-center">
+                    <UtensilsCrossed className="h-5 w-5 text-muted-foreground" />
                   </div>
                   {/* Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-sm font-medium text-slate-900 dark:text-white truncate">
+                      <span className="text-sm font-medium text-foreground truncate">
                         {item.menuItem?.name || item.product?.name || 'Producto'}
                       </span>
-                      <span className="text-sm font-semibold text-slate-900 dark:text-white shrink-0">
+                      <span className="text-sm font-semibold text-foreground shrink-0">
                         {formatCurrency(item.price * item.quantity)}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-500 dark:text-muted-foreground">
+                    <p className="text-xs text-muted-foreground">
                       x{item.quantity} · {formatCurrency(item.price)} c/u
                     </p>
                     {item.note && (
-                      <p className="text-xs text-slate-400 mt-1 italic">{item.note}</p>
+                      <p className="text-xs text-muted-foreground mt-1 italic">{item.note}</p>
                     )}
                     {item.extras && item.extras.length > 0 && (
                       <div className="mt-1.5 flex flex-wrap gap-1">
@@ -302,28 +302,28 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
           {/* ===== RIGHT COLUMN: Summary + Customer Info + Actions ===== */}
           <div className="space-y-4">
             {/* Account Summary */}
-            <div className="bg-slate-50 dark:bg-card rounded-lg p-4 space-y-2">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-muted-foreground mb-2">
+            <div className="bg-muted rounded-lg p-4 space-y-2">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
                 Resumen
               </h4>
               <div className="flex justify-between text-sm">
-                <span className="text-slate-500 dark:text-muted-foreground">Subtotal</span>
-                <span className="text-slate-900 dark:text-white">{formatCurrency(order.subtotal)}</span>
+                <span className="text-muted-foreground">Subtotal</span>
+                <span className="text-foreground">{formatCurrency(order.subtotal)}</span>
               </div>
               {order.iva > 0 && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500 dark:text-muted-foreground">IVA</span>
-                  <span className="text-slate-900 dark:text-white">{formatCurrency(order.iva)}</span>
+                  <span className="text-muted-foreground">IVA</span>
+                  <span className="text-foreground">{formatCurrency(order.iva)}</span>
                 </div>
               )}
               {order.tip > 0 && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500 dark:text-muted-foreground">Propina</span>
-                  <span className="text-slate-900 dark:text-white">{formatCurrency(order.tip)}</span>
+                  <span className="text-muted-foreground">Propina</span>
+                  <span className="text-foreground">{formatCurrency(order.tip)}</span>
                 </div>
               )}
-              <div className="flex justify-between items-center pt-2 border-t border-slate-200 dark:border-border">
-                <span className="text-base font-bold text-slate-900 dark:text-white">Total</span>
+              <div className="flex justify-between items-center pt-2 border-t border-border">
+                <span className="text-base font-bold text-foreground">Total</span>
                 <span className="text-xl font-bold text-primary">{formatCurrency(order.total)}</span>
               </div>
             </div>
@@ -331,39 +331,39 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
             {/* Customer Info (online orders, collapsible) */}
             {isOnline && (order.customerName || order.customerPhone) && (
               <Collapsible>
-                <div className="bg-slate-50 dark:bg-card rounded-lg overflow-hidden">
-                  <CollapsibleTrigger className="flex items-center justify-between w-full p-4 text-left hover:bg-slate-100 dark:hover:bg-card/50 transition-colors">
+                <div className="bg-muted rounded-lg overflow-hidden">
+                  <CollapsibleTrigger className="flex items-center justify-between w-full p-4 text-left hover:bg-muted dark:hover:bg-card/50 transition-colors">
                     <div className="flex items-center gap-2">
-                      <User className="h-4 w-4 text-slate-500 dark:text-muted-foreground" />
-                      <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-muted-foreground">
+                      <User className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Datos del cliente
                       </span>
                     </div>
-                    <ChevronDown className="h-4 w-4 text-slate-400" />
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <div className="px-4 pb-4 space-y-2">
                       {order.customerName && (
-                        <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-foreground">
-                          <User className="h-4 w-4 text-slate-400" />
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <User className="h-4 w-4 text-muted-foreground" />
                           <span>{order.customerName}</span>
                         </div>
                       )}
                       {order.customerPhone && (
-                        <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-foreground">
-                          <Phone className="h-4 w-4 text-slate-400" />
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Phone className="h-4 w-4 text-muted-foreground" />
                           <span>{order.customerPhone}</span>
                         </div>
                       )}
                       {order.deliveryAddress && (
-                        <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-foreground">
-                          <MapPin className="h-4 w-4 text-slate-400" />
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <MapPin className="h-4 w-4 text-muted-foreground" />
                           <span>{order.deliveryAddress}</span>
                         </div>
                       )}
                       {order.scheduledAt && (
-                        <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-foreground">
-                          <Clock className="h-4 w-4 text-slate-400" />
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Clock className="h-4 w-4 text-muted-foreground" />
                           <span>
                             {new Date(order.scheduledAt).toLocaleString('es-MX', {
                               dateStyle: 'medium',
@@ -396,8 +396,8 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
 
             {/* Delivery status buttons (online, paid, not delivered) */}
             {isOnline && order.status && !order.delivered && onUpdateDeliveryStatus && (
-              <div className="bg-slate-50 dark:bg-card rounded-lg p-4 space-y-3">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-muted-foreground">
+              <div className="bg-muted rounded-lg p-4 space-y-3">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Actualizar estado
                 </h4>
                 <div className="grid grid-cols-2 gap-2">
@@ -433,7 +433,7 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
                   <Button
                     size="sm"
                     onClick={() => onUpdateDeliveryStatus(order.id, 'DELIVERED')}
-                    className="bg-green-600 hover:bg-green-700 text-white text-xs"
+                    className="bg-fresco hover:bg-fresco text-white text-xs"
                   >
                     <CheckCircle className="h-3.5 w-3.5 mr-1" />
                     Entregado

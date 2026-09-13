@@ -74,15 +74,15 @@ const SubscriptionSuccessPage = () => {
   // Loading
   if (isVerifying) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center px-4">
+      <div className="min-h-screen bg-muted flex flex-col items-center justify-center px-4">
         <div className="text-center">
           <div className="flex justify-center mb-6">
             <Loader2 className="w-12 h-12 text-primary animate-spin" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+          <h1 className="text-2xl font-bold text-foreground mb-2">
             Verificando pago...
           </h1>
-          <p className="text-slate-500 dark:text-muted-foreground">
+          <p className="text-muted-foreground">
             Estamos confirmando tu suscripción con Stripe.
           </p>
         </div>
@@ -93,17 +93,17 @@ const SubscriptionSuccessPage = () => {
   // Error
   if (verifyError) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center px-4">
+      <div className="min-h-screen bg-muted flex flex-col items-center justify-center px-4">
         <div className="text-center">
           <div className="flex justify-center mb-6">
-            <div className="w-20 h-20 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
-              <AlertCircle className="w-10 h-10 text-amber-500" />
+            <div className="w-20 h-20 rounded-full bg-apoyo-suave flex items-center justify-center">
+              <AlertCircle className="w-10 h-10 text-apoyo" />
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+          <h1 className="text-2xl font-bold text-foreground mb-2">
             No se pudo verificar el pago
           </h1>
-          <p className="text-slate-500 dark:text-muted-foreground mb-6">
+          <p className="text-muted-foreground mb-6">
             Tu pago fue procesado pero no pudimos confirmar la suscripción. Intenta de nuevo o contacta soporte.
           </p>
           <div className="flex gap-3 justify-center">
@@ -121,18 +121,18 @@ const SubscriptionSuccessPage = () => {
 
   // Success
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen bg-muted flex flex-col items-center justify-center px-4">
       <div className="text-center">
         <div className="flex justify-center mb-6">
-          <div className="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-            <CheckCircle className="w-10 h-10 text-green-500" />
+          <div className="w-20 h-20 rounded-full bg-fresco-suave flex items-center justify-center">
+            <CheckCircle className="w-10 h-10 text-fresco" />
           </div>
         </div>
 
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
+        <h1 className="text-3xl font-bold text-foreground mb-2">
           Pago exitoso
         </h1>
-        <p className="text-slate-500 dark:text-muted-foreground mb-8">
+        <p className="text-muted-foreground mb-8">
           Tu suscripción está activa. Redirigiendo en {countdown}...
         </p>
 

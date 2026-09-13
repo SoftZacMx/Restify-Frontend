@@ -26,7 +26,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
             pillBase,
             selectedCategoryId === null
               ? 'bg-primary/15 text-primary dark:bg-primary/20 dark:text-primary'
-              : 'text-slate-500 dark:text-muted-foreground hover:bg-slate-100 dark:hover:bg-card/50 hover:text-slate-700 dark:hover:text-foreground'
+              : 'text-muted-foreground hover:bg-muted dark:hover:bg-card/50 hover:text-foreground dark:hover:text-foreground'
           )}
         >
           Todas
@@ -43,7 +43,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
                 pillBase,
                 isSelected
                   ? 'bg-primary/15 text-primary dark:bg-primary/20 dark:text-primary'
-                  : 'text-slate-500 dark:text-muted-foreground hover:bg-slate-100 dark:hover:bg-card/50 hover:text-slate-700 dark:hover:text-foreground'
+                  : 'text-muted-foreground hover:bg-muted dark:hover:bg-card/50 hover:text-foreground dark:hover:text-foreground'
               )}
             >
               {category.icon && <span className="text-base opacity-90">{category.icon}</span>}

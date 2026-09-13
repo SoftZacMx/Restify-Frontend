@@ -40,10 +40,10 @@ export const ReportFilters: React.FC<ReportFiltersProps> = ({
   const reportTypes: ReportType[] = ['CASH_FLOW', 'SALES_PERFORMANCE', 'EXPENSE_ANALYSIS'];
 
   return (
-    <div className="px-4 py-3 border-b border-slate-200 dark:border-border bg-gradient-to-r from-slate-50/80 to-transparent dark:from-card/30 dark:to-transparent">
+    <div className="px-4 py-3 border-b border-border bg-gradient-to-r from-muted/80 to-transparent dark:from-card/30 dark:to-transparent">
       <div className="flex flex-wrap items-end gap-4">
         <div className="flex flex-col gap-2 min-w-[200px]">
-          <Label className="flex items-center gap-2 text-slate-600 dark:text-muted-foreground">
+          <Label className="flex items-center gap-2 text-muted-foreground">
             <span className="rounded-md bg-primary/10 p-1">
               <BarChart3 className="h-4 w-4 text-primary" />
             </span>
@@ -53,7 +53,7 @@ export const ReportFilters: React.FC<ReportFiltersProps> = ({
             value={filters.type}
             onValueChange={(value) => onFiltersChange({ ...filters, type: value as ReportType })}
           >
-            <SelectTrigger className="rounded-lg border-slate-200 dark:border-border bg-white dark:bg-card/80 shadow-sm">
+            <SelectTrigger className="rounded-lg border-border bg-card shadow-sm">
               <SelectValue placeholder="Seleccionar tipo de reporte">
                 {filters.type ? REPORT_TYPE_LABELS[filters.type] : null}
               </SelectValue>
@@ -68,24 +68,24 @@ export const ReportFilters: React.FC<ReportFiltersProps> = ({
           </Select>
         </div>
         <div className="flex flex-col gap-2 min-w-[140px]">
-          <Label className="flex items-center gap-2 text-slate-600 dark:text-muted-foreground">
-            <Calendar className="h-4 w-4 text-slate-500" />
+          <Label className="flex items-center gap-2 text-muted-foreground">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
             Desde
           </Label>
           <Input
             type="date"
             value={filters.dateFrom}
             onChange={(e) => onFiltersChange({ ...filters, dateFrom: e.target.value })}
-            className="rounded-lg border-slate-200 dark:border-border bg-white dark:bg-card/80 shadow-sm"
+            className="rounded-lg border-border bg-card shadow-sm"
           />
         </div>
         <div className="flex flex-col gap-2 min-w-[140px]">
-          <Label className="text-slate-600 dark:text-muted-foreground">Hasta</Label>
+          <Label className="text-muted-foreground">Hasta</Label>
           <Input
             type="date"
             value={filters.dateTo}
             onChange={(e) => onFiltersChange({ ...filters, dateTo: e.target.value })}
-            className="rounded-lg border-slate-200 dark:border-border bg-white dark:bg-card/80 shadow-sm"
+            className="rounded-lg border-border bg-card shadow-sm"
           />
         </div>
         <Button

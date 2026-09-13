@@ -70,7 +70,7 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-muted flex flex-col items-center justify-center p-4">
       <div className="absolute top-4 right-4">
         <ThemeToggle variant="icon" />
       </div>
@@ -79,21 +79,21 @@ export default function ChangePasswordPage() {
       <div className="mb-8 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
           <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
-          <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
+          <span className="text-2xl font-serif font-bold tracking-wide text-foreground">
             RESTIFY
           </span>
         </div>
       </div>
 
-      <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-border bg-white dark:bg-card">
+      <Card className="w-full max-w-[450px] shadow-lg border-border bg-card">
         <CardHeader className="space-y-3 text-center pb-8 pt-10">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
-            <ShieldAlert className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-apoyo-suave">
+            <ShieldAlert className="h-6 w-6 text-apoyo" />
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white font-serif">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground font-serif">
             Cambia tu contraseña
           </h2>
-          <p className="text-sm text-slate-500 dark:text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Por seguridad debes establecer una nueva contraseña antes de continuar.
           </p>
         </CardHeader>
@@ -102,7 +102,7 @@ export default function ChangePasswordPage() {
           {/* Error */}
           {error && (
             <div
-              className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg relative"
+              className="bg-destructive-suave border border-destructive text-destructive-texto px-4 py-3 rounded-lg relative"
               role="alert"
             >
               <strong className="font-bold">Error:</strong>
@@ -112,7 +112,7 @@ export default function ChangePasswordPage() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium text-slate-700 dark:text-foreground">
+              <Label htmlFor="password" className="text-sm font-medium text-foreground">
                 Nueva Contraseña
               </Label>
               <div className="relative">
@@ -121,12 +121,12 @@ export default function ChangePasswordPage() {
                   {...register('password')}
                   placeholder="Ingresa tu nueva contraseña"
                   type={showPassword ? 'text' : 'password'}
-                  className={`pr-10 ${errors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                  className={`pr-10 ${errors.password ? 'border-destructive focus-visible:ring-destructive' : ''}`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-muted-foreground dark:hover:text-foreground focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground dark:hover:text-foreground focus:outline-none"
                   aria-label="Toggle password visibility"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -136,7 +136,7 @@ export default function ChangePasswordPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-sm font-medium text-slate-700 dark:text-foreground">
+              <Label htmlFor="confirmPassword" className="text-sm font-medium text-foreground">
                 Confirmar Contraseña
               </Label>
               <div className="relative">
@@ -147,16 +147,16 @@ export default function ChangePasswordPage() {
                   type={showConfirmPassword ? 'text' : 'password'}
                   className={`pr-10 ${
                     watchConfirmPassword.length > 0 && !doPasswordsMatch
-                      ? 'border-red-500 focus-visible:ring-red-500'
+                      ? 'border-destructive focus-visible:ring-destructive'
                       : doPasswordsMatch
-                      ? 'border-green-500 focus-visible:ring-green-500'
+                      ? 'border-fresco focus-visible:ring-fresco'
                       : ''
                   }`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-muted-foreground dark:hover:text-foreground focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground dark:hover:text-foreground focus:outline-none"
                   aria-label="Toggle confirm password visibility"
                 >
                   {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -166,7 +166,7 @@ export default function ChangePasswordPage() {
                 <span className="text-destructive text-xs">Las contraseñas no coinciden</span>
               )}
               {doPasswordsMatch && (
-                <span className="text-green-600 dark:text-green-400 text-xs flex items-center gap-1">
+                <span className="text-fresco text-xs flex items-center gap-1">
                   <Check className="h-3.5 w-3.5" />
                   Las contraseñas coinciden
                 </span>
@@ -185,7 +185,7 @@ export default function ChangePasswordPage() {
               <button
                 type="button"
                 onClick={() => logout().then(() => navigate('/auth/login', { replace: true }))}
-                className="text-sm text-slate-500 hover:text-slate-700 dark:text-muted-foreground dark:hover:text-foreground hover:underline font-medium"
+                className="text-sm text-muted-foreground hover:text-foreground dark:hover:text-foreground hover:underline font-medium"
               >
                 Cerrar sesión
               </button>

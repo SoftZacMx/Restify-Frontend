@@ -90,7 +90,7 @@ const MovementsHistoryPage: React.FC = () => {
   if (!productId) {
     return (
       <MainLayout>
-        <div className="text-center text-slate-500 dark:text-muted-foreground py-8">
+        <div className="text-center text-muted-foreground py-8">
           Producto no especificado
         </div>
       </MainLayout>
@@ -104,12 +104,12 @@ const MovementsHistoryPage: React.FC = () => {
         <div className="flex flex-wrap gap-2 text-sm">
           <Link
             to="/stock"
-            className="text-slate-500 dark:text-muted-foreground font-medium hover:text-primary transition-colors"
+            className="text-muted-foreground font-medium hover:text-primary transition-colors"
           >
             Stock
           </Link>
-          <span className="text-slate-500 dark:text-muted-foreground">/</span>
-          <span className="text-slate-800 dark:text-foreground font-medium">
+          <span className="text-muted-foreground">/</span>
+          <span className="text-foreground font-medium">
             Historial de movimientos
           </span>
         </div>
@@ -121,12 +121,12 @@ const MovementsHistoryPage: React.FC = () => {
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+              <h1 className="text-3xl font-bold text-foreground">
                 Historial de movimientos
               </h1>
               {product && (
-                <p className="text-sm text-slate-500 dark:text-muted-foreground mt-1">
-                  Producto: <strong className="text-slate-700 dark:text-foreground">{product.name}</strong>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Producto: <strong className="text-foreground">{product.name}</strong>
                 </p>
               )}
             </div>

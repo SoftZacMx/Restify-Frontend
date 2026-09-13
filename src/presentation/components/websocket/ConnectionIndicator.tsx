@@ -31,29 +31,29 @@ export const ConnectionIndicator: React.FC<ConnectionIndicatorProps> = ({
         className={cn(
           'flex items-center gap-2 px-2 py-1 rounded-full transition-colors cursor-default',
           isConnected
-            ? 'bg-green-100 dark:bg-green-900/30'
-            : 'bg-red-100 dark:bg-red-900/30',
+            ? 'bg-fresco-suave'
+            : 'bg-destructive-suave',
           className
         )}
       >
         {/* Indicador de punto */}
         <span className="relative flex h-2.5 w-2.5">
           {isConnected && (
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fresco opacity-75" />
           )}
           <span
             className={cn(
               'relative inline-flex rounded-full h-2.5 w-2.5',
-              isConnected ? 'bg-green-500' : 'bg-red-500'
+              isConnected ? 'bg-fresco' : 'bg-destructive'
             )}
           />
         </span>
 
         {/* Icono */}
         {isConnected ? (
-          <Wifi className="h-4 w-4 text-green-600 dark:text-green-400" />
+          <Wifi className="h-4 w-4 text-fresco" />
         ) : (
-          <WifiOff className="h-4 w-4 text-red-600 dark:text-red-400" />
+          <WifiOff className="h-4 w-4 text-destructive" />
         )}
 
         {/* Label opcional */}
@@ -62,8 +62,8 @@ export const ConnectionIndicator: React.FC<ConnectionIndicatorProps> = ({
             className={cn(
               'text-xs font-medium',
               isConnected
-                ? 'text-green-700 dark:text-green-300'
-                : 'text-red-700 dark:text-red-300'
+                ? 'text-fresco-texto'
+                : 'text-destructive-texto'
             )}
           >
             {isConnected ? 'En línea' : 'Desconectado'}

@@ -64,22 +64,22 @@ export const OrderPaymentLayout: React.FC<OrderPaymentLayoutProps> = ({
     .join(' • ') || 'Orden';
 
   return (
-    <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background overflow-hidden shadow-lg">
+    <div className="rounded-xl border border-border bg-card overflow-hidden shadow-lg">
       {/* Header tipo Checkout */}
-      <div className="flex items-center gap-4 px-6 py-4 border-b border-slate-200 dark:border-border bg-slate-50/50 dark:bg-card/50 shrink-0">
+      <div className="flex items-center gap-4 px-6 py-4 border-b border-border bg-muted/50 dark:bg-card/50 shrink-0">
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
           <Receipt className="h-6 w-6" />
         </div>
         <div className="min-w-0 flex-1">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white">Checkout</h2>
-          <p className="text-sm text-slate-500 dark:text-muted-foreground truncate">{subtitle}</p>
+          <h2 className="text-xl font-bold text-foreground">Checkout</h2>
+          <p className="text-sm text-muted-foreground truncate">{subtitle}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
         {/* Columna izquierda: Order Summary */}
-        <div className="border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-border p-6 flex flex-col min-h-0">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-muted-foreground mb-4">
+        <div className="border-b lg:border-b-0 lg:border-r border-border p-6 flex flex-col min-h-0">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-4">
             Resumen de la orden
           </h3>
           <div className="flex-1 min-h-0 overflow-y-auto space-y-4" data-testid="order-items">
@@ -89,7 +89,7 @@ export const OrderPaymentLayout: React.FC<OrderPaymentLayoutProps> = ({
                 className="flex gap-3 items-start"
                 data-testid="order-item"
               >
-                <div className="h-12 w-12 shrink-0 rounded-lg overflow-hidden bg-slate-100 dark:bg-card flex items-center justify-center">
+                <div className="h-12 w-12 shrink-0 rounded-lg overflow-hidden bg-muted flex items-center justify-center">
                   {item.product.imageUrl ? (
                     <img
                       src={item.product.imageUrl}
@@ -97,20 +97,20 @@ export const OrderPaymentLayout: React.FC<OrderPaymentLayoutProps> = ({
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <UtensilsCrossed className="h-6 w-6 text-slate-400" />
+                    <UtensilsCrossed className="h-6 w-6 text-muted-foreground" />
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="font-medium text-slate-900 dark:text-white truncate">
+                  <p className="font-medium text-foreground truncate">
                     {item.product.name}
                   </p>
-                  <p className="text-xs text-slate-500 dark:text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     {item.quantity}x
                     {item.selectedExtras.length > 0 &&
                       ` • ${item.selectedExtras.map((e) => e.name).join(', ')}`}
                   </p>
                 </div>
-                <p className="text-sm font-semibold text-slate-900 dark:text-white shrink-0" data-testid="order-item-total">
+                <p className="text-sm font-semibold text-foreground shrink-0" data-testid="order-item-total">
                   ${item.itemTotal.toFixed(2)}
                 </p>
               </div>
@@ -118,23 +118,23 @@ export const OrderPaymentLayout: React.FC<OrderPaymentLayoutProps> = ({
           </div>
 
           {/* Desglose: Subtotal, Tax, Total */}
-          <div className="mt-4 pt-4 border-t border-slate-200 dark:border-border space-y-2">
+          <div className="mt-4 pt-4 border-t border-border space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-slate-500 dark:text-muted-foreground">Subtotal</span>
-              <span className="font-medium text-slate-900 dark:text-white" data-testid="order-subtotal">
+              <span className="text-muted-foreground">Subtotal</span>
+              <span className="font-medium text-foreground" data-testid="order-subtotal">
                 ${cartState.subtotal.toFixed(2)}
               </span>
             </div>
             {cartState.tax > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="text-slate-500 dark:text-muted-foreground">IVA</span>
-                <span className="font-medium text-slate-900 dark:text-white">
+                <span className="text-muted-foreground">IVA</span>
+                <span className="font-medium text-foreground">
                   ${cartState.tax.toFixed(2)}
                 </span>
               </div>
             )}
-            <div className="flex justify-between items-center pt-2 border-t border-slate-200 dark:border-border">
-              <span className="text-base font-bold text-slate-900 dark:text-white">Total</span>
+            <div className="flex justify-between items-center pt-2 border-t border-border">
+              <span className="text-base font-bold text-foreground">Total</span>
               <span className="text-xl font-bold text-primary" data-testid="order-total" aria-label={`Total de la orden ${cartState.total.toFixed(2)}`}>
                 ${cartState.total.toFixed(2)}
               </span>

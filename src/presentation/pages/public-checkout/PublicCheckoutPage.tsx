@@ -38,7 +38,7 @@ const PublicCheckoutPage = () => {
     return (
       <PublicLayout>
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <p className="text-slate-500 dark:text-muted-foreground mb-4">
+          <p className="text-muted-foreground mb-4">
             No hay items en el carrito
           </p>
           <Button onClick={() => navigate(`/menu/${slug}`)}>
@@ -69,7 +69,7 @@ const PublicCheckoutPage = () => {
     return (
       <PublicLayout>
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <p className="text-slate-500 dark:text-muted-foreground mb-4">
+          <p className="text-muted-foreground mb-4">
             No hay items en el carrito
           </p>
           <Button onClick={() => navigate(`/menu/${slug}`)}>
@@ -142,13 +142,13 @@ const PublicCheckoutPage = () => {
         <button
           type="button"
           onClick={() => navigate(`/menu/${slug}`)}
-          className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 dark:hover:text-foreground transition-colors"
+          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground dark:hover:text-foreground transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Volver al catálogo
         </button>
 
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+        <h2 className="text-2xl font-bold text-foreground">
           Checkout
         </h2>
 
@@ -156,8 +156,8 @@ const PublicCheckoutPage = () => {
           {/* Left: Form */}
           <div className="space-y-6">
             {/* Customer info */}
-            <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-5 space-y-4">
-              <h3 className="font-semibold text-slate-900 dark:text-white">
+            <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+              <h3 className="font-semibold text-foreground">
                 Datos del cliente
               </h3>
               <div className="space-y-3">
@@ -182,7 +182,7 @@ const PublicCheckoutPage = () => {
                     onChange={(e) => setCustomerPhone(e.target.value)}
                     maxLength={13}
                     aria-invalid={!!phoneError}
-                    className={phoneError ? 'border-red-500 focus-visible:ring-red-500' : undefined}
+                    className={phoneError ? 'border-destructive focus-visible:ring-destructive' : undefined}
                   />
                   {phoneError && <p className="text-destructive text-xs mt-1">{phoneError}</p>}
                 </div>
@@ -190,8 +190,8 @@ const PublicCheckoutPage = () => {
             </div>
 
             {/* Order type */}
-            <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-5 space-y-4">
-              <h3 className="font-semibold text-slate-900 dark:text-white">
+            <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+              <h3 className="font-semibold text-foreground">
                 Tipo de pedido *
               </h3>
               <div className="grid grid-cols-2 gap-3">
@@ -201,7 +201,7 @@ const PublicCheckoutPage = () => {
                   className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
                     orderType === 'DELIVERY'
                       ? 'border-primary bg-primary/5 text-primary'
-                      : 'border-slate-200 dark:border-border hover:border-slate-300 text-slate-600 dark:text-muted-foreground'
+                      : 'border-border hover:border-border text-muted-foreground'
                   }`}
                 >
                   <MapPin className="h-6 w-6" />
@@ -213,7 +213,7 @@ const PublicCheckoutPage = () => {
                   className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
                     orderType === 'PICKUP'
                       ? 'border-primary bg-primary/5 text-primary'
-                      : 'border-slate-200 dark:border-border hover:border-slate-300 text-slate-600 dark:text-muted-foreground'
+                      : 'border-border hover:border-border text-muted-foreground'
                   }`}
                 >
                   <Clock className="h-6 w-6" />
@@ -224,8 +224,8 @@ const PublicCheckoutPage = () => {
 
             {/* Delivery: map + address */}
             {orderType === 'DELIVERY' && (
-              <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-5 space-y-4">
-                <h3 className="font-semibold text-slate-900 dark:text-white">
+              <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+                <h3 className="font-semibold text-foreground">
                   Dirección de entrega
                 </h3>
                 <DeliveryMap onLocationSelect={handleLocationSelect} />
@@ -240,7 +240,7 @@ const PublicCheckoutPage = () => {
                   />
                 </div>
                 {latitude && longitude && (
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-muted-foreground">
                     Ubicación: {latitude.toFixed(5)}, {longitude.toFixed(5)}
                   </p>
                 )}
@@ -249,8 +249,8 @@ const PublicCheckoutPage = () => {
 
             {/* Pickup: scheduled time */}
             {orderType === 'PICKUP' && (
-              <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-5 space-y-4">
-                <h3 className="font-semibold text-slate-900 dark:text-white">
+              <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+                <h3 className="font-semibold text-foreground">
                   Hora de recolección
                 </h3>
                 <div>
@@ -261,7 +261,7 @@ const PublicCheckoutPage = () => {
                     value={scheduledAt}
                     onChange={(e) => setScheduledAt(e.target.value)}
                   />
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     Si no seleccionas hora, el pedido será para lo antes posible.
                   </p>
                 </div>
@@ -272,14 +272,14 @@ const PublicCheckoutPage = () => {
           {/* Right: Order summary */}
           <div className="space-y-4">
             <div className="sticky top-20 space-y-4">
-              <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-5 space-y-4">
-                <h3 className="font-semibold text-slate-900 dark:text-white">
+              <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+                <h3 className="font-semibold text-foreground">
                   Resumen del pedido
                 </h3>
                 <Cart items={cartItems} onRemoveItem={() => {}} readOnly />
-                <div className="pt-4 border-t border-slate-200 dark:border-border">
+                <div className="pt-4 border-t border-border">
                   <div className="flex justify-between items-center">
-                    <span className="text-base font-bold text-slate-900 dark:text-white">Total</span>
+                    <span className="text-base font-bold text-foreground">Total</span>
                     <span className="text-xl font-bold text-primary">
                       ${cartTotal.toFixed(2)}
                     </span>

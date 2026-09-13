@@ -54,7 +54,7 @@ export const TableSearchBar: React.FC<TableSearchBarProps> = ({
       <div className="flex flex-col sm:flex-row gap-3">
         {/* Barra de búsqueda */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             id="table-search-input"
             name="search"

@@ -74,7 +74,7 @@ const DialogContent = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        'bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 md:p-8',
+        'bg-card rounded-xl shadow-lg p-6 md:p-8',
         className
       )}
       onClick={(e) => e.stopPropagation()}
@@ -108,7 +108,7 @@ const DialogTitle = React.forwardRef<
     <h2
       ref={ref}
       className={cn(
-        'text-3xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white',
+        'text-3xl font-bold leading-tight tracking-tight text-foreground',
         className
       )}
       {...props}

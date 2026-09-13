@@ -40,36 +40,36 @@ export const PaymentSuccessView: React.FC<PaymentSuccessViewProps> = ({
     <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">
       {/* Success icon */}
       <div className="relative mb-6">
-        <div className="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center ring-4 ring-green-50 dark:ring-green-900/20">
-          <CheckCircle className="w-10 h-10 text-green-500" />
+        <div className="w-20 h-20 rounded-full bg-fresco-suave flex items-center justify-center ring-4 ring-fresco">
+          <CheckCircle className="w-10 h-10 text-fresco" />
         </div>
       </div>
 
       {/* Title */}
-      <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">
+      <h1 className="text-2xl font-bold text-foreground mb-1">
         Pago Exitoso
       </h1>
-      <p className="text-sm text-slate-500 dark:text-muted-foreground mb-8">
+      <p className="text-sm text-muted-foreground mb-8">
         La transacción se ha procesado correctamente.
       </p>
 
       {/* Receipt card */}
-      <div className="w-full max-w-md rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-card p-6 mb-8 shadow-sm">
+      <div className="w-full max-w-md rounded-xl border border-border bg-card p-6 mb-8 shadow-sm">
         {/* Order ID & Date */}
         <div className="flex justify-between mb-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-muted-foreground">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Orden
             </p>
-            <p className="text-sm font-bold text-slate-900 dark:text-white">
+            <p className="text-sm font-bold text-foreground">
               {orderShortId}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-muted-foreground">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Fecha y hora
             </p>
-            <p className="text-sm font-medium text-slate-700 dark:text-foreground">
+            <p className="text-sm font-medium text-foreground">
               {formattedDate} &bull; {formattedTime}
             </p>
           </div>
@@ -78,19 +78,19 @@ export const PaymentSuccessView: React.FC<PaymentSuccessViewProps> = ({
         {/* Payment method & Merchant */}
         <div className="flex justify-between mb-6">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-muted-foreground">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Metodo de pago
             </p>
-            <p className="text-sm font-medium text-slate-700 dark:text-foreground">
+            <p className="text-sm font-medium text-foreground">
               {getPaymentMethodName(data.paymentMethod)}
             </p>
           </div>
           {data.companyName && (
             <div className="text-right">
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-muted-foreground">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Comercio
               </p>
-              <p className="text-sm font-medium text-slate-700 dark:text-foreground">
+              <p className="text-sm font-medium text-foreground">
                 {data.companyName}
               </p>
             </div>
@@ -98,8 +98,8 @@ export const PaymentSuccessView: React.FC<PaymentSuccessViewProps> = ({
         </div>
 
         {/* Divider + Total */}
-        <div className="border-t border-slate-200 dark:border-border pt-4 flex items-center justify-between">
-          <span className="text-base font-bold text-slate-900 dark:text-white">
+        <div className="border-t border-border pt-4 flex items-center justify-between">
+          <span className="text-base font-bold text-foreground">
             Total Pagado
           </span>
           <span className="text-2xl font-bold text-primary">
@@ -109,7 +109,7 @@ export const PaymentSuccessView: React.FC<PaymentSuccessViewProps> = ({
       </div>
 
       {/* Redirecting indicator */}
-      <div className="flex items-center gap-2 text-sm text-slate-400 dark:text-muted-foreground">
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Loader2 className="h-4 w-4 animate-spin" />
         Redirigiendo a órdenes...
       </div>

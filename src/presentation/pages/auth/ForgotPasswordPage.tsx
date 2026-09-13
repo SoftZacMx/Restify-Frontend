@@ -41,7 +41,7 @@ export default function ForgotPasswordPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-muted flex flex-col items-center justify-center p-4">
         <div className="absolute top-4 right-4">
           <ThemeToggle variant="icon" />
         </div>
@@ -49,19 +49,19 @@ export default function ForgotPasswordPage() {
         <div className="mb-8 flex flex-col items-center gap-2">
           <div className="flex items-center gap-2">
             <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
-            <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
+            <span className="text-2xl font-serif font-bold tracking-wide text-foreground">
               RESTIFY
             </span>
           </div>
         </div>
 
-        <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-border bg-white dark:bg-card">
+        <Card className="w-full max-w-[450px] shadow-lg border-border bg-card">
           <CardContent className="flex flex-col items-center gap-4 py-12 px-8">
             <MailCheck className="h-16 w-16 text-primary" />
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white font-serif text-center">
+            <h2 className="text-xl font-bold text-foreground font-serif text-center">
               Revisa tu correo
             </h2>
-            <p className="text-sm text-slate-500 dark:text-muted-foreground text-center">
+            <p className="text-sm text-muted-foreground text-center">
               Si existe una cuenta asociada a ese correo, te enviamos un enlace para
               restablecer tu contraseña. El enlace caduca en 5 minutos.
             </p>
@@ -79,7 +79,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-background flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-muted flex flex-col items-center justify-center p-4">
       <div className="absolute top-4 right-4">
         <ThemeToggle variant="icon" />
       </div>
@@ -88,18 +88,18 @@ export default function ForgotPasswordPage() {
       <div className="mb-8 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
           <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
-          <span className="text-2xl font-serif font-bold tracking-wide text-slate-900 dark:text-white">
+          <span className="text-2xl font-serif font-bold tracking-wide text-foreground">
             RESTIFY
           </span>
         </div>
       </div>
 
-      <Card className="w-full max-w-[450px] shadow-lg border-slate-100 dark:border-border bg-white dark:bg-card">
+      <Card className="w-full max-w-[450px] shadow-lg border-border bg-card">
         <CardHeader className="space-y-1 text-center pb-8 pt-10">
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white font-serif">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground font-serif">
             Recuperar Contraseña
           </h2>
-          <p className="text-sm text-slate-500 dark:text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Ingresa tu correo y te enviaremos un enlace para restablecerla.
           </p>
         </CardHeader>
@@ -107,7 +107,7 @@ export default function ForgotPasswordPage() {
         <CardContent className="space-y-6 px-8 pb-10">
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-slate-700 dark:text-foreground">
+              <Label htmlFor="email" className="text-sm font-medium text-foreground">
                 Email
               </Label>
               <Input
@@ -115,7 +115,7 @@ export default function ForgotPasswordPage() {
                 {...form.register('email')}
                 placeholder="correo@ejemplo.com"
                 type="email"
-                className={form.formState.errors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}
+                className={form.formState.errors.email ? 'border-destructive focus-visible:ring-destructive' : ''}
               />
               {form.formState.errors.email && (
                 <span className="text-destructive text-sm">{form.formState.errors.email.message}</span>

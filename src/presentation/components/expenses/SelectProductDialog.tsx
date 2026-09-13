@@ -76,7 +76,7 @@ export const SelectProductDialog: React.FC<SelectProductDialogProps> = ({
 
         <div className="space-y-4 flex-1 min-h-0 flex flex-col">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
               placeholder="Buscar productos por nombre..."

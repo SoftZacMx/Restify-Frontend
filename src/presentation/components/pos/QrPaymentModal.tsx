@@ -59,17 +59,17 @@ export const QrPaymentModal = ({ orderId, userId, total, onSuccess, onClose }: Q
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white dark:bg-card rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
+      <div className="bg-card rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+          <h2 className="text-lg font-bold text-foreground">
             Pago con QR - Mercado Pago
           </h2>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-card"
+            className="p-1 rounded-lg hover:bg-muted dark:hover:bg-card"
           >
-            <X className="w-5 h-5 text-slate-500" />
+            <X className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>
 
@@ -79,14 +79,14 @@ export const QrPaymentModal = ({ orderId, userId, total, onSuccess, onClose }: Q
           {state === 'loading' && (
             <div className="py-12 flex flex-col items-center gap-3">
               <Loader2 className="w-10 h-10 text-primary animate-spin" />
-              <p className="text-slate-500 dark:text-muted-foreground">Generando código QR...</p>
+              <p className="text-muted-foreground">Generando código QR...</p>
             </div>
           )}
 
           {/* QR Code */}
           {state === 'showing' && qrUrl && (
             <>
-              <div className="bg-white p-4 rounded-xl mb-4">
+              <div className="bg-card p-4 rounded-xl mb-4">
                 <QRCodeSVG
                   value={qrUrl}
                   size={250}
@@ -94,10 +94,10 @@ export const QrPaymentModal = ({ orderId, userId, total, onSuccess, onClose }: Q
                   includeMargin
                 />
               </div>
-              <p className="text-center text-sm text-slate-500 dark:text-muted-foreground mb-2">
+              <p className="text-center text-sm text-muted-foreground mb-2">
                 Escanea el código QR con tu celular para pagar
               </p>
-              <p className="text-center text-2xl font-bold text-slate-900 dark:text-white mb-4">
+              <p className="text-center text-2xl font-bold text-foreground mb-4">
                 ${total.toFixed(2)} MXN
               </p>
               <div className="flex items-center gap-2 text-sm text-primary">
@@ -110,21 +110,21 @@ export const QrPaymentModal = ({ orderId, userId, total, onSuccess, onClose }: Q
           {/* Success */}
           {state === 'succeeded' && (
             <div className="py-8 flex flex-col items-center gap-3">
-              <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                <CheckCircle className="w-8 h-8 text-green-500" />
+              <div className="w-16 h-16 rounded-full bg-fresco-suave flex items-center justify-center">
+                <CheckCircle className="w-8 h-8 text-fresco" />
               </div>
-              <p className="text-lg font-semibold text-slate-900 dark:text-white">Pago exitoso</p>
-              <p className="text-sm text-slate-500 dark:text-muted-foreground">Procesando orden...</p>
+              <p className="text-lg font-semibold text-foreground">Pago exitoso</p>
+              <p className="text-sm text-muted-foreground">Procesando orden...</p>
             </div>
           )}
 
           {/* Failed */}
           {state === 'failed' && (
             <div className="py-8 flex flex-col items-center gap-3">
-              <div className="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                <AlertTriangle className="w-8 h-8 text-red-500" />
+              <div className="w-16 h-16 rounded-full bg-destructive-suave flex items-center justify-center">
+                <AlertTriangle className="w-8 h-8 text-destructive" />
               </div>
-              <p className="text-lg font-semibold text-slate-900 dark:text-white">Pago fallido</p>
+              <p className="text-lg font-semibold text-foreground">Pago fallido</p>
               <Button onClick={onClose} variant="outline" className="mt-2">
                 Cerrar
               </Button>
@@ -134,11 +134,11 @@ export const QrPaymentModal = ({ orderId, userId, total, onSuccess, onClose }: Q
           {/* Error */}
           {state === 'error' && (
             <div className="py-8 flex flex-col items-center gap-3">
-              <div className="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                <AlertTriangle className="w-8 h-8 text-red-500" />
+              <div className="w-16 h-16 rounded-full bg-destructive-suave flex items-center justify-center">
+                <AlertTriangle className="w-8 h-8 text-destructive" />
               </div>
-              <p className="text-lg font-semibold text-slate-900 dark:text-white">Error</p>
-              <p className="text-sm text-slate-500 dark:text-muted-foreground text-center">{error}</p>
+              <p className="text-lg font-semibold text-foreground">Error</p>
+              <p className="text-sm text-muted-foreground text-center">{error}</p>
               <Button onClick={onClose} variant="outline" className="mt-2">
                 Cerrar
               </Button>

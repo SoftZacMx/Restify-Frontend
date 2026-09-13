@@ -113,7 +113,7 @@ export const AdjustStockDialog: React.FC<AdjustStockDialogProps> = ({
         <form onSubmit={submit} className="flex flex-col gap-5 mt-2">
           {/* Producto — botón que abre el dialog */}
           <div>
-            <Label className="text-sm font-medium text-slate-700 dark:text-foreground">
+            <Label className="text-sm font-medium text-foreground">
               Producto <span className="text-destructive">*</span>
             </Label>
             <button
@@ -121,11 +121,11 @@ export const AdjustStockDialog: React.FC<AdjustStockDialogProps> = ({
               onClick={() => setIsPickerOpen(true)}
               className={cn(
                 'mt-1 w-full flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium text-left transition-colors',
-                'border-slate-200 dark:border-border hover:bg-slate-50 dark:hover:bg-card',
-                !selectedProduct && 'text-slate-400 dark:text-muted-foreground'
+                'border-border hover:bg-muted dark:hover:bg-card',
+                !selectedProduct && 'text-muted-foreground'
               )}
             >
-              <Package className="h-4 w-4 flex-shrink-0 text-slate-500 dark:text-muted-foreground" />
+              <Package className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
               <span className="truncate flex-1">
                 {selectedProduct
                   ? `${selectedProduct.name}${selectedProduct.unitOfMeasure ? ` (${formatUnit(selectedProduct.unitOfMeasure)})` : ''}`
@@ -139,9 +139,9 @@ export const AdjustStockDialog: React.FC<AdjustStockDialogProps> = ({
 
           {/* Stock actual (readonly) */}
           {selectedProduct && (
-            <div className="rounded-lg bg-slate-50 dark:bg-card/50 p-3 border border-slate-200 dark:border-border">
-              <div className="text-xs text-slate-500 dark:text-muted-foreground">Stock actual</div>
-              <div className="text-lg font-semibold text-slate-900 dark:text-white mt-0.5">
+            <div className="rounded-lg bg-muted p-3 border border-border">
+              <div className="text-xs text-muted-foreground">Stock actual</div>
+              <div className="text-lg font-semibold text-foreground mt-0.5">
                 {formatStockQuantity(selectedProduct.stockActual, selectedProduct.unitOfMeasure)}
               </div>
             </div>
@@ -149,7 +149,7 @@ export const AdjustStockDialog: React.FC<AdjustStockDialogProps> = ({
 
           {/* Nuevo stock */}
           <div>
-            <Label htmlFor="newStock" className="text-sm font-medium text-slate-700 dark:text-foreground">
+            <Label htmlFor="newStock" className="text-sm font-medium text-foreground">
               Nuevo stock <span className="text-destructive">*</span>
             </Label>
             <Input
@@ -170,9 +170,9 @@ export const AdjustStockDialog: React.FC<AdjustStockDialogProps> = ({
               <div
                 className={cn(
                   'mt-2 flex items-center gap-2 text-sm rounded-md px-3 py-2 border',
-                  diff > 0 && 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-300',
-                  diff < 0 && 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-300',
-                  diff === 0 && 'bg-slate-50 dark:bg-card/50 border-slate-200 dark:border-border text-slate-700 dark:text-foreground'
+                  diff > 0 && 'bg-fresco-suave border-fresco text-fresco-texto',
+                  diff < 0 && 'bg-destructive-suave border-destructive text-destructive-texto',
+                  diff === 0 && 'bg-muted border-border text-foreground'
                 )}
               >
                 {diff > 0 && <ArrowUp className="h-4 w-4 flex-shrink-0" />}
@@ -194,7 +194,7 @@ export const AdjustStockDialog: React.FC<AdjustStockDialogProps> = ({
 
             {/* Warning para ajustes positivos: deberían venir por compra de mercadería. */}
             {diff != null && diff > 0 && selectedProduct && (
-              <div className="mt-2 flex items-start gap-2 text-sm rounded-md px-3 py-2 border bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-300">
+              <div className="mt-2 flex items-start gap-2 text-sm rounded-md px-3 py-2 border bg-apoyo-suave border-apoyo text-apoyo-texto">
                 <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="font-medium">Estás sumando producto al stock sin una compra asociada.</p>
@@ -210,7 +210,7 @@ export const AdjustStockDialog: React.FC<AdjustStockDialogProps> = ({
 
           {/* Motivo */}
           <div>
-            <Label htmlFor="reason" className="text-sm font-medium text-slate-700 dark:text-foreground">
+            <Label htmlFor="reason" className="text-sm font-medium text-foreground">
               Motivo <span className="text-destructive">*</span>
             </Label>
             <Input
@@ -228,7 +228,7 @@ export const AdjustStockDialog: React.FC<AdjustStockDialogProps> = ({
 
           {/* Notas */}
           <div>
-            <Label htmlFor="adj-notes" className="text-sm font-medium text-slate-700 dark:text-foreground">
+            <Label htmlFor="adj-notes" className="text-sm font-medium text-foreground">
               Notas (opcional)
             </Label>
             <Textarea

@@ -86,30 +86,30 @@ export const ChangePaymentMethodDialog: React.FC<ChangePaymentMethodDialogProps>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="rounded-lg bg-slate-100 dark:bg-card p-4 space-y-2">
+          <div className="rounded-lg bg-muted p-4 space-y-2">
             <div className="flex items-center justify-between gap-3">
-              <span className="text-sm text-slate-500 dark:text-muted-foreground">Orden</span>
-              <span className="text-sm font-medium text-slate-900 dark:text-white">
+              <span className="text-sm text-muted-foreground">Orden</span>
+              <span className="text-sm font-medium text-foreground">
                 {formatOrderNumber(order.id)}
               </span>
             </div>
             <div className="flex items-center justify-between gap-3">
-              <span className="text-sm text-slate-500 dark:text-muted-foreground">Método actual</span>
-              <span className="text-sm font-medium text-slate-900 dark:text-white">
+              <span className="text-sm text-muted-foreground">Método actual</span>
+              <span className="text-sm font-medium text-foreground">
                 {currentMethodName}
               </span>
             </div>
             <div className="flex items-center justify-between gap-3">
-              <span className="text-sm text-slate-500 dark:text-muted-foreground">Método nuevo</span>
-              <span className="text-sm font-medium text-slate-900 dark:text-white">
+              <span className="text-sm text-muted-foreground">Método nuevo</span>
+              <span className="text-sm font-medium text-foreground">
                 {targetMethodName}
               </span>
             </div>
           </div>
 
-          <p className="text-sm text-slate-600 dark:text-foreground">
+          <p className="text-sm text-muted-foreground">
             El cambio afecta los reportes de la orden. Escribe{' '}
-            <strong className="text-slate-900 dark:text-white">{CONFIRMATION_WORD}</strong> para
+            <strong className="text-foreground">{CONFIRMATION_WORD}</strong> para
             continuar.
           </p>
 
@@ -126,7 +126,7 @@ export const ChangePaymentMethodDialog: React.FC<ChangePaymentMethodDialogProps>
           </div>
 
           {errorMessage && (
-            <p className="text-sm text-red-600 dark:text-red-400">{errorMessage}</p>
+            <p className="text-sm text-destructive">{errorMessage}</p>
           )}
 
           <DialogFooter>

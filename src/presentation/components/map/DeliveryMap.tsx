@@ -58,7 +58,7 @@ export const DeliveryMap: React.FC<DeliveryMapProps> = ({
   }, [initialPosition]);
 
   return (
-    <div style={{ height }} className="rounded-xl overflow-hidden border border-slate-200 dark:border-border">
+    <div style={{ height }} className="rounded-xl overflow-hidden border border-border">
       <MapContainer
         center={center}
         zoom={14}

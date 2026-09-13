@@ -31,24 +31,24 @@ export const EmployeeSelectionItem: React.FC<EmployeeSelectionItemProps> = ({
       onClick={onSelect}
       className={cn(
         'w-full flex items-center gap-4 p-3 rounded-lg border text-left transition-colors',
-        'hover:bg-slate-50 dark:hover:bg-card/50',
+        'hover:bg-muted dark:hover:bg-card/50',
         selected
-          ? 'border-primary bg-primary/10 dark:bg-primary/20/30 dark:border-primary'
-          : 'border-slate-200 dark:border-border'
+          ? 'border-primary bg-primary/10 dark:bg-primary/20 dark:border-primary'
+          : 'border-border'
       )}
     >
-      <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-slate-100 dark:bg-card flex items-center justify-center">
-        <User className="h-6 w-6 text-slate-500 dark:text-muted-foreground" />
+      <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-muted flex items-center justify-center">
+        <User className="h-6 w-6 text-muted-foreground" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-slate-900 dark:text-white truncate">
+        <p className="font-medium text-foreground truncate">
           {fullName}
         </p>
-        <p className="text-sm text-slate-500 dark:text-muted-foreground truncate mt-0.5">
+        <p className="text-sm text-muted-foreground truncate mt-0.5">
           {employee.email}
         </p>
         {employee.rol && (
-          <p className="text-xs text-slate-400 dark:text-muted-foreground mt-0.5">
+          <p className="text-xs text-muted-foreground mt-0.5">
             {employee.rol}
           </p>
         )}
@@ -58,11 +58,11 @@ export const EmployeeSelectionItem: React.FC<EmployeeSelectionItemProps> = ({
           'flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center',
           selected
             ? 'border-primary bg-primary dark:border-primary dark:bg-primary'
-            : 'border-slate-300 dark:border-border'
+            : 'border-border'
         )}
       >
         {selected && (
-          <span className="w-1.5 h-1.5 rounded-full bg-white" aria-hidden />
+          <span className="w-1.5 h-1.5 rounded-full bg-card" aria-hidden />
         )}
       </div>
     </button>

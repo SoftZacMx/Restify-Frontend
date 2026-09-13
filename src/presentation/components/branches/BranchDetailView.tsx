@@ -39,12 +39,12 @@ const InfoRow: React.FC<{ icon: React.ReactNode; label: string; value: React.Rea
   value,
 }) => (
   <div className="flex items-start gap-3">
-    <div className="mt-0.5 text-slate-400 dark:text-muted-foreground">{icon}</div>
+    <div className="mt-0.5 text-muted-foreground">{icon}</div>
     <div className="min-w-0">
-      <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-muted-foreground">
+      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
         {label}
       </p>
-      <p className="text-sm text-slate-900 dark:text-foreground break-words">{value}</p>
+      <p className="text-sm text-foreground break-words">{value}</p>
     </div>
   </div>
 );
@@ -53,7 +53,7 @@ const SectionCard: React.FC<{ title: string; children: React.ReactNode }> = ({
   title,
   children,
 }) => (
-  <div className="rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark p-5 space-y-4">
+  <div className="rounded-xl border border-border bg-card p-5 space-y-4">
     <h3 className="text-xs font-semibold uppercase tracking-widest text-primary">{title}</h3>
     {children}
   </div>
@@ -72,11 +72,11 @@ export const BranchDetailView: React.FC<BranchDetailViewProps> = ({ branch }) =>
     <div className="space-y-5">
       {/* Encabezado: logo + nombre + estado */}
       <div className="flex items-start gap-4">
-        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border border-slate-200 dark:border-border bg-slate-100 dark:bg-card overflow-hidden">
+        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border border-border bg-muted overflow-hidden">
           {branch.logoUrl ? (
             <img src={branch.logoUrl} alt={branch.name} className="h-full w-full object-cover" />
           ) : (
-            <Building2 className="h-7 w-7 text-slate-400 dark:text-muted-foreground" />
+            <Building2 className="h-7 w-7 text-muted-foreground" />
           )}
         </div>
         <div className="min-w-0 space-y-1">
@@ -84,16 +84,16 @@ export const BranchDetailView: React.FC<BranchDetailViewProps> = ({ branch }) =>
             className={cn(
               'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0',
               isActive
-                ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300'
-                : 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300'
+                ? 'bg-fresco-suave text-fresco-texto'
+                : 'bg-destructive-suave text-destructive-texto'
             )}
           >
             {isActive ? 'Activa' : 'Deshabilitada'}
           </Badge>
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white truncate">
+          <h2 className="text-xl font-bold text-foreground truncate">
             {branch.name}
           </h2>
-          <p className="text-xs text-slate-500 dark:text-muted-foreground">ID: {branch.id}</p>
+          <p className="text-xs text-muted-foreground">ID: {branch.id}</p>
         </div>
       </div>
 

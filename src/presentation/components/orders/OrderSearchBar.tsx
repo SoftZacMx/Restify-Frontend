@@ -80,7 +80,7 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
       <div className="flex flex-col sm:flex-row gap-3">
         {/* Búsqueda */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Buscar por cliente o número de orden..."
             value={filters.search}
@@ -90,7 +90,7 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
           {filters.search && (
             <button
               onClick={() => handleSearchChange('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground"
             >
               <X className="h-4 w-4" />
             </button>
@@ -101,7 +101,7 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
         <Select value={filters.status} onValueChange={handleStatusChange}>
           <SelectTrigger className="w-full sm:w-[180px]">
             <span className="flex items-center gap-2">
-              <Filter className="h-4 w-4 shrink-0 text-slate-400" />
+              <Filter className="h-4 w-4 shrink-0 text-muted-foreground" />
               <SelectValue placeholder="Estado" />
             </span>
           </SelectTrigger>
@@ -159,7 +159,7 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
 
         {/* Fecha desde */}
         <div className="relative">
-          <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+          <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
           <Input
             type="date"
             value={filters.dateFrom}
@@ -171,7 +171,7 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
 
         {/* Fecha hasta */}
         <div className="relative">
-          <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+          <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
           <Input
             type="date"
             value={filters.dateTo}
@@ -186,7 +186,7 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
           <Button
             variant="outline"
             onClick={clearFilters}
-            className="text-slate-600 hover:text-slate-900"
+            className="text-muted-foreground hover:text-foreground"
           >
             <X className="h-4 w-4 mr-1" />
             Limpiar

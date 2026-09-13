@@ -33,16 +33,16 @@ export const CreateExpenseDialog: React.FC<CreateExpenseDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full md:w-[55vw] max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 shadow-xl rounded-xl">
+      <DialogContent className="w-full md:w-[55vw] max-h-[90vh] overflow-y-auto bg-card shadow-xl rounded-xl">
         <DialogHeader className="flex flex-row items-start gap-3 pr-10">
           <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary text-white">
             <ShoppingCart className="h-5 w-5" />
           </div>
           <div className="min-w-0 flex-1">
-            <DialogTitle className="text-xl font-bold text-slate-900 dark:text-white">
+            <DialogTitle className="text-xl font-bold text-foreground">
               Nuevo Gasto
             </DialogTitle>
-            <p className="mt-0.5 text-sm text-slate-500 dark:text-muted-foreground">
+            <p className="mt-0.5 text-sm text-muted-foreground">
               Registro de compra de mercancía para inventario.
             </p>
           </div>

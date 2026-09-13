@@ -32,7 +32,7 @@ export const UserBranches: React.FC<UserBranchesProps> = ({ user }) => {
   const renderContent = () => {
     if (hasOrgWideAccess) {
       return (
-        <p className="text-sm text-slate-500 dark:text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Este rol tiene acceso a todas las sucursales de la organización.
         </p>
       );
@@ -40,17 +40,17 @@ export const UserBranches: React.FC<UserBranchesProps> = ({ user }) => {
 
     if (assignedIds.length === 0) {
       return (
-        <p className="text-sm text-slate-500 dark:text-muted-foreground">Sin sucursales asignadas</p>
+        <p className="text-sm text-muted-foreground">Sin sucursales asignadas</p>
       );
     }
 
     if (isLoading) {
-      return <p className="text-sm text-slate-500 dark:text-muted-foreground">Cargando sucursales...</p>;
+      return <p className="text-sm text-muted-foreground">Cargando sucursales...</p>;
     }
 
     if (assignedBranches.length === 0) {
       return (
-        <p className="text-sm text-slate-500 dark:text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           No se pudo obtener el nombre de las sucursales asignadas.
         </p>
       );
@@ -61,23 +61,23 @@ export const UserBranches: React.FC<UserBranchesProps> = ({ user }) => {
         {assignedBranches.map((branch) => (
           <div
             key={branch.id}
-            className="flex items-center gap-3 rounded-lg border border-slate-200 dark:border-border p-3 min-w-0"
+            className="flex items-center gap-3 rounded-lg border border-border p-3 min-w-0"
           >
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-card text-slate-500 dark:text-foreground">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
               <Store className="h-4 w-4" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 min-w-0">
-                <p className="text-sm font-medium text-slate-900 dark:text-white truncate">
+                <p className="text-sm font-medium text-foreground truncate">
                   {branch.name}
                 </p>
                 {branch.status === 'disabled' && (
-                  <Badge className="shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800 dark:bg-card dark:text-foreground">
+                  <Badge className="shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold bg-muted text-foreground dark:bg-card dark:text-foreground">
                     Deshabilitada
                   </Badge>
                 )}
               </div>
-              <p className="text-xs text-slate-500 dark:text-muted-foreground truncate">
+              <p className="text-xs text-muted-foreground truncate">
                 {branch.city}, {branch.state}
               </p>
             </div>
@@ -88,8 +88,8 @@ export const UserBranches: React.FC<UserBranchesProps> = ({ user }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-card rounded-xl shadow-sm p-6 border border-slate-200 dark:border-border">
-      <h3 className="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] mb-6">
+    <div className="bg-card rounded-xl shadow-sm p-6 border border-border">
+      <h3 className="text-foreground text-lg font-bold leading-tight tracking-[-0.015em] mb-6">
         Sucursales Asignadas
       </h3>
       {renderContent()}

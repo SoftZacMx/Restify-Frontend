@@ -63,7 +63,7 @@ export const MenuCategoryPagination: React.FC<MenuCategoryPaginationProps> = ({
     <div className="px-4 py-4">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Información de items */}
-        <div className="text-sm text-slate-500 dark:text-muted-foreground">
+        <div className="text-sm text-muted-foreground">
           Mostrando {startItem} - {endItem} de {totalItems} categorías
         </div>
 
@@ -84,7 +84,7 @@ export const MenuCategoryPagination: React.FC<MenuCategoryPaginationProps> = ({
               page === 'ellipsis' ? (
                 <span
                   key={`ellipsis-${index}`}
-                  className="px-2 text-slate-400"
+                  className="px-2 text-muted-foreground"
                 >
                   ...
                 </span>
@@ -103,7 +103,7 @@ export const MenuCategoryPagination: React.FC<MenuCategoryPaginationProps> = ({
           </div>
 
           {/* Indicador móvil */}
-          <span className="sm:hidden text-sm text-slate-500 dark:text-muted-foreground">
+          <span className="sm:hidden text-sm text-muted-foreground">
             Página {currentPage} de {totalPages}
           </span>
 

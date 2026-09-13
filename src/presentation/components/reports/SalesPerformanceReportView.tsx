@@ -23,23 +23,23 @@ export const SalesPerformanceReportView: React.FC<SalesPerformanceReportViewProp
   return (
     <div className="space-y-6 p-4">
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="overflow-hidden border-l-4 border-l-emerald-500 dark:border-l-emerald-600 bg-gradient-to-br from-white to-emerald-50/30 dark:from-card dark:to-emerald-950/20 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="overflow-hidden border-l-4 border-l-fresco bg-gradient-to-br from-white to-fresco-suave/30 dark:from-card shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
-              <span className="rounded-lg bg-emerald-100 dark:bg-emerald-900/40 p-1.5">
-                <DollarSign className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <span className="rounded-lg bg-fresco-suave p-1.5">
+                <DollarSign className="h-4 w-4 text-fresco" />
               </span>
               Total vendido
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{formatCurrency(totalSold)}</p>
+            <p className="text-2xl font-bold text-fresco">{formatCurrency(totalSold)}</p>
           </CardContent>
         </Card>
         <Card className="overflow-hidden border-l-4 border-l-primary dark:border-l-primary bg-gradient-to-br from-white to-primary/30 dark:from-card dark:to-primary/20 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
-              <span className="rounded-lg bg-primary/10 dark:bg-primary/20/40 p-1.5">
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <span className="rounded-lg bg-primary/10 dark:bg-primary/20 p-1.5">
                 <Package className="h-4 w-4 text-primary dark:text-primary" />
               </span>
               Ítems con ventas
@@ -51,7 +51,7 @@ export const SalesPerformanceReportView: React.FC<SalesPerformanceReportViewProp
         </Card>
         <Card className="overflow-hidden border-l-4 border-l-violet-500 dark:border-l-violet-600 bg-gradient-to-br from-white to-violet-50/30 dark:from-card dark:to-violet-950/20 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <span className="rounded-lg bg-violet-100 dark:bg-violet-900/40 p-1.5">
                 <BarChart2 className="h-4 w-4 text-violet-600 dark:text-violet-400" />
               </span>
@@ -65,29 +65,29 @@ export const SalesPerformanceReportView: React.FC<SalesPerformanceReportViewProp
       </div>
 
       {summary.topSeller && (
-        <Card className="overflow-hidden border-2 border-amber-200 dark:border-amber-800 bg-gradient-to-br from-amber-50/80 to-white dark:from-amber-950/30 dark:to-card shadow-lg">
-          <CardHeader className="bg-amber-50/50 dark:bg-amber-900/20 border-b border-amber-200/50 dark:border-amber-800/50">
+        <Card className="overflow-hidden border-2 border-apoyo bg-gradient-to-br from-apoyo-suave/80 to-white dark:to-card shadow-lg">
+          <CardHeader className="bg-apoyo-suave/50 border-b border-apoyo/50">
             <CardTitle className="flex items-center gap-2 text-base">
-              <span className="rounded-xl bg-amber-200 dark:bg-amber-800 p-2">
-                <Trophy className="h-5 w-5 text-amber-700 dark:text-amber-300" />
+              <span className="rounded-xl bg-apoyo-suave p-2">
+                <Trophy className="h-5 w-5 text-apoyo-texto" />
               </span>
               Mejor vendido
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-4 flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p className="font-semibold text-slate-900 dark:text-white text-lg">{summary.topSeller.menuItemName}</p>
-              <p className="text-sm text-slate-500 dark:text-muted-foreground mt-1">Total vendido: <span className="font-medium text-amber-700 dark:text-amber-300">{formatCurrency(summary.topSeller.totalSold)}</span></p>
+              <p className="font-semibold text-foreground text-lg">{summary.topSeller.menuItemName}</p>
+              <p className="text-sm text-muted-foreground mt-1">Total vendido: <span className="font-medium text-apoyo-texto">{formatCurrency(summary.topSeller.totalSold)}</span></p>
             </div>
-            <Badge className="bg-amber-200 text-amber-900 dark:bg-amber-800 dark:text-amber-100 border-0 text-sm px-3 py-1">
+            <Badge className="bg-apoyo-suave text-apoyo-texto border-0 text-sm px-3 py-1">
               Top 1
             </Badge>
           </CardContent>
         </Card>
       )}
 
-      <Card className="shadow-md border-slate-200 dark:border-border">
-        <CardHeader className="bg-slate-50/80 dark:bg-card/50 border-b border-slate-200 dark:border-border">
+      <Card className="shadow-md border-border">
+        <CardHeader className="bg-muted/80 dark:bg-card/50 border-b border-border">
           <CardTitle className="flex items-center gap-2 text-base">
             <UtensilsCrossed className="h-5 w-5 text-primary" />
             Ventas por ítem del catálogo
@@ -95,11 +95,11 @@ export const SalesPerformanceReportView: React.FC<SalesPerformanceReportViewProp
         </CardHeader>
         <CardContent className="pt-4">
           {sales.length === 0 ? (
-            <p className="text-sm text-slate-500">No hay ventas en el período.</p>
+            <p className="text-sm text-muted-foreground">No hay ventas en el período.</p>
           ) : (
             <Table>
               <TableHeader>
-                <TableRow className="border-slate-200 dark:border-border">
+                <TableRow className="border-border">
                   <TableHead>Producto</TableHead>
                   <TableHead>Precio unit.</TableHead>
                   <TableHead>Cantidad</TableHead>
@@ -109,7 +109,7 @@ export const SalesPerformanceReportView: React.FC<SalesPerformanceReportViewProp
               </TableHeader>
               <TableBody>
                 {sales.map((s, idx) => (
-                  <TableRow key={s.menuItemId} className={`hover:bg-slate-50 dark:hover:bg-card/50 ${idx === 0 ? 'bg-amber-50/50 dark:bg-amber-950/20' : ''}`}>
+                  <TableRow key={s.menuItemId} className={`hover:bg-muted dark:hover:bg-card/50 ${idx === 0 ? 'bg-apoyo-suave/50' : ''}`}>
                     <TableCell className="font-medium">{s.menuItemName}</TableCell>
                     <TableCell>{formatCurrency(s.unitPrice)}</TableCell>
                     <TableCell>{s.quantitySold}</TableCell>

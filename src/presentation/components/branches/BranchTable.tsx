@@ -54,8 +54,8 @@ export const BranchTable: React.FC<BranchTableProps> = ({
   if (isLoading) {
     return (
       <div className="px-4 py-5">
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
-          <div className="p-8 text-center text-slate-500 dark:text-muted-foreground">
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          <div className="p-8 text-center text-muted-foreground">
             Cargando sucursales...
           </div>
         </div>
@@ -66,8 +66,8 @@ export const BranchTable: React.FC<BranchTableProps> = ({
   if (branches.length === 0) {
     return (
       <div className="px-4 py-5">
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
-          <div className="p-8 text-center text-slate-500 dark:text-muted-foreground">
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          <div className="p-8 text-center text-muted-foreground">
             No se encontraron sucursales
           </div>
         </div>
@@ -77,27 +77,27 @@ export const BranchTable: React.FC<BranchTableProps> = ({
 
   return (
     <div className="px-4 py-5">
-      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-border bg-white dark:bg-background-dark">
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="bg-slate-50 dark:bg-card/50">
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+              <TableRow className="bg-muted/50">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Sucursal
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Ubicación
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Usuarios
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Último pedido
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Estado
                 </TableHead>
-                <TableHead className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-muted-foreground uppercase tracking-wider">
+                <TableHead className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Acciones
                 </TableHead>
               </TableRow>
@@ -106,23 +106,23 @@ export const BranchTable: React.FC<BranchTableProps> = ({
               {branches.map((branch) => (
                 <TableRow
                   key={branch.id}
-                  className="hover:bg-slate-50 dark:hover:bg-card/50 transition-colors"
+                  className="hover:bg-muted/50 transition-colors"
                 >
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 dark:text-white">
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
                     {branch.name}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap text-sm">
                     <div className="flex flex-col">
-                      <span className="text-slate-900 dark:text-foreground">{branch.city}</span>
-                      <span className="text-xs uppercase tracking-wider text-slate-500 dark:text-muted-foreground">
+                      <span className="text-foreground">{branch.city}</span>
+                      <span className="text-xs uppercase tracking-wider text-muted-foreground">
                         {branch.state}
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-muted-foreground">
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                     {branch.assignedUsersCount}
                   </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-muted-foreground">
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                     {formatLastOrder(branch.lastOrderAt)}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap">
@@ -130,8 +130,8 @@ export const BranchTable: React.FC<BranchTableProps> = ({
                       className={cn(
                         'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0',
                         branch.status === 'active'
-                          ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300'
-                          : 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300'
+                          ? 'bg-fresco-suave text-fresco-texto'
+                          : 'bg-destructive-suave text-destructive-texto'
                       )}
                     >
                       {branch.status === 'active' ? 'Activa' : 'Deshabilitada'}
@@ -139,7 +139,7 @@ export const BranchTable: React.FC<BranchTableProps> = ({
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <DropdownMenu>
-                      <DropdownMenuTrigger className="p-2 rounded-full text-slate-500 dark:text-muted-foreground hover:bg-slate-200 dark:hover:bg-card hover:text-slate-700 dark:hover:text-foreground transition-colors">
+                      <DropdownMenuTrigger className="p-2 rounded-full text-muted-foreground hover:bg-accent hover:text-foreground transition-colors">
                         <MoreVertical className="h-4 w-4" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-40">
@@ -164,7 +164,7 @@ export const BranchTable: React.FC<BranchTableProps> = ({
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               onSelect={() => onBranchAction?.(branch.id, 'disable')}
-                              className="cursor-pointer text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20"
+                              className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive-suave"
                             >
                               <Ban className="mr-2 h-4 w-4" />
                               <span>Deshabilitar</span>
@@ -176,7 +176,7 @@ export const BranchTable: React.FC<BranchTableProps> = ({
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               onSelect={() => onBranchAction?.(branch.id, 'enable')}
-                              className="cursor-pointer text-green-700 dark:text-green-400 focus:text-green-700 dark:focus:text-green-400 focus:bg-green-50 dark:focus:bg-green-900/20"
+                              className="cursor-pointer text-fresco-texto focus:text-fresco-texto focus:bg-fresco-suave"
                             >
                               <CheckCircle2 className="mr-2 h-4 w-4" />
                               <span>Habilitar</span>

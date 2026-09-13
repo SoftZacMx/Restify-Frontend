@@ -73,8 +73,8 @@ export const BranchAssignDialog: React.FC<BranchAssignDialogProps> = ({
       <div className="space-y-4">
         {/* Búsqueda */}
         <label className="flex h-12 w-full">
-          <div className="flex w-full flex-1 items-stretch rounded-lg bg-slate-100 dark:bg-card">
-            <div className="flex items-center justify-center pl-4 text-slate-500 dark:text-muted-foreground">
+          <div className="flex w-full flex-1 items-stretch rounded-lg bg-muted">
+            <div className="flex items-center justify-center pl-4 text-muted-foreground">
               <Search className="h-5 w-5" />
             </div>
             <Input
@@ -87,14 +87,14 @@ export const BranchAssignDialog: React.FC<BranchAssignDialogProps> = ({
         </label>
 
         {/* Lista */}
-        <div className="max-h-80 overflow-y-auto rounded-xl border border-slate-200 dark:border-border">
+        <div className="max-h-80 overflow-y-auto rounded-xl border border-border">
           {isLoading && (
-            <div className="p-8 text-center text-sm text-slate-500 dark:text-muted-foreground">
+            <div className="p-8 text-center text-sm text-muted-foreground">
               Cargando sucursales...
             </div>
           )}
           {!isLoading && filtered.length === 0 && (
-            <div className="p-8 text-center text-sm text-slate-500 dark:text-muted-foreground">
+            <div className="p-8 text-center text-sm text-muted-foreground">
               No se encontraron sucursales
             </div>
           )}
@@ -107,10 +107,10 @@ export const BranchAssignDialog: React.FC<BranchAssignDialogProps> = ({
                   type="button"
                   onClick={() => toggle(branch.id)}
                   className={cn(
-                    'flex w-full items-center gap-3 px-4 py-3 text-left transition-colors border-b border-slate-100 dark:border-border last:border-b-0',
+                    'flex w-full items-center gap-3 px-4 py-3 text-left transition-colors border-b border-border last:border-b-0',
                     isSelected
                       ? 'bg-primary/5 dark:bg-primary/10'
-                      : 'hover:bg-slate-50 dark:hover:bg-card/40'
+                      : 'hover:bg-muted dark:hover:bg-card/40'
                   )}
                 >
                   <div
@@ -118,19 +118,19 @@ export const BranchAssignDialog: React.FC<BranchAssignDialogProps> = ({
                       'flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors',
                       isSelected
                         ? 'border-primary bg-primary text-primary-foreground'
-                        : 'border-slate-300 dark:border-border'
+                        : 'border-border'
                     )}
                   >
                     {isSelected && <Check className="h-3.5 w-3.5" />}
                   </div>
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-card">
-                    <Store className="h-4 w-4 text-slate-400 dark:text-muted-foreground" />
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted">
+                    <Store className="h-4 w-4 text-muted-foreground" />
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-slate-900 dark:text-foreground">
+                    <p className="truncate text-sm font-medium text-foreground">
                       {branch.name}
                     </p>
-                    <p className="flex items-center gap-1 truncate text-xs text-slate-500 dark:text-muted-foreground">
+                    <p className="flex items-center gap-1 truncate text-xs text-muted-foreground">
                       <MapPin className="h-3 w-3 shrink-0" />
                       {branch.city}, {branch.state}
                     </p>

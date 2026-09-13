@@ -25,10 +25,10 @@ const PAYMENT_LABELS: Record<number, string> = {
 };
 
 const paymentPillClass: Record<number, string> = {
-  1: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  2: 'bg-primary/10 text-primary dark:bg-primary/20/40 dark:text-primary',
+  1: 'bg-apoyo-suave text-apoyo-texto',
+  2: 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary',
   3: 'bg-violet-100 text-violet-800 dark:bg-violet-900/40 dark:text-violet-300',
-  4: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
+  4: 'bg-fresco-suave text-fresco-texto',
 };
 
 export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) => {
@@ -36,56 +36,56 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
   const bpm = incomes.byPaymentMethod ?? { cash: 0, transfer: 0, card: 0 };
   const statusConfig =
     cashFlow.status === 'POSITIVE'
-      ? { variant: 'default' as const, label: 'Positivo', icon: TrendingUp, className: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800' }
+      ? { variant: 'default' as const, label: 'Positivo', icon: TrendingUp, className: 'bg-fresco-suave text-fresco-texto border-fresco' }
       : cashFlow.status === 'NEGATIVE'
-        ? { variant: 'destructive' as const, label: 'Negativo', icon: TrendingDown, className: 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300 border-red-200 dark:border-red-800' }
-        : { variant: 'secondary' as const, label: 'En equilibrio', icon: Scale, className: 'bg-slate-100 text-slate-800 dark:bg-card/50 dark:text-foreground border-slate-200 dark:border-border' };
+        ? { variant: 'destructive' as const, label: 'Negativo', icon: TrendingDown, className: 'bg-destructive-suave text-destructive-texto border-destructive' }
+        : { variant: 'secondary' as const, label: 'En equilibrio', icon: Scale, className: 'bg-muted text-foreground dark:bg-card/50 dark:text-foreground border-border' };
   const StatusIcon = statusConfig.icon;
 
   return (
     <div className="space-y-6 p-4">
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="overflow-hidden border-l-4 border-l-green-500 dark:border-l-green-600 bg-gradient-to-br from-white to-green-50/30 dark:from-card dark:to-green-950/20 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="overflow-hidden border-l-4 border-l-fresco bg-gradient-to-br from-white to-fresco-suave/30 dark:from-card shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
-              <span className="rounded-lg bg-green-100 dark:bg-green-900/40 p-1.5">
-                <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <span className="rounded-lg bg-fresco-suave p-1.5">
+                <TrendingUp className="h-4 w-4 text-fresco" />
               </span>
               Ingresos totales
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-green-600 dark:text-green-400">{formatCurrency(incomes.totalIncomes)}</p>
+            <p className="text-2xl font-bold text-fresco">{formatCurrency(incomes.totalIncomes)}</p>
             <div className="flex flex-wrap gap-1.5 mt-2">
-              <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">Efectivo {formatCurrency(bpm.cash)}</span>
-              <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-primary/10 dark:bg-primary/20/40 text-primary dark:text-primary">Transf. {formatCurrency(bpm.transfer)}</span>
+              <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-apoyo-suave text-apoyo-texto">Efectivo {formatCurrency(bpm.cash)}</span>
+              <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary">Transf. {formatCurrency(bpm.transfer)}</span>
               <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-violet-100 dark:bg-violet-900/40 text-violet-800 dark:text-violet-300">Tarjeta {formatCurrency(bpm.card)}</span>
             </div>
           </CardContent>
         </Card>
-        <Card className="overflow-hidden border-l-4 border-l-red-500 dark:border-l-red-600 bg-gradient-to-br from-white to-red-50/30 dark:from-card dark:to-red-950/20 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="overflow-hidden border-l-4 border-l-destructive bg-gradient-to-br from-white to-destructive-suave/30 dark:from-card shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
-              <span className="rounded-lg bg-red-100 dark:bg-red-900/40 p-1.5">
-                <TrendingDown className="h-4 w-4 text-red-600 dark:text-red-400" />
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <span className="rounded-lg bg-destructive-suave p-1.5">
+                <TrendingDown className="h-4 w-4 text-destructive" />
               </span>
               Gastos totales
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-red-600 dark:text-red-400">{formatCurrency(expenses.totalExpenses)}</p>
+            <p className="text-2xl font-bold text-destructive">{formatCurrency(expenses.totalExpenses)}</p>
             <div className="flex flex-wrap gap-1.5 mt-2 text-xs">
               {expenses.businessServices.total > 0 && (
-                <span className="rounded-md px-2 py-0.5 font-medium bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">Servicios {formatCurrency(expenses.businessServices.total)}</span>
+                <span className="rounded-md px-2 py-0.5 font-medium bg-apoyo-suave text-apoyo-texto">Servicios {formatCurrency(expenses.businessServices.total)}</span>
               )}
               {expenses.utility.total > 0 && (
-                <span className="rounded-md px-2 py-0.5 font-medium bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300">S. públicos {formatCurrency(expenses.utility.total)}</span>
+                <span className="rounded-md px-2 py-0.5 font-medium bg-apoyo-suave text-apoyo-texto">S. públicos {formatCurrency(expenses.utility.total)}</span>
               )}
               {expenses.rent.total > 0 && (
-                <span className="rounded-md px-2 py-0.5 font-medium bg-rose-100 dark:bg-rose-900/40 text-rose-800 dark:text-rose-300">Renta {formatCurrency(expenses.rent.total)}</span>
+                <span className="rounded-md px-2 py-0.5 font-medium bg-destructive-suave text-destructive-texto">Renta {formatCurrency(expenses.rent.total)}</span>
               )}
               {expenses.merchandise.total > 0 && (
-                <span className="rounded-md px-2 py-0.5 font-medium bg-primary/10 dark:bg-primary/20/40 text-primary dark:text-primary">Mercancía {formatCurrency(expenses.merchandise.total)}</span>
+                <span className="rounded-md px-2 py-0.5 font-medium bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary">Mercancía {formatCurrency(expenses.merchandise.total)}</span>
               )}
               {(expenses.salary.total + expenses.employeeSalaries.total) > 0 && (
                 <span className="rounded-md px-2 py-0.5 font-medium bg-violet-100 dark:bg-violet-900/40 text-violet-800 dark:text-violet-300">Nómina {formatCurrency(expenses.salary.total + expenses.employeeSalaries.total)}</span>
@@ -94,17 +94,17 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
                 <span className="rounded-md px-2 py-0.5 font-medium bg-cyan-100 dark:bg-cyan-900/40 text-cyan-800 dark:text-cyan-300">Comisión MP {formatCurrency(expenses.mercadoPagoFee.total)}</span>
               )}
               {expenses.other.total > 0 && (
-                <span className="rounded-md px-2 py-0.5 font-medium bg-slate-100 dark:bg-card text-slate-700 dark:text-foreground">Otros {formatCurrency(expenses.other.total)}</span>
+                <span className="rounded-md px-2 py-0.5 font-medium bg-muted text-foreground">Otros {formatCurrency(expenses.other.total)}</span>
               )}
               {expenses.tips.total > 0 && (
-                <span className="rounded-md px-2 py-0.5 font-medium bg-pink-100 dark:bg-pink-900/40 text-pink-800 dark:text-pink-300">Propinas {formatCurrency(expenses.tips.total)}</span>
+                <span className="rounded-md px-2 py-0.5 font-medium bg-destructive-suave text-destructive-texto">Propinas {formatCurrency(expenses.tips.total)}</span>
               )}
             </div>
           </CardContent>
         </Card>
         <Card className="overflow-hidden border-l-4 border-l-primary bg-gradient-to-br from-white to-primary/5 dark:from-card dark:to-primary/10 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 dark:text-muted-foreground flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <span className="rounded-lg bg-primary/10 p-1.5">
                 <StatusIcon className="h-4 w-4 text-primary" />
               </span>
@@ -112,7 +112,7 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-slate-900 dark:text-white">{formatCurrency(cashFlow.balance)}</p>
+            <p className="text-2xl font-bold text-foreground">{formatCurrency(cashFlow.balance)}</p>
             <Badge variant={statusConfig.variant} className={`mt-2 border ${statusConfig.className}`}>
               {statusConfig.label}
             </Badge>
@@ -120,8 +120,8 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
         </Card>
       </div>
 
-      <Card className="shadow-md border-slate-200 dark:border-border">
-        <CardHeader className="bg-slate-50/80 dark:bg-card/50 border-b border-slate-200 dark:border-border">
+      <Card className="shadow-md border-border">
+        <CardHeader className="bg-muted/80 dark:bg-card/50 border-b border-border">
           <CardTitle className="flex items-center gap-2 text-base">
             <Receipt className="h-5 w-5 text-primary" />
             Órdenes (ingresos)
@@ -129,11 +129,11 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
         </CardHeader>
         <CardContent className="pt-4">
           {incomes.orders.length === 0 ? (
-            <p className="text-sm text-slate-500">No hay órdenes en el período.</p>
+            <p className="text-sm text-muted-foreground">No hay órdenes en el período.</p>
           ) : (
             <Table>
               <TableHeader>
-                <TableRow className="border-slate-200 dark:border-border">
+                <TableRow className="border-border">
                   <TableHead>Fecha</TableHead>
                   <TableHead>Total</TableHead>
                   <TableHead>Método de pago</TableHead>
@@ -141,16 +141,16 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
               </TableHeader>
               <TableBody>
                 {incomes.orders.map((o) => (
-                  <TableRow key={o.id} className="hover:bg-slate-50 dark:hover:bg-card/50">
+                  <TableRow key={o.id} className="hover:bg-muted dark:hover:bg-card/50">
                     <TableCell>{formatExpenseDate(o.date)}</TableCell>
                     <TableCell className="font-medium">{formatCurrency(o.total)}</TableCell>
                     <TableCell>
                       {o.paymentMethod != null ? (
-                        <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${paymentPillClass[o.paymentMethod] ?? 'bg-slate-100 dark:bg-card'}`}>
+                        <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${paymentPillClass[o.paymentMethod] ?? 'bg-muted'}`}>
                           {PAYMENT_LABELS[o.paymentMethod] ?? o.paymentMethod}
                         </span>
                       ) : (
-                        <span className="rounded-full bg-slate-200 dark:bg-card px-2 py-0.5 text-xs">Dividido</span>
+                        <span className="rounded-full bg-secondary px-2 py-0.5 text-xs">Dividido</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -162,16 +162,16 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
       </Card>
 
       <div className="grid gap-4 md:grid-cols-2">
-        <Card className="shadow-md border-slate-200 dark:border-border hover:shadow-lg transition-shadow">
+        <Card className="shadow-md border-border hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <Briefcase className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+              <Briefcase className="h-4 w-4 text-apoyo" />
               Servicios del negocio
             </CardTitle>
           </CardHeader>
           <CardContent>
             {expenses.businessServices.items.length === 0 ? (
-              <p className="text-sm text-slate-500">Sin registros.</p>
+              <p className="text-sm text-muted-foreground">Sin registros.</p>
             ) : (
               <Table>
                 <TableHeader>
@@ -182,7 +182,7 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
                 </TableHeader>
                 <TableBody>
                   {expenses.businessServices.items.map((i) => (
-                    <TableRow key={i.id} className="hover:bg-slate-50 dark:hover:bg-card/50">
+                    <TableRow key={i.id} className="hover:bg-muted dark:hover:bg-card/50">
                       <TableCell>{formatExpenseDate(i.date)}</TableCell>
                       <TableCell className="font-medium">{formatCurrency(i.total)}</TableCell>
                     </TableRow>
@@ -190,12 +190,12 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
                 </TableBody>
               </Table>
             )}
-            <p className="text-sm font-semibold mt-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 px-3 py-2 text-amber-800 dark:text-amber-200">
+            <p className="text-sm font-semibold mt-3 rounded-lg bg-apoyo-suave px-3 py-2 text-apoyo-texto">
               Total: {formatCurrency(expenses.businessServices.total)}
             </p>
           </CardContent>
         </Card>
-        <Card className="shadow-md border-slate-200 dark:border-border hover:shadow-lg transition-shadow">
+        <Card className="shadow-md border-border hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
               <Package className="h-4 w-4 text-primary dark:text-primary" />
@@ -204,7 +204,7 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
           </CardHeader>
           <CardContent>
             {expenses.merchandise.items.length === 0 ? (
-              <p className="text-sm text-slate-500">Sin registros.</p>
+              <p className="text-sm text-muted-foreground">Sin registros.</p>
             ) : (
               <Table>
                 <TableHeader>
@@ -215,7 +215,7 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
                 </TableHeader>
                 <TableBody>
                   {expenses.merchandise.items.map((i) => (
-                    <TableRow key={i.id} className="hover:bg-slate-50 dark:hover:bg-card/50">
+                    <TableRow key={i.id} className="hover:bg-muted dark:hover:bg-card/50">
                       <TableCell>{formatExpenseDate(i.date)}</TableCell>
                       <TableCell className="font-medium">{formatCurrency(i.total)}</TableCell>
                     </TableRow>
@@ -223,7 +223,7 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
                 </TableBody>
               </Table>
             )}
-            <p className="text-sm font-semibold mt-3 rounded-lg bg-primary/10 dark:bg-primary/20/30 px-3 py-2 text-primary dark:text-primary">
+            <p className="text-sm font-semibold mt-3 rounded-lg bg-primary/10 dark:bg-primary/20 px-3 py-2 text-primary dark:text-primary">
               Total: {formatCurrency(expenses.merchandise.total)}
             </p>
           </CardContent>
@@ -240,16 +240,16 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
             visible={expenses.utility.total > 0}
             title="Servicios públicos"
             icon={Zap}
-            iconClass="text-yellow-600 dark:text-yellow-400"
-            totalClass="bg-yellow-50 dark:bg-yellow-950/30 text-yellow-800 dark:text-yellow-200"
+            iconClass="text-apoyo"
+            totalClass="bg-apoyo-suave text-apoyo-texto"
             bucket={expenses.utility}
           />
           <ExpenseBucketCard
             visible={expenses.rent.total > 0}
             title="Renta"
             icon={Building2}
-            iconClass="text-rose-600 dark:text-rose-400"
-            totalClass="bg-rose-50 dark:bg-rose-950/30 text-rose-800 dark:text-rose-200"
+            iconClass="text-destructive"
+            totalClass="bg-destructive-suave text-destructive-texto"
             bucket={expenses.rent}
           />
           <ExpenseBucketCard
@@ -272,8 +272,8 @@ export const CashFlowReportView: React.FC<CashFlowReportViewProps> = ({ data }) 
             visible={expenses.other.total > 0}
             title="Otros gastos"
             icon={FileText}
-            iconClass="text-slate-600 dark:text-muted-foreground"
-            totalClass="bg-slate-100 dark:bg-card text-slate-800 dark:text-foreground"
+            iconClass="text-muted-foreground"
+            totalClass="bg-muted text-foreground"
             bucket={expenses.other}
           />
         </div>
@@ -301,7 +301,7 @@ const ExpenseBucketCard: React.FC<ExpenseBucketCardProps> = ({
 }) => {
   if (!visible) return null;
   return (
-    <Card className="shadow-md border-slate-200 dark:border-border hover:shadow-lg transition-shadow">
+    <Card className="shadow-md border-border hover:shadow-lg transition-shadow">
       <CardHeader className="pb-2">
         <CardTitle className="text-base flex items-center gap-2">
           <Icon className={`h-4 w-4 ${iconClass}`} />
@@ -318,7 +318,7 @@ const ExpenseBucketCard: React.FC<ExpenseBucketCardProps> = ({
           </TableHeader>
           <TableBody>
             {bucket.items.map((i) => (
-              <TableRow key={i.id} className="hover:bg-slate-50 dark:hover:bg-card/50">
+              <TableRow key={i.id} className="hover:bg-muted dark:hover:bg-card/50">
                 <TableCell>{formatExpenseDate(i.date)}</TableCell>
                 <TableCell className="font-medium">{formatCurrency(i.total)}</TableCell>
               </TableRow>

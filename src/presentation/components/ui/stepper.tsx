@@ -40,7 +40,7 @@ export function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
                   'flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-bold transition-colors',
                   isActive && 'border-primary bg-primary text-white',
                   isCompleted && 'border-primary bg-primary text-white',
-                  !isActive && !isCompleted && 'border-slate-300 dark:border-border text-slate-400 dark:text-muted-foreground',
+                  !isActive && !isCompleted && 'border-border text-muted-foreground',
                   isClickable ? 'cursor-pointer hover:bg-primary/90 hover:border-primary' : 'cursor-default'
                 )}
               >
@@ -50,8 +50,8 @@ export function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
                 className={cn(
                   'text-xs font-medium whitespace-nowrap',
                   isActive || isCompleted
-                    ? 'text-slate-900 dark:text-white'
-                    : 'text-slate-400 dark:text-muted-foreground'
+                    ? 'text-foreground'
+                    : 'text-muted-foreground'
                 )}
               >
                 {step.label}
@@ -63,7 +63,7 @@ export function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
               <div
                 className={cn(
                   'mx-2 h-0.5 w-16 sm:w-24 -translate-y-3 transition-colors',
-                  index < currentStep ? 'bg-primary' : 'bg-slate-300 dark:bg-card'
+                  index < currentStep ? 'bg-primary' : 'bg-secondary'
                 )}
               />
             )}
