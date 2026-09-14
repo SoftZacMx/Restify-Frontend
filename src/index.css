@@ -41,14 +41,14 @@
     --ring: 14 78% 54%;                /* foco = brasa */
     --radius: 0.5rem;
 
-    /* Roles extra no cubiertos por shadcn (en HEX) */
-    --color-marca:  #17201B;           /* carbón: marca/cabeceras/footer */
-    --color-fresco: #5C9A2E;           /* huerto: positivo/fresco */
-    --color-fresco-suave: #E8F1DC;
-    --color-fresco-texto: #3F6B1F;
-    --color-apoyo:  #F2A65A;           /* ámbar: apoyo/iconos/detalles */
-    --color-apoyo-suave: #FDEBD6;
-    --color-apoyo-texto: #9A5A12;
+    /* Roles extra no cubiertos por shadcn (canales HSL para soportar opacidad) */
+    --color-marca:  147 16% 11%;       /* #17201B carbón: marca/cabeceras/footer */
+    --color-fresco: 94 54% 39%;        /* #5C9A2E huerto: positivo/fresco */
+    --color-fresco-suave: 86 43% 90%;  /* #E8F1DC */
+    --color-fresco-texto: 95 55% 27%;  /* #3F6B1F */
+    --color-apoyo:  30 85% 65%;        /* #F2A65A ámbar: apoyo/iconos/detalles */
+    --color-apoyo-suave: 32 91% 92%;   /* #FDEBD6 */
+    --color-apoyo-texto: 32 79% 34%;   /* #9A5A12 */
   }
 
   .dark {
@@ -79,14 +79,14 @@
     --input: 95 13% 18%;
     --ring: 14 78% 54%;
 
-    /* Roles extra en dark */
-    --color-marca:  #F1EEE6;           /* en oscuro la marca/texto va claro */
-    --color-fresco: #93C267;           /* huerto aclarado para contraste */
-    --color-fresco-suave: #202A18;
-    --color-fresco-texto: #ADD388;
-    --color-apoyo:  #F2A65A;
-    --color-apoyo-suave: #2A2416;
-    --color-apoyo-texto: #F2C07A;
+    /* Roles extra en dark (canales HSL) */
+    --color-marca:  44 28% 92%;        /* #F1EEE6 en oscuro la marca/texto va claro */
+    --color-fresco: 91 43% 58%;        /* #93C267 huerto aclarado para contraste */
+    --color-fresco-suave: 93 27% 13%;  /* #202A18 */
+    --color-fresco-texto: 90 46% 68%;  /* #ADD388 */
+    --color-apoyo:  30 85% 65%;        /* #F2A65A */
+    --color-apoyo-suave: 42 31% 13%;   /* #2A2416 */
+    --color-apoyo-texto: 35 82% 71%;   /* #F2C07A */
   }
 }
 

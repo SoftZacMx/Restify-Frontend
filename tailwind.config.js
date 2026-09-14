@@ -56,16 +56,16 @@ export default {
         "background-light": "#f5f6f8",
         "background-dark": "#0f1323",
         // Roles del sistema de diseño (no cubiertos por shadcn)
-        marca: "var(--color-marca)",
+        marca: "hsl(var(--color-marca) / <alpha-value>)",
         fresco: {
-          DEFAULT: "var(--color-fresco)",
-          suave: "var(--color-fresco-suave)",
-          texto: "var(--color-fresco-texto)",
+          DEFAULT: "hsl(var(--color-fresco) / <alpha-value>)",
+          suave: "hsl(var(--color-fresco-suave) / <alpha-value>)",
+          texto: "hsl(var(--color-fresco-texto) / <alpha-value>)",
         },
         apoyo: {
-          DEFAULT: "var(--color-apoyo)",
-          suave: "var(--color-apoyo-suave)",
-          texto: "var(--color-apoyo-texto)",
+          DEFAULT: "hsl(var(--color-apoyo) / <alpha-value>)",
+          suave: "hsl(var(--color-apoyo-suave) / <alpha-value>)",
+          texto: "hsl(var(--color-apoyo-texto) / <alpha-value>)",
         },
       },
       borderRadius: {
