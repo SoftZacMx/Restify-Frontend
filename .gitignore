@@ -42,6 +42,7 @@ test-results/
 *.tsbuildinfo
 
 # Cursor IDE (reglas/estado local; opcional)
-.cursor/
+.cursor/*
+!.cursor/rules/
 
 .claude/

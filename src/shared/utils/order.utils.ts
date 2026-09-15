@@ -27,16 +27,16 @@ export const getOrderStatusInfo = (order: OrderResponse): OrderStatusInfo => {
     return {
       label: 'Pendiente',
       color: 'yellow',
-      bgClass: 'bg-yellow-100 dark:bg-yellow-900/30',
-      textClass: 'text-yellow-800 dark:text-yellow-300',
+      bgClass: 'bg-apoyo-suave',
+      textClass: 'text-apoyo-texto',
     };
   }
   if (!order.status && order.delivered) {
     return {
       label: 'Entregada',
       color: 'orange',
-      bgClass: 'bg-orange-100 dark:bg-orange-900/30',
-      textClass: 'text-orange-800 dark:text-orange-300',
+      bgClass: 'bg-apoyo-suave',
+      textClass: 'text-apoyo-texto',
     };
   }
   if (order.status && !order.delivered) {
@@ -51,15 +51,15 @@ export const getOrderStatusInfo = (order: OrderResponse): OrderStatusInfo => {
     return {
       label: 'Completada',
       color: 'green',
-      bgClass: 'bg-green-100 dark:bg-green-900/30',
-      textClass: 'text-green-800 dark:text-green-300',
+      bgClass: 'bg-fresco-suave',
+      textClass: 'text-fresco-texto',
     };
   }
   return {
     label: 'Desconocido',
     color: 'gray',
-    bgClass: 'bg-gray-100 dark:bg-gray-900/30',
-    textClass: 'text-gray-800 dark:text-gray-300',
+    bgClass: 'bg-muted',
+    textClass: 'text-foreground',
   };
 };
 

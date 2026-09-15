@@ -43,16 +43,16 @@ describe('getPasswordStrengthLabel', () => {
 
 describe('getPasswordStrengthColor', () => {
   it('returns the matching bar color', () => {
-    expect(getPasswordStrengthColor('')).toBe('bg-red-500');
-    expect(getPasswordStrengthColor('abcdefgh1')).toBe('bg-yellow-500');
-    expect(getPasswordStrengthColor('Abcdefgh1!')).toBe('bg-green-500');
+    expect(getPasswordStrengthColor('')).toBe('bg-destructive');
+    expect(getPasswordStrengthColor('abcdefgh1')).toBe('bg-apoyo');
+    expect(getPasswordStrengthColor('Abcdefgh1!')).toBe('bg-fresco');
   });
 });
 
 describe('getPasswordStrengthTextColor', () => {
   it('returns the matching text color', () => {
-    expect(getPasswordStrengthTextColor('')).toBe('text-red-500');
-    expect(getPasswordStrengthTextColor('abcdefgh1')).toBe('text-yellow-500');
-    expect(getPasswordStrengthTextColor('Abcdefgh1!')).toBe('text-green-500');
+    expect(getPasswordStrengthTextColor('')).toBe('text-destructive');
+    expect(getPasswordStrengthTextColor('abcdefgh1')).toBe('text-apoyo');
+    expect(getPasswordStrengthTextColor('Abcdefgh1!')).toBe('text-fresco');
   });
 });

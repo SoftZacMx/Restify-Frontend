@@ -65,13 +65,13 @@ export const getPasswordStrengthColor = (password: string): string => {
   const strength = calculatePasswordStrength(password);
   switch (strength) {
     case 'weak':
-      return 'bg-red-500';
+      return 'bg-destructive';
     case 'medium':
-      return 'bg-yellow-500';
+      return 'bg-apoyo';
     case 'strong':
-      return 'bg-green-500';
+      return 'bg-fresco';
     default:
-      return 'bg-gray-300';
+      return 'bg-secondary';
   }
 };
 
@@ -82,13 +82,13 @@ export const getPasswordStrengthTextColor = (password: string): string => {
   const strength = calculatePasswordStrength(password);
   switch (strength) {
     case 'weak':
-      return 'text-red-500';
+      return 'text-destructive';
     case 'medium':
-      return 'text-yellow-500';
+      return 'text-apoyo';
     case 'strong':
-      return 'text-green-500';
+      return 'text-fresco';
     default:
-      return 'text-gray-500';
+      return 'text-muted-foreground';
   }
 };
 

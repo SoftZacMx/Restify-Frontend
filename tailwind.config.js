@@ -90,6 +90,9 @@ export default {
         h1: ["1.5rem", { lineHeight: "2rem", fontWeight: "700" }],
         h2: ["1.25rem", { lineHeight: "1.75rem", fontWeight: "600" }],
         h3: ["1.125rem", { lineHeight: "1.75rem", fontWeight: "600" }],
+        // Cuerpo y etiqueta: sin peso forzado para componerse con font-medium/semibold
+        body: ["0.875rem", "1.25rem"],
+        caption: ["0.75rem", "1rem"],
       },
       keyframes: {
         "accordion-down": {

@@ -22,13 +22,13 @@ export function getExpenseTypeLabel(type: ExpenseType): string {
  */
 export function getExpenseTypeBadgeColor(type: ExpenseType): string {
   const colors: Record<ExpenseType, string> = {
-    SERVICE_BUSINESS: 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300',
+    SERVICE_BUSINESS: 'bg-fresco-suave text-fresco-texto',
     UTILITY: 'bg-primary/10 dark:bg-primary/20/50 text-primary dark:text-primary',
-    RENT: 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300',
-    MERCHANDISE: 'bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-300',
-    SALARY: 'bg-violet-100 dark:bg-violet-900/50 text-violet-800 dark:text-violet-300',
-    OTHER: 'bg-gray-100 dark:bg-gray-900/50 text-gray-800 dark:text-gray-300',
-    MERCADO_PAGO_FEE: 'bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-300',
+    RENT: 'bg-destructive-suave text-destructive-texto',
+    MERCHANDISE: 'bg-apoyo-suave text-apoyo-texto',
+    SALARY: 'bg-chart-5/15 text-chart-5',
+    OTHER: 'bg-muted text-foreground',
+    MERCADO_PAGO_FEE: 'bg-chart-4/15 text-chart-4',
   };
   return colors[type] || '';
 }

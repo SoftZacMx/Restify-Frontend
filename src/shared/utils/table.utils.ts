@@ -80,8 +80,8 @@ export function validateTableName(value: string): string | null {
  */
 export function getStatusBadgeClasses(status: boolean): string {
   return status
-    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
-    : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+    ? 'bg-fresco-suave text-fresco-texto'
+    : 'bg-destructive-suave text-destructive-texto';
 }
 
 /**
@@ -89,6 +89,6 @@ export function getStatusBadgeClasses(status: boolean): string {
  */
 export function getAvailabilityBadgeClasses(availabilityStatus: boolean): string {
   return availabilityStatus
-    ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300'
-    : 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300';
+    ? 'bg-fresco-suave text-fresco-texto'
+    : 'bg-apoyo-suave text-apoyo-texto';
 }

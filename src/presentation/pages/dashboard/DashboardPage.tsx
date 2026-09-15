@@ -252,7 +252,7 @@ const DashboardPage = () => {
                         <th className="px-4 py-3 font-medium text-right rounded-r-lg">Total</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-border">
+                    <tbody className="divide-y divide-border dark:divide-border">
                       {activeOrders.items.map((order) => (
                         <tr
                           key={order.id}
@@ -310,7 +310,7 @@ const DashboardPage = () => {
                         <th className="px-4 py-3 font-medium text-right rounded-r-lg">Total</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-border">
+                    <tbody className="divide-y divide-border dark:divide-border">
                       {recentOrders.map((order) => (
                         <DashboardOrderRow
                           key={order.id}

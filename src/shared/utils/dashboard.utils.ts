@@ -21,9 +21,9 @@ export function getOrderStatusLabel(order: DashboardOrderSummary): string {
 
 export function getOrderStatusStyle(order: DashboardOrderSummary): string {
   if (order.status && order.delivered)
-    return 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400';
+    return 'bg-fresco-suave text-fresco-texto';
   if (order.status) return 'bg-primary/10 dark:bg-primary/20/20 text-primary dark:text-primary';
-  return 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400';
+  return 'bg-apoyo-suave text-apoyo-texto';
 }
 
 export function getTableDisplay(order: DashboardOrderSummary): string {

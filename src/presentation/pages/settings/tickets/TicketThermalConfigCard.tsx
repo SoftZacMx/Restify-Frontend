@@ -139,7 +139,7 @@ function CollapsibleSection({
 }
 
 const switchListClass =
-  'rounded-lg border border-border/90 dark:border-border/60 divide-y divide-slate-200/90 dark:divide-border/60 px-2 bg-card/50 dark:bg-background/25';
+  'rounded-lg border border-border/90 dark:border-border/60 divide-y divide-border/90 dark:divide-border/60 px-2 bg-card/50 dark:bg-background/25';
 
 /**
  * Configuración de tickets térmicos (venta y cocina): layout, visibilidad y pie.
