@@ -126,7 +126,7 @@ export default function SignupPage() {
       {/* Logo */}
       <div className="mb-6 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
-          <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
+          <UtensilsCrossed className="h-8 w-8 text-primary" />
           <span className="text-2xl font-serif font-bold tracking-wide text-foreground">
             RESTIFY
           </span>
@@ -144,7 +144,7 @@ export default function SignupPage() {
 
       {/* Título + subtítulo del paso */}
       <div className="mb-6 max-w-[640px] text-center">
-        <h2 className="text-lg font-bold text-foreground">
+        <h2 className="text-h3 text-foreground">
           {step === "owner"
             ? "Datos Personales y Organización"
             : "Primera Sucursal"}

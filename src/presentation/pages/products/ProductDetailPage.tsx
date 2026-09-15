@@ -143,7 +143,7 @@ const ProductDetailPage: React.FC = () => {
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <Package className="h-4 w-4" />
               </div>
-              <h2 className="text-lg font-semibold text-foreground">
+              <h2 className="text-h3 text-foreground">
                 Información General
               </h2>
             </div>
@@ -192,7 +192,7 @@ const ProductDetailPage: React.FC = () => {
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <CalendarDays className="h-4 w-4" />
               </div>
-              <h2 className="text-lg font-semibold text-foreground">
+              <h2 className="text-h3 text-foreground">
                 Información de Fechas
               </h2>
             </div>

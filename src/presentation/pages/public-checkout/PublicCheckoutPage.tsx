@@ -148,7 +148,7 @@ const PublicCheckoutPage = () => {
           Volver al catálogo
         </button>
 
-        <h2 className="text-2xl font-bold text-foreground">
+        <h2 className="text-h1 text-foreground">
           Checkout
         </h2>
 
@@ -280,7 +280,7 @@ const PublicCheckoutPage = () => {
                 <div className="pt-4 border-t border-border">
                   <div className="flex justify-between items-center">
                     <span className="text-base font-bold text-foreground">Total</span>
-                    <span className="text-xl font-bold text-primary">
+                    <span className="text-h2 text-primary">
                       ${cartTotal.toFixed(2)}
                     </span>
                   </div>

@@ -41,7 +41,7 @@ export function PosOrderBanner({ order, onBack }: PosOrderBannerProps) {
         </div>
         <div className="flex items-center gap-4">
           <div className="text-right">
-            <p className="text-2xl font-bold text-foreground">
+            <p className="text-h1 text-foreground">
               ${order.total.toFixed(2)}
             </p>
             <p className="text-xs text-muted-foreground">

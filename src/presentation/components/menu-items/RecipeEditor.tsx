@@ -255,7 +255,7 @@ export const RecipeEditor: React.FC<RecipeEditorProps> = ({ menuItemId, isExtra 
             <ChefHat className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-foreground">Receta</h3>
+            <h3 className="text-h3 text-foreground">Receta</h3>
             <p className="text-sm text-muted-foreground">
               {isExtra
                 ? 'Ingredientes que se descuentan del stock cuando este extra se vende junto con un producto.'

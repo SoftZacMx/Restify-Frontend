@@ -9,7 +9,6 @@ import {
   ClipboardList,
   TrendingUp,
   UtensilsCrossed,
-  type LucideIcon,
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/presentation/components/ui/button';
@@ -18,6 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/presentation/components/u
 import { Badge } from '@/presentation/components/ui/badge';
 import { useAuthStore } from '@/presentation/store/auth.store';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
+import { StatCard } from '@/presentation/components/dashboard/StatCard';
 import { dashboardService } from '@/application/services';
 import type { DashboardOrderSummary } from '@/domain/types';
 import { formatCurrency, getTodayDateString } from '@/shared/utils';
@@ -89,7 +89,7 @@ const DashboardPage = () => {
   const getOrderStatusStyle = (order: DashboardOrderSummary) => {
     if (order.status && order.delivered)
       return 'bg-fresco-suave text-fresco-texto';
-    if (order.status) return 'bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary';
+    if (order.status) return 'bg-primary/10 dark:bg-primary/20 text-primary';
     return 'bg-apoyo-suave text-apoyo-texto';
   };
 
@@ -189,11 +189,11 @@ const DashboardPage = () => {
           {/* Chart: Ventas últimos 7 días */}
           <Card className="border-border shadow-sm bg-card">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold text-foreground">
+              <CardTitle className="text-h3 text-foreground">
                 Ventas de los últimos 7 días
               </CardTitle>
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-bold text-foreground">
+                <span className="text-display text-foreground">
                   {formatCurrency(salesLast7Days.total)}
                 </span>
               </div>
@@ -226,7 +226,7 @@ const DashboardPage = () => {
           {/* Órdenes activas */}
           <Card className="border-border shadow-sm bg-card">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-lg font-semibold text-foreground">
+              <CardTitle className="text-h3 text-foreground">
                 Órdenes activas ({activeOrders.count})
               </CardTitle>
               <Link
@@ -283,7 +283,7 @@ const DashboardPage = () => {
           {/* Órdenes recientes */}
           <Card className="border-border shadow-sm bg-card">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-lg font-semibold text-foreground">
+              <CardTitle className="text-h3 text-foreground">
                 Órdenes recientes
               </CardTitle>
               <Link
@@ -337,14 +337,14 @@ const DashboardPage = () => {
           {/* Acciones rápidas */}
           <Card className="border-border shadow-sm bg-card">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold text-foreground">
+              <CardTitle className="text-h3 text-foreground">
                 Acciones rápidas
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <Button
-                  className="h-24 flex flex-col gap-2 bg-primary/10 dark:bg-primary/20 hover:bg-primary/90 dark:hover:bg-primary/90 text-primary dark:text-primary"
+                  className="h-24 flex flex-col gap-2 bg-primary/10 dark:bg-primary/20 hover:bg-primary/90 dark:hover:bg-primary/90 text-primary"
                   onClick={() => navigate('/pos')}
                 >
                   <Plus className="h-6 w-6" />
@@ -373,7 +373,7 @@ const DashboardPage = () => {
           {/* Últimas completadas */}
           <Card className="border-border shadow-sm bg-card">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-lg font-semibold text-foreground">
+              <CardTitle className="text-h3 text-foreground">
                 Últimas completadas
               </CardTitle>
               <Link
@@ -419,7 +419,7 @@ const DashboardPage = () => {
           {/* Notificaciones (placeholder) */}
           <Card className="border-border shadow-sm bg-card">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold text-foreground">
+              <CardTitle className="text-h3 text-foreground">
                 Notificaciones recientes
               </CardTitle>
             </CardHeader>
@@ -435,7 +435,7 @@ const DashboardPage = () => {
                 title="Usa Órdenes para ver el detalle de cada orden."
                 time="Información"
                 iconBg="bg-primary/10 dark:bg-primary/20"
-                iconColor="text-primary dark:text-primary"
+                iconColor="text-primary"
                 IconComponent={ClipboardList}
               />
             </CardContent>
@@ -447,115 +447,6 @@ const DashboardPage = () => {
 };
 
 // --- Helpers ---
-
-const ACCENT_STYLES: Record<
-  string,
-  {
-    iconBg: string;
-    iconColor: string;
-    iconRing: string;
-    cardBg: string;
-    cardBorder: string;
-    cardShadow: string;
-    cardHoverShadow: string;
-    cornerGlow: string;
-    badgeBg: string;
-    badgeText: string;
-  }
-> = {
-  emerald: {
-    iconBg: 'bg-fresco/15',
-    iconColor: 'text-fresco',
-    iconRing: 'ring-fresco/20',
-    cardBg:
-      'bg-gradient-to-br from-white via-white to-fresco-suave/60 dark:from-card dark:via-card',
-    cardBorder: 'border-fresco/60',
-    cardShadow: 'shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50',
-    cardHoverShadow: 'hover:shadow-xl hover:shadow-emerald-500/5 dark:hover:shadow-emerald-500/10',
-    cornerGlow:
-      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-fresco/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
-    badgeBg: 'bg-fresco-suave',
-    badgeText: 'text-fresco-texto',
-  },
-  amber: {
-    iconBg: 'bg-apoyo/15',
-    iconColor: 'text-apoyo',
-    iconRing: 'ring-apoyo/20',
-    cardBg:
-      'bg-gradient-to-br from-white via-white to-apoyo-suave/50 dark:from-card dark:via-card',
-    cardBorder: 'border-apoyo/60',
-    cardShadow: 'shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50',
-    cardHoverShadow: 'hover:shadow-xl hover:shadow-amber-500/5 dark:hover:shadow-amber-500/10',
-    cornerGlow:
-      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-apoyo/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
-    badgeBg: 'bg-apoyo-suave',
-    badgeText: 'text-apoyo-texto',
-  },
-  blue: {
-    iconBg: 'bg-primary/15 dark:bg-primary/20',
-    iconColor: 'text-primary dark:text-primary',
-    iconRing: 'ring-primary/20 dark:ring-primary/30',
-    cardBg:
-      'bg-gradient-to-br from-white via-white to-primary/50 dark:from-card dark:via-card dark:to-primary/25',
-    cardBorder: 'border-primary/30 dark:border-primary/50',
-    cardShadow: 'shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50',
-    cardHoverShadow: 'hover:shadow-xl hover:shadow-primary/5 dark:hover:shadow-primary/10',
-    cornerGlow:
-      'before:absolute before:top-0 before:right-0 before:w-28 before:h-28 before:bg-primary/15 dark:before:bg-primary/15 before:rounded-full before:translate-x-1/3 before:-translate-y-1/3 before:blur-2xl',
-    badgeBg: 'bg-primary/10 dark:bg-primary/20',
-    badgeText: 'text-primary dark:text-primary',
-  },
-};
-
-const StatCard = ({
-  title,
-  value,
-  icon: Icon,
-  accent = 'blue',
-  subtitle,
-}: {
-  title: string;
-  value: string | number;
-  icon?: LucideIcon;
-  accent?: keyof typeof ACCENT_STYLES;
-  subtitle?: string;
-}) => {
-  const styles = ACCENT_STYLES[accent] ?? ACCENT_STYLES.blue;
-  return (
-    <Card
-      className={`relative overflow-hidden border-2 ${styles.cardBorder} ${styles.cardBg} ${styles.cardShadow} ${styles.cardHoverShadow} ${styles.cornerGlow} transition-all duration-300 hover:-translate-y-0.5`}
-    >
-      <CardContent className="relative p-6">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1 min-w-0">
-            {subtitle && (
-              <span
-                className={`inline-block text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md max-w-[160px] truncate ${styles.badgeBg} ${styles.badgeText} mb-2`}
-                title={subtitle}
-              >
-                {subtitle}
-              </span>
-            )}
-            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-1">
-              {title}
-            </p>
-            <h3 className="text-2xl md:text-3xl font-bold text-foreground tabular-nums tracking-tight drop-shadow-sm">
-              {value}
-            </h3>
-          </div>
-          {Icon && (
-            <div
-              className={`flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center ring-4 ${styles.iconBg} ${styles.iconColor} ${styles.iconRing}`}
-              aria-hidden
-            >
-              <Icon className="w-7 h-7" strokeWidth={2.5} />
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
 
 const Bar = ({
   height,
@@ -571,7 +462,7 @@ const Bar = ({
   <div className="flex flex-col items-center gap-2 flex-1 group cursor-pointer" title={title}>
     <div
       className={`w-full rounded-t-md transition-all group-hover:opacity-80 min-h-[24px] ${
-        active ? 'bg-primary dark:bg-primary' : 'bg-primary/10 dark:bg-primary/20'
+        active ? 'bg-primary' : 'bg-primary/10 dark:bg-primary/20'
       }`}
       style={{ height }}
     />

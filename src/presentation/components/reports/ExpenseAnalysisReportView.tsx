@@ -35,10 +35,10 @@ const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>
 
 const CATEGORY_BORDER: Record<string, string> = {
   businessServices: 'border-l-apoyo',
-  utilities: 'border-l-primary dark:border-l-primary',
+  utilities: 'border-l-primary',
   rent: 'border-l-destructive',
   merchandise: 'border-l-fresco',
-  other: 'border-l-slate-500 dark:border-l-slate-600',
+  other: 'border-l-muted-foreground',
 };
 
 function CategoryCard({
@@ -114,20 +114,20 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-destructive">{formatCurrency(summary.totalExpenses)}</p>
+            <p className="text-h1 text-destructive">{formatCurrency(summary.totalExpenses)}</p>
           </CardContent>
         </Card>
-        <Card className="overflow-hidden border-l-4 border-l-violet-500 dark:border-l-violet-600 bg-gradient-to-br from-white to-violet-50/30 dark:from-card dark:to-violet-950/20 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="overflow-hidden border-l-4 border-l-chart-5 bg-gradient-to-br from-white to-chart-5/15 dark:from-card shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <span className="rounded-lg bg-violet-100 dark:bg-violet-900/40 p-1.5">
-                <PieChart className="h-4 w-4 text-violet-600 dark:text-violet-400" />
+              <span className="rounded-lg bg-chart-5/15 p-1.5">
+                <PieChart className="h-4 w-4 text-chart-5" />
               </span>
               Promedio por concepto
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-violet-600 dark:text-violet-400">{formatCurrency(summary.averageExpense)}</p>
+            <p className="text-h1 text-chart-5">{formatCurrency(summary.averageExpense)}</p>
           </CardContent>
         </Card>
         <Card className="overflow-hidden border-l-4 border-l-apoyo bg-gradient-to-br from-white to-apoyo-suave/30 dark:from-card shadow-md hover:shadow-lg transition-shadow">
@@ -140,7 +140,7 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg font-bold text-apoyo-texto capitalize">
+            <p className="text-h3 text-apoyo-texto capitalize">
               {CATEGORY_LABELS[summary.largestExpenseCategory] ?? summary.largestExpenseCategory}
             </p>
           </CardContent>
@@ -159,10 +159,10 @@ export const ExpenseAnalysisReportView: React.FC<ExpenseAnalysisReportViewProps>
             <span className="rounded-lg bg-apoyo-suave px-3 py-1.5 text-sm font-medium text-apoyo-texto">
               Efectivo: {formatCurrency(summary.totalByPaymentMethod.cash)}
             </span>
-            <span className="rounded-lg bg-primary/10 dark:bg-primary/20 px-3 py-1.5 text-sm font-medium text-primary dark:text-primary">
+            <span className="rounded-lg bg-primary/10 dark:bg-primary/20 px-3 py-1.5 text-sm font-medium text-primary">
               Transferencia: {formatCurrency(summary.totalByPaymentMethod.transfer)}
             </span>
-            <span className="rounded-lg bg-violet-100 dark:bg-violet-900/40 px-3 py-1.5 text-sm font-medium text-violet-800 dark:text-violet-200">
+            <span className="rounded-lg bg-chart-5/15 px-3 py-1.5 text-sm font-medium text-chart-5">
               Tarjeta: {formatCurrency(summary.totalByPaymentMethod.card)}
             </span>
           </div>

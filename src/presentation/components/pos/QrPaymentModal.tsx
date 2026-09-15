@@ -62,7 +62,7 @@ export const QrPaymentModal = ({ orderId, userId, total, onSuccess, onClose }: Q
       <div className="bg-card rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-bold text-foreground">
+          <h2 className="text-h3 text-foreground">
             Pago con QR - Mercado Pago
           </h2>
           <button
@@ -97,7 +97,7 @@ export const QrPaymentModal = ({ orderId, userId, total, onSuccess, onClose }: Q
               <p className="text-center text-sm text-muted-foreground mb-2">
                 Escanea el código QR con tu celular para pagar
               </p>
-              <p className="text-center text-2xl font-bold text-foreground mb-4">
+              <p className="text-center text-h1 text-foreground mb-4">
                 ${total.toFixed(2)} MXN
               </p>
               <div className="flex items-center gap-2 text-sm text-primary">
@@ -113,7 +113,7 @@ export const QrPaymentModal = ({ orderId, userId, total, onSuccess, onClose }: Q
               <div className="w-16 h-16 rounded-full bg-fresco-suave flex items-center justify-center">
                 <CheckCircle className="w-8 h-8 text-fresco" />
               </div>
-              <p className="text-lg font-semibold text-foreground">Pago exitoso</p>
+              <p className="text-h3 text-foreground">Pago exitoso</p>
               <p className="text-sm text-muted-foreground">Procesando orden...</p>
             </div>
           )}
@@ -124,7 +124,7 @@ export const QrPaymentModal = ({ orderId, userId, total, onSuccess, onClose }: Q
               <div className="w-16 h-16 rounded-full bg-destructive-suave flex items-center justify-center">
                 <AlertTriangle className="w-8 h-8 text-destructive" />
               </div>
-              <p className="text-lg font-semibold text-foreground">Pago fallido</p>
+              <p className="text-h3 text-foreground">Pago fallido</p>
               <Button onClick={onClose} variant="outline" className="mt-2">
                 Cerrar
               </Button>
@@ -137,7 +137,7 @@ export const QrPaymentModal = ({ orderId, userId, total, onSuccess, onClose }: Q
               <div className="w-16 h-16 rounded-full bg-destructive-suave flex items-center justify-center">
                 <AlertTriangle className="w-8 h-8 text-destructive" />
               </div>
-              <p className="text-lg font-semibold text-foreground">Error</p>
+              <p className="text-h3 text-foreground">Error</p>
               <p className="text-sm text-muted-foreground text-center">{error}</p>
               <Button onClick={onClose} variant="outline" className="mt-2">
                 Cerrar

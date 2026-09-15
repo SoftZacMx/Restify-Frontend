@@ -46,11 +46,11 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({ cartState }) => {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
               <DollarSign className="h-5 w-5 text-primary" />
-              <span className="text-lg font-bold text-foreground">Total:</span>
+              <span className="text-h3 text-foreground">Total:</span>
             </div>
             <div className="text-right">
               <span
-                className={`text-2xl font-bold text-primary inline-block ${animateTotal ? 'animate-total-bump' : ''}`}
+                className={`text-h1 text-primary inline-block ${animateTotal ? 'animate-total-bump' : ''}`}
                 data-testid="order-total"
                 aria-label={`Total de la orden ${cartState.total.toFixed(2)}`}
               >

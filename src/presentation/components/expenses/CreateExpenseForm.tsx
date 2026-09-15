@@ -430,7 +430,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           {expenseType === 'MERCHANDISE' && (
             <div className="flex gap-3 rounded-lg bg-muted p-4 dark:bg-card/50">
-              <Info className="h-5 w-5 flex-shrink-0 text-primary dark:text-primary" />
+              <Info className="h-5 w-5 flex-shrink-0 text-primary" />
               <p className="text-sm text-muted-foreground">
                 Los subtotales y totales se calculan automáticamente basándose en la cantidad y
                 precio unitario ingresado. El IVA se calcula al 19% por defecto.
@@ -448,7 +448,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
             </div>
             <div className="flex justify-between border-t border-border pt-2 dark:border-border">
               <span className="font-semibold text-foreground" data-testid="expense-form-total-label">Total a Pagar</span>
-              <span className="text-lg font-bold text-primary dark:text-primary" data-testid="expense-form-total">
+              <span className="text-h3 text-primary" data-testid="expense-form-total">
                 {formatCurrency(parseFloat(total || '0'))}
               </span>
             </div>

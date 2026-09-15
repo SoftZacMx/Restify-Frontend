@@ -193,7 +193,7 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
             {/* Nombre de ubicación */}
             <div className="text-center">
               <span className={cn(
-                'text-lg font-bold px-1 break-words',
+                'text-h3 px-1 break-words',
                 table.status ? 'opacity-100' : 'opacity-60'
               )}>
                 {table.name}

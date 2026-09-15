@@ -141,7 +141,7 @@ export const SplitPaymentDialog: React.FC<SplitPaymentDialogProps> = ({
             {/* Total de la orden (solo lectura) */}
             <div className="rounded-lg bg-muted p-4">
               <Label className="text-muted-foreground">Total de la orden</Label>
-              <p className="text-2xl font-bold text-foreground mt-1">
+              <p className="text-h1 text-foreground mt-1">
                 {formatCurrency(orderTotal)}
               </p>
             </div>

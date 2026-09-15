@@ -162,7 +162,7 @@ export const PaymentMethods: React.FC = () => {
                 handleAmountChange(selectedMethod1, raw);
               }}
               className={cn(
-                'pl-8 h-12 text-lg font-semibold',
+                'pl-8 h-12 text-h3',
                 (errors.cashAmount || errors.cardAmount || errors.transferAmount) && 'border-destructive'
               )}
             />
@@ -180,7 +180,7 @@ export const PaymentMethods: React.FC = () => {
         <div className="flex items-center justify-between gap-3 p-4 rounded-xl bg-primary/10 dark:bg-primary/20 border border-primary/20 mb-4">
           <div>
             <p className="text-sm font-medium text-muted-foreground">Cambio a devolver</p>
-            <p className="text-2xl font-bold text-primary">${change.toFixed(2)}</p>
+            <p className="text-h1 text-primary">${change.toFixed(2)}</p>
           </div>
           <button
             type="button"
@@ -251,7 +251,7 @@ export const PaymentMethods: React.FC = () => {
                 handleAmountChange(selectedMethod2, raw);
               }}
               className={cn(
-                'h-12 text-lg font-semibold',
+                'h-12 text-h3',
                 (errors.cashAmount || errors.cardAmount || errors.transferAmount) && 'border-destructive'
               )}
             />

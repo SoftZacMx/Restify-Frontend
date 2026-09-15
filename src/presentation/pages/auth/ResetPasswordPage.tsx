@@ -71,7 +71,7 @@ export default function ResetPasswordPage() {
 
         <div className="mb-8 flex flex-col items-center gap-2">
           <div className="flex items-center gap-2">
-            <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
+            <UtensilsCrossed className="h-8 w-8 text-primary" />
             <span className="text-2xl font-serif font-bold tracking-wide text-foreground">
               RESTIFY
             </span>
@@ -81,7 +81,7 @@ export default function ResetPasswordPage() {
         <Card className="w-full max-w-[450px] shadow-lg border-border bg-card">
           <CardContent className="flex flex-col items-center gap-4 py-12 px-8">
             <XCircle className="h-16 w-16 text-destructive" />
-            <h2 className="text-xl font-bold text-foreground font-serif text-center">
+            <h2 className="text-h2 text-foreground font-serif text-center">
               Enlace inválido
             </h2>
             <p className="text-sm text-muted-foreground text-center">
@@ -105,7 +105,7 @@ export default function ResetPasswordPage() {
 
         <div className="mb-8 flex flex-col items-center gap-2">
           <div className="flex items-center gap-2">
-            <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
+            <UtensilsCrossed className="h-8 w-8 text-primary" />
             <span className="text-2xl font-serif font-bold tracking-wide text-foreground">
               RESTIFY
             </span>
@@ -115,7 +115,7 @@ export default function ResetPasswordPage() {
         <Card className="w-full max-w-[450px] shadow-lg border-border bg-card">
           <CardContent className="flex flex-col items-center gap-4 py-12 px-8">
             <CheckCircle2 className="h-16 w-16 text-fresco" />
-            <h2 className="text-xl font-bold text-foreground font-serif">
+            <h2 className="text-h2 text-foreground font-serif">
               Contraseña actualizada
             </h2>
             <p className="text-sm text-muted-foreground text-center">
@@ -136,7 +136,7 @@ export default function ResetPasswordPage() {
       {/* Logo */}
       <div className="mb-8 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
-          <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
+          <UtensilsCrossed className="h-8 w-8 text-primary" />
           <span className="text-2xl font-serif font-bold tracking-wide text-foreground">
             RESTIFY
           </span>
@@ -145,7 +145,7 @@ export default function ResetPasswordPage() {
 
       <Card className="w-full max-w-[450px] shadow-lg border-border bg-card">
         <CardHeader className="space-y-1 text-center pb-8 pt-10">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground font-serif">
+          <h2 className="text-h1 tracking-tight text-foreground font-serif">
             Nueva Contraseña
           </h2>
           <p className="text-sm text-muted-foreground">

@@ -67,7 +67,7 @@ export const TableSelector: React.FC<TableSelectorProps> = ({
               )}
             </div>
 
-            <span className="text-lg font-bold text-center px-1 leading-tight break-words max-w-full">
+            <span className="text-h3 text-center px-1 leading-tight break-words max-w-full">
               {table.name}
             </span>
             <span className="text-xs font-medium uppercase tracking-wide opacity-90">

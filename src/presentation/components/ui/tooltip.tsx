@@ -57,10 +57,10 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, content, side = 'rig
           <div
             className={cn(
               'absolute w-0 h-0 border-4 border-transparent',
-              side === 'right' && 'right-full top-1/2 -translate-y-1/2 border-r-slate-900 dark:border-r-slate-700',
-              side === 'left' && 'left-full top-1/2 -translate-y-1/2 border-l-slate-900 dark:border-l-slate-700',
-              side === 'top' && 'top-full left-1/2 -translate-x-1/2 border-t-slate-900 dark:border-t-slate-700',
-              side === 'bottom' && 'bottom-full left-1/2 -translate-x-1/2 border-b-slate-900 dark:border-b-slate-700'
+              side === 'right' && 'right-full top-1/2 -translate-y-1/2 border-r-foreground dark:border-r-card',
+              side === 'left' && 'left-full top-1/2 -translate-y-1/2 border-l-foreground dark:border-l-card',
+              side === 'top' && 'top-full left-1/2 -translate-x-1/2 border-t-foreground dark:border-t-card',
+              side === 'bottom' && 'bottom-full left-1/2 -translate-x-1/2 border-b-foreground dark:border-b-card'
             )}
           />
         </div>

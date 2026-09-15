@@ -54,7 +54,7 @@ export const CategorySelectionDialog: React.FC<CategorySelectionDialogProps> = (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[min(28rem,95vw)] max-h-[90vh] flex flex-col bg-card border border-border p-0 overflow-hidden">
         <DialogHeader className="px-6 pt-6 pb-4 border-b border-border shrink-0">
-          <DialogTitle className="text-xl font-bold text-foreground pr-10">
+          <DialogTitle className="text-h2 text-foreground pr-10">
             Categorías
           </DialogTitle>
           <DialogClose className="text-muted-foreground hover:bg-muted dark:hover:bg-card rounded-lg p-1.5 right-4 top-4" />

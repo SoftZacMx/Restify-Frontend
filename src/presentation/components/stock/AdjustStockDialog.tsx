@@ -141,7 +141,7 @@ export const AdjustStockDialog: React.FC<AdjustStockDialogProps> = ({
           {selectedProduct && (
             <div className="rounded-lg bg-muted p-3 border border-border">
               <div className="text-xs text-muted-foreground">Stock actual</div>
-              <div className="text-lg font-semibold text-foreground mt-0.5">
+              <div className="text-h3 text-foreground mt-0.5">
                 {formatStockQuantity(selectedProduct.stockActual, selectedProduct.unitOfMeasure)}
               </div>
             </div>

@@ -36,11 +36,11 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({ on
         <div className="max-w-md w-full flex flex-col items-center text-center space-y-6">
           {/* Icon */}
           <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-border bg-primary/10 dark:bg-primary/20">
-            <AlertTriangle className="h-10 w-10 text-primary dark:text-primary" strokeWidth={2} />
+            <AlertTriangle className="h-10 w-10 text-primary" strokeWidth={2} />
           </div>
 
           <div className="space-y-2">
-            <h1 className="text-2xl font-bold text-foreground">
+            <h1 className="text-h1 text-foreground">
               ¡Ups! Algo salió mal
             </h1>
             <p className="text-sm text-muted-foreground leading-relaxed">

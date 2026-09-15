@@ -26,7 +26,7 @@ function Bar({
     <div className="flex flex-col items-center gap-2 flex-1 group cursor-pointer" title={title}>
       <div
         className={`w-full rounded-t-md transition-all group-hover:opacity-80 min-h-[24px] ${
-          active ? 'bg-primary dark:bg-primary' : 'bg-primary/10 dark:bg-primary/20'
+          active ? 'bg-primary' : 'bg-primary/10 dark:bg-primary/20'
         }`}
         style={{ height }}
       />
@@ -51,11 +51,11 @@ export function SalesChart({ salesLast7Days }: SalesChartProps) {
   return (
     <Card className="border-border shadow-sm bg-card">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold text-foreground">
+        <CardTitle className="text-h3 text-foreground">
           Ventas de los últimos 7 días
         </CardTitle>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-bold text-foreground">
+          <span className="text-display text-foreground">
             {formatCurrency(salesLast7Days.total)}
           </span>
         </div>

@@ -324,7 +324,7 @@ export const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({
               )}
               <div className="flex justify-between items-center pt-2 border-t border-border">
                 <span className="text-base font-bold text-foreground">Total</span>
-                <span className="text-xl font-bold text-primary">{formatCurrency(order.total)}</span>
+                <span className="text-h2 text-primary">{formatCurrency(order.total)}</span>
               </div>
             </div>
 

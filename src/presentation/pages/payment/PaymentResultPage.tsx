@@ -78,7 +78,7 @@ const PaymentResultPage: React.FC = () => {
         <div className={`w-24 h-24 rounded-full ${bg} flex items-center justify-center mx-auto mb-6`}>
           {icon}
         </div>
-        <h1 className="text-2xl font-bold text-foreground mb-2">
+        <h1 className="text-h1 text-foreground mb-2">
           {title}
         </h1>
         <p className="text-sm text-muted-foreground mb-8">

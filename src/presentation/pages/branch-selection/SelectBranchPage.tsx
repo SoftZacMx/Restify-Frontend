@@ -39,12 +39,12 @@ export default function SelectBranchPage() {
 
       <div className="mb-8 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
-          <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
+          <UtensilsCrossed className="h-8 w-8 text-primary" />
           <span className="text-2xl font-serif font-bold tracking-wide text-foreground">
             RESTIFY
           </span>
         </div>
-        <h1 className="text-lg font-semibold text-foreground">Selecciona una sucursal</h1>
+        <h1 className="text-h3 text-foreground">Selecciona una sucursal</h1>
         <p className="text-sm text-muted-foreground">
           Elige dónde quieres trabajar para comenzar.
         </p>

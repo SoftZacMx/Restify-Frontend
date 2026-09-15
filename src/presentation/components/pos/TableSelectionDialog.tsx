@@ -49,7 +49,7 @@ export const TableSelectionDialog: React.FC<TableSelectionDialogProps> = ({
               <UtensilsCrossed className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <DialogTitle className="text-xl font-bold text-foreground pr-10">
+              <DialogTitle className="text-h2 text-foreground pr-10">
                 Seleccionar Ubicación
               </DialogTitle>
               <p className="text-sm text-muted-foreground mt-0.5">

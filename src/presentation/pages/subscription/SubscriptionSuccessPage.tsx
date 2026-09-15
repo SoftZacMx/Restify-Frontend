@@ -79,7 +79,7 @@ const SubscriptionSuccessPage = () => {
           <div className="flex justify-center mb-6">
             <Loader2 className="w-12 h-12 text-primary animate-spin" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">
+          <h1 className="text-h1 text-foreground mb-2">
             Verificando pago...
           </h1>
           <p className="text-muted-foreground">
@@ -100,7 +100,7 @@ const SubscriptionSuccessPage = () => {
               <AlertCircle className="w-10 h-10 text-apoyo" />
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">
+          <h1 className="text-h1 text-foreground mb-2">
             No se pudo verificar el pago
           </h1>
           <p className="text-muted-foreground mb-6">
@@ -129,7 +129,7 @@ const SubscriptionSuccessPage = () => {
           </div>
         </div>
 
-        <h1 className="text-3xl font-bold text-foreground mb-2">
+        <h1 className="text-display text-foreground mb-2">
           Pago exitoso
         </h1>
         <p className="text-muted-foreground mb-8">

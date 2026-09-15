@@ -43,7 +43,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
 
   return (
     // Fondo de página desde el token --background: las cards blancas se despegan del fondo.
-    <div className="flex h-screen bg-background dark:bg-background font-sans text-foreground">
+    <div className="flex h-screen bg-background font-sans text-foreground">
       {/* Sidebar */}
       <Sidebar />
 

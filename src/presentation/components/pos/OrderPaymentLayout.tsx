@@ -71,7 +71,7 @@ export const OrderPaymentLayout: React.FC<OrderPaymentLayoutProps> = ({
           <Receipt className="h-6 w-6" />
         </div>
         <div className="min-w-0 flex-1">
-          <h2 className="text-xl font-bold text-foreground">Checkout</h2>
+          <h2 className="text-h2 text-foreground">Checkout</h2>
           <p className="text-sm text-muted-foreground truncate">{subtitle}</p>
         </div>
       </div>
@@ -135,7 +135,7 @@ export const OrderPaymentLayout: React.FC<OrderPaymentLayoutProps> = ({
             )}
             <div className="flex justify-between items-center pt-2 border-t border-border">
               <span className="text-base font-bold text-foreground">Total</span>
-              <span className="text-xl font-bold text-primary" data-testid="order-total" aria-label={`Total de la orden ${cartState.total.toFixed(2)}`}>
+              <span className="text-h2 text-primary" data-testid="order-total" aria-label={`Total de la orden ${cartState.total.toFixed(2)}`}>
                 ${cartState.total.toFixed(2)}
               </span>
             </div>

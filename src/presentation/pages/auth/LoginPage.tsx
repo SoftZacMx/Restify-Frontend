@@ -68,7 +68,7 @@ export default function LoginPage() {
       {/* Login Card */}
       <Card className="w-full max-w-[450px] shadow-lg border-border bg-card">
         <CardHeader className="space-y-1 text-center pb-8 pt-10">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground font-serif">
+          <h2 className="text-h1 tracking-tight text-foreground font-serif">
             Bienvenido de Nuevo
           </h2>
           <p className="text-sm text-muted-foreground">

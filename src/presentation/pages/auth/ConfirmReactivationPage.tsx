@@ -97,13 +97,13 @@ export default function ConfirmReactivationPage() {
         <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
           <div className="flex items-center gap-2 text-primary">
             <UtensilsCrossed className="h-6 w-6" />
-            <span className="text-lg font-bold text-foreground">RESTIFY</span>
+            <span className="text-h3 text-foreground">RESTIFY</span>
           </div>
 
           {status === 'reactivating' && (
             <>
               <Loader2 className="h-12 w-12 animate-spin text-primary" />
-              <h1 className="text-xl font-bold text-foreground">
+              <h1 className="text-h2 text-foreground">
                 Reactivando tu organización...
               </h1>
               <p className="text-sm text-muted-foreground">Esto solo tomará un momento.</p>
@@ -113,7 +113,7 @@ export default function ConfirmReactivationPage() {
           {status === 'success' && (
             <>
               <CheckCircle2 className="h-12 w-12 text-fresco" />
-              <h1 className="text-xl font-bold text-foreground">
+              <h1 className="text-h2 text-foreground">
                 ¡Organización reactivada!
               </h1>
               <p className="text-sm text-muted-foreground">
@@ -125,7 +125,7 @@ export default function ConfirmReactivationPage() {
           {status === 'already' && (
             <>
               <RotateCcw className="h-12 w-12 text-primary" />
-              <h1 className="text-xl font-bold text-foreground">
+              <h1 className="text-h2 text-foreground">
                 Tu organización ya está activa
               </h1>
               <p className="text-sm text-muted-foreground">
@@ -140,7 +140,7 @@ export default function ConfirmReactivationPage() {
           {status === 'error' && (
             <>
               <XCircle className="h-12 w-12 text-destructive" />
-              <h1 className="text-xl font-bold text-foreground">
+              <h1 className="text-h2 text-foreground">
                 No pudimos reactivar tu organización
               </h1>
               <p className="text-sm text-muted-foreground">{message}</p>

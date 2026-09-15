@@ -113,7 +113,7 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
             <SlidersHorizontal className="h-5 w-5 text-muted-foreground" />
           </div>
-          <DialogTitle className="text-xl font-semibold text-foreground flex-1">
+          <DialogTitle className="text-h2 text-foreground flex-1">
             Personaliza tu plato
           </DialogTitle>
           <DialogClose />
@@ -251,7 +251,7 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
             <span className="text-sm font-medium text-foreground">
               Total de Extras
             </span>
-            <span className="text-lg font-bold text-primary">${extrasTotal.toFixed(2)}</span>
+            <span className="text-h3 text-primary">${extrasTotal.toFixed(2)}</span>
           </div>
           <div className="flex gap-3">
             <Button

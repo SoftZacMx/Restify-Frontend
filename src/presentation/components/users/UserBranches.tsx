@@ -89,7 +89,7 @@ export const UserBranches: React.FC<UserBranchesProps> = ({ user }) => {
 
   return (
     <div className="bg-card rounded-xl shadow-sm p-6 border border-border">
-      <h3 className="text-foreground text-lg font-bold leading-tight tracking-[-0.015em] mb-6">
+      <h3 className="text-foreground text-h3 leading-tight tracking-[-0.015em] mb-6">
         Sucursales Asignadas
       </h3>
       {renderContent()}

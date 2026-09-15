@@ -173,7 +173,7 @@ const ExpenseDetailPage: React.FC = () => {
         {/* Información General */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <Card className="p-6">
-            <h2 className="text-lg font-semibold text-foreground mb-4">
+            <h2 className="text-h3 text-foreground mb-4">
               Información General
             </h2>
             <div className="space-y-4">
@@ -213,7 +213,7 @@ const ExpenseDetailPage: React.FC = () => {
           </Card>
 
           <Card className="p-6">
-            <h2 className="text-lg font-semibold text-foreground mb-4">
+            <h2 className="text-h3 text-foreground mb-4">
               Totales
             </h2>
             <div className="space-y-4">
@@ -231,7 +231,7 @@ const ExpenseDetailPage: React.FC = () => {
               </div>
               <div className="flex justify-between items-center pt-4 border-t border-border">
                 <span className="text-base font-semibold text-foreground">Total</span>
-                <span className="text-lg font-bold text-foreground">
+                <span className="text-h3 text-foreground">
                   {formatCurrency(expense.total)}
                 </span>
               </div>
@@ -242,7 +242,7 @@ const ExpenseDetailPage: React.FC = () => {
         {/* Ítems de compra de mercancía (solo si type === MERCHANDISE y hay items) */}
         {hasItems && (
           <Card className="p-6">
-            <h2 className="text-lg font-semibold text-foreground mb-4">
+            <h2 className="text-h3 text-foreground mb-4">
               Detalle de la compra de mercancía
             </h2>
             <div className="overflow-x-auto">

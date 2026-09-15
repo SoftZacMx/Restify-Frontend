@@ -56,14 +56,14 @@ export const OrderOriginCard: React.FC<OrderOriginCardProps> = ({
                 onClick={onSelectTableClick}
                 className="w-full flex items-center gap-3 p-4 rounded-xl border border-border bg-muted hover:border-primary/30 transition-colors text-left"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-sky-500/20 dark:bg-sky-400/20 shrink-0">
-                  <LayoutGrid className="h-6 w-6 text-sky-600 dark:text-sky-400" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-chart-4/20 shrink-0">
+                  <LayoutGrid className="h-6 w-6 text-chart-4" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                     Ubicación seleccionada
                   </p>
-                  <p className="text-lg font-bold text-foreground mt-0.5">
+                  <p className="text-h3 text-foreground mt-0.5">
                     Ubicación {selectedTable.name}
                   </p>
                   {selectedTable.location?.trim() && (
@@ -80,8 +80,8 @@ export const OrderOriginCard: React.FC<OrderOriginCardProps> = ({
                 onClick={onSelectTableClick}
                 className="w-full flex items-center gap-3 p-4 rounded-xl border border-dashed border-border bg-muted/50 dark:bg-card/30 hover:border-primary/40 hover:bg-muted dark:hover:bg-card/50 transition-colors text-left"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-sky-500/20 dark:bg-sky-400/20 shrink-0">
-                  <LayoutGrid className="h-6 w-6 text-sky-600 dark:text-sky-400" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-chart-4/20 shrink-0">
+                  <LayoutGrid className="h-6 w-6 text-chart-4" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">

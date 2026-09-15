@@ -110,11 +110,11 @@ const TableDetailPage: React.FC = () => {
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center justify-center min-w-12 max-w-[140px] min-h-12 px-2 rounded-xl bg-muted text-foreground font-bold text-lg text-center break-words">
+            <span className="inline-flex items-center justify-center min-w-12 max-w-[140px] min-h-12 px-2 rounded-xl bg-muted text-foreground text-h3 text-center break-words">
               {table.name}
             </span>
             <div>
-              <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
+              <h1 className="text-h1 lg:text-display text-foreground">
                 Ubicación {table.name}
               </h1>
               <p className="text-sm text-muted-foreground">
@@ -154,7 +154,7 @@ const TableDetailPage: React.FC = () => {
                 <div className="flex flex-col items-center justify-center py-6 space-y-3">
                   <div
                     className={cn(
-                      'w-20 min-h-20 max-w-[200px] rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg px-2 py-2 text-center break-words',
+                      'w-20 min-h-20 max-w-[200px] rounded-xl flex items-center justify-center text-white text-h3 shadow-lg px-2 py-2 text-center break-words',
                       !table.status
                         ? 'bg-muted-foreground'
                         : table.availabilityStatus

@@ -95,7 +95,7 @@ export const StockConfigSection: React.FC<StockConfigSectionProps> = ({
           <Boxes className="h-5 w-5" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-foreground">Inventario</h3>
+          <h3 className="text-h3 text-foreground">Inventario</h3>
           <p className="text-sm text-muted-foreground">
             Activá el tracking para que las compras sumen stock y las ventas lo descuenten automáticamente.
           </p>

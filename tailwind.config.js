@@ -53,8 +53,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        "background-light": "#f5f6f8",
-        "background-dark": "#0f1323",
         // Roles del sistema de diseño (no cubiertos por shadcn)
         marca: "hsl(var(--color-marca) / <alpha-value>)",
         fresco: {
@@ -67,6 +65,14 @@ export default {
           suave: "hsl(var(--color-apoyo-suave) / <alpha-value>)",
           texto: "hsl(var(--color-apoyo-texto) / <alpha-value>)",
         },
+        chart: {
+          1: "hsl(var(--chart-1) / <alpha-value>)",
+          2: "hsl(var(--chart-2) / <alpha-value>)",
+          3: "hsl(var(--chart-3) / <alpha-value>)",
+          4: "hsl(var(--chart-4) / <alpha-value>)",
+          5: "hsl(var(--chart-5) / <alpha-value>)",
+          6: "hsl(var(--chart-6) / <alpha-value>)",
+        },
       },
       borderRadius: {
         DEFAULT: "0.25rem",
@@ -77,6 +83,13 @@ export default {
       fontFamily: {
         sans: ["Manrope", "system-ui", "sans-serif"],
         display: ["Manrope", "system-ui", "sans-serif"],
+      },
+      // Escala tipográfica semántica (tamaño + interlineado + peso canónico)
+      fontSize: {
+        display: ["1.875rem", { lineHeight: "2.25rem", fontWeight: "700" }],
+        h1: ["1.5rem", { lineHeight: "2rem", fontWeight: "700" }],
+        h2: ["1.25rem", { lineHeight: "1.75rem", fontWeight: "600" }],
+        h3: ["1.125rem", { lineHeight: "1.75rem", fontWeight: "600" }],
       },
       keyframes: {
         "accordion-down": {

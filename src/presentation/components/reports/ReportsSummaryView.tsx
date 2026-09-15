@@ -32,7 +32,7 @@ import { DollarSign, ShoppingCart, TrendingUp, Receipt, Wallet } from 'lucide-re
 import { formatCurrency } from '@/shared/utils';
 import type { ReportsSummaryResponse } from '@/domain/types';
 
-const PAYMENT_COLORS = ['#3b82f6', '#8b5cf6', '#22c55e'];
+const PAYMENT_COLORS = ['hsl(var(--chart-4))', 'hsl(var(--chart-5))', 'hsl(var(--chart-2))'];
 
 function formatPercent(value: number): string {
   const sign = value >= 0 ? '+' : '';
@@ -58,7 +58,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{formatCurrency(kpis.totalSales)}</p>
+            <p className="text-h1">{formatCurrency(kpis.totalSales)}</p>
             <p className={`text-xs font-medium ${kpis.totalSalesChangePercent >= 0 ? 'text-fresco' : 'text-destructive'}`}>
               {formatPercent(kpis.totalSalesChangePercent)}
             </p>
@@ -72,13 +72,13 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{kpis.ordersProcessed}</p>
+            <p className="text-h1">{kpis.ordersProcessed}</p>
             <p className={`text-xs font-medium ${kpis.ordersProcessedChangePercent >= 0 ? 'text-fresco' : 'text-destructive'}`}>
               {formatPercent(kpis.ordersProcessedChangePercent)}
             </p>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-violet-500">
+        <Card className="border-l-4 border-l-chart-5">
           <CardHeader className="pb-1">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
@@ -86,7 +86,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{formatCurrency(kpis.averagePerOrder)}</p>
+            <p className="text-h1">{formatCurrency(kpis.averagePerOrder)}</p>
             <p className={`text-xs font-medium ${kpis.averagePerOrderChangePercent >= 0 ? 'text-fresco' : 'text-destructive'}`}>
               {formatPercent(kpis.averagePerOrderChangePercent)}
             </p>
@@ -100,7 +100,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{formatCurrency(kpis.totalExpenses)}</p>
+            <p className="text-h1">{formatCurrency(kpis.totalExpenses)}</p>
             <p className={`text-xs font-medium ${kpis.totalExpensesChangePercent <= 0 ? 'text-fresco' : 'text-destructive'}`}>
               {formatPercent(kpis.totalExpensesChangePercent)}
             </p>
@@ -114,7 +114,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className={`text-2xl font-bold ${kpis.netProfit >= 0 ? 'text-fresco' : 'text-destructive'}`}>
+            <p className={`text-h1 ${kpis.netProfit >= 0 ? 'text-fresco' : 'text-destructive'}`}>
               {formatCurrency(kpis.netProfit)}
             </p>
             <p className={`text-xs font-medium ${kpis.netProfitChangePercent >= 0 ? 'text-fresco' : 'text-destructive'}`}>
@@ -133,7 +133,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
           <div className="h-[280px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={salesOverTime} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-slate-200 dark:stroke-slate-700" />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                 <XAxis
                   dataKey="date"
                   tick={{ fontSize: 11 }}
@@ -147,7 +147,7 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
                   formatter={(value: unknown) => [formatCurrency(Number(value ?? 0)), 'Ventas']}
                   labelFormatter={(_, payload) => (payload?.[0]?.payload?.date ?? '')}
                 />
-                <Line type="monotone" dataKey="total" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3 }} name="Ventas" />
+                <Line type="monotone" dataKey="total" stroke="hsl(var(--chart-4))" strokeWidth={2} dot={{ r: 3 }} name="Ventas" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -195,11 +195,11 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
             <div className="h-[260px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={topProducts} layout="vertical" margin={{ left: 10, right: 20 }} barCategoryGap="12%">
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-slate-200 dark:stroke-slate-700" />
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                   <XAxis type="number" tickFormatter={(v) => v} />
                   <YAxis type="category" dataKey="name" width={120} tick={{ fontSize: 11 }} />
                   <Tooltip formatter={(value: unknown) => [Number(value ?? 0), 'Cantidad']} />
-                  <Bar dataKey="quantitySold" fill="#3b82f6" name="Vendidos" radius={[0, 4, 4, 0]} />
+                  <Bar dataKey="quantitySold" fill="hsl(var(--chart-4))" name="Vendidos" radius={[0, 4, 4, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -216,12 +216,12 @@ export const ReportsSummaryView: React.FC<ReportsSummaryViewProps> = ({ data }) 
           <div className="h-[280px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={expensesByCategory} margin={{ bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-slate-200 dark:stroke-slate-700" />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                 <XAxis dataKey="label" tick={{ fontSize: 11 }} />
                 <YAxis tickFormatter={(v) => `$${v}`} tick={{ fontSize: 12 }} />
                 <Tooltip formatter={(value: unknown) => [formatCurrency(Number(value ?? 0)), 'Total']} />
                 <Legend />
-                <Bar dataKey="total" name="Total" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="total" name="Total" fill="hsl(var(--chart-5))" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

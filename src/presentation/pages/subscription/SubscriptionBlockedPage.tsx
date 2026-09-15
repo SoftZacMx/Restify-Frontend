@@ -69,7 +69,7 @@ const SubscriptionBlockedPage = () => {
             <AlertTriangle className="w-8 h-8 text-destructive" />
           </div>
         </div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">
+        <h1 className="text-display text-foreground mb-2">
           Tu suscripción ha expirado
         </h1>
         <p className="text-muted-foreground max-w-md mx-auto">
@@ -114,7 +114,7 @@ const SubscriptionBlockedPage = () => {
 
                 {/* Plan name */}
                 <div className="text-center mb-6 mt-1">
-                  <h3 className="text-lg font-semibold text-foreground mb-1">
+                  <h3 className="text-h3 text-foreground mb-1">
                     {plan.name}
                   </h3>
                   <div className="flex items-baseline justify-center gap-1">

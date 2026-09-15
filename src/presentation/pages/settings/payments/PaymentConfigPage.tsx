@@ -143,7 +143,7 @@ const PaymentConfigPage: React.FC = () => {
       {/* Header con badge */}
       <div>
         <div className="flex items-center gap-3 mb-2">
-          <h2 className="text-2xl font-bold text-foreground">
+          <h2 className="text-h1 text-foreground">
             Configuración de Mercado Pago
           </h2>
           {config?.isConfigured ? (
@@ -159,7 +159,7 @@ const PaymentConfigPage: React.FC = () => {
         <p className="text-sm text-muted-foreground max-w-2xl">
           Configura las credenciales de tu cuenta de Mercado Pago para recibir pagos con QR en
           tu negocio. Obtén estas credenciales desde tu panel de Mercado Pago en{' '}
-          <span className="text-primary dark:text-primary font-medium">
+          <span className="text-primary font-medium">
             Credenciales {'>'} Credenciales de producción
           </span>.
         </p>
@@ -202,9 +202,9 @@ const PaymentConfigPage: React.FC = () => {
 
         {/* Info note */}
         <div className="flex items-start gap-3 rounded-xl border border-primary/30 dark:border-primary/50 bg-primary/10 dark:bg-primary/20 p-4">
-          <Info className="h-5 w-5 text-primary dark:text-primary shrink-0 mt-0.5" />
+          <Info className="h-5 w-5 text-primary shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm font-medium text-primary dark:text-primary">Prueba de Conexión</p>
+            <p className="text-sm font-medium text-primary">Prueba de Conexión</p>
             <p className="text-sm text-primary/80 dark:text-primary/70 mt-0.5">
               Asegúrate de que tu servidor sea accesible públicamente para que Mercado Pago pueda
               enviar las notificaciones de webhook correctamente.

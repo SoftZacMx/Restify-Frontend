@@ -28,7 +28,7 @@ const SubscriptionCancelPage = () => {
           </div>
         </div>
 
-        <h1 className="text-3xl font-bold text-foreground mb-2">
+        <h1 className="text-display text-foreground mb-2">
           No se realizó el pago
         </h1>
         <p className="text-muted-foreground mb-8">

@@ -49,7 +49,7 @@ export default function ReactivateOrganizationPage() {
 
         <div className="mb-8 flex flex-col items-center gap-2">
           <div className="flex items-center gap-2">
-            <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
+            <UtensilsCrossed className="h-8 w-8 text-primary" />
             <span className="text-2xl font-serif font-bold tracking-wide text-foreground">
               RESTIFY
             </span>
@@ -59,7 +59,7 @@ export default function ReactivateOrganizationPage() {
         <Card className="w-full max-w-[450px] shadow-lg border-border bg-card">
           <CardContent className="flex flex-col items-center gap-4 py-12 px-8">
             <MailCheck className="h-16 w-16 text-primary" />
-            <h2 className="text-xl font-bold text-foreground font-serif text-center">
+            <h2 className="text-h2 text-foreground font-serif text-center">
               Revisa tu correo
             </h2>
             <p className="text-sm text-muted-foreground text-center">
@@ -88,7 +88,7 @@ export default function ReactivateOrganizationPage() {
       {/* Logo */}
       <div className="mb-8 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
-          <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
+          <UtensilsCrossed className="h-8 w-8 text-primary" />
           <span className="text-2xl font-serif font-bold tracking-wide text-foreground">
             RESTIFY
           </span>
@@ -98,9 +98,9 @@ export default function ReactivateOrganizationPage() {
       <Card className="w-full max-w-[450px] shadow-lg border-border bg-card">
         <CardHeader className="space-y-3 text-center pb-8 pt-10">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 dark:bg-primary/20">
-            <RotateCcw className="h-6 w-6 text-primary dark:text-primary" />
+            <RotateCcw className="h-6 w-6 text-primary" />
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-foreground font-serif">
+          <h2 className="text-h1 tracking-tight text-foreground font-serif">
             Reactivar organización
           </h2>
           <p className="text-sm text-muted-foreground">

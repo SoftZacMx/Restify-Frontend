@@ -37,7 +37,7 @@ function RowSwitch({
   disabled?: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 py-2 border-b border-border/80 dark:border-border/80 last:border-0">
+    <div className="flex items-center justify-between gap-3 py-2 border-b border-border/80 last:border-0">
       <Label htmlFor={id} className="text-sm font-normal cursor-pointer flex-1 text-foreground">
         {label}
       </Label>
@@ -95,8 +95,8 @@ function CollapsibleSection({
         {Icon ? (
           <span
             className={cn(
-              'flex shrink-0 items-center justify-center rounded-lg text-primary dark:text-sky-400',
-              nested ? 'h-8 w-8 bg-secondary/80 dark:bg-card/80' : 'h-10 w-10 bg-primary/10 dark:bg-sky-500/15'
+              'flex shrink-0 items-center justify-center rounded-lg text-primary',
+              nested ? 'h-8 w-8 bg-secondary/80 dark:bg-card/80' : 'h-10 w-10 bg-primary/10'
             )}
             aria-hidden
           >

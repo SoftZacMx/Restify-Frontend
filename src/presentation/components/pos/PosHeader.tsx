@@ -31,7 +31,7 @@ export function PosHeader({
         </div>
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold text-foreground">
+            <h1 className="text-display text-foreground">
               {loadedOrder
                 ? `Orden ${formatOrderNumber(loadedOrder.id)}`
                 : posMode === 'ORDER_BUILDING'

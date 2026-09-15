@@ -225,7 +225,7 @@ const MenuItemDetailPage: React.FC = () => {
               <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
                 Editando producto
               </p>
-              <h1 className="text-3xl font-bold text-foreground">
+              <h1 className="text-display text-foreground">
                 {menuItem.name}
               </h1>
             </div>
@@ -261,7 +261,7 @@ const MenuItemDetailPage: React.FC = () => {
           {/* Información general (col-span 2) */}
           <Card className="lg:col-span-2 p-6">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-semibold text-foreground">
+              <h2 className="text-h3 text-foreground">
                 Información general
               </h2>
               <Badge
@@ -366,7 +366,7 @@ const MenuItemDetailPage: React.FC = () => {
 
           {/* Cronología */}
           <Card className="p-6">
-            <h2 className="text-lg font-semibold text-foreground mb-5">
+            <h2 className="text-h3 text-foreground mb-5">
               Cronología
             </h2>
 
@@ -413,7 +413,7 @@ const MenuItemDetailPage: React.FC = () => {
 
               {menuItem.isExtra && (
                 <div className="rounded-lg bg-primary/10 dark:bg-primary/20 border border-primary/30 dark:border-primary p-3">
-                  <p className="text-xs text-primary dark:text-primary">
+                  <p className="text-xs text-primary">
                     Este producto es un <strong>extra</strong> — se vende como complemento de
                     otros productos. Su receta también descuenta stock al venderse.
                   </p>

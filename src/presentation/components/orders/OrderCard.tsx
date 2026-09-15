@@ -114,7 +114,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
     if (!order.status && order.delivered) return 'border-l-apoyo';
     if (order.status && !order.delivered) return 'border-l-primary';
     if (order.status && order.delivered) return 'border-l-fresco';
-    return 'border-l-gray-500';
+    return 'border-l-muted-foreground';
   };
 
   return (
@@ -127,7 +127,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-lg font-bold text-foreground min-w-0 break-all">
+            <span className="text-h3 text-foreground min-w-0 break-all">
               {isLocalWithMesaBlock ? mesaLine : orderNumberLabel}
             </span>
             <OrderStatusBadge order={order} />
@@ -176,7 +176,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
           <div className="mt-3 pt-3 border-t border-border">
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">Total</span>
-              <span className="text-xl font-bold text-foreground">
+              <span className="text-h2 text-foreground">
                 {formatCurrency(order.total)}
               </span>
             </div>

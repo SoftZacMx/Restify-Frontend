@@ -32,7 +32,7 @@ const fields = [
 export const UserPersonalInfo: React.FC<UserPersonalInfoProps> = ({ user }) => {
   return (
     <div className="bg-card rounded-xl shadow-sm p-6 border border-border h-full">
-      <h3 className="text-foreground text-lg font-bold leading-tight tracking-[-0.015em] mb-6">
+      <h3 className="text-foreground text-h3 leading-tight tracking-[-0.015em] mb-6">
         Información Personal
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 text-sm">

@@ -13,7 +13,7 @@ export function ActiveOrdersCard({ activeOrders, onOrderClick }: ActiveOrdersCar
   return (
     <Card className="border-border shadow-sm bg-card">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-lg font-semibold text-foreground">
+        <CardTitle className="text-h3 text-foreground">
           Órdenes activas ({activeOrders.count})
         </CardTitle>
         <Link

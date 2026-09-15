@@ -46,7 +46,7 @@ export const PaymentSuccessView: React.FC<PaymentSuccessViewProps> = ({
       </div>
 
       {/* Title */}
-      <h1 className="text-2xl font-bold text-foreground mb-1">
+      <h1 className="text-h1 text-foreground mb-1">
         Pago Exitoso
       </h1>
       <p className="text-sm text-muted-foreground mb-8">
@@ -102,7 +102,7 @@ export const PaymentSuccessView: React.FC<PaymentSuccessViewProps> = ({
           <span className="text-base font-bold text-foreground">
             Total Pagado
           </span>
-          <span className="text-2xl font-bold text-primary">
+          <span className="text-h1 text-primary">
             ${data.total.toFixed(2)}
           </span>
         </div>

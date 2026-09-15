@@ -391,7 +391,7 @@ const OrdersPage: React.FC = () => {
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between gap-2">
-          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+          <h1 className="text-h1 text-foreground flex items-center gap-2">
             <FileText className="h-7 w-7 hidden sm:block" />
             Órdenes
           </h1>
@@ -448,13 +448,13 @@ const OrdersPage: React.FC = () => {
         {/* Contadores rápidos */}
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-apoyo-suave rounded-lg px-3 py-2.5 border border-apoyo flex items-center gap-3">
-            <span className="text-2xl font-bold text-apoyo-texto">
+            <span className="text-h1 text-apoyo-texto">
               {orderCounts.pending}
             </span>
             <span className="text-xs text-apoyo leading-tight">Pendientes</span>
           </div>
           <div className="bg-fresco-suave rounded-lg px-3 py-2.5 border border-fresco flex items-center gap-3">
-            <span className="text-2xl font-bold text-fresco-texto">
+            <span className="text-h1 text-fresco-texto">
               {orderCounts.paid}
             </span>
             <span className="text-xs text-fresco leading-tight">Pagadas</span>

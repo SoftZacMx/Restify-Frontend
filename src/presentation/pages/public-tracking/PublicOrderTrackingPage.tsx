@@ -79,7 +79,7 @@ const PublicOrderTrackingPage = () => {
         <div className="max-w-lg mx-auto flex flex-col items-center justify-center py-20 text-center space-y-4">
           <XCircle className="h-12 w-12 text-destructive" />
           <div className="space-y-1">
-            <p className="text-lg font-semibold text-foreground">
+            <p className="text-h3 text-foreground">
               Tu pago no se completó
             </p>
             <p className="text-sm text-muted-foreground">
@@ -114,7 +114,7 @@ const PublicOrderTrackingPage = () => {
       <div className="max-w-lg mx-auto space-y-6">
         {/* Header */}
         <div className="text-center space-y-1">
-          <h2 className="text-2xl font-bold text-foreground">
+          <h2 className="text-h1 text-foreground">
             Seguimiento de pedido
           </h2>
           <p className="text-sm text-muted-foreground">

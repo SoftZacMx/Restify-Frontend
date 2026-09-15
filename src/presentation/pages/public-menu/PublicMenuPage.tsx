@@ -50,7 +50,7 @@ const PublicMenuPage = () => {
     return (
       <PublicLayout>
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <h2 className="text-xl font-bold text-foreground mb-2">
+          <h2 className="text-h2 text-foreground mb-2">
             Menú no disponible
           </h2>
           <p className="text-muted-foreground">
@@ -105,7 +105,7 @@ const PublicMenuPage = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center px-2">
                     <span className="text-base font-bold text-foreground">Total</span>
-                    <span className="text-xl font-bold text-primary">
+                    <span className="text-h2 text-primary">
                       ${cartState.total.toFixed(2)}
                     </span>
                   </div>
@@ -168,7 +168,7 @@ const PublicMenuPage = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-base font-bold text-foreground">Total</span>
-                    <span className="text-xl font-bold text-primary">
+                    <span className="text-h2 text-primary">
                       ${cartState.total.toFixed(2)}
                     </span>
                   </div>

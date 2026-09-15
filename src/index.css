@@ -49,6 +49,14 @@
     --color-apoyo:  30 85% 65%;        /* #F2A65A ámbar: apoyo/iconos/detalles */
     --color-apoyo-suave: 32 91% 92%;   /* #FDEBD6 */
     --color-apoyo-texto: 32 79% 34%;   /* #9A5A12 */
+
+    /* Serie categórica para gráficas y acentos (usar con opacidad para tints) */
+    --chart-1: 14 78% 54%;
+    --chart-2: 94 50% 42%;
+    --chart-3: 30 85% 60%;
+    --chart-4: 200 65% 48%;
+    --chart-5: 262 52% 58%;
+    --chart-6: 340 60% 55%;
   }
 
   .dark {
@@ -87,6 +95,14 @@
     --color-apoyo:  30 85% 65%;        /* #F2A65A */
     --color-apoyo-suave: 42 31% 13%;   /* #2A2416 */
     --color-apoyo-texto: 35 82% 71%;   /* #F2C07A */
+
+    /* Serie categórica aclarada para contraste sobre fondo oscuro */
+    --chart-1: 14 85% 62%;
+    --chart-2: 94 45% 58%;
+    --chart-3: 30 85% 65%;
+    --chart-4: 200 70% 62%;
+    --chart-5: 262 60% 70%;
+    --chart-6: 340 70% 68%;
   }
 }
 
@@ -125,15 +141,6 @@
     -webkit-box-shadow: 0 0 0 1000px #1D231A inset; /* superficie oscura de la paleta */
     -webkit-text-fill-color: #F1EEE6;
     caret-color: #F1EEE6;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
 }
 

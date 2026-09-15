@@ -93,7 +93,7 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
               <UtensilsCrossed className="h-6 w-6 text-primary-foreground" />
             </div>
             <div className="flex-1 min-w-0">
-              <DialogTitle className="text-xl font-bold text-foreground leading-tight">
+              <DialogTitle className="text-h2 text-foreground leading-tight">
                 {product.name}
               </DialogTitle>
               <p className="text-sm text-muted-foreground mt-0.5">
@@ -254,7 +254,7 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
                 <div className="flex justify-between items-center pt-2 border-t border-border">
                   <span className="text-base font-bold text-foreground">Total</span>
                   <span
-                    className={`text-xl font-bold text-primary inline-block ${animateTotal ? 'animate-total-bump' : ''}`}
+                    className={`text-h2 text-primary inline-block ${animateTotal ? 'animate-total-bump' : ''}`}
                   >
                     ${itemSubtotal.toFixed(2)}
                   </span>

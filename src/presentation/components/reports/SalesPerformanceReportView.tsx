@@ -33,33 +33,33 @@ export const SalesPerformanceReportView: React.FC<SalesPerformanceReportViewProp
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-fresco">{formatCurrency(totalSold)}</p>
+            <p className="text-h1 text-fresco">{formatCurrency(totalSold)}</p>
           </CardContent>
         </Card>
-        <Card className="overflow-hidden border-l-4 border-l-primary dark:border-l-primary bg-gradient-to-br from-white to-primary/30 dark:from-card dark:to-primary/20 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="overflow-hidden border-l-4 border-l-primary bg-gradient-to-br from-white to-primary/30 dark:from-card dark:to-primary/20 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <span className="rounded-lg bg-primary/10 dark:bg-primary/20 p-1.5">
-                <Package className="h-4 w-4 text-primary dark:text-primary" />
+                <Package className="h-4 w-4 text-primary" />
               </span>
               Ítems con ventas
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-primary dark:text-primary">{summary.totalMenuItems}</p>
+            <p className="text-h1 text-primary">{summary.totalMenuItems}</p>
           </CardContent>
         </Card>
-        <Card className="overflow-hidden border-l-4 border-l-violet-500 dark:border-l-violet-600 bg-gradient-to-br from-white to-violet-50/30 dark:from-card dark:to-violet-950/20 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="overflow-hidden border-l-4 border-l-chart-5 bg-gradient-to-br from-white to-chart-5/15 dark:from-card shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <span className="rounded-lg bg-violet-100 dark:bg-violet-900/40 p-1.5">
-                <BarChart2 className="h-4 w-4 text-violet-600 dark:text-violet-400" />
+              <span className="rounded-lg bg-chart-5/15 p-1.5">
+                <BarChart2 className="h-4 w-4 text-chart-5" />
               </span>
               Precio promedio
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-violet-600 dark:text-violet-400">{formatCurrency(summary.averagePrice)}</p>
+            <p className="text-h1 text-chart-5">{formatCurrency(summary.averagePrice)}</p>
           </CardContent>
         </Card>
       </div>

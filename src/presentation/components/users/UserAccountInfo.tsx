@@ -55,7 +55,7 @@ export const UserAccountInfo: React.FC<UserAccountInfoProps> = ({ user }) => {
 
   return (
     <div className="bg-card rounded-xl shadow-sm p-6 border border-border h-full">
-      <h3 className="text-foreground text-lg font-bold leading-tight tracking-[-0.015em] mb-6">
+      <h3 className="text-foreground text-h3 leading-tight tracking-[-0.015em] mb-6">
         Información de la Cuenta
       </h3>
       <div className="flex flex-col gap-5 text-sm">

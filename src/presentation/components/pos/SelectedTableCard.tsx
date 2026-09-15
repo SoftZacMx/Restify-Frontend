@@ -34,8 +34,8 @@ export const SelectedTableCard: React.FC<SelectedTableCardProps> = ({
       <CardContent className="p-5 space-y-4">
         {/* Icono circular */}
         <div className="flex justify-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-sky-500/20 dark:bg-sky-400/20">
-            <LayoutGrid className="h-7 w-7 text-sky-600 dark:text-sky-400" />
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-chart-4/20">
+            <LayoutGrid className="h-7 w-7 text-chart-4" />
           </div>
         </div>
 
@@ -44,7 +44,7 @@ export const SelectedTableCard: React.FC<SelectedTableCardProps> = ({
           <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
             Identificador
           </p>
-          <p className="text-xl font-bold text-foreground mt-0.5">
+          <p className="text-h2 text-foreground mt-0.5">
             {tableLabel}
           </p>
         </div>

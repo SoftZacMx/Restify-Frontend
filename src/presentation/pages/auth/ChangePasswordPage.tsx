@@ -78,7 +78,7 @@ export default function ChangePasswordPage() {
       {/* Logo */}
       <div className="mb-8 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
-          <UtensilsCrossed className="h-8 w-8 text-primary dark:text-primary" />
+          <UtensilsCrossed className="h-8 w-8 text-primary" />
           <span className="text-2xl font-serif font-bold tracking-wide text-foreground">
             RESTIFY
           </span>
@@ -90,7 +90,7 @@ export default function ChangePasswordPage() {
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-apoyo-suave">
             <ShieldAlert className="h-6 w-6 text-apoyo" />
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-foreground font-serif">
+          <h2 className="text-h1 tracking-tight text-foreground font-serif">
             Cambia tu contraseña
           </h2>
           <p className="text-sm text-muted-foreground">

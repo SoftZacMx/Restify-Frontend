@@ -71,7 +71,7 @@ export const SettingsLayout: React.FC = () => {
           <span className="text-foreground text-sm font-medium">{breadcrumbLabel}</span>
         </div>
 
-        <h1 className="text-2xl font-semibold text-foreground mb-2">{pageTitle}</h1>
+        <h1 className="text-h1 text-foreground mb-2">{pageTitle}</h1>
         {pageDescription && (
           <p className="text-sm text-muted-foreground mb-8">{pageDescription}</p>
         )}

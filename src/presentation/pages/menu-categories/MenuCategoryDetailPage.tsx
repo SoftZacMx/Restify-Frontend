@@ -108,7 +108,7 @@ const MenuCategoryDetailPage: React.FC = () => {
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
+            <h1 className="text-h1 lg:text-display text-foreground">
               {category.name}
             </h1>
             <p className="text-sm text-muted-foreground">

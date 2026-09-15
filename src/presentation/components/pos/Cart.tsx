@@ -24,7 +24,7 @@ const CartItemTotal: React.FC<{ itemTotal: number; itemSubtotal: number }> = ({
 
   return (
     <div className="text-right">
-      <div className={`font-bold text-xl text-primary inline-block ${animate ? 'animate-total-bump' : ''}`} data-testid="cart-item-total-value">
+      <div className={`text-h2 text-primary inline-block ${animate ? 'animate-total-bump' : ''}`} data-testid="cart-item-total-value">
         ${itemTotal.toFixed(2)}
       </div>
       <div className="text-xs text-muted-foreground">

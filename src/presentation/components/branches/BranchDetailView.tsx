@@ -90,7 +90,7 @@ export const BranchDetailView: React.FC<BranchDetailViewProps> = ({ branch }) =>
           >
             {isActive ? 'Activa' : 'Deshabilitada'}
           </Badge>
-          <h2 className="text-xl font-bold text-foreground truncate">
+          <h2 className="text-h2 text-foreground truncate">
             {branch.name}
           </h2>
           <p className="text-xs text-muted-foreground">ID: {branch.id}</p>

@@ -108,7 +108,7 @@ const ReportsPage = () => {
           <div className="px-4 py-4 bg-gradient-to-br from-muted via-card to-primary/5 dark:from-card/80 dark:via-card/50 dark:to-primary/10">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-foreground">
+                <h1 className="text-display text-foreground">
                   Reportes
                 </h1>
                 <p className="text-sm text-muted-foreground mt-2 max-w-xl">
@@ -140,7 +140,7 @@ const ReportsPage = () => {
             </div>
 
             {viewMode === 'summary' && (
-              <div className="mt-4 flex flex-wrap items-end gap-4 px-4 py-3 border-t border-border/80 dark:border-border/80">
+              <div className="mt-4 flex flex-wrap items-end gap-4 px-4 py-3 border-t border-border/80">
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-medium text-muted-foreground">Desde</label>
                   <input
@@ -182,7 +182,7 @@ const ReportsPage = () => {
           )}
           {viewMode === 'summary' && !summaryData && !isLoadingSummary && (
             <div className="flex flex-col items-center justify-center py-20 px-4">
-              <div className="rounded-2xl bg-muted p-8 max-w-md text-center border border-border/80 dark:border-border/80 shadow-inner">
+              <div className="rounded-2xl bg-muted p-8 max-w-md text-center border border-border/80 shadow-inner">
                 <div className="mx-auto w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
                   <LayoutDashboard className="h-8 w-8 text-primary" />
                 </div>
@@ -219,7 +219,7 @@ const ReportsPage = () => {
           )}
           {viewMode === 'document' && !report && !isLoading && (
             <div className="flex flex-col items-center justify-center py-20 px-4">
-              <div className="rounded-2xl bg-muted p-8 max-w-md text-center border border-border/80 dark:border-border/80 shadow-inner">
+              <div className="rounded-2xl bg-muted p-8 max-w-md text-center border border-border/80 shadow-inner">
                 <div className="mx-auto w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
                   <BarChart3 className="h-8 w-8 text-primary" />
                 </div>
