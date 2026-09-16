@@ -121,7 +121,7 @@ const MovementsHistoryPage: React.FC = () => {
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div>
-              <h1 className="text-display text-foreground">
+              <h1 className="text-h1 text-foreground">
                 Historial de movimientos
               </h1>
               {product && (

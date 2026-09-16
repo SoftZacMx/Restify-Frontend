@@ -12,6 +12,12 @@ const RAW_COLOR =
 const RAW_COLOR_MSG =
   'No uses colores crudos de Tailwind; usa los tokens del sistema de diseño (primary, fresco, apoyo, destructive, muted, chart-N…).'
 
+// Tamaños de título crudos (text-3xl y mayores): deben usar la escala tipográfica
+// del sistema (text-display / text-h1 / text-h2 / text-h3).
+const RAW_TITLE = '\\btext-(3xl|4xl|5xl|6xl|7xl|8xl|9xl)\\b'
+const RAW_TITLE_MSG =
+  'No uses tamaños de título crudos; usa la escala tipográfica (text-display, text-h1, text-h2, text-h3).'
+
 export default defineConfig([
   globalIgnores(['dist']),
   {
@@ -31,6 +37,8 @@ export default defineConfig([
         'error',
         { selector: `Literal[value=/${RAW_COLOR}/]`, message: RAW_COLOR_MSG },
         { selector: `TemplateElement[value.raw=/${RAW_COLOR}/]`, message: RAW_COLOR_MSG },
+        { selector: `Literal[value=/${RAW_TITLE}/]`, message: RAW_TITLE_MSG },
+        { selector: `TemplateElement[value.raw=/${RAW_TITLE}/]`, message: RAW_TITLE_MSG },
       ],
     },
   },

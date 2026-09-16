@@ -113,7 +113,7 @@ export const ExtrasSelectionDialog: React.FC<ExtrasSelectionDialogProps> = ({
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
             <SlidersHorizontal className="h-5 w-5 text-muted-foreground" />
           </div>
-          <DialogTitle className="text-h2 text-foreground flex-1">
+          <DialogTitle className="flex-1">
             Personaliza tu plato
           </DialogTitle>
           <DialogClose />

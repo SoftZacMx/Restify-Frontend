@@ -108,7 +108,7 @@ const DialogTitle = React.forwardRef<
     <h2
       ref={ref}
       className={cn(
-        'text-display leading-tight tracking-tight text-foreground',
+        'text-h2 tracking-tight text-foreground',
         className
       )}
       {...props}

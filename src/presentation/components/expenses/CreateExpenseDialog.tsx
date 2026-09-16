@@ -39,7 +39,7 @@ export const CreateExpenseDialog: React.FC<CreateExpenseDialogProps> = ({
             <ShoppingCart className="h-5 w-5" />
           </div>
           <div className="min-w-0 flex-1">
-            <DialogTitle className="text-h2 text-foreground">
+            <DialogTitle>
               Nuevo Gasto
             </DialogTitle>
             <p className="mt-0.5 text-sm text-muted-foreground">

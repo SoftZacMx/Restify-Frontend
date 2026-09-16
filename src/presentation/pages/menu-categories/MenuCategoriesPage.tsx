@@ -152,7 +152,7 @@ const MenuCategoriesPage: React.FC = () => {
   return (
     <MainLayout>
       <div className="flex flex-wrap justify-between items-center gap-4 px-4 py-2">
-        <h1 className="text-3xl lg:text-4xl font-black text-foreground leading-tight tracking-tight">Categorías</h1>
+        <h1 className="text-h1 text-foreground">Categorías</h1>
         <Button onClick={() => setIsCreateModalOpen(true)} className="flex items-center justify-center gap-2 min-w-[84px] cursor-pointer overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-sm hover:bg-primary/90 transition-colors">
           <Plus className="h-4 w-4" />
           <span className="truncate">Nueva Categoría</span>

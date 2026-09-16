@@ -114,7 +114,7 @@ const TableDetailPage: React.FC = () => {
               {table.name}
             </span>
             <div>
-              <h1 className="text-h1 lg:text-display text-foreground">
+              <h1 className="text-h1 text-foreground">
                 Ubicación {table.name}
               </h1>
               <p className="text-sm text-muted-foreground">

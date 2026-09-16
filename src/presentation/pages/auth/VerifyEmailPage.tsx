@@ -62,7 +62,7 @@ export default function VerifyEmailPage() {
           {status === 'verifying' && (
             <>
               <Loader2 className="h-12 w-12 animate-spin text-primary" />
-              <h1 className="text-h2 text-foreground">
+              <h1 className="text-h1 text-foreground">
                 Verificando tu correo...
               </h1>
               <p className="text-sm text-muted-foreground">Esto solo tomará un momento.</p>
@@ -72,7 +72,7 @@ export default function VerifyEmailPage() {
           {status === 'success' && (
             <>
               <CheckCircle2 className="h-12 w-12 text-fresco" />
-              <h1 className="text-h2 text-foreground">
+              <h1 className="text-h1 text-foreground">
                 ¡Correo verificado!
               </h1>
               <p className="text-sm text-muted-foreground">
@@ -87,7 +87,7 @@ export default function VerifyEmailPage() {
           {status === 'already' && (
             <>
               <MailCheck className="h-12 w-12 text-primary" />
-              <h1 className="text-h2 text-foreground">
+              <h1 className="text-h1 text-foreground">
                 Tu correo ya estaba verificado
               </h1>
               <p className="text-sm text-muted-foreground">
@@ -102,7 +102,7 @@ export default function VerifyEmailPage() {
           {status === 'error' && (
             <>
               <XCircle className="h-12 w-12 text-destructive" />
-              <h1 className="text-h2 text-foreground">
+              <h1 className="text-h1 text-foreground">
                 No pudimos verificar tu correo
               </h1>
               <p className="text-sm text-muted-foreground">{message}</p>

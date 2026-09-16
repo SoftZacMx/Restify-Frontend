@@ -35,12 +35,12 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, onEd
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Avatar className="h-24 w-24 ring-4 ring-white dark:ring-border shadow-lg">
-              <AvatarFallback className="bg-foreground dark:bg-muted text-background dark:text-muted-foreground text-3xl font-black">
+              <AvatarFallback className="bg-foreground dark:bg-muted text-background dark:text-muted-foreground text-display">
                 {getInitials(user.name, user.last_name)}
               </AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="text-foreground text-3xl font-black leading-tight tracking-tight">
+              <h1 className="text-h1 text-foreground">
                 {fullName}
               </h1>
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2">

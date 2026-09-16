@@ -225,7 +225,7 @@ const MenuItemDetailPage: React.FC = () => {
               <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
                 Editando producto
               </p>
-              <h1 className="text-display text-foreground">
+              <h1 className="text-h1 text-foreground">
                 {menuItem.name}
               </h1>
             </div>

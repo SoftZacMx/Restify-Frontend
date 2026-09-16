@@ -19,7 +19,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({ children, title = 'M
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary">
             <UtensilsCrossed className="h-5 w-5 text-primary-foreground" />
           </div>
-          <h1 className="text-h3 text-foreground">
+          <h1 className="text-h1 text-foreground">
             {title}
           </h1>
         </div>

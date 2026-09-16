@@ -232,7 +232,7 @@ const BranchesPage: React.FC = () => {
       <section className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-display text-foreground">Sucursales</h1>
+            <h1 className="text-h1 text-foreground">Sucursales</h1>
             <p className="text-sm text-muted-foreground">
               Gestión y control centralizado de unidades operativas
             </p>

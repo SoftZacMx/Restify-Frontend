@@ -112,7 +112,7 @@ const ProductDetailPage: React.FC = () => {
         {/* Page Heading */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-4">
-            <h1 className="text-foreground text-3xl font-black leading-tight tracking-tight">
+            <h1 className="text-h1 text-foreground">
               {product.name}
             </h1>
             <Badge

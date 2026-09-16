@@ -154,7 +154,7 @@ export const UserForm: React.FC<UserFormProps> = ({
       <div>
         <div className="flex items-center gap-2 mb-4">
           <Briefcase className="h-5 w-5 text-muted-foreground shrink-0" />
-          <h2 className="text-sm font-bold uppercase tracking-wide text-foreground">Información personal</h2>
+          <h2 className="text-h3 text-foreground">Información personal</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col gap-2">
@@ -205,7 +205,7 @@ export const UserForm: React.FC<UserFormProps> = ({
       <div>
         <div className="flex items-center gap-2 mb-4">
           <Lock className="h-5 w-5 text-muted-foreground shrink-0" />
-          <h2 className="text-sm font-bold uppercase tracking-wide text-foreground">Credenciales y acceso</h2>
+          <h2 className="text-h3 text-foreground">Credenciales y acceso</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col gap-2">
@@ -255,7 +255,7 @@ export const UserForm: React.FC<UserFormProps> = ({
       <div>
         <div className="flex items-center gap-2 mb-4">
           <Settings className="h-5 w-5 text-muted-foreground shrink-0" />
-          <h2 className="text-sm font-bold uppercase tracking-wide text-foreground">Configuración del sistema</h2>
+          <h2 className="text-h3 text-foreground">Configuración del sistema</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           <div className="flex flex-col gap-2">

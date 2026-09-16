@@ -44,7 +44,7 @@ export default function SelectBranchPage() {
             RESTIFY
           </span>
         </div>
-        <h1 className="text-h3 text-foreground">Selecciona una sucursal</h1>
+        <h1 className="text-h1 text-foreground">Selecciona una sucursal</h1>
         <p className="text-sm text-muted-foreground">
           Elige dónde quieres trabajar para comenzar.
         </p>

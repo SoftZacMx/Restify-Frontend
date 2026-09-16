@@ -108,7 +108,7 @@ const ReportsPage = () => {
           <div className="px-4 py-4 bg-gradient-to-br from-muted via-card to-primary/5 dark:from-card/80 dark:via-card/50 dark:to-primary/10">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <h1 className="text-display text-foreground">
+                <h1 className="text-h1 text-foreground">
                   Reportes
                 </h1>
                 <p className="text-sm text-muted-foreground mt-2 max-w-xl">

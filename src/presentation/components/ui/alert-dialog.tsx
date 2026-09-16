@@ -100,7 +100,7 @@ const AlertDialogTitle = React.forwardRef<
   return (
     <h2
       ref={ref}
-      className={cn('text-h3 text-foreground', className)}
+      className={cn('text-h2 text-foreground', className)}
       {...props}
     />
   );
