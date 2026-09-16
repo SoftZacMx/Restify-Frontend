@@ -137,16 +137,6 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
       </div>
 
       <div className="space-y-2">
-        <Label className="text-sm font-medium">Imagen</Label>
-        <ImageUpload
-          value={imageUrl}
-          onUpload={(file) => uploadService.uploadImage(file, 'menu_item_image')}
-          onChange={(url) => setValue('imageUrl', url, { shouldDirty: true })}
-          disabled={isLoading}
-        />
-      </div>
-
-      <div className="space-y-2">
         <Label htmlFor="price" className="text-sm font-medium">
           Precio <span className="text-destructive">*</span>
         </Label>
@@ -206,14 +196,27 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
           onSelect={(category) => setValue('categoryId', category?.id ?? undefined)}
         />
         {errors.categoryId && <p className="text-sm text-destructive">{errors.categoryId.message}</p>}
-        <p className="text-xs text-muted-foreground">Selecciona la categoría del catálogo a la que pertenece el producto</p>
+        <p className="text-xs text-muted-foreground">Selecciona la categoría del catálogo a la que pertenece el platillo</p>
+      </div>
+
+      <div className="space-y-2">
+        <Label className="text-sm font-medium">
+          Imagen <span className="text-muted-foreground font-normal">(opcional)</span>
+        </Label>
+        <ImageUpload
+          value={imageUrl}
+          onUpload={(file) => uploadService.uploadImage(file, 'menu_item_image')}
+          onChange={(url) => setValue('imageUrl', url, { shouldDirty: true })}
+          disabled={isLoading}
+          size="featured"
+        />
       </div>
 
       <div className="flex items-center justify-between space-x-2 rounded-lg border  p-4">
         <div className="space-y-0.5">
           <Label htmlFor="isExtra" className="text-sm font-medium">Es un Extra</Label>
           <p className="text-xs text-muted-foreground">
-            {isExtra ? 'Este producto es un extra que se puede agregar a otros productos' : 'Este es un producto normal del catálogo'}
+            {isExtra ? 'Este platillo es un extra que se puede agregar a otros platillos' : 'Este es un platillo normal del catálogo'}
           </p>
         </div>
         <Switch id="isExtra" checked={isExtra} onCheckedChange={(checked) => setValue('isExtra', checked)} disabled={isLoading} />
@@ -223,7 +226,7 @@ export const MenuItemForm: React.FC<MenuItemFormProps> = ({
         <div className="space-y-0.5">
           <Label htmlFor="status" className="text-sm font-medium">Estado</Label>
           <p className="text-xs text-muted-foreground">
-            {status ? 'Producto activo' : 'Producto inactivo'}
+            {status ? 'Platillo activo' : 'Platillo inactivo'}
           </p>
         </div>
         <Switch id="status" checked={status} onCheckedChange={(checked) => setValue('status', checked)} disabled={isLoading} />

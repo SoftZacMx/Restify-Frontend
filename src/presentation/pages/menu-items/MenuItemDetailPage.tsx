@@ -107,8 +107,8 @@ const MenuItemDetailPage: React.FC = () => {
 
   React.useEffect(() => {
     if (error) {
-      const msg = error instanceof AppError ? error.message : 'No se pudo obtener el producto';
-      showErrorToast('Error al cargar producto', msg);
+      const msg = error instanceof AppError ? error.message : 'No se pudo obtener el platillo';
+      showErrorToast('Error al cargar platillo', msg);
     }
   }, [error]);
 
@@ -139,7 +139,7 @@ const MenuItemDetailPage: React.FC = () => {
         categoryId: values.categoryId,
         imageUrl: values.imageUrl ?? null,
       });
-      showSuccessToast('Producto actualizado', 'Los cambios se guardaron correctamente');
+      showSuccessToast('Platillo actualizado', 'Los cambios se guardaron correctamente');
       await queryClient.invalidateQueries({ queryKey: ['menuItem', menuItemId] });
       await queryClient.invalidateQueries({ queryKey: ['menuItems'] });
       await refetch();
@@ -157,7 +157,7 @@ const MenuItemDetailPage: React.FC = () => {
       await menuItemService.updateMenuItem(menuItemId, { status: !menuItem.status });
       showSuccessToast(
         'Estado actualizado',
-        menuItem.status ? 'Producto desactivado' : 'Producto activado'
+        menuItem.status ? 'Platillo desactivado' : 'Platillo activado'
       );
       await queryClient.invalidateQueries({ queryKey: ['menuItem', menuItemId] });
       await queryClient.invalidateQueries({ queryKey: ['menuItems'] });
@@ -173,7 +173,7 @@ const MenuItemDetailPage: React.FC = () => {
     setIsDeleting(true);
     try {
       await menuItemService.deleteMenuItem(menuItemId);
-      showSuccessToast('Producto eliminado', 'Se quitó del catálogo correctamente');
+      showSuccessToast('Platillo eliminado', 'Se quitó del catálogo correctamente');
       await queryClient.invalidateQueries({ queryKey: ['menuItems'] });
       navigate('/menu/items');
     } catch (err) {
@@ -189,7 +189,7 @@ const MenuItemDetailPage: React.FC = () => {
     return (
       <MainLayout>
         <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-          <p className="text-muted-foreground text-lg">Cargando producto...</p>
+          <p className="text-muted-foreground text-lg">Cargando platillo...</p>
         </div>
       </MainLayout>
     );
@@ -204,7 +204,7 @@ const MenuItemDetailPage: React.FC = () => {
             to="/menu/items"
             className="text-muted-foreground font-medium hover:text-primary transition-colors"
           >
-            Productos
+            Platillos
           </Link>
           <span className="text-muted-foreground">/</span>
           <span className="text-foreground font-medium">{menuItem.name}</span>
@@ -223,7 +223,7 @@ const MenuItemDetailPage: React.FC = () => {
             </Button>
             <div>
               <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
-                Editando producto
+                Editando platillo
               </p>
               <h1 className="text-h1 text-foreground">
                 {menuItem.name}
@@ -238,7 +238,7 @@ const MenuItemDetailPage: React.FC = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
                 <DropdownMenuItem onSelect={handleToggleStatus} className="cursor-pointer">
-                  {menuItem.status ? 'Desactivar producto' : 'Activar producto'}
+                  {menuItem.status ? 'Desactivar platillo' : 'Activar platillo'}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={() => setIsDeleteOpen(true)}
@@ -283,7 +283,7 @@ const MenuItemDetailPage: React.FC = () => {
                     htmlFor="name"
                     className="text-xs uppercase tracking-wider text-muted-foreground font-semibold"
                   >
-                    Nombre del producto
+                    Nombre del platillo
                   </Label>
                   <Input
                     id="name"
@@ -414,8 +414,8 @@ const MenuItemDetailPage: React.FC = () => {
               {menuItem.isExtra && (
                 <div className="rounded-lg bg-primary/10 dark:bg-primary/20 border border-primary/30 dark:border-primary p-3">
                   <p className="text-xs text-primary">
-                    Este producto es un <strong>extra</strong> — se vende como complemento de
-                    otros productos. Su receta también descuenta stock al venderse.
+                    Este platillo es un <strong>extra</strong> — se vende como complemento de
+                    otros platillos. Su receta también descuenta stock al venderse.
                   </p>
                 </div>
               )}
@@ -445,10 +445,10 @@ const MenuItemDetailPage: React.FC = () => {
       <ConfirmDialog
         open={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
-        title="¿Eliminar producto?"
+        title="¿Eliminar platillo?"
         description={
           <>
-            Estás a punto de eliminar el producto{' '}
+            Estás a punto de eliminar el platillo{' '}
             <strong className="text-foreground">{menuItem.name}</strong>.
             <br />
             <br />
