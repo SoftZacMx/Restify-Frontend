@@ -60,6 +60,8 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
 }) => {
   const { user } = useAuthStore();
   const [title, setTitle] = useState<string>('');
+  // Si el usuario escribió su propio título, no lo pisamos al cambiar el tipo.
+  const [titleEdited, setTitleEdited] = useState<boolean>(false);
   const [expenseType, setExpenseType] = useState<ExpenseType | ''>('');
   const [date, setDate] = useState<string>(getTodayDateString());
   const [description, setDescription] = useState<string>('');
@@ -225,7 +227,10 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
               type="text"
               maxLength={200}
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                setTitleEdited(e.target.value.trim() !== '');
+              }}
               placeholder="Ej. Mercancía Proveedor Central"
               className={cn(errors.title && 'border-destructive')}
             />
@@ -245,7 +250,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
               onValueChange={(value) => {
                 const type = value as ExpenseType;
                 setExpenseType(type);
-                setTitle(getExpenseTypeLabel(type));
+                if (!titleEdited) setTitle(getExpenseTypeLabel(type));
                 setErrors({});
                 if (value !== 'SALARY') setSalaryEmployee(null);
               }}
@@ -432,8 +437,8 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
             <div className="flex gap-3 rounded-lg bg-muted p-4 dark:bg-card/50">
               <Info className="h-5 w-5 flex-shrink-0 text-primary" />
               <p className="text-sm text-muted-foreground">
-                Los subtotales y totales se calculan automáticamente basándose en la cantidad y
-                precio unitario ingresado. El IVA se calcula al 19% por defecto.
+                Los subtotales y totales se calculan automáticamente según la cantidad y el
+                precio unitario ingresado.
               </p>
             </div>
           )}

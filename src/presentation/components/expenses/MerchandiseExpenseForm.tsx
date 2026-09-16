@@ -9,6 +9,7 @@ import {
   SelectTrigger,
 } from '@/presentation/components/ui/select';
 import { SelectProductDialog } from './SelectProductDialog';
+import { UNIT_OPTIONS } from '@/shared/utils/stock.utils';
 import type { Product, CreateExpenseItemRequest, UnitOfMeasure } from '@/domain/types';
 
 /** Índice de fila o 'add' para abrir el diálogo añadiendo un ítem nuevo */
@@ -49,12 +50,11 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
   ]);
   const [productDialogTarget, setProductDialogTarget] = useState<ProductDialogTarget>(null);
 
-  const unitOfMeasureOptions: { value: UnitOfMeasure; label: string }[] = [
-    { value: 'KG', label: 'Kilogramos' },
-    { value: 'G', label: 'Gramos' },
-    { value: 'PCS', label: 'Piezas' },
-    { value: 'OTHER', label: 'Otros' },
-  ];
+  // Unidades desde la lista canónica del sistema (incluye Litros/Mililitros),
+  // para no desincronizarse del catálogo de productos.
+  const unitOfMeasureOptions: { value: UnitOfMeasure; label: string }[] = UNIT_OPTIONS.map(
+    (u) => ({ value: u.value, label: u.name })
+  );
 
   const calculateItemTotals = (item: ExpenseItemForm): ExpenseItemForm => {
     const amount = parseFloat(item.amount) || 0;
