@@ -1,10 +1,9 @@
 import React from 'react';
-import { Edit, Mail, Phone, CalendarDays } from 'lucide-react';
+import { Edit, Mail, Phone, CalendarDays, User as UserIcon } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/presentation/components/ui/avatar';
 import { Button } from '@/presentation/components/ui/button';
 import type { User } from '@/domain/types';
 import { getFullName, getRoleLabel, getStatusLabel } from '@/shared/utils';
-import { getInitials } from '@/shared/utils/dashboard.utils';
 import { APP_TIMEZONE } from '@/shared/constants';
 
 interface UserProfileHeaderProps {
@@ -14,7 +13,7 @@ interface UserProfileHeaderProps {
 
 
 /**
- * Cabecera de perfil del usuario: avatar con iniciales, nombre, badges de rol/estado
+ * Cabecera de perfil del usuario: avatar con icono, nombre, badges de rol/estado
  * y datos de contacto en tarjetas. Solo UI, no requiere datos adicionales de la API.
  */
 export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, onEdit }) => {
@@ -35,8 +34,8 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, onEd
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Avatar className="h-24 w-24 ring-4 ring-white dark:ring-border shadow-lg">
-              <AvatarFallback className="bg-foreground dark:bg-muted text-background dark:text-muted-foreground text-display">
-                {getInitials(user.name, user.last_name)}
+              <AvatarFallback className="bg-primary text-primary-foreground">
+                <UserIcon className="h-10 w-10" />
               </AvatarFallback>
             </Avatar>
             <div>
