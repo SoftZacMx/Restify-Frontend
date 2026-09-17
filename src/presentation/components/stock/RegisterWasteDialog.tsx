@@ -129,7 +129,7 @@ export const RegisterWasteDialog: React.FC<RegisterWasteDialogProps> = ({
         <DialogContent className="w-full md:w-[42vw] max-h-[90vh] overflow-y-auto">
           <DialogClose />
           <DialogHeader>
-            <DialogTitle>Registrar merma</DialogTitle>
+            <DialogTitle>Registrar pérdida</DialogTitle>
           </DialogHeader>
 
           <form onSubmit={submit} className="flex flex-col gap-5 mt-2">
@@ -253,7 +253,7 @@ export const RegisterWasteDialog: React.FC<RegisterWasteDialogProps> = ({
                 Cancelar
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Registrando...' : 'Registrar merma'}
+                {isSubmitting ? 'Registrando...' : 'Registrar pérdida'}
               </Button>
             </div>
           </form>

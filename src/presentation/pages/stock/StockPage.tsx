@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { Trash2, Sliders } from 'lucide-react';
+import { PackageMinus, Sliders } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { Button } from '@/presentation/components/ui/button';
 import { Pagination } from '@/presentation/components/ui/pagination';
@@ -82,7 +82,7 @@ const StockPage: React.FC = () => {
     try {
       const result = await stockService.recordWaste(body);
       if (result.recorded) {
-        showSuccessToast('Merma registrada', 'El movimiento se guardó correctamente');
+        showSuccessToast('Pérdida registrada', 'El movimiento se guardó correctamente');
       } else {
         // El producto pasó a trackStock=false entre el momento de cargar la lista y el submit.
         showSuccessToast(
@@ -94,7 +94,7 @@ const StockPage: React.FC = () => {
       await queryClient.invalidateQueries({ queryKey: ['stock'] });
     } catch (err) {
       const message = err instanceof AppError ? err.message : 'Ocurrió un error inesperado';
-      showErrorToast('Error al registrar merma', message);
+      showErrorToast('Error al registrar pérdida', message);
     } finally {
       setIsSubmittingWaste(false);
     }
@@ -134,8 +134,8 @@ const StockPage: React.FC = () => {
           </div>
           <div className="flex flex-wrap gap-2">
             <Button variant="outline" onClick={() => setIsWasteOpen(true)}>
-              <Trash2 className="h-4 w-4 mr-2" />
-              Registrar merma
+              <PackageMinus className="h-4 w-4 mr-2" />
+              Registrar pérdida
             </Button>
             <Button variant="outline" onClick={() => setIsAdjustOpen(true)}>
               <Sliders className="h-4 w-4 mr-2" />
