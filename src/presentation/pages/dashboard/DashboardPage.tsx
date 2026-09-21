@@ -5,7 +5,6 @@ import {
   Plus,
   DollarSign,
   MapPin,
-  CheckCircle2,
   ClipboardList,
   TrendingUp,
   UtensilsCrossed,
@@ -416,7 +415,7 @@ const DashboardPage = () => {
             </CardContent>
           </Card>
 
-          {/* Notificaciones (placeholder) */}
+          {/* Notificaciones (placeholder)
           <Card className="border-border shadow-sm bg-card">
             <CardHeader>
               <CardTitle className="text-h3 text-foreground">
@@ -440,6 +439,7 @@ const DashboardPage = () => {
               />
             </CardContent>
           </Card>
+           */}
         </div>
       </div>
     </MainLayout>
@@ -510,31 +510,5 @@ function DashboardOrderRow({
     </tr>
   );
 }
-
-const NotificationItem = ({
-  title,
-  time,
-  iconBg,
-  iconColor,
-  IconComponent,
-}: {
-  title: string;
-  time: string;
-  iconBg: string;
-  iconColor: string;
-  IconComponent: React.ComponentType<{ className?: string }>;
-}) => (
-  <div className="flex gap-4 items-start">
-    <div
-      className={`h-10 w-10 rounded-full ${iconBg} flex items-center justify-center shrink-0`}
-    >
-      <IconComponent className={`h-5 w-5 ${iconColor}`} />
-    </div>
-    <div>
-      <p className="text-sm font-medium text-foreground leading-snug">{title}</p>
-      <p className="text-xs text-muted-foreground mt-1">{time}</p>
-    </div>
-  </div>
-);
 
 export default DashboardPage;
