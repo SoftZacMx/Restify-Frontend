@@ -45,7 +45,7 @@ export const SelectCategoryDialog: React.FC<SelectCategoryDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl w-full max-h-[90vh] flex flex-col">
+      <DialogContent className="max-w-3xl w-full max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="pr-8">Seleccionar categoría</DialogTitle>
           <DialogClose />
