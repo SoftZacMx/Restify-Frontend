@@ -24,7 +24,7 @@ export const CategorySelectionList: React.FC<CategorySelectionListProps> = ({
   }
 
   return (
-    <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1">
+    <div className="space-y-3">
       {categories.map((category) => (
         <CategorySelectionItem
           key={category.id}

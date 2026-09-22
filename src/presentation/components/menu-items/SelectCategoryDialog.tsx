@@ -45,10 +45,13 @@ export const SelectCategoryDialog: React.FC<SelectCategoryDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg w-full max-h-[90vh] flex flex-col">
+      <DialogContent className="max-w-2xl w-full max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="pr-8">Seleccionar categoría</DialogTitle>
           <DialogClose />
+          <p className="text-sm text-muted-foreground">
+            Elige la categoría del platillo · {categories.length} categorías
+          </p>
         </DialogHeader>
 
         <div className="space-y-4 flex-1 min-h-0 flex flex-col">
@@ -59,22 +62,22 @@ export const SelectCategoryDialog: React.FC<SelectCategoryDialogProps> = ({
               placeholder="Buscar por nombre..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
+              className="pl-9 h-12"
               autoFocus
             />
           </div>
 
-          <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1">
+          <div className="flex-1 min-h-0 space-y-3 overflow-y-auto pr-1">
             <button
               type="button"
               onClick={() => handleSelect(null)}
-              className="w-full flex items-center gap-4 p-3 rounded-lg border text-left transition-colors border-border hover:bg-muted dark:hover:bg-card/50"
+              className="w-full flex items-center gap-4 p-4 rounded-lg border text-left transition-colors border-border hover:bg-muted dark:hover:bg-card/50"
             >
-              <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-muted flex items-center justify-center">
-                <LayoutGrid className="h-6 w-6 text-muted-foreground" />
+              <div className="flex-shrink-0 w-14 h-14 rounded-lg bg-muted flex items-center justify-center">
+                <LayoutGrid className="h-7 w-7 text-muted-foreground" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-foreground truncate">
+                <p className="text-base font-medium text-foreground truncate">
                   Sin categoría
                 </p>
               </div>
