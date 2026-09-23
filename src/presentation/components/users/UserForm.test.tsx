@@ -171,6 +171,30 @@ describe('UserForm', () => {
       expect(mockOnSubmit).not.toHaveBeenCalled();
     });
 
+    it('muestra error cuando falta el carácter especial', async () => {
+      const user = userEvent.setup();
+      renderUserForm();
+      await fillValidCreateData(user, { password: 'Password1' });
+      await submitForm(user);
+
+      await waitFor(() => {
+        expect(screen.getByText(/debe incluir al menos un carácter especial/i)).toBeInTheDocument();
+      });
+      expect(mockOnSubmit).not.toHaveBeenCalled();
+    });
+
+    it('muestra el checklist de requisitos al escribir la contraseña', async () => {
+      const user = userEvent.setup();
+      renderUserForm();
+      const passwordInput = document.getElementById('password') as HTMLInputElement;
+      await user.type(passwordInput, 'P');
+
+      expect(screen.getByText(/mínimo 8 caracteres/i)).toBeInTheDocument();
+      expect(screen.getByText(/una letra mayúscula/i)).toBeInTheDocument();
+      expect(screen.getByText(/un número/i)).toBeInTheDocument();
+      expect(screen.getByText(/un carácter especial/i)).toBeInTheDocument();
+    });
+
     it('muestra error cuando el teléfono tiene valor pero no 10 dígitos', async () => {
       const user = userEvent.setup();
       renderUserForm();

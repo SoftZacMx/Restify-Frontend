@@ -25,6 +25,7 @@ import {
   getPasswordStrengthColor,
   getPasswordStrengthTextColor,
 } from '@/shared/utils/password.utils';
+import { PasswordRequirements } from '@/presentation/components/ui/password-requirements';
 import { cn } from '@/shared/lib/utils';
 import { INPUT_LENGTH } from '@/shared/constants';
 
@@ -104,13 +105,9 @@ export const UserForm: React.FC<UserFormProps> = ({
   const passwordStrengthTextColor = getPasswordStrengthTextColor(password);
 
   const onFormSubmit = async (data: UserFormValues) => {
-    // Validación condicional de password (requerida en creación, min 8 si se proporciona)
+    // En creación la contraseña es obligatoria; la complejidad la valida userFormSchema.
     if (!isEditMode && !data.password) {
       setError('password', { message: 'La contraseña es requerida' });
-      return;
-    }
-    if (data.password && data.password.length < 8) {
-      setError('password', { message: 'La contraseña debe tener al menos 8 caracteres' });
       return;
     }
 
@@ -236,6 +233,7 @@ export const UserForm: React.FC<UserFormProps> = ({
                 </button>
               </div>
               {errors.password && <p className="text-destructive text-xs">{errors.password.message}</p>}
+              <PasswordRequirements password={password || ''} />
               {password && (
                 <div className="flex items-center gap-2 mt-1.5">
                   <div className="flex-1 h-1.5 bg-secondary rounded-full overflow-hidden">

@@ -7,7 +7,7 @@ const validUser = {
   second_last_name: 'García',
   email: 'juan@restify.com',
   phone: '5512345678',
-  password: 'secret',
+  password: 'Secret1!',
   rol: 'WAITER',
   status: true,
   branchIds: ['branch-1'],
@@ -66,5 +66,25 @@ describe('userFormSchema', () => {
   it('accepts a phone with formatting characters that total 10 digits', () => {
     const result = userFormSchema.safeParse({ ...validUser, phone: '(55) 1234-5678' });
     expect(result.success).toBe(true);
+  });
+
+  it('accepts an empty password (edit mode / optional at schema level)', () => {
+    const result = userFormSchema.safeParse({ ...validUser, password: '' });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a password that does not meet complexity rules', () => {
+    expect(userFormSchema.safeParse({ ...validUser, password: 'short' }).success).toBe(false);
+    expect(userFormSchema.safeParse({ ...validUser, password: 'nouppercase1!' }).success).toBe(false);
+    expect(userFormSchema.safeParse({ ...validUser, password: 'NoNumber!' }).success).toBe(false);
+    expect(userFormSchema.safeParse({ ...validUser, password: 'NoSpecial1' }).success).toBe(false);
+  });
+
+  it('surfaces the special-character rule message when that is the only missing requirement', () => {
+    const result = userFormSchema.safeParse({ ...validUser, password: 'Password1' });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toMatch(/carácter especial/i);
+    }
   });
 });
