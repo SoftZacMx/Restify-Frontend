@@ -10,6 +10,7 @@ import {
 } from '@/presentation/components/ui/select';
 import { SelectProductDialog } from './SelectProductDialog';
 import { UNIT_OPTIONS } from '@/shared/utils/stock.utils';
+import { cn } from '@/shared/lib/utils';
 import type { Product, CreateExpenseItemRequest, UnitOfMeasure } from '@/domain/types';
 
 /** Índice de fila o 'add' para abrir el diálogo añadiendo un ítem nuevo */
@@ -126,6 +127,18 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
     (p) => ({ id: p.id, name: p.name, status: p.status })
   );
 
+  // Devuelve la unidad del producto si la elegida en la fila no coincide
+  // (mismo chequeo que el backend aplica con INCOMPATIBLE_UNIT), o null si es válida.
+  const getUnitMismatch = (item: ExpenseItemForm): UnitOfMeasure | null => {
+    if (!item.productId || !item.unitOfMeasure) return null;
+    const product = products.find((p) => p.id === item.productId);
+    if (!product?.trackStock || !product.unitOfMeasure) return null;
+    return item.unitOfMeasure !== product.unitOfMeasure ? product.unitOfMeasure : null;
+  };
+
+  const unitLabel = (unit: UnitOfMeasure): string =>
+    unitOfMeasureOptions.find((u) => u.value === unit)?.label ?? unit;
+
   return (
     <section className="space-y-4 border-t border-border pt-6 dark:border-border">
       <SelectProductDialog
@@ -167,7 +180,9 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
             <div className="col-span-3">Subtotal</div>
           </div>
           {/* Filas */}
-          {items.map((item, index) => (
+          {items.map((item, index) => {
+            const unitMismatch = getUnitMismatch(item);
+            return (
             <div
               key={index}
               className="grid grid-cols-12 gap-2 border-b border-border px-4 py-3 last:border-b-0 dark:border-border/50"
@@ -203,7 +218,9 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
                     updateItem(index, { unitOfMeasure: (value || '') as UnitOfMeasure | '' })
                   }
                 >
-                  <SelectTrigger className="h-9">
+                  <SelectTrigger
+                    className={cn('h-9', unitMismatch && 'border-destructive focus-visible:ring-destructive')}
+                  >
                     {item.unitOfMeasure
                       ? unitOfMeasureOptions.find((u) => u.value === item.unitOfMeasure)?.label ?? item.unitOfMeasure
                       : '—'}
@@ -217,6 +234,11 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
                     ))}
                   </SelectContent>
                 </Select>
+                {unitMismatch && (
+                  <p className="mt-1 text-xs text-destructive">
+                    No coincide con la unidad del producto ({unitLabel(unitMismatch)})
+                  </p>
+                )}
               </div>
               <div className="col-span-2">
                 <Input
@@ -244,7 +266,8 @@ export const MerchandiseExpenseForm: React.FC<MerchandiseExpenseFormProps> = ({
                 </Button>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
