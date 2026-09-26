@@ -44,6 +44,7 @@ export const UserTable: React.FC<UserTableProps> = ({
 }) => {
   const getRoleBadgeColor = (role: string): string => {
     const colors: Record<string, string> = {
+      Propietario: 'bg-fresco-suave text-fresco-texto',
       Administrador: 'bg-chart-5/15 text-chart-5',
       Gerente: 'bg-primary/10 dark:bg-primary/20 text-primary',
       Empleado: 'bg-primary/10 dark:bg-primary/20 text-primary',
