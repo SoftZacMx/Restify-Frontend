@@ -23,7 +23,7 @@ export const userFormSchema = z.object({
   phone: z.string().refine(
     (val) => !val || val.replace(/\D/g, '').length === PHONE_DIGITS,
     `El teléfono debe tener ${PHONE_DIGITS} dígitos`
-  ),
+  ).regex(/^[0-9]+$/,'El teléfono solo puede contener números'),
   // Vacía permitida a nivel schema (edición no envía password); en creación se exige en el form.
   password: z.string().superRefine((val, ctx) => {
     if (!val) return;
