@@ -20,10 +20,11 @@ export const userFormSchema = z.object({
   last_name: z.string().min(1, 'El apellido es requerido').max(100, 'El apellido no puede superar 100 caracteres'),
   second_last_name: z.string().max(100, 'El segundo apellido no puede superar 100 caracteres'),
   email: z.string().min(1, 'El email es requerido').regex(EMAIL_REGEX, 'El formato del email no es válido'),
-  phone: z.string().refine(
-    (val) => !val || val.replace(/\D/g, '').length === PHONE_DIGITS,
+  // Opcional: vacío pasa directo; con contenido, solo números y exactamente 10 dígitos.
+  phone: z.string().refine((val) => !val || /^[0-9]+$/.test(val), 'El teléfono solo puede contener números').refine(
+    (val) => !val || val.length === PHONE_DIGITS,
     `El teléfono debe tener ${PHONE_DIGITS} dígitos`
-  ).regex(/^[0-9]+$/,'El teléfono solo puede contener números'),
+  ),
   // Vacía permitida a nivel schema (edición no envía password); en creación se exige en el form.
   password: z.string().superRefine((val, ctx) => {
     if (!val) return;

@@ -63,9 +63,12 @@ describe('userFormSchema', () => {
     expect(userFormSchema.safeParse({ ...validUser, phone: '55123456789' }).success).toBe(false);
   });
 
-  it('accepts a phone with formatting characters that total 10 digits', () => {
+  it('rejects a phone with non-numeric characters', () => {
     const result = userFormSchema.safeParse({ ...validUser, phone: '(55) 1234-5678' });
-    expect(result.success).toBe(true);
+    expect(result.success).toBe(false);
+    expect(result.success === false && result.error.issues[0].message).toBe(
+      'El teléfono solo puede contener números'
+    );
   });
 
   it('accepts an empty password (edit mode / optional at schema level)', () => {

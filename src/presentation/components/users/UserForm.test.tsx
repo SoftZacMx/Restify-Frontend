@@ -246,7 +246,7 @@ describe('UserForm', () => {
       expect(payload.phone).toBeNull();
     });
 
-    it('normaliza teléfono a 10 dígitos cuando se ingresa con espacios', async () => {
+    it('rechaza teléfono con espacios (solo se aceptan números)', async () => {
       const user = userEvent.setup();
       mockOnSubmit.mockResolvedValue(undefined);
       renderUserForm();
@@ -257,9 +257,9 @@ describe('UserForm', () => {
       await submitForm(user);
 
       await waitFor(() => {
-        expect(mockOnSubmit).toHaveBeenCalledTimes(1);
+        expect(screen.getByText('El teléfono solo puede contener números')).toBeInTheDocument();
       });
-      expect(mockOnSubmit.mock.calls[0][0].phone).toBe('5512345678');
+      expect(mockOnSubmit).not.toHaveBeenCalled();
     });
 
     it('incluye segundo apellido y teléfono cuando se completan', async () => {
