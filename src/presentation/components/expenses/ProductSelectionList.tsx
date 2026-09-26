@@ -27,7 +27,7 @@ export const ProductSelectionList: React.FC<ProductSelectionListProps> = ({
   }
 
   return (
-    <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1">
+    <div className="space-y-2 max-h-full overflow-y-auto pr-1">
       {products.map((product) => (
         <ProductSelectionItem
           key={product.id}
