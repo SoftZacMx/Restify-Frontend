@@ -188,7 +188,7 @@ export const UserForm: React.FC<UserFormProps> = ({
             <Label htmlFor="phone" className="text-sm font-medium text-foreground">
               Teléfono <span className="text-muted-foreground font-normal text-xs">(opcional, 10 dígitos)</span>
             </Label>
-            <Input id="phone" type="tel" inputMode="numeric" placeholder="Ej. 5512345678" maxLength={PHONE_DIGITS + 4}
+            <Input id="phone" type="tel" inputMode="numeric" placeholder="Ej. 5512345678" maxLength={PHONE_DIGITS}
               {...register('phone')}
               className={cn('h-11 rounded-lg', errors.phone && 'border-destructive focus-visible:ring-destructive')} />
             {errors.phone && <p className="text-destructive text-xs">{errors.phone.message}</p>}
