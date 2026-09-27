@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Calendar, CreditCard, Wrench, Zap, Building2, Package, Banknote, FileText, Wallet, SlidersHorizontal, type LucideIcon } from 'lucide-react';
+import { Search, Calendar, CreditCard, DollarSign, Layers, Wrench, Zap, Building2, Package, Banknote, FileText, Wallet, SlidersHorizontal, type LucideIcon } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
 import {
   Select,
@@ -80,7 +80,11 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
     { value: 'OTHER', title: 'Otros', icon: FileText },
     { value: 'MERCADO_PAGO_FEE', title: 'Comisión Mercado Pago', icon: Wallet },
   ];
-  const paymentMethods: PaymentMethod[] = [1, 2, 3];
+  const paymentMethods: { value: PaymentMethod; icon: LucideIcon }[] = [
+    { value: 1, icon: DollarSign },
+    { value: 2, icon: Building2 },
+    { value: 3, icon: CreditCard },
+  ];
 
   return (
     <div className="space-y-4 px-4 py-3 border-b border-border overflow-x-visible min-w-0">
@@ -179,32 +183,46 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
       {showAdvanced && (
         <div
           id="expense-advanced-filters"
-          className="space-y-3 rounded-lg border border-border bg-muted/50 p-3 dark:border-border dark:bg-card/30"
+          className="flex flex-col gap-3 rounded-lg border border-border bg-muted/50 p-3 md:flex-row md:flex-wrap md:items-center dark:border-border dark:bg-card/30"
         >
           {/* Método de pago */}
-          <Select value={getCurrentPaymentMethodValue()} onValueChange={handlePaymentMethodChange}>
-            <SelectTrigger className="h-9 rounded-lg bg-card border-border hover:bg-muted dark:hover:bg-card text-foreground text-sm font-medium w-full md:w-auto gap-1.5 px-3">
-              <CreditCard className="h-3.5 w-3.5 shrink-0" />
-              <span className="truncate">
-                {filters.paymentMethod && filters.paymentMethod !== 'all'
-                  ? getPaymentMethodLabel(filters.paymentMethod as 1 | 2 | 3)
-                  : 'Método de pago'}
-              </span>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos los métodos</SelectItem>
-              {paymentMethods.map((method) => (
-                <SelectItem key={method} value={method.toString()}>
-                  {getPaymentMethodLabel(method)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex w-full items-center gap-2 md:w-auto">
+            <CreditCard className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+            <span className="shrink-0 text-xs text-muted-foreground">Método de pago</span>
+            <div className="min-w-0 flex-1 md:flex-none">
+              <Select value={getCurrentPaymentMethodValue()} onValueChange={handlePaymentMethodChange}>
+                <SelectTrigger className="h-9 w-full rounded-lg bg-card border-border hover:bg-muted dark:hover:bg-card text-foreground text-sm font-medium sm:w-[170px] gap-1.5 px-3">
+                  <span className="truncate">
+                    {filters.paymentMethod && filters.paymentMethod !== 'all'
+                      ? getPaymentMethodLabel(filters.paymentMethod as 1 | 2 | 3)
+                      : 'Todos los métodos'}
+                  </span>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">
+                    <span className="flex items-center gap-2">
+                      <Layers className="h-3.5 w-3.5 text-muted-foreground" />
+                      Todos los métodos
+                    </span>
+                  </SelectItem>
+                  {paymentMethods.map(({ value, icon: Icon }) => (
+                    <SelectItem key={value} value={value.toString()}>
+                      <span className="flex items-center gap-2">
+                        <Icon className="h-3.5 w-3.5" />
+                        {getPaymentMethodLabel(value)}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
 
           {/* Rango de fechas — columna en móvil, fila en desktop */}
-          <div className="flex flex-col md:flex-row items-center gap-2">
+          <div className="flex flex-col gap-2 md:flex-row md:flex-wrap md:items-center">
             <div className="flex items-center gap-2 w-full md:w-auto">
-              <Calendar className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+              {/* En móvil el input date nativo ya muestra su propio icono */}
+              <Calendar className="h-3.5 w-3.5 text-muted-foreground shrink-0 hidden md:block" />
               <span className="text-xs text-muted-foreground shrink-0">Desde</span>
               <Input
                 id="dateFrom"
@@ -215,7 +233,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
               />
             </div>
             <div className="flex items-center gap-2 w-full md:w-auto">
-              <Calendar className="h-3.5 w-3.5 text-muted-foreground shrink-0 md:hidden" />
+              <Calendar className="h-3.5 w-3.5 text-muted-foreground shrink-0 hidden md:block" />
               <span className="text-xs text-muted-foreground shrink-0">Hasta</span>
               <Input
                 id="dateTo"

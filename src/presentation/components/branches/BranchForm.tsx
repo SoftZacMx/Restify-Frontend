@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Image as ImageIcon, Clock } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
 import { Button } from '@/presentation/components/ui/button';
 import { Label } from '@/presentation/components/ui/label';
 import { branchFormSchema, type BranchFormValues } from '@/shared/schemas/branch.schema';
 import type { BranchDetail, CreateBranchRequest, UpdateBranchRequest } from '@/domain/types';
+import { AppError } from '@/domain/errors';
+import { uploadService } from '@/application/services';
+import { showErrorToast } from '@/shared/utils/toast';
 import { cn } from '@/shared/lib/utils';
+import { ImageUpload } from '../ui/image-upload';
 
 interface BranchFormProps {
   initialData?: BranchDetail | null;
@@ -74,12 +78,13 @@ export const BranchForm: React.FC<BranchFormProps> = ({
   isLoading = false,
 }) => {
   const isEditMode = !!initialData;
-  const [logoBroken, setLogoBroken] = useState(false);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
 
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<BranchFormValues>({
     resolver: zodResolver(branchFormSchema),
@@ -100,14 +105,31 @@ export const BranchForm: React.FC<BranchFormProps> = ({
 
   const logoUrl = watch('logoUrl');
 
-  const logoIsValid = /^https?:\/\//i.test(logoUrl.trim());
-
   const onFormSubmit = async (data: BranchFormValues) => {
+    // El archivo se sube en el submit (y no al seleccionarlo) para no dejar
+    // imágenes huérfanas si el usuario cancela el diálogo.
+    if (logoFile) {
+      try {
+        const uploadedUrl = await uploadService.uploadImage(logoFile, 'branch_logo');
+        data.logoUrl = uploadedUrl;
+        // Sin esto el campo sigue con la URL vieja y un segundo submit
+        // revertiria el logo.
+        setValue('logoUrl', uploadedUrl);
+      } catch (error) {
+        showErrorToast(
+          'Error al subir el logo',
+          error instanceof AppError ? error.message : 'No se pudo subir la imagen.'
+        );
+        return;
+      }
+    }
+
     if (isEditMode) {
       await onSubmit(buildUpdatePayload(data, initialData!));
     } else {
       await onSubmit(buildCreatePayload(data));
     }
+    setLogoFile(null);
   };
 
   return (
@@ -167,39 +189,20 @@ export const BranchForm: React.FC<BranchFormProps> = ({
         </div>
 
         {/* Branding */}
-        <div className="space-y-4">
+        <div className="space-y-4 w-full flex-col flex items-center">
           <h3 className={sectionTitleClass}>Branding</h3>
-          <div className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-muted p-4 h-[140px]">
-            <div className="w-20 h-20 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
-              {logoIsValid && !logoBroken ? (
-                <img
-                  src={logoUrl.trim()}
-                  alt="Logo de la sucursal"
-                  className="w-full h-full object-cover"
-                  onError={() => setLogoBroken(true)}
-                />
-              ) : (
-                <ImageIcon className="h-8 w-8 text-muted-foreground" />
-              )}
-            </div>
-            <span className="text-xs text-muted-foreground text-center">
-              Vista previa del logo
-            </span>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="logoUrl" className="text-sm font-medium">
-              URL del logo
-            </Label>
-            <Input
-              id="logoUrl"
-              {...register('logoUrl', { onChange: () => setLogoBroken(false) })}
-              placeholder="https://mi-marca.com/logo.png"
-              className={cn(inputClass, errors.logoUrl && 'border-destructive')}
-              maxLength={500}
-              disabled={isLoading}
-            />
-            {errors.logoUrl && <p className="text-sm text-destructive mt-1">{errors.logoUrl.message}</p>}
-          </div>
+          <ImageUpload
+            value={logoUrl}
+            file={logoFile}
+            onFileChange={setLogoFile}
+            onChange={(url) => setValue('logoUrl', url ?? '')}
+            size="lg"
+            emptyAsBox
+            disabled={isLoading}
+          />
+          <p className="text-xs text-muted-foreground text-center">
+            JPG, PNG o WebP
+          </p>
         </div>
       </div>
 

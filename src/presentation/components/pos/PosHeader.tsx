@@ -21,7 +21,7 @@ export function PosHeader({
 }: PosHeaderProps) {
   return (
     <div className="flex items-center justify-between mb-6">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 mt-2 mr-2">
         <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-lg">
           {posMode === 'ORDER_BUILDING' ? (
             <ShoppingCart className="h-6 w-6 text-white" />

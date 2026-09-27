@@ -51,30 +51,30 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   return (
     <>
       {/* Vista compacta en móvil (lista) */}
-      <div className="flex flex-col gap-2 md:hidden">
+      <div className="flex flex-col gap-3 md:hidden">
         {products.map((product) => (
           <button
             key={product.id}
             type="button"
             onClick={() => onProductSelect(product)}
-            className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 shadow-sm hover:shadow-md transition-shadow text-left"
+            className="flex items-center gap-5 rounded-xl border border-border bg-card p-5 shadow-sm hover:shadow-md transition-shadow text-left"
           >
-            <div className="h-12 w-12 shrink-0 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
+            <div className="h-20 w-20 shrink-0 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
               {product.imageUrl ? (
                 <img src={product.imageUrl} alt={product.name} className="h-full w-full object-cover" />
               ) : (
-                <Package className="h-6 w-6 text-primary opacity-80" />
+                <Package className="h-8 w-8 text-primary opacity-80" />
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-sm text-foreground truncate">
+              <h3 className="text-h3 text-foreground truncate">
                 {product.name}
               </h3>
-              <p className="text-primary font-semibold text-sm">${product.price.toFixed(2)}</p>
+              <p className="text-body font-semibold text-primary">${product.price.toFixed(2)}</p>
             </div>
             <div className="shrink-0">
-              <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
-                <Plus className="h-4 w-4 text-primary-foreground" />
+              <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center">
+                <Plus className="h-6 w-6 text-primary-foreground" />
               </div>
             </div>
           </button>

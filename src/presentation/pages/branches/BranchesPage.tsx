@@ -230,17 +230,14 @@ const BranchesPage: React.FC = () => {
   return (
     <MainLayout>
       <section className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between p-2">
           <div>
             <h1 className="text-h1 text-foreground">Sucursales</h1>
-            <p className="text-sm text-muted-foreground">
-              Gestión y control centralizado de unidades operativas
-            </p>
           </div>
           {canWrite && (
-            <Button onClick={() => setIsCreateModalOpen(true)}>
-              <Plus className="h-4 w-4 mr-2" />
-              Nueva sucursal
+            <Button  className="rounded-md w-auto h-12 p-2" onClick={() => setIsCreateModalOpen(true)}>
+              <Plus className=" h-4 w-4 m-2"/>
+              <span >Agregar Sucursal</span>
             </Button>
           )}
         </div>

@@ -34,7 +34,7 @@ import { AppError } from '@/domain/errors';
  * Página del Punto de Venta (POS)
  * Responsabilidad única: Integrar todos los componentes del POS
  * Cumple SRP: Solo coordina los componentes del POS
- * 
+ *
  * Parámetros de URL:
  * - mode: 'edit' | 'pay' | 'ORDER_BUILDING' | 'PAYMENT_PROCESSING' | 'view'
  *   - edit / view: editar orden (lista ubicaciones, grid platos, info editable)
@@ -198,7 +198,7 @@ const PosPage = () => {
 
     // Validar formato UUID para productId
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    
+
     // Construir orderItems
     const orderItems = cartItems.map((item) => {
       // Validar que productId sea un UUID válido
@@ -296,7 +296,7 @@ const PosPage = () => {
 
         // Construir objeto de actualización completo
         const validTableId = orderType === 'DINE_IN' && selectedTableId ? selectedTableId : null;
-        
+
         const updateRequest = {
           tableId: validTableId,
           origin: mapOrderTypeToOrigin(orderType),
@@ -316,7 +316,7 @@ const PosPage = () => {
       } else {
         // Crear nueva orden
         const orderRequest = buildCreateOrderRequest();
-        
+
         if (!orderRequest) {
           setIsSavingOrder(false);
           return;
@@ -580,7 +580,7 @@ const PosPage = () => {
               : 'Guardando orden...'
         }
       />
-      <div className="space-y-6 p-6 bg-muted min-h-screen">
+      <div className="space-y-6 p-0 sm:p-6 bg-muted min-h-screen w-full">
         {/* Banner de orden cargada */}
         {loadedOrder && (
           <PosOrderBanner order={loadedOrder} onBack={() => navigate('/orders')} />
