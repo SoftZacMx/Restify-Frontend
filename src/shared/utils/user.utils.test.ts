@@ -32,8 +32,8 @@ describe('getRoleLabel', () => {
       OWNER: 'Propietario',
       ADMIN: 'Administrador',
       MANAGER: 'Gerente',
-      WAITER: 'Empleado',
-      CHEF: 'Operario',
+      WAITER: 'Mesero',
+      CHEF: 'Cocinero',
     };
     for (const [role, label] of Object.entries(expected)) {
       expect(getRoleLabel(role as UserRole)).toBe(label);

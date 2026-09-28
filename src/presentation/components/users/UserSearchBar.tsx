@@ -8,6 +8,7 @@ import {
   SelectTrigger,
 } from '@/presentation/components/ui/select';
 import type { UserTableFilters, UserRole, UserStatusFilter } from '@/domain/types';
+import { ASSIGNABLE_ROLES, getRoleLabel } from '@/shared/utils';
 
 interface UserSearchBarProps {
   filters: UserTableFilters;
@@ -53,16 +54,9 @@ export const UserSearchBar: React.FC<UserSearchBarProps> = ({
     return filters.status || 'all';
   };
 
-  const getRoleLabel = (role?: UserRole | 'all'): string => {
+  const getRoleLabelForFilter = (role?: UserRole | 'all'): string => {
     if (!role || role === 'all') return 'Rol';
-    const labels: Record<UserRole, string> = {
-      OWNER: 'Propietario',
-      ADMIN: 'Administrador',
-      MANAGER: 'Gerente',
-      WAITER: 'Empleado',
-      CHEF: 'Operario',
-    };
-    return labels[role] || 'Rol';
+    return getRoleLabel(role);
   };
 
   const getStatusLabel = (status?: UserStatusFilter | 'all'): string => {
@@ -95,14 +89,15 @@ export const UserSearchBar: React.FC<UserSearchBarProps> = ({
         {/* Role Filter */}
         <Select value={getCurrentRoleValue()} onValueChange={handleRoleChange}>
           <SelectTrigger className="h-12 shrink-0 rounded-lg bg-muted border-border hover:bg-secondary dark:hover:bg-card text-foreground text-sm font-medium leading-normal min-w-[140px]">
-            {getRoleLabel(filters.role)}
+            {getRoleLabelForFilter(filters.role)}
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos los roles</SelectItem>
-            <SelectItem value="ADMIN">Administrador</SelectItem>
-            <SelectItem value="MANAGER">Gerente</SelectItem>
-            <SelectItem value="WAITER">Empleado</SelectItem>
-            <SelectItem value="CHEF">Operario</SelectItem>
+            {ASSIGNABLE_ROLES.map((rol) => (
+              <SelectItem key={rol} value={rol}>
+                {getRoleLabel(rol)}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
 

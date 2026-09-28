@@ -11,6 +11,8 @@ export function cn(...inputs: ClassValue[]) {
 
 // Export user utilities
 export {
+  ROLE_LABELS,
+  ASSIGNABLE_ROLES,
   getRoleLabel,
   getStatusLabel,
   getFullName,

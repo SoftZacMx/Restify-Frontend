@@ -5,13 +5,18 @@ import { APP_TIMEZONE } from '@/shared/constants';
 /**
  * Mapeo de roles a etiquetas en español
  */
-const ROLE_LABELS: Record<UserRole, string> = {
+export const ROLE_LABELS: Record<UserRole, string> = {
   OWNER: 'Propietario',
   ADMIN: 'Administrador',
   MANAGER: 'Gerente',
-  WAITER: 'Empleado',
-  CHEF: 'Operario',
+  WAITER: 'Mesero',
+  CHEF: 'Cocinero',
 };
+
+// OWNER se crea en el flujo de signup, no se asigna desde la gestión de usuarios.
+export const ASSIGNABLE_ROLES = (Object.keys(ROLE_LABELS) as UserRole[]).filter(
+  (role) => role !== 'OWNER',
+);
 
 /**
  * Obtiene la etiqueta en español para un rol
@@ -70,4 +75,3 @@ export const formatUserForTable = (user: User): UserTableItem => {
 export const formatUsersForTable = (users: User[]): UserTableItem[] => {
   return users.map(formatUserForTable);
 };
-

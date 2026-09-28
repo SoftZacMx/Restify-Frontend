@@ -11,11 +11,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from '@/presentation
 import { Switch } from '@/presentation/components/ui/switch';
 import { branchService } from '@/application/services';
 import { userFormSchema, type UserFormValues } from '@/shared/schemas/user.schema';
-import type { CreateUserRequest, UpdateUserRequest, User } from '@/domain/types';
+import type { CreateUserRequest, UpdateUserRequest, User, UserRole } from '@/domain/types';
 import { BranchAssignDialog } from './BranchAssignDialog';
 
 // Roles asignables desde el formulario de usuarios. OWNER se excluye: solo se crea vía signup.
-type AssignableRole = UserFormValues['rol'];
+type AssignableRole = Exclude<UserRole, 'OWNER'>;
 
 // ADMIN accede a todas las sucursales sin asignación explícita; los demás requieren ≥1.
 const ROLES_REQUIRING_BRANCHES: AssignableRole[] = ['WAITER', 'CHEF', 'MANAGER'];
@@ -28,14 +28,15 @@ import {
 import { PasswordRequirements } from '@/presentation/components/ui/password-requirements';
 import { cn } from '@/shared/lib/utils';
 import { INPUT_LENGTH } from '@/shared/constants';
+import { ASSIGNABLE_ROLES, getRoleLabel } from '@/shared/utils';
 
 const PHONE_DIGITS = 10;
 
-const roleConfig: Record<AssignableRole, { label: string; Icon: React.ComponentType<{ className?: string }> }> = {
-  WAITER: { label: 'Mesero', Icon: UtensilsCrossed },
-  CHEF: { label: 'Cocinero', Icon: ChefHat },
-  MANAGER: { label: 'Gerente', Icon: UserCog },
-  ADMIN: { label: 'Administrador', Icon: Shield },
+const ROLE_ICONS: Record<AssignableRole, React.ComponentType<{ className?: string }>> = {
+  WAITER: UtensilsCrossed,
+  CHEF: ChefHat,
+  MANAGER: UserCog,
+  ADMIN: Shield,
 };
 
 interface UserFormProps {
@@ -263,19 +264,22 @@ export const UserForm: React.FC<UserFormProps> = ({
             <Select value={rol} onValueChange={(value) => setValue('rol', value as AssignableRole)}>
               <SelectTrigger id="rol" className="h-11 rounded-lg">
                 <span className="flex items-center justify-between w-full gap-3">
-                  <span>{roleConfig[rol].label}</span>
-                  {React.createElement(roleConfig[rol].Icon, { className: 'h-4 w-4 text-muted-foreground shrink-0 ml-1' })}
+                  <span>{getRoleLabel(rol)}</span>
+                  {React.createElement(ROLE_ICONS[rol], { className: 'h-4 w-4 text-muted-foreground shrink-0 ml-1' })}
                 </span>
               </SelectTrigger>
               <SelectContent>
-                {(Object.entries(roleConfig) as [AssignableRole, typeof roleConfig[AssignableRole]][]).map(([role, { label, Icon }]) => (
-                  <SelectItem key={role} value={role}>
-                    <span className="flex items-center justify-between w-full gap-3">
-                      <span>{label}</span>
-                      <Icon className="h-4 w-4 text-muted-foreground shrink-0 ml-1" />
-                    </span>
-                  </SelectItem>
-                ))}
+                {ASSIGNABLE_ROLES.map((role) => {
+                  const Icon = ROLE_ICONS[role];
+                  return (
+                    <SelectItem key={role} value={role}>
+                      <span className="flex items-center justify-between w-full gap-3">
+                        <span>{getRoleLabel(role)}</span>
+                        <Icon className="h-4 w-4 text-muted-foreground shrink-0 ml-1" />
+                      </span>
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
             {errors.rol && <p className="text-destructive text-xs">{errors.rol.message}</p>}
