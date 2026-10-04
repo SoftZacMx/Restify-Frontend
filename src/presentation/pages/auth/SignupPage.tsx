@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,9 +13,15 @@ import {
   Mail,
   Store,
   Phone,
+  Crown,
 } from "lucide-react";
 import { useAuth } from "@/presentation/hooks/useAuth";
+import { AppError } from "@/domain/errors";
 import type { SignupRequest } from "@/domain/types";
+import type { SubscriptionPlan } from "@/domain/types/subscription.types";
+import { subscriptionService } from "@/application/services/subscription.service";
+import { formatCurrency } from "@/shared/utils/currency.utils";
+import { showErrorToast } from "@/shared/utils/toast";
 import { Button } from "@/presentation/components/ui/button";
 import { Input } from "@/presentation/components/ui/input";
 import { Label } from "@/presentation/components/ui/label";
@@ -29,16 +35,19 @@ import {
 import {
   signupOwnerSchema,
   signupBranchSchema,
+  signupPlanSchema,
   SIGNUP_LIMITS,
   type SignupOwnerFormData,
   type SignupBranchFormData,
+  type SignupPlanFormData,
 } from "./signup.schema";
 
-type Step = "owner" | "branch";
+type Step = "owner" | "branch" | "plan";
 
 const STEPS: StepperStep[] = [
   { id: "owner", label: "Datos personales" },
   { id: "branch", label: "Sucursal" },
+  { id: "plan", label: "Plan" },
 ];
 
 const labelClass =
@@ -53,8 +62,11 @@ export default function SignupPage() {
   const { signup, isLoading, error, clearError } = useAuth();
   const [step, setStep] = useState<Step>("owner");
   const [ownerData, setOwnerData] = useState<SignupOwnerFormData | null>(null);
+  const [branchData, setBranchData] = useState<SignupBranchFormData | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
+  const [isLoadingPlans, setIsLoadingPlans] = useState(true);
 
   const ownerForm = useForm<SignupOwnerFormData>({
     resolver: zodResolver(signupOwnerSchema),
@@ -65,9 +77,26 @@ export default function SignupPage() {
     resolver: zodResolver(signupBranchSchema),
   });
 
+  const planForm = useForm<SignupPlanFormData>({
+    resolver: zodResolver(signupPlanSchema),
+  });
+
+  useEffect(() => {
+    subscriptionService
+      .getPlans()
+      .then((data) => {
+        setPlans(data);
+        if (data.length > 0) planForm.setValue("planId", data[0].id);
+      })
+      .catch(() => showErrorToast("Error al cargar planes"))
+      .finally(() => setIsLoadingPlans(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const watchPassword = ownerForm.watch("password") || "";
   const watchConfirmPassword = ownerForm.watch("confirmPassword") || "";
   const doPasswordsMatch = passwordsMatch(watchPassword, watchConfirmPassword);
+  const selectedPlanId = planForm.watch("planId");
 
   // Paso 1: solo valida y avanza, NO llama al backend.
   const onSubmitOwner = (data: SignupOwnerFormData) => {
@@ -76,21 +105,35 @@ export default function SignupPage() {
     setStep("branch");
   };
 
+  // Paso 2: solo valida y avanza, NO llama al backend.
+  const onSubmitBranch = (data: SignupBranchFormData) => {
+    clearError();
+    setBranchData(data);
+    setStep("plan");
+  };
+
   // Volver al paso 1 (desde el botón "Atrás" o desde el stepper).
   const goToOwnerStep = () => {
     clearError();
     setStep("owner");
   };
 
-  // Paso 2: arma el payload completo y dispara el signup (única request al backend).
-  const onSubmitBranch = async (branch: SignupBranchFormData) => {
-    if (!ownerData) {
+  // Volver al paso 2.
+  const goToBranchStep = () => {
+    clearError();
+    setStep("branch");
+  };
+
+  // Paso 3: arma el payload completo y dispara el signup (única request al backend).
+  const onSubmitPlan = async (planData: SignupPlanFormData) => {
+    if (!ownerData || !branchData) {
       setStep("owner");
       return;
     }
     clearError();
 
     const payload: SignupRequest = {
+      planId: planData.planId,
       user: {
         email: ownerData.email,
         password: ownerData.password,
@@ -99,13 +142,13 @@ export default function SignupPage() {
       },
       organization: { name: ownerData.organizationName },
       branch: {
-        name: branch.name,
-        state: branch.state,
-        city: branch.city,
-        street: branch.street,
-        exteriorNumber: branch.exteriorNumber,
-        phone: branch.phone,
-        rfc: branch.rfc || null,
+        name: branchData.name,
+        state: branchData.state,
+        city: branchData.city,
+        street: branchData.street,
+        exteriorNumber: branchData.exteriorNumber,
+        phone: branchData.phone,
+        rfc: branchData.rfc || null,
         // Autodetectado del navegador, no es un campo visible del formulario.
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       },
@@ -113,7 +156,18 @@ export default function SignupPage() {
 
     const result = await signup(payload);
     if (result.success) {
-      navigate("/dashboard");
+      if (result.requiresCheckout) {
+        try {
+          const checkout = await subscriptionService.createCheckout(planData.planId);
+          window.location.href = checkout.checkoutUrl;
+        } catch (err) {
+          const appError = err instanceof AppError ? err : AppError.create("UNKNOWN_ERROR", "Error desconocido");
+          showErrorToast("Error al iniciar el pago", appError.message);
+          navigate("/dashboard");
+        }
+      } else {
+        navigate("/dashboard");
+      }
     }
   };
 
@@ -133,26 +187,32 @@ export default function SignupPage() {
         </div>
       </div>
 
-      {/* Stepper: indica el paso actual; clic en el paso 1 (completado) regresa */}
+      {/* Stepper: indica el paso actual; clic en un paso completado regresa */}
       <div className="mb-6 w-full max-w-[640px]">
         <Stepper
           steps={STEPS}
-          currentStep={step === "owner" ? 0 : 1}
-          onStepClick={(index) => index === 0 && goToOwnerStep()}
+          currentStep={step === "owner" ? 0 : step === "branch" ? 1 : 2}
+          onStepClick={(index) => {
+            if (index === 0) goToOwnerStep();
+            if (index === 1) goToBranchStep();
+          }}
         />
       </div>
 
       {/* Título + subtítulo del paso */}
       <div className="mb-6 max-w-[640px] text-center">
         <h2 className="text-h3 text-foreground">
-          {step === "owner"
-            ? "Datos Personales y Organización"
-            : "Primera Sucursal"}
+          {step === "owner" && "Datos Personales y Organización"}
+          {step === "branch" && "Primera Sucursal"}
+          {step === "plan" && "Elige tu Plan"}
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          {step === "owner"
-            ? "Comienza configurando tu perfil de administrador y los detalles de tu negocio."
-            : "Configura los detalles operativos de tu ubicación principal para comenzar a recibir pedidos."}
+          {step === "owner" &&
+            "Comienza configurando tu perfil de administrador y los detalles de tu negocio."}
+          {step === "branch" &&
+            "Configura los detalles operativos de tu ubicación principal para comenzar a recibir pedidos."}
+          {step === "plan" &&
+            "Selecciona el plan con el que quieres comenzar. Puedes cambiarlo más adelante."}
         </p>
       </div>
 
@@ -543,7 +603,106 @@ export default function SignupPage() {
                 </Button>
                 <Button
                   type="submit"
-                  disabled={isLoading}
+                  className={`flex-1 h-12 text-base ${primaryButtonClass}`}
+                >
+                  Siguiente Paso
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Paso 3: Plan de suscripción */}
+      {step === "plan" && (
+        <Card className="w-full max-w-[640px] shadow-lg border-border bg-card">
+          <CardContent className="space-y-5 px-8 py-8">
+            {error && (
+              <div
+                className="bg-destructive-suave border border-destructive text-destructive-texto px-4 py-3 rounded-lg"
+                role="alert"
+              >
+                <strong className="font-bold">Error:</strong>
+                <span className="ml-2">{error}</span>
+              </div>
+            )}
+
+            <form
+              onSubmit={planForm.handleSubmit(onSubmitPlan)}
+              className="space-y-5"
+            >
+              {isLoadingPlans ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {plans.map((plan) => {
+                    const isSelected = selectedPlanId === plan.id;
+                    const isAnnual = plan.billingPeriod === "ANNUAL";
+                    const isFree = plan.price === 0;
+                    const priceDisplay = isFree
+                      ? "Gratis"
+                      : formatCurrency(plan.price / 100);
+                    const periodLabel = isFree ? "" : isAnnual ? "/año" : "/mes";
+
+                    return (
+                      <button
+                        key={plan.id}
+                        type="button"
+                        onClick={() => planForm.setValue("planId", plan.id)}
+                        className={`relative rounded-xl border-2 bg-card p-5 text-left transition-all ${
+                          isSelected
+                            ? "border-primary ring-2 ring-primary/20"
+                            : "border-border hover:border-border dark:hover:border-border"
+                        }`}
+                      >
+                        {isAnnual && (
+                          <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
+                            <span className="bg-fresco text-white text-xs font-semibold px-2.5 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
+                              <Crown className="w-3 h-3" />
+                              Mejor valor
+                            </span>
+                          </div>
+                        )}
+                        <div className="text-center mt-1">
+                          <h3 className="text-h3 text-foreground mb-1">
+                            {plan.name}
+                          </h3>
+                          <div className="flex items-baseline justify-center gap-1">
+                            <span className="text-h2 text-foreground">
+                              {priceDisplay}
+                            </span>
+                            <span className="text-muted-foreground text-sm">
+                              {periodLabel}
+                            </span>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+              {planForm.formState.errors.planId && (
+                <span className="text-destructive text-xs">
+                  {planForm.formState.errors.planId.message}
+                </span>
+              )}
+
+              <div className="flex items-center gap-4 pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={goToBranchStep}
+                  className="h-12 px-6 text-base"
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Atrás
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isLoading || isLoadingPlans || !selectedPlanId}
                   className={`flex-1 h-12 text-base ${primaryButtonClass}`}
                 >
                   {isLoading ? "Creando cuenta..." : "Completar Registro"}

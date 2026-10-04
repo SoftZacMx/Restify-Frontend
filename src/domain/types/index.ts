@@ -58,6 +58,7 @@ export interface LoginResponse {
 
 // Signup (registro público: crea organización + owner + primera sucursal)
 export interface SignupRequest {
+  planId: string;
   user: {
     email: string;
     password: string;
@@ -93,6 +94,9 @@ export interface SignupResponse {
   };
   organization: { id: string; name: string };
   branch: { id: string; name: string };
+  planId: string;
+  /** true si el plan elegido es de pago: hay que redirigir a Stripe Checkout. */
+  requiresCheckout: boolean;
 }
 
 // API Response types

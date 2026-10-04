@@ -61,5 +61,13 @@ export const signupBranchSchema = z.object({
     .or(z.literal('')),
 });
 
+/**
+ * Paso 3 del wizard: plan de suscripción elegido.
+ */
+export const signupPlanSchema = z.object({
+  planId: z.string().uuid('Selecciona un plan'),
+});
+
 export type SignupOwnerFormData = z.infer<typeof signupOwnerSchema>;
 export type SignupBranchFormData = z.infer<typeof signupBranchSchema>;
+export type SignupPlanFormData = z.infer<typeof signupPlanSchema>;

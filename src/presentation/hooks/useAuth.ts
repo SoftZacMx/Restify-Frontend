@@ -68,7 +68,7 @@ export const useAuth = () => {
           // El signup crea una única sucursal: queda auto-elegida (no hay selección que mostrar).
           branches: [branch],
         });
-        return { success: true };
+        return { success: true, requiresCheckout: response.data.requiresCheckout, planId: response.data.planId };
       } else {
         const errorMessage = response.error?.message || 'Error al registrarse';
         setError(errorMessage);

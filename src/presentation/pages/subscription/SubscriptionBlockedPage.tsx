@@ -22,7 +22,12 @@ const SubscriptionBlockedPage = () => {
   const [isLoadingPlans, setIsLoadingPlans] = useState(true);
   const logout = useAuthStore((s) => s.logout);
   const clear = useSubscriptionStore((s) => s.clear);
+  const status = useSubscriptionStore((s) => s.status);
   const navigate = useNavigate();
+
+  // Sin ninguna fila en `subscriptions` (organización recién registrada con un plan
+  // de pago que aún no completó el checkout) vs. una suscripción que sí existió y venció.
+  const isPendingOnboardingPayment = status?.exists === false;
 
   useEffect(() => {
     subscriptionService
@@ -70,11 +75,14 @@ const SubscriptionBlockedPage = () => {
           </div>
         </div>
         <h1 className="text-h1 text-foreground mb-2">
-          Tu suscripción ha expirado
+          {isPendingOnboardingPayment
+            ? "Completa tu pago para activar tu cuenta"
+            : "Tu suscripción ha expirado"}
         </h1>
         <p className="text-muted-foreground max-w-md mx-auto">
-          Tu acceso a Restify se encuentra restringido actualmente. Elige un plan
-          para continuar gestionando tu negocio sin interrupciones.
+          {isPendingOnboardingPayment
+            ? "Elegiste un plan de pago durante el registro. Confirma el pago para empezar a usar Restify."
+            : "Tu acceso a Restify se encuentra restringido actualmente. Elige un plan para continuar gestionando tu negocio sin interrupciones."}
         </p>
       </div>
 
