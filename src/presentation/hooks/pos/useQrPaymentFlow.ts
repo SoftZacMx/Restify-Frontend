@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { paymentService } from '@/application/services/payment.service';
 import { ticketService } from '@/application/services/ticket.service';
-import { showErrorToast } from '@/shared/utils/toast';
+import { showErrorToast, showWarningToast } from '@/shared/utils/toast';
 import { usePaymentSound } from '@/presentation/hooks/usePaymentSound';
 import { useActiveBranch } from '@/presentation/hooks/useActiveBranch';
 import type { PaymentSuccessData } from '@/presentation/components/pos/PaymentSuccessView';
@@ -90,6 +90,13 @@ export const useQrPaymentFlow = ({
             playSuccess();
             queryClient.invalidateQueries({ queryKey: ['orders'] });
             queryClient.invalidateQueries({ queryKey: ['tables'] });
+
+            // Ticket de venta al confirmarse el pago. Su fallo no interrumpe el flujo.
+            ticketService
+              .printSaleTicket(orderId)
+              .catch(() =>
+                showWarningToast('Ticket no impreso', 'El pago fue exitoso pero no se pudo imprimir el ticket')
+              );
 
             setPaymentSuccessData({
               orderId,

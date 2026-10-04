@@ -38,7 +38,7 @@ export const MenuCategoryTable: React.FC<MenuCategoryTableProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <div className="px-4 py-5">
+      <div className="py-5">
         <div className="overflow-hidden rounded-xl border border-border bg-card">
           <div className="p-8 text-center text-muted-foreground">
             Cargando categorías...
@@ -50,7 +50,7 @@ export const MenuCategoryTable: React.FC<MenuCategoryTableProps> = ({
 
   if (categories.length === 0) {
     return (
-      <div className="px-4 py-5">
+      <div className="py-5">
         <div className="overflow-hidden rounded-xl border border-border bg-card">
           <div className="p-8 text-center text-muted-foreground">
             No se encontraron categorías
@@ -61,7 +61,7 @@ export const MenuCategoryTable: React.FC<MenuCategoryTableProps> = ({
   }
 
   return (
-    <div className="px-4 py-5">
+    <div className="py-5">
       <div className="overflow-hidden rounded-xl border border-border bg-card">
         <div className="overflow-x-auto">
           <Table>

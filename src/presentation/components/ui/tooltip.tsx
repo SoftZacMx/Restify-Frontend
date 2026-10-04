@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useLayoutEffect } from 'react';
 import { cn } from '@/shared/lib/utils';
 
 interface TooltipProps {
@@ -13,6 +13,9 @@ interface TooltipProps {
  */
 export const Tooltip: React.FC<TooltipProps> = ({ children, content, side = 'right' }) => {
   const triggerRef = useRef<HTMLDivElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  /** Estilo base (sin ajuste de viewport); se conserva para no re-acumular ajustes. */
+  const baseStyleRef = useRef<React.CSSProperties>({});
   const [isVisible, setIsVisible] = useState(false);
   const [style, setStyle] = useState<React.CSSProperties>({});
 
@@ -34,9 +37,33 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, content, side = 'rig
   };
 
   const handleMouseEnter = () => {
-    setStyle(computeStyle());
+    const base = computeStyle();
+    baseStyleRef.current = base;
+    setStyle(base);
     setIsVisible(true);
   };
+
+  // Ajuste post-render, una sola vez por apertura: si el tooltip se sale de la
+  // pantalla (típico al centrarlo sobre un botón pegado al borde izquierdo),
+  // lo recorremos hacia adentro. No depende de `style` para evitar re-render en bucle.
+  useLayoutEffect(() => {
+    if (!isVisible) return;
+    const tip = tooltipRef.current;
+    if (!tip) return;
+    const tipRect = tip.getBoundingClientRect();
+    // Sin medidas reales (entornos de test / viewport 0) no hay nada que ajustar.
+    if (tipRect.width === 0 || window.innerWidth === 0) return;
+    const margin = 8;
+    let adjust = 0;
+    if (tipRect.left < margin) adjust = margin - tipRect.left;
+    else if (tipRect.right > window.innerWidth - margin) {
+      adjust = window.innerWidth - margin - tipRect.right;
+    }
+    if (adjust !== 0) {
+      const base = baseStyleRef.current;
+      setStyle({ ...base, left: (typeof base.left === 'number' ? base.left : 0) + adjust });
+    }
+  }, [isVisible]);
 
   return (
     <div
@@ -48,6 +75,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, content, side = 'rig
       {children}
       {isVisible && (
         <div
+          ref={tooltipRef}
           role="tooltip"
           className="fixed z-[100] px-2 py-1 text-xs font-medium text-white bg-foreground dark:bg-card rounded shadow-lg whitespace-nowrap pointer-events-none"
           style={style}

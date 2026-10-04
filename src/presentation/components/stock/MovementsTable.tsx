@@ -48,7 +48,7 @@ export const MovementsTable: React.FC<MovementsTableProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <div className="px-4 py-5">
+      <div className="py-5">
         <div className="overflow-hidden rounded-xl border border-border bg-card">
           <div className="p-8 text-center text-muted-foreground">
             Cargando movimientos...
@@ -60,7 +60,7 @@ export const MovementsTable: React.FC<MovementsTableProps> = ({
 
   if (items.length === 0) {
     return (
-      <div className="px-4 py-5">
+      <div className="py-5">
         <div className="overflow-hidden rounded-xl border border-border bg-card">
           <div className="p-8 text-center text-muted-foreground">
             No hay movimientos para los filtros aplicados.
@@ -71,7 +71,7 @@ export const MovementsTable: React.FC<MovementsTableProps> = ({
   }
 
   return (
-    <div className="px-4 py-5">
+    <div className="py-5">
       <div className="overflow-hidden rounded-xl border border-border bg-card">
         <div className="overflow-x-auto">
           <Table>

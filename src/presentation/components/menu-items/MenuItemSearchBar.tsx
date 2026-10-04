@@ -48,7 +48,7 @@ export const MenuItemSearchBar: React.FC<MenuItemSearchBarProps> = ({
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 px-4 py-3 border-b border-border">
+    <div className="flex flex-col md:flex-row gap-4 py-3">
       {/* Search Input */}
       <div className="flex-grow">
         <label className="flex flex-col min-w-40 h-12 w-full">

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
+import { PageHeader } from '@/presentation/components/ui/PageHeader';
 import { Button } from '@/presentation/components/ui/button';
 import { ConfirmDialog } from '@/presentation/components/ui/confirm-dialog';
 import { ExpenseFilters } from '@/presentation/components/expenses/ExpenseFilters';
@@ -158,13 +159,12 @@ const ExpensesPage: React.FC = () => {
   return (
     <MainLayout>
       <section className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-h1 text-foreground">Gastos</h1>
+        <PageHeader title="Gastos">
           <Button onClick={() => setIsCreateModalOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nuevo Gasto
           </Button>
-        </div>
+        </PageHeader>
 
         <ExpenseFilters filters={filters} onFiltersChange={handleFiltersChange} />
 

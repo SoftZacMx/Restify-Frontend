@@ -46,15 +46,15 @@ describe('getOrderStatusLabel', () => {
 
 describe('getOrderStatusStyle', () => {
   it('returns the completed style class', () => {
-    expect(getOrderStatusStyle(order({ status: true, delivered: true }))).toContain('green');
+    expect(getOrderStatusStyle(order({ status: true, delivered: true }))).toContain('fresco');
   });
 
   it('returns the paid style class', () => {
-    expect(getOrderStatusStyle(order({ status: true, delivered: false }))).toContain('blue');
+    expect(getOrderStatusStyle(order({ status: true, delivered: false }))).toContain('primary');
   });
 
   it('returns the pending style class', () => {
-    expect(getOrderStatusStyle(order({ status: false, delivered: false }))).toContain('yellow');
+    expect(getOrderStatusStyle(order({ status: false, delivered: false }))).toContain('apoyo');
   });
 });
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { Building2, Settings, CreditCard , Ticket} from 'lucide-react';
+import { Building2, Settings, CreditCard, Ticket, UserCircle } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { cn } from '@/shared/lib/utils';
 
@@ -12,6 +12,7 @@ interface SettingsNavItem {
 }
 
 const SETTINGS_NAV_ITEMS: SettingsNavItem[] = [
+  { id: 'profile', label: 'Mi perfil', path: '/settings/profile', icon: UserCircle },
   { id: 'company', label: 'Sucursal', path: '/settings/company', icon: Building2 },
   { id: 'payments', label: 'Pasarelas de Pago', path: '/settings/payments', icon: CreditCard },
   { id: 'ticket', label: 'Configuración de ticket', path: '/settings/tickets', icon: Ticket },
@@ -19,6 +20,7 @@ const SETTINGS_NAV_ITEMS: SettingsNavItem[] = [
 ];
 
 const PATH_TO_BREADCRUMB: Record<string, string> = {
+  '/settings/profile': 'Mi perfil',
   '/settings/general': 'General',
   '/settings/company': 'Sucursal',
   '/settings/payments': 'Pasarelas de Pago',
@@ -27,6 +29,7 @@ const PATH_TO_BREADCRUMB: Record<string, string> = {
 };
 
 const PATH_TO_TITLE: Record<string, string> = {
+  '/settings/profile': 'Mi perfil',
   '/settings/general': 'Configuración General',
   '/settings/company': 'Configuración de la Sucursal',
   '/settings/payments': 'Pasarelas de Pago',
@@ -35,6 +38,7 @@ const PATH_TO_TITLE: Record<string, string> = {
 };
 
 const PATH_TO_DESCRIPTION: Record<string, string> = {
+  '/settings/profile': 'Edita tus datos personales y tu contraseña.',
   '/settings/general': 'Personaliza la apariencia y preferencias de la aplicación.',
   '/settings/company': 'Administra la información general y legal de la sucursal activa en la plataforma RESTIFY.',
   '/settings/payments': 'Configura las credenciales de tus pasarelas de pago.',

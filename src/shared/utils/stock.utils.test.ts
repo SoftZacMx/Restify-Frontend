@@ -84,7 +84,7 @@ describe('MOVEMENT_TYPE_OPTIONS / getMovementTypeOption', () => {
     const sale = getMovementTypeOption('SALE');
     expect(sale.description).toBe('Venta');
     expect(sale.descriptionPlural).toBe('Ventas');
-    expect(sale.badgeClassName).toContain('blue');
+    expect(sale.badgeClassName).toContain('primary');
   });
 
   it('describes purchase and reversal types', () => {

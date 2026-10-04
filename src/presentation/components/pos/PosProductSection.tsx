@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/compone
 import { Input } from '@/presentation/components/ui/input';
 import { CategoryFilter } from './CategoryFilter';
 import { ProductGrid } from './ProductGrid';
-import type { PosProduct, Category } from '@/domain/types';
+import type { PosProduct, Category, OrderItem } from '@/domain/types';
 
 interface PosProductSectionProps {
   productSearch: string;
@@ -12,6 +12,7 @@ interface PosProductSectionProps {
   selectedCategoryId: string | null;
   onCategorySelect: (categoryId: string | null) => void;
   filteredProducts: PosProduct[];
+  cartItems: OrderItem[];
   onProductSelect: (product: PosProduct) => void;
   isLoading: boolean;
   error: string | null;
@@ -24,6 +25,7 @@ export function PosProductSection({
   selectedCategoryId,
   onCategorySelect,
   filteredProducts,
+  cartItems,
   onProductSelect,
   isLoading,
   error,
@@ -54,6 +56,8 @@ export function PosProductSection({
           <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin">
             <ProductGrid
               products={filteredProducts}
+              categories={categories}
+              cartItems={cartItems}
               onProductSelect={onProductSelect}
               isLoading={isLoading}
               error={error}

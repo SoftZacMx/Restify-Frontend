@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   Info,
-  Calendar,
   CreditCard,
   Save,
   Wrench,
@@ -19,6 +18,7 @@ import { getTodayDateString } from '@/shared/utils';
 import { ProductRepository } from '@/infrastructure/api/repositories/product.repository';
 import { UserRepository } from '@/infrastructure/api/repositories/user.repository';
 import { Input } from '@/presentation/components/ui/input';
+import { DatePicker } from '@/presentation/components/ui/date-picker';
 import { Label } from '@/presentation/components/ui/label';
 import { Button } from '@/presentation/components/ui/button';
 import {
@@ -292,16 +292,7 @@ export const CreateExpenseForm: React.FC<CreateExpenseFormProps> = ({
             <Label htmlFor="date">
               Fecha de Compra <span className="text-destructive">*</span>
             </Label>
-            <div className="relative">
-              <Input
-                id="date"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className={cn('pr-10', errors.date && 'border-destructive')}
-              />
-              <Calendar className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
-            </div>
+            <DatePicker value={date} onChange={setDate} hasError={!!errors.date} />
             {errors.date && (
               <p className="text-sm text-destructive">{errors.date}</p>
             )}

@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { Plus } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
+import { PageHeader } from '@/presentation/components/ui/PageHeader';
 import { Button } from '@/presentation/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/presentation/components/ui/dialog';
 import { ConfirmDialog } from '@/presentation/components/ui/confirm-dialog';
@@ -151,13 +152,12 @@ const MenuCategoriesPage: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="flex flex-wrap justify-between items-center gap-4 px-4 py-2">
-        <h1 className="text-h1 text-foreground">Categorías</h1>
+      <PageHeader title="Categorías">
         <Button onClick={() => setIsCreateModalOpen(true)} className="flex items-center justify-center gap-2 min-w-[84px] cursor-pointer overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-sm hover:bg-primary/90 transition-colors">
           <Plus className="h-4 w-4" />
           <span className="truncate">Nueva Categoría</span>
         </Button>
-      </div>
+      </PageHeader>
 
       <MenuCategorySearchBar filters={filters} onFiltersChange={setFilters} />
       <MenuCategoryTable categories={tableCategories} isLoading={isLoading} onCategoryAction={handleCategoryAction} />

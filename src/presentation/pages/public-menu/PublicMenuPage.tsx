@@ -88,6 +88,8 @@ const PublicMenuPage = () => {
           <div className="lg:col-span-2">
             <ProductGrid
               products={filteredProducts}
+              categories={categories}
+              cartItems={cartItems}
               onProductSelect={handleProductSelect}
               isLoading={isBranchLoading || isLoading}
               error={error}

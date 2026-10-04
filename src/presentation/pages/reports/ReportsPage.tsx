@@ -1,7 +1,9 @@
 import { useState, useCallback } from 'react';
-import { BarChart3, LayoutDashboard, FileText } from 'lucide-react';
+import { BarChart3, LayoutDashboard, FileText, SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { LoadingOverlay } from '@/presentation/components/ui/loading-overlay';
+import { PageHeader } from '@/presentation/components/ui/PageHeader';
+import { DatePicker } from '@/presentation/components/ui/date-picker';
 import { Button } from '@/presentation/components/ui/button';
 import { ReportFilters, type ReportFiltersState } from '@/presentation/components/reports/ReportFilters';
 import { CashFlowReportView } from '@/presentation/components/reports/CashFlowReportView';
@@ -53,6 +55,8 @@ const ReportsPage = () => {
     dateTo: defaultTo,
   });
   const [summaryFilters, setSummaryFilters] = useState({ dateFrom: summaryFrom, dateTo: summaryTo });
+  // En mobile los filtros ocupan mucho alto; se ocultan por defecto y el usuario los abre si los necesita.
+  const [showFilters, setShowFilters] = useState(false);
   const [report, setReport] = useState<BaseReportResponse<unknown> | null>(null);
   const [summaryData, setSummaryData] = useState<ReportsSummaryResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -106,73 +110,89 @@ const ReportsPage = () => {
       <div className="flex flex-col h-full">
         <div className="border-b border-border bg-card">
           <div className="px-4 py-4 bg-gradient-to-br from-muted via-card to-primary/5 dark:from-card/80 dark:via-card/50 dark:to-primary/10">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <h1 className="text-h1 text-foreground">
-                  Reportes
-                </h1>
-                <p className="text-sm text-muted-foreground mt-2 max-w-xl">
-                  {viewMode === 'summary'
-                    ? 'Resumen con gráficas: ventas, órdenes, gastos y utilidad por período.'
-                    : 'Genera reportes de flujo de caja, desempeño de ventas o análisis de gastos.'}
-                </p>
-              </div>
-              <div className="flex rounded-lg border border-border p-1 bg-muted/80 dark:bg-card/80">
+            <PageHeader
+              title="Reportes"
+              description={viewMode === 'summary'
+                ? 'Resumen con gráficas: ventas, órdenes, gastos y utilidad por período.'
+                : 'Genera reportes de flujo de caja, desempeño de ventas o análisis de gastos.'}
+            >
+              <div className="flex w-full sm:w-auto rounded-lg border border-border p-1 bg-muted/80 dark:bg-card/80">
                 <Button
                   variant={viewMode === 'summary' ? 'default' : 'ghost'}
                   size="sm"
-                  className="gap-2"
+                  className="flex-1 sm:flex-initial gap-2"
                   onClick={() => setViewMode('summary')}
                 >
-                  <LayoutDashboard className="h-4 w-4" />
-                  Resumen (gráficas)
+                  <LayoutDashboard className="h-4 w-4 shrink-0" />
+                  <span className="truncate">
+                    <span className="sm:hidden">Resumen</span>
+                    <span className="hidden sm:inline">Resumen (gráficas)</span>
+                  </span>
                 </Button>
                 <Button
                   variant={viewMode === 'document' ? 'default' : 'ghost'}
                   size="sm"
-                  className="gap-2"
+                  className="flex-1 sm:flex-initial gap-2"
                   onClick={() => setViewMode('document')}
                 >
-                  <FileText className="h-4 w-4" />
-                  Reportes documentados
+                  <FileText className="h-4 w-4 shrink-0" />
+                  <span className="truncate">
+                    <span className="sm:hidden">Reportes</span>
+                    <span className="hidden sm:inline">Reportes documentados</span>
+                  </span>
                 </Button>
               </div>
+            </PageHeader>
+
+            {/* Toggle de filtros: solo en mobile, donde ocupan demasiado alto. En desktop quedan siempre visibles. */}
+            <button
+              type="button"
+              onClick={() => setShowFilters((v) => !v)}
+              className="mt-4 flex sm:hidden w-full items-center justify-between rounded-lg border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground"
+            >
+              <span className="flex items-center gap-2">
+                <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
+                Filtros
+              </span>
+              {showFilters ? (
+                <ChevronUp className="h-4 w-4 text-muted-foreground" />
+              ) : (
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              )}
+            </button>
+
+            <div className={showFilters ? 'block' : 'hidden sm:block'}>
+              {viewMode === 'summary' && (
+                <div className="mt-4 flex flex-col sm:flex-row sm:flex-wrap sm:items-end gap-3 sm:gap-4 px-4 py-3 border-t border-border/80">
+                  <div className="flex flex-col gap-1 sm:min-w-[150px]">
+                    <label className="text-xs font-medium text-muted-foreground">Desde</label>
+                    <DatePicker
+                      value={summaryFilters.dateFrom}
+                      onChange={(value) => setSummaryFilters((p) => ({ ...p, dateFrom: value }))}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1 sm:min-w-[150px]">
+                    <label className="text-xs font-medium text-muted-foreground">Hasta</label>
+                    <DatePicker
+                      value={summaryFilters.dateTo}
+                      onChange={(value) => setSummaryFilters((p) => ({ ...p, dateTo: value }))}
+                    />
+                  </div>
+                  <Button onClick={handleLoadSummary} disabled={isLoadingSummary} className="w-full sm:w-auto gap-2">
+                    {summaryData ? 'Actualizar resumen' : 'Cargar resumen'}
+                  </Button>
+                </div>
+              )}
+
+              {viewMode === 'document' && (
+                <ReportFilters
+                  filters={filters}
+                  onFiltersChange={setFilters}
+                  onGenerate={handleGenerate}
+                  isLoading={isLoading}
+                />
+              )}
             </div>
-
-            {viewMode === 'summary' && (
-              <div className="mt-4 flex flex-wrap items-end gap-4 px-4 py-3 border-t border-border/80">
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-muted-foreground">Desde</label>
-                  <input
-                    type="date"
-                    value={summaryFilters.dateFrom}
-                    onChange={(e) => setSummaryFilters((p) => ({ ...p, dateFrom: e.target.value }))}
-                    className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-muted-foreground">Hasta</label>
-                  <input
-                    type="date"
-                    value={summaryFilters.dateTo}
-                    onChange={(e) => setSummaryFilters((p) => ({ ...p, dateTo: e.target.value }))}
-                    className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
-                  />
-                </div>
-                <Button onClick={handleLoadSummary} disabled={isLoadingSummary} className="gap-2">
-                  {summaryData ? 'Actualizar resumen' : 'Cargar resumen'}
-                </Button>
-              </div>
-            )}
-
-            {viewMode === 'document' && (
-              <ReportFilters
-                filters={filters}
-                onFiltersChange={setFilters}
-                onGenerate={handleGenerate}
-                isLoading={isLoading}
-              />
-            )}
         </div>
         </div>
 

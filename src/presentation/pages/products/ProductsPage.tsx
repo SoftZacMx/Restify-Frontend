@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
+import { PageHeader } from '@/presentation/components/ui/PageHeader';
 import { Button } from '@/presentation/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/presentation/components/ui/dialog';
 import { ConfirmDialog } from '@/presentation/components/ui/confirm-dialog';
@@ -171,13 +172,12 @@ const ProductsPage: React.FC = () => {
   return (
     <MainLayout>
       <section className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-h1 text-foreground">Productos</h1>
+        <PageHeader title="Productos">
           <Button onClick={() => setIsCreateModalOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nuevo Producto
           </Button>
-        </div>
+        </PageHeader>
 
         <ProductSearchBar filters={filters} onFiltersChange={setFilters} />
 

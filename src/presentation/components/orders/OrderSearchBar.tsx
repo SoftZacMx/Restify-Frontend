@@ -1,6 +1,7 @@
 import React from 'react';
-import { Search, X, Filter, Calendar } from 'lucide-react';
+import { Search, X, Filter } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
+import { DatePicker } from '@/presentation/components/ui/date-picker';
 import { Button } from '@/presentation/components/ui/button';
 import {
   Select,
@@ -47,12 +48,12 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
     onFiltersChange({ ...filters, origin: value === 'all' ? '' : value });
   };
 
-  const handleDateFromChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onFiltersChange({ ...filters, dateFrom: e.target.value });
+  const handleDateFromChange = (value: string) => {
+    onFiltersChange({ ...filters, dateFrom: value });
   };
 
-  const handleDateToChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onFiltersChange({ ...filters, dateTo: e.target.value });
+  const handleDateToChange = (value: string) => {
+    onFiltersChange({ ...filters, dateTo: value });
   };
 
   const clearFilters = () => {
@@ -122,7 +123,7 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
           value={filters.tableId || 'all'}
           onValueChange={handleTableChange}
         >
-          <SelectTrigger className="w-full sm:w-[160px]">
+          <SelectTrigger className="w-full sm:w-[200px]">
             <SelectValue placeholder="Ubicación" />
           </SelectTrigger>
           <SelectContent>
@@ -146,7 +147,7 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
           value={filters.origin || 'all'}
           onValueChange={handleOriginChange}
         >
-          <SelectTrigger className="w-full sm:w-[150px]">
+          <SelectTrigger className="w-full sm:w-[190px]">
             <SelectValue placeholder="Origen" />
           </SelectTrigger>
           <SelectContent>
@@ -158,28 +159,20 @@ export const OrderSearchBar: React.FC<OrderSearchBarProps> = ({
         </Select>
 
         {/* Fecha desde */}
-        <div className="relative">
-          <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-          <Input
-            type="date"
-            value={filters.dateFrom}
-            onChange={handleDateFromChange}
-            className="pl-10 w-full sm:w-[160px]"
-            placeholder="Desde"
-          />
-        </div>
+        <DatePicker
+          value={filters.dateFrom}
+          onChange={handleDateFromChange}
+          placeholder="Desde"
+          className="sm:flex-none sm:w-[150px]"
+        />
 
         {/* Fecha hasta */}
-        <div className="relative">
-          <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-          <Input
-            type="date"
-            value={filters.dateTo}
-            onChange={handleDateToChange}
-            className="pl-10 w-full sm:w-[160px]"
-            placeholder="Hasta"
-          />
-        </div>
+        <DatePicker
+          value={filters.dateTo}
+          onChange={handleDateToChange}
+          placeholder="Hasta"
+          className="sm:flex-none sm:w-[150px]"
+        />
 
         {/* Limpiar filtros */}
         {hasActiveFilters && (

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Search, Calendar, CreditCard, DollarSign, Layers, Wrench, Zap, Building2, Package, Banknote, FileText, Wallet, SlidersHorizontal, type LucideIcon } from 'lucide-react';
+import { Search, CreditCard, DollarSign, Layers, Wrench, Zap, Building2, Package, Banknote, FileText, Wallet, SlidersHorizontal, type LucideIcon } from 'lucide-react';
 import { Input } from '@/presentation/components/ui/input';
+import { DatePicker } from '@/presentation/components/ui/date-picker';
 import {
   Select,
   SelectContent,
@@ -55,12 +56,12 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
     });
   };
 
-  const handleDateFromChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onFiltersChange({ ...filters, dateFrom: e.target.value || undefined });
+  const handleDateFromChange = (value: string) => {
+    onFiltersChange({ ...filters, dateFrom: value || undefined });
   };
 
-  const handleDateToChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onFiltersChange({ ...filters, dateTo: e.target.value || undefined });
+  const handleDateToChange = (value: string) => {
+    onFiltersChange({ ...filters, dateTo: value || undefined });
   };
 
   const getCurrentTypeValue = (): string => {
@@ -87,7 +88,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
   ];
 
   return (
-    <div className="space-y-4 px-4 py-3 border-b border-border overflow-x-visible min-w-0">
+    <div className="space-y-4 py-3 border-b border-border overflow-x-visible min-w-0">
       {/* Search Input + botón "Filtros" */}
       <div className="flex items-stretch gap-2">
         <label className="flex h-12 flex-1 min-w-0">
@@ -154,7 +155,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
           </SelectContent>
         </Select>
       </div>
-      <div className="hidden md:block border-b border-border -mx-4 px-4">
+      <div className="hidden md:block border-b border-border">
         <div className="flex items-stretch gap-6 overflow-x-auto scrollbar-thin">
           {([{ value: 'all' as const, title: 'Todos' }, ...expenseTypes] as Array<{ value: string; title: string }>).map(({ value, title }) => {
             const isActive = getCurrentTypeValue() === value;
@@ -221,26 +222,19 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
           {/* Rango de fechas — columna en móvil, fila en desktop */}
           <div className="flex flex-col gap-2 md:flex-row md:flex-wrap md:items-center">
             <div className="flex items-center gap-2 w-full md:w-auto">
-              {/* En móvil el input date nativo ya muestra su propio icono */}
-              <Calendar className="h-3.5 w-3.5 text-muted-foreground shrink-0 hidden md:block" />
               <span className="text-xs text-muted-foreground shrink-0">Desde</span>
-              <Input
-                id="dateFrom"
-                type="date"
+              <DatePicker
                 value={filters.dateFrom ?? ''}
                 onChange={handleDateFromChange}
-                className="h-9 flex-1 md:w-[140px] rounded-lg bg-card border-border text-sm px-2"
+                className="md:flex-none md:w-[160px]"
               />
             </div>
             <div className="flex items-center gap-2 w-full md:w-auto">
-              <Calendar className="h-3.5 w-3.5 text-muted-foreground shrink-0 hidden md:block" />
               <span className="text-xs text-muted-foreground shrink-0">Hasta</span>
-              <Input
-                id="dateTo"
-                type="date"
+              <DatePicker
                 value={filters.dateTo ?? ''}
                 onChange={handleDateToChange}
-                className="h-9 flex-1 md:w-[140px] rounded-lg bg-card border-border text-sm px-2"
+                className="md:flex-none md:w-[160px]"
               />
             </div>
           </div>

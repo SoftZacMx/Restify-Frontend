@@ -1,7 +1,7 @@
 import React from 'react';
-import { BarChart3, Calendar, Sparkles } from 'lucide-react';
+import { BarChart3, Sparkles } from 'lucide-react';
 import { Button } from '@/presentation/components/ui/button';
-import { Input } from '@/presentation/components/ui/input';
+import { DatePicker } from '@/presentation/components/ui/date-picker';
 import { Label } from '@/presentation/components/ui/label';
 import {
   Select,
@@ -41,8 +41,8 @@ export const ReportFilters: React.FC<ReportFiltersProps> = ({
 
   return (
     <div className="px-4 py-3 border-b border-border bg-gradient-to-r from-muted/80 to-transparent dark:from-card/30 dark:to-transparent">
-      <div className="flex flex-wrap items-end gap-4">
-        <div className="flex flex-col gap-2 min-w-[200px]">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-end gap-3 sm:gap-4">
+        <div className="flex flex-col gap-2 sm:min-w-[200px]">
           <Label className="flex items-center gap-2 text-muted-foreground">
             <span className="rounded-md bg-primary/10 p-1">
               <BarChart3 className="h-4 w-4 text-primary" />
@@ -67,31 +67,24 @@ export const ReportFilters: React.FC<ReportFiltersProps> = ({
             </SelectContent>
           </Select>
         </div>
-        <div className="flex flex-col gap-2 min-w-[140px]">
-          <Label className="flex items-center gap-2 text-muted-foreground">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-            Desde
-          </Label>
-          <Input
-            type="date"
+        <div className="flex flex-col gap-2 sm:min-w-[150px]">
+          <Label className="text-muted-foreground">Desde</Label>
+          <DatePicker
             value={filters.dateFrom}
-            onChange={(e) => onFiltersChange({ ...filters, dateFrom: e.target.value })}
-            className="rounded-lg border-border bg-card shadow-sm"
+            onChange={(value) => onFiltersChange({ ...filters, dateFrom: value })}
           />
         </div>
-        <div className="flex flex-col gap-2 min-w-[140px]">
+        <div className="flex flex-col gap-2 sm:min-w-[150px]">
           <Label className="text-muted-foreground">Hasta</Label>
-          <Input
-            type="date"
+          <DatePicker
             value={filters.dateTo}
-            onChange={(e) => onFiltersChange({ ...filters, dateTo: e.target.value })}
-            className="rounded-lg border-border bg-card shadow-sm"
+            onChange={(value) => onFiltersChange({ ...filters, dateTo: value })}
           />
         </div>
         <Button
           onClick={onGenerate}
           disabled={isLoading}
-          className="rounded-lg bg-primary hover:bg-primary/90 shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+          className="w-full sm:w-auto rounded-lg bg-primary hover:bg-primary/90 shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
         >
           <Sparkles className="h-4 w-4" />
           {isLoading ? 'Generando...' : 'Generar reporte'}

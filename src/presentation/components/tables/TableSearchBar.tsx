@@ -17,6 +17,8 @@ export interface TableFilters {
 interface TableSearchBarProps {
   filters: TableFilters;
   onFiltersChange: (filters: TableFilters) => void;
+  /** Acción junto a los filtros (ej. botón "Nueva Mesa"). En mobile baja debajo, centrada. */
+  actions?: React.ReactNode;
 }
 
 /**
@@ -27,6 +29,7 @@ interface TableSearchBarProps {
 export const TableSearchBar: React.FC<TableSearchBarProps> = ({
   filters,
   onFiltersChange,
+  actions,
 }) => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onFiltersChange({
@@ -50,10 +53,10 @@ export const TableSearchBar: React.FC<TableSearchBarProps> = ({
   };
 
   return (
-    <div className="px-4 py-3">
-      <div className="flex flex-col sm:flex-row gap-3">
+    <div className="py-3">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
         {/* Barra de búsqueda */}
-        <div className="relative flex-1">
+        <div className="relative sm:flex-1 sm:min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             id="table-search-input"
@@ -61,7 +64,7 @@ export const TableSearchBar: React.FC<TableSearchBarProps> = ({
             type="text"
             inputMode="text"
             autoComplete="off"
-            placeholder="Buscar por nombre de ubicación..."
+            placeholder="Buscar por nombre..."
             value={filters.search || ''}
             onChange={handleSearchChange}
             className="pl-10"
@@ -73,7 +76,7 @@ export const TableSearchBar: React.FC<TableSearchBarProps> = ({
           value={filters.status || 'all'}
           onValueChange={handleStatusChange}
         >
-          <SelectTrigger className="w-full sm:w-[180px]">
+          <SelectTrigger className="w-full sm:flex-1 sm:min-w-[160px]">
             {filters.status === 'active'
               ? 'Activas'
               : filters.status === 'inactive'
@@ -92,7 +95,7 @@ export const TableSearchBar: React.FC<TableSearchBarProps> = ({
           value={filters.availability || 'all'}
           onValueChange={handleAvailabilityChange}
         >
-          <SelectTrigger className="w-full sm:w-[180px]">
+          <SelectTrigger className="w-full sm:flex-1 sm:min-w-[160px]">
             {filters.availability === 'available'
               ? 'Libres'
               : filters.availability === 'occupied'
@@ -100,11 +103,17 @@ export const TableSearchBar: React.FC<TableSearchBarProps> = ({
                 : 'Todas'}
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todas las ubicaciones</SelectItem>
+            <SelectItem value="all">Todas las mesas</SelectItem>
             <SelectItem value="available">Libres</SelectItem>
             <SelectItem value="occupied">Ocupadas</SelectItem>
           </SelectContent>
         </Select>
+
+        {actions && (
+          <div className="flex justify-center sm:justify-start sm:shrink-0">
+            {actions}
+          </div>
+        )}
       </div>
     </div>
   );

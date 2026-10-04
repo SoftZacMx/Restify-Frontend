@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
+import { PageHeader } from '@/presentation/components/ui/PageHeader';
 import { Button } from '@/presentation/components/ui/button';
 import { FormDialog } from '@/presentation/components/ui/form-dialog';
 import { Pagination } from '@/presentation/components/ui/pagination';
@@ -230,17 +231,14 @@ const BranchesPage: React.FC = () => {
   return (
     <MainLayout>
       <section className="space-y-6">
-        <div className="flex items-center justify-between p-2">
-          <div>
-            <h1 className="text-h1 text-foreground">Sucursales</h1>
-          </div>
+        <PageHeader title="Sucursales">
           {canWrite && (
             <Button  className="rounded-md w-auto h-12 p-2" onClick={() => setIsCreateModalOpen(true)}>
               <Plus className=" h-4 w-4 m-2"/>
               <span >Agregar Sucursal</span>
             </Button>
           )}
-        </div>
+        </PageHeader>
 
         <BranchSearchBar filters={filters} onFiltersChange={setFilters} />
 

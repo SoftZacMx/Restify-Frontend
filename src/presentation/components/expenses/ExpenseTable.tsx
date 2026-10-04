@@ -36,7 +36,7 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <div className="px-4 py-5">
+      <div className="py-5">
         <div className="overflow-hidden rounded-xl border border-border bg-card">
           <div className="p-8 text-center text-muted-foreground">
             Cargando gastos...
@@ -48,7 +48,7 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
 
   if (expenses.length === 0) {
     return (
-      <div className="px-4 py-5">
+      <div className="py-5">
         <div className="overflow-hidden rounded-xl border border-border bg-card">
           <div className="p-8 text-center text-muted-foreground">
             <div className="flex flex-col items-center gap-4">
@@ -83,7 +83,7 @@ export const ExpenseTable: React.FC<ExpenseTableProps> = ({
   }
 
   return (
-    <div className="px-4 py-5">
+    <div className="py-5">
       {/* Vista cards en móvil */}
       <div className="flex flex-col gap-3 md:hidden">
         {expenses.map((expense) => (

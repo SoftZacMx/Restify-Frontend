@@ -28,12 +28,12 @@ describe('expense.utils', () => {
 
   describe('getExpenseTypeBadgeColor', () => {
     it('returns a non-empty class string for known types', () => {
-      expect(getExpenseTypeBadgeColor('SERVICE_BUSINESS')).toContain('green');
-      expect(getExpenseTypeBadgeColor('UTILITY')).toContain('blue');
-      expect(getExpenseTypeBadgeColor('RENT')).toContain('red');
-      expect(getExpenseTypeBadgeColor('MERCHANDISE')).toContain('orange');
-      expect(getExpenseTypeBadgeColor('SALARY')).toContain('violet');
-      expect(getExpenseTypeBadgeColor('OTHER')).toContain('gray');
+      expect(getExpenseTypeBadgeColor('SERVICE_BUSINESS')).toContain('fresco');
+      expect(getExpenseTypeBadgeColor('UTILITY')).toContain('primary');
+      expect(getExpenseTypeBadgeColor('RENT')).toContain('destructive');
+      expect(getExpenseTypeBadgeColor('MERCHANDISE')).toContain('apoyo');
+      expect(getExpenseTypeBadgeColor('SALARY')).toContain('chart-5');
+      expect(getExpenseTypeBadgeColor('OTHER')).toContain('muted');
     });
 
     it('returns empty string for unknown type', () => {

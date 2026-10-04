@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { PackageMinus, Sliders } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
+import { PageHeader } from '@/presentation/components/ui/PageHeader';
 import { Button } from '@/presentation/components/ui/button';
 import { Pagination } from '@/presentation/components/ui/pagination';
 import { StockSearchBar } from '@/presentation/components/stock/StockSearchBar';
@@ -125,24 +126,19 @@ const StockPage: React.FC = () => {
   return (
     <MainLayout>
       <section className="space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          <div>
-            <h1 className="text-h1 text-foreground">Stock</h1>
-            <p className="text-sm text-muted-foreground">
-              Inventario actual de productos trackeados, costo promedio y alertas de mínimos.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Button variant="outline" onClick={() => setIsWasteOpen(true)}>
-              <PackageMinus className="h-4 w-4 mr-2" />
-              Registrar pérdida
-            </Button>
-            <Button variant="outline" onClick={() => setIsAdjustOpen(true)}>
-              <Sliders className="h-4 w-4 mr-2" />
-              Ajustar stock
-            </Button>
-          </div>
-        </div>
+        <PageHeader
+          title="Stock"
+          description="Inventario actual de productos trackeados, costo promedio y alertas de mínimos."
+        >
+          <Button variant="outline" onClick={() => setIsWasteOpen(true)}>
+            <PackageMinus className="h-4 w-4 mr-2" />
+            Registrar pérdida
+          </Button>
+          <Button variant="outline" onClick={() => setIsAdjustOpen(true)}>
+            <Sliders className="h-4 w-4 mr-2" />
+            Ajustar stock
+          </Button>
+        </PageHeader>
 
         <StockSearchBar filters={filters} onFiltersChange={setFilters} />
 

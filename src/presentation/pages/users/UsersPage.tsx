@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, UserPlus } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
+import { PageHeader } from '@/presentation/components/ui/PageHeader';
 import { Button } from '@/presentation/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/presentation/components/ui/dialog';
 import { ConfirmDialog } from '@/presentation/components/ui/confirm-dialog';
@@ -31,7 +32,9 @@ const filterAdapter = (filters: UserTableFilters) => {
 };
 
 const clientFilter = (data: User[], filters: UserTableFilters) => {
-  let result = data;
+  // La cuenta OWNER no se gestiona desde este módulo (debe existir un único
+  // owner y edita sus propios datos en "Mi perfil"); no se lista aquí.
+  let result = data.filter((u) => u.rol !== 'OWNER');
   if (filters.search) {
     const q = filters.search.toLowerCase();
     result = result.filter((u) =>
@@ -200,13 +203,12 @@ const UsersPage: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="flex flex-wrap justify-between items-center gap-4 px-4 py-2">
-        <h1 className="text-h1 text-foreground">Usuarios</h1>
+      <PageHeader title="Usuarios">
         <Button onClick={() => setIsCreateModalOpen(true)} className="flex items-center justify-center gap-2 min-w-[84px] cursor-pointer overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-sm hover:bg-primary/90 transition-colors">
           <Plus className="h-4 w-4" />
           <span className="truncate">Nuevo Usuario</span>
         </Button>
-      </div>
+      </PageHeader>
 
       <UserSearchBar filters={filters} onFiltersChange={setFilters} onExport={() => {}} />
       <UserTable users={tableUsers} isLoading={isLoading} canResetPassword={canResetPassword} onUserAction={handleUserAction} />

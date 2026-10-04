@@ -50,7 +50,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
       {/* Main Content Area - Contenido específico de cada página */}
       <main
         className={cn(
-          'flex-1 p-1 overflow-y-auto min-h-screen transition-all duration-300',
+          'flex-1 px-4 py-4 md:px-6 overflow-y-auto min-h-screen transition-all duration-300',
           getMainMargin()
         )}
       >

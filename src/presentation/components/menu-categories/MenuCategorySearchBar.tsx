@@ -38,7 +38,7 @@ export const MenuCategorySearchBar: React.FC<MenuCategorySearchBarProps> = ({
   };
 
   return (
-    <div className="px-4 py-3">
+    <div className="py-3">
       <div className="flex flex-col sm:flex-row gap-3">
         {/* Barra de búsqueda */}
         <div className="relative flex-1">

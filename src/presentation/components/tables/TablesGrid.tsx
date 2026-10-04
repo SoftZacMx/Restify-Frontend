@@ -31,7 +31,7 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
 
   if (isLoading) {
     return (
-      <div className="px-4 py-8">
+      <div className="py-8">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
           {[...Array(12)].map((_, i) => (
             <div
@@ -46,7 +46,7 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
 
   if (tables.length === 0) {
     return (
-      <div className="px-4 py-12">
+      <div className="py-12">
         <div className="text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
             <Square className="h-8 w-8 text-muted-foreground" />
@@ -94,7 +94,7 @@ export const TablesGrid: React.FC<TablesGridProps> = ({
   };
 
   return (
-    <div className="px-4 py-6">
+    <div className="py-6">
       {/* Leyenda de estados */}
       <div className="flex flex-wrap items-center gap-6 mb-6 px-2">
         <div className="flex items-center gap-2">

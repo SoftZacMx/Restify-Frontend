@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { Plus } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
+import { PageHeader } from '@/presentation/components/ui/PageHeader';
 import { Button } from '@/presentation/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/presentation/components/ui/dialog';
 import { ConfirmDialog } from '@/presentation/components/ui/confirm-dialog';
@@ -69,33 +69,14 @@ const TablesPage: React.FC = () => {
   React.useEffect(() => {
     if (error) {
       if (error instanceof AppError) {
-        showErrorToast('Error al cargar ubicaciones', error.message);
+        showErrorToast('Error al cargar mesas', error.message);
       } else {
-        showErrorToast('Error al cargar ubicaciones', 'No se pudieron obtener las ubicaciones del servidor');
+        showErrorToast('Error al cargar mesas', 'No se pudieron obtener las mesas del servidor');
       }
     }
   }, [error]);
 
-  const handleTableAction = useCallback((tableId: string, action: 'edit' | 'delete' | 'toggle-status' | 'toggle-availability') => {
-    switch (action) {
-      case 'edit':
-        window.location.href = `/tables/${tableId}`;
-        break;
-      case 'delete': {
-        const table = tables.find((t) => t.id === tableId);
-        if (table) deleteDialog.open(table);
-        break;
-      }
-      case 'toggle-status':
-        handleToggleStatus(tableId);
-        break;
-      case 'toggle-availability':
-        handleToggleAvailability(tableId);
-        break;
-    }
-  }, [tables, deleteDialog]);
-
-  const handleToggleStatus = async (tableId: string) => {
+  const handleToggleStatus = useCallback(async (tableId: string) => {
     try {
       const table = tables.find((t) => t.id === tableId);
       if (!table) return;
@@ -110,9 +91,9 @@ const TablesPage: React.FC = () => {
         showErrorToast('Error al actualizar estado', 'Ocurrió un error inesperado');
       }
     }
-  };
+  }, [tables, invalidate, refetch]);
 
-  const handleToggleAvailability = async (tableId: string) => {
+  const handleToggleAvailability = useCallback(async (tableId: string) => {
     try {
       const table = tables.find((t) => t.id === tableId);
       if (!table) return;
@@ -132,7 +113,26 @@ const TablesPage: React.FC = () => {
         showErrorToast('Error al actualizar disponibilidad', 'Ocurrió un error inesperado');
       }
     }
-  };
+  }, [tables, invalidate, refetch]);
+
+  const handleTableAction = useCallback((tableId: string, action: 'edit' | 'delete' | 'toggle-status' | 'toggle-availability') => {
+    switch (action) {
+      case 'edit':
+        window.location.href = `/tables/${tableId}`;
+        break;
+      case 'delete': {
+        const table = tables.find((t) => t.id === tableId);
+        if (table) deleteDialog.open(table);
+        break;
+      }
+      case 'toggle-status':
+        handleToggleStatus(tableId);
+        break;
+      case 'toggle-availability':
+        handleToggleAvailability(tableId);
+        break;
+    }
+  }, [tables, deleteDialog, handleToggleStatus, handleToggleAvailability]);
 
   const handleConfirmDelete = async () => {
     if (!deleteDialog.data) return;
@@ -176,15 +176,17 @@ const TablesPage: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="flex flex-wrap justify-between items-center gap-4 px-4 py-2">
-        <h1 className="text-h1 text-foreground">Mapa de Ubicaciones</h1>
-        <Button onClick={() => setIsCreateModalOpen(true)} className="flex items-center justify-center gap-2 min-w-[84px] cursor-pointer overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-sm hover:bg-primary/90 transition-colors">
-          <Plus className="h-4 w-4" />
-          <span className="truncate">Nueva Ubicación</span>
-        </Button>
-      </div>
+      <PageHeader title="Mapa de Mesas" />
 
-      <TableSearchBar filters={filters} onFiltersChange={setFilters} />
+      <TableSearchBar
+        filters={filters}
+        onFiltersChange={setFilters}
+        actions={
+          <Button onClick={() => setIsCreateModalOpen(true)} className="rounded-lg h-11 px-6 bg-primary text-white text-sm font-bold shadow-sm hover:bg-primary/90 transition-colors">
+            Nueva Mesa
+          </Button>
+        }
+      />
       <TablesGrid tables={filteredTables} isLoading={isLoading} onTableAction={handleTableAction} />
 
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>

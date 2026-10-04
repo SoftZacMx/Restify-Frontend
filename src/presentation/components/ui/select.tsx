@@ -12,26 +12,66 @@ export interface SelectProps {
 
 const SelectContext = React.createContext<{
   value?: string;
-  label?: string;
-  onValueChange?: (value: string, label: string) => void;
+  /** value -> texto visible, calculado de los SelectItem (ver extractItemLabels) */
+  itemLabels: Record<string, string>;
+  onValueChange?: (value: string) => void;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   containerRef: React.RefObject<HTMLDivElement | null>;
 }>({
+  itemLabels: {},
   isOpen: false,
   setIsOpen: () => {},
   containerRef: { current: null },
 });
 
+/** Texto plano de un nodo (ignora íconos/elementos sin texto). */
+const extractText = (node: React.ReactNode): string => {
+  if (node === null || node === undefined || typeof node === 'boolean') return '';
+  if (typeof node === 'string' || typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(extractText).join('');
+  if (React.isValidElement(node)) {
+    return extractText((node.props as { children?: React.ReactNode }).children);
+  }
+  return '';
+};
+
+/**
+ * Recorre el árbol de children del Select (incluye SelectContent y mapeos
+ * condicionales como `tables.map(...)`) y arma value -> etiqueta. Esto evita
+ * depender del click del usuario: la etiqueta de un valor por defecto (ej.
+ * "all" -> "Todo") queda disponible desde el primer render.
+ */
+const extractItemLabels = (node: React.ReactNode, map: Record<string, string>): void => {
+  if (node === null || node === undefined || typeof node === 'boolean') return;
+  if (Array.isArray(node)) {
+    node.forEach((child) => extractItemLabels(child, map));
+    return;
+  }
+  if (!React.isValidElement(node)) return;
+
+  const props = node.props as { value?: string; children?: React.ReactNode };
+  if (node.type === SelectItem && props.value !== undefined) {
+    map[props.value] = extractText(props.children);
+  }
+  if (props.children) {
+    extractItemLabels(props.children, map);
+  }
+};
+
 const Select = ({ value, defaultValue, onValueChange, children }: SelectProps) => {
   const [internalValue, setInternalValue] = React.useState(defaultValue || value);
-  const [internalLabel, setInternalLabel] = React.useState('');
   const [isOpen, setIsOpen] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
 
-  const handleValueChange = (newValue: string, newLabel: string) => {
+  const itemLabels = React.useMemo(() => {
+    const map: Record<string, string> = {};
+    extractItemLabels(children, map);
+    return map;
+  }, [children]);
+
+  const handleValueChange = (newValue: string) => {
     setInternalValue(newValue);
-    setInternalLabel(newLabel);
     onValueChange?.(newValue);
     setIsOpen(false);
   };
@@ -62,7 +102,7 @@ const Select = ({ value, defaultValue, onValueChange, children }: SelectProps) =
   }, [isOpen]);
 
   return (
-    <SelectContext.Provider value={{ value: internalValue, label: internalLabel, onValueChange: handleValueChange, isOpen, setIsOpen, containerRef }}>
+    <SelectContext.Provider value={{ value: internalValue, itemLabels, onValueChange: handleValueChange, isOpen, setIsOpen, containerRef }}>
       <div className="relative" data-select-container ref={containerRef}>
         {children}
       </div>
@@ -74,7 +114,8 @@ const SelectTrigger = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement>
 >(({ className, children, ...props }, ref) => {
-  const { value, isOpen, setIsOpen } = React.useContext(SelectContext);
+  const { value, itemLabels, isOpen, setIsOpen } = React.useContext(SelectContext);
+  const displayValue = value !== undefined ? (itemLabels[value] ?? value) : undefined;
 
   return (
     <button
@@ -90,16 +131,17 @@ const SelectTrigger = React.forwardRef<
       }}
       {...props}
     >
-      <span>{children || value || 'Selecciona...'}</span>
-      <ChevronDown className={cn('h-4 w-4 opacity-50 transition-transform', isOpen && 'rotate-180')} />
+      <span className="truncate whitespace-nowrap">{children || displayValue || 'Selecciona...'}</span>
+      <ChevronDown className={cn('h-4 w-4 opacity-50 transition-transform shrink-0', isOpen && 'rotate-180')} />
     </button>
   );
 });
 SelectTrigger.displayName = 'SelectTrigger';
 
 const SelectValue = ({ placeholder, children }: { placeholder?: string; children?: React.ReactNode }) => {
-  const { label, value } = React.useContext(SelectContext);
-  return <span>{children ?? (label || value) ?? placeholder}</span>;
+  const { value, itemLabels } = React.useContext(SelectContext);
+  const displayValue = value !== undefined ? (itemLabels[value] ?? value) : undefined;
+  return <span>{children ?? displayValue ?? placeholder}</span>;
 };
 
 const SelectContent = React.forwardRef<
@@ -178,17 +220,12 @@ const SelectItem = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement> & { value: string }
 >(({ className, children, value, ...props }, ref) => {
   const { onValueChange, value: selectedValue } = React.useContext(SelectContext);
-  const itemRef = React.useRef<HTMLDivElement>(null);
 
   const isSelected = selectedValue === value;
 
   return (
     <div
-      ref={(node) => {
-        (itemRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
-      }}
+      ref={ref}
       className={cn(
         'relative flex w-full cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none text-foreground hover:bg-muted dark:hover:bg-card focus:bg-muted dark:focus:bg-card',
         isSelected && 'bg-muted',
@@ -196,8 +233,7 @@ const SelectItem = React.forwardRef<
       )}
       onClick={(e) => {
         e.stopPropagation();
-        const label = itemRef.current?.textContent ?? '';
-        onValueChange?.(value, label);
+        onValueChange?.(value);
       }}
       {...props}
     >

@@ -42,20 +42,9 @@ export const UserTable: React.FC<UserTableProps> = ({
   canResetPassword = false,
   onUserAction,
 }) => {
-  const getRoleBadgeColor = (role: string): string => {
-    const colors: Record<string, string> = {
-      Propietario: 'bg-fresco-suave text-fresco-texto',
-      Administrador: 'bg-chart-5/15 text-chart-5',
-      Gerente: 'bg-primary/10 dark:bg-primary/20 text-primary',
-      Empleado: 'bg-primary/10 dark:bg-primary/20 text-primary',
-      Operario: 'bg-apoyo-suave text-apoyo-texto',
-    };
-    return colors[role] || '';
-  };
-
   if (isLoading) {
     return (
-      <div className="px-4 py-5">
+      <div className="py-5">
         <div className="overflow-hidden rounded-xl border border-border bg-card">
           <div className="p-8 text-center text-muted-foreground">
             Cargando usuarios...
@@ -67,7 +56,7 @@ export const UserTable: React.FC<UserTableProps> = ({
 
   if (users.length === 0) {
     return (
-      <div className="px-4 py-5">
+      <div className="py-5">
         <div className="overflow-hidden rounded-xl border border-border bg-card">
           <div className="p-8 text-center text-muted-foreground">
             No se encontraron usuarios
@@ -78,7 +67,7 @@ export const UserTable: React.FC<UserTableProps> = ({
   }
 
   return (
-    <div className="px-4 py-5">
+    <div className="py-5">
       <div className="overflow-hidden rounded-xl border border-border bg-card">
         <div className="overflow-x-auto">
           <Table>
@@ -105,7 +94,9 @@ export const UserTable: React.FC<UserTableProps> = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {users.map((user) => (
+              {users.map((user) => {
+                const isOwner = user.rol === 'OWNER';
+                return (
                 <TableRow
                   key={user.id}
                   className="hover:bg-muted dark:hover:bg-card/50 transition-colors"
@@ -122,12 +113,7 @@ export const UserTable: React.FC<UserTableProps> = ({
                     {user.email}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap">
-                    <Badge
-                      className={cn(
-                        'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold leading-5 border-0',
-                        getRoleBadgeColor(user.roleLabel)
-                      )}
-                    >
+                    <Badge className="inline-flex items-center rounded-full border-0 bg-apoyo-suave px-3 py-1 text-xs font-semibold leading-5 text-apoyo-texto">
                       {user.roleLabel}
                     </Badge>
                   </TableCell>
@@ -166,7 +152,8 @@ export const UserTable: React.FC<UserTableProps> = ({
                           <Eye className="mr-2 h-4 w-4" />
                           <span>Ver detalle</span>
                         </DropdownMenuItem>
-                        {canResetPassword && user.statusLabel === 'Activo' && (
+                        {/* La cuenta OWNER no se gestiona desde este módulo: sin reset/desactivar/reactivar. */}
+                        {!isOwner && canResetPassword && user.statusLabel === 'Activo' && (
                           <DropdownMenuItem
                             onSelect={() => onUserAction?.(user.id, 'reset-password')}
                             className="cursor-pointer"
@@ -175,7 +162,7 @@ export const UserTable: React.FC<UserTableProps> = ({
                             <span>Resetear contraseña</span>
                           </DropdownMenuItem>
                         )}
-                        {user.statusLabel === 'Activo' ? (
+                        {!isOwner && (user.statusLabel === 'Activo' ? (
                         <DropdownMenuItem
                           onSelect={() => onUserAction?.(user.id, 'delete')}
                           className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive-suave"
@@ -191,12 +178,13 @@ export const UserTable: React.FC<UserTableProps> = ({
                             <RotateCw className="mr-2 h-4 w-4" />
                             <span>Reactivar</span>
                         </DropdownMenuItem>
-                        )}
+                        ))}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
                 </TableRow>
-              ))}
+                );
+              })}
             </TableBody>
           </Table>
         </div>
@@ -204,4 +192,3 @@ export const UserTable: React.FC<UserTableProps> = ({
     </div>
   );
 };
-

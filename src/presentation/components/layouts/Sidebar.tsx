@@ -14,9 +14,9 @@ import { Tooltip } from '@/presentation/components/ui/tooltip';
 import { Button } from '@/presentation/components/ui/button';
 import { cn } from '@/shared/lib/utils';
 
-/** Fila del bloque inferior (tema, cerrar sesión): mismo look que un NavItem inactivo. */
+/** Botón de ícono del bloque inferior (ajustes, tema, sesión): compacto, con la misma sangría que un NavItem para que los íconos queden alineados verticalmente. */
 const bottomRowClass =
-  'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-muted-foreground hover:bg-muted dark:hover:bg-card hover:text-foreground dark:hover:text-foreground';
+  'h-10 flex items-center justify-center rounded-lg transition-colors text-muted-foreground hover:bg-muted dark:hover:bg-card hover:text-foreground dark:hover:text-foreground';
 
 /**
  * Componente Sidebar
@@ -47,6 +47,26 @@ export const Sidebar = () => {
 
   const logoUrl = !logoFailed ? branchDetail?.logoUrl ?? null : null;
 
+  // Scroll del nav: controla la visibilidad de los fades superior e inferior.
+  const navRef = React.useRef<HTMLDivElement>(null);
+  const [navScrollTop, setNavScrollTop] = React.useState(0);
+  const [hasMoreNavBelow, setHasMoreNavBelow] = React.useState(false);
+
+  const updateNavScrollState = React.useCallback(() => {
+    const el = navRef.current;
+    if (!el) return;
+    setNavScrollTop(el.scrollTop);
+    setHasMoreNavBelow(el.scrollHeight - el.scrollTop - el.clientHeight > 4);
+  }, []);
+
+  React.useEffect(() => {
+    // Recalcular también cuando cambia isCollapsed: el nav cambia de alto/padding y puede
+    // pasar de necesitar scroll a no necesitarlo (o viceversa).
+    updateNavScrollState();
+    window.addEventListener('resize', updateNavScrollState);
+    return () => window.removeEventListener('resize', updateNavScrollState);
+  }, [updateNavScrollState, isCollapsed]);
+
   const handleChangeBranch = () => {
     clearSelectedBranch();
     navigate('/select-branch');
@@ -57,6 +77,8 @@ export const Sidebar = () => {
     await logout();
     // La redirección se maneja en el interceptor de Axios (401)
   };
+
+  const handleNavScroll = () => updateNavScrollState();
 
   const handleNavClick = (path: string) => {
     handleNavigate(path);
@@ -217,18 +239,38 @@ export const Sidebar = () => {
 
         {/* Cambiar de sucursal (solo si el usuario tiene más de una) */}
         {hasMultipleBranches && !isCollapsed && (
-          <button
-            type="button"
-            onClick={handleChangeBranch}
-            className="mx-4 mb-2 flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted dark:hover:bg-card hover:text-foreground dark:hover:text-foreground transition-colors"
-          >
-            <Store className="h-4 w-4 shrink-0" />
-            Cambiar de sucursal
-          </button>
+          <>
+            <button
+              type="button"
+              onClick={handleChangeBranch}
+              className="mx-4 mb-2 flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted dark:hover:bg-card hover:text-foreground dark:hover:text-foreground transition-colors"
+            >
+              <Store className="h-4 w-4 shrink-0" />
+              Cambiar de sucursal
+            </button>
+            {/* Separador con desvanecido lateral: marca el límite entre la identidad de la sucursal y la navegación, en el mismo idioma que los demás separadores del sidebar. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none mx-4 mb-2 h-px bg-gradient-to-r from-transparent via-border to-transparent dark:via-card"
+            />
+          </>
         )}
 
-        {/* Main Navigation */}
-        <nav className={cn('flex-1 space-y-1 mt-8 overflow-y-auto', isCollapsed ? 'px-2' : 'px-4')}>
+        {/* Main Navigation — el contenedor relativo permite los fades que avisan que hay más módulos arriba/abajo del scroll. */}
+        <div className="relative flex-1 min-h-0 mt-3">
+          {/* Fade superior: visible solo si hay contenido scrolleado hacia arriba (navScrollTop > 0). */}
+          <div
+            aria-hidden="true"
+            className={cn(
+              'pointer-events-none absolute inset-x-0 top-0 z-10 h-5 bg-gradient-to-b from-card to-transparent transition-opacity duration-200',
+              navScrollTop > 0 ? 'opacity-100' : 'opacity-0'
+            )}
+          />
+          <nav
+            ref={navRef}
+            onScroll={handleNavScroll}
+            className={cn('h-full space-y-1 overflow-y-auto', isCollapsed ? 'px-2' : 'px-4')}
+          >
           {mainNavItems.map((item: NavItem) => {
             const IconComponent = item.icon;
 
@@ -266,60 +308,65 @@ export const Sidebar = () => {
               />
             );
           })}
-        </nav>
+          </nav>
+          {/* Fade inferior: avisa que hay más módulos debajo del scroll visible. */}
+          <div
+            aria-hidden="true"
+            className={cn(
+              'pointer-events-none absolute inset-x-0 bottom-0 z-10 h-8 bg-gradient-to-t from-card to-transparent transition-opacity duration-200',
+              hasMoreNavBelow ? 'opacity-100' : 'opacity-0'
+            )}
+          />
+        </div>
 
-        {/* Bottom Navigation */}
-        <div className={cn('border-t border-border space-y-1', isCollapsed ? 'p-2' : 'p-4')}>
+        {/* Bottom Navigation: fila compacta de acciones (Ajustes, tema, sesión) con etiqueta en tooltip. */}
+        <div
+          className={cn(
+            'border-t border-border flex items-center',
+            // Colapsado: apilados en columna. Expandido: repartidos a lo ancho, con el mismo aire entre ellos.
+            isCollapsed ? 'flex-col gap-1 px-2 py-2' : 'justify-between px-4 py-2'
+          )}
+        >
           {bottomNavItems.map((item: NavItem) => {
             const IconComponent = item.icon;
             const path = item.path ?? '';
             return (
-              <NavItemComponent
-                key={path || item.label}
-                icon={<IconComponent size={20} />}
-                label={item.label}
-                path={path}
-                isActive={isActive(path)}
-                isCollapsed={isCollapsed}
-                onClick={() => handleNavClick(path)}
-              />
+              <Tooltip key={path || item.label} content={item.label} side="top">
+                <button
+                  onClick={() => handleNavClick(path)}
+                  aria-label={item.label}
+                  aria-current={isActive(path) ? 'page' : undefined}
+                  className={cn(
+                    bottomRowClass,
+                    isCollapsed ? 'w-10' : 'px-3',
+                    isActive(path) && 'bg-muted text-foreground dark:bg-card'
+                  )}
+                >
+                  <IconComponent size={20} />
+                </button>
+              </Tooltip>
             );
           })}
-          {(() => {
-            const themeButton = (
-              <button
-                onClick={toggleTheme}
-                className={cn(bottomRowClass, isCollapsed && 'justify-center px-2')}
-                aria-label={themeLabel}
-              >
-                {isDark ? <Sun size={20} /> : <Moon size={20} />}
-                {!isCollapsed && <span>{themeLabel}</span>}
-              </button>
-            );
 
-            if (isCollapsed) {
-              return <Tooltip content={themeLabel}>{themeButton}</Tooltip>;
-            }
+          <Tooltip content={themeLabel} side="top">
+            <button
+              onClick={toggleTheme}
+              aria-label={themeLabel}
+              className={cn(bottomRowClass, isCollapsed ? 'w-10' : 'px-3')}
+            >
+              {isDark ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+          </Tooltip>
 
-            return themeButton;
-          })()}
-          {(() => {
-            const logoutButton = (
-              <button
-                onClick={handleLogout}
-                className={cn(bottomRowClass, isCollapsed && 'justify-center px-2')}
-              >
-                <LogOut size={20} />
-                {!isCollapsed && <span>Cerrar Sesión</span>}
-              </button>
-            );
-
-            if (isCollapsed) {
-              return <Tooltip content="Cerrar Sesión">{logoutButton}</Tooltip>;
-            }
-
-            return logoutButton;
-          })()}
+          <Tooltip content="Cerrar Sesión" side="top">
+            <button
+              onClick={handleLogout}
+              aria-label="Cerrar Sesión"
+              className={cn(bottomRowClass, isCollapsed ? 'w-10' : 'px-3', 'text-destructive hover:bg-destructive-suave hover:text-destructive-texto')}
+            >
+              <LogOut size={20} />
+            </button>
+          </Tooltip>
         </div>
       </aside>
     </>

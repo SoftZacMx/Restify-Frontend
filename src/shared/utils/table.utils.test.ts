@@ -95,13 +95,13 @@ describe('validateTableName', () => {
 });
 
 describe('badge classes', () => {
-  it('returns green/red classes for status', () => {
-    expect(getStatusBadgeClasses(true)).toContain('green');
-    expect(getStatusBadgeClasses(false)).toContain('red');
+  it('returns fresco/destructive tokens for status', () => {
+    expect(getStatusBadgeClasses(true)).toContain('fresco');
+    expect(getStatusBadgeClasses(false)).toContain('destructive');
   });
 
-  it('returns emerald/orange classes for availability', () => {
-    expect(getAvailabilityBadgeClasses(true)).toContain('emerald');
-    expect(getAvailabilityBadgeClasses(false)).toContain('orange');
+  it('returns fresco/apoyo tokens for availability', () => {
+    expect(getAvailabilityBadgeClasses(true)).toContain('fresco');
+    expect(getAvailabilityBadgeClasses(false)).toContain('apoyo');
   });
 });

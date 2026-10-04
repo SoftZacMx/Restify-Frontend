@@ -19,6 +19,8 @@ interface UserProfileHeaderProps {
 export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, onEdit }) => {
   const fullName = getFullName(user);
   const roleLabel = getRoleLabel(user.rol);
+  // La cuenta del propietario no se edita desde la gestión de usuarios.
+  const isOwner = user.rol === 'OWNER';
   const statusLabel = getStatusLabel(user.status);
   const memberSince = new Date(user.createdAt).toLocaleDateString('es-ES', {
     day: 'numeric',
@@ -54,13 +56,15 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, onEd
             </div>
           </div>
 
-          <Button
-            onClick={onEdit}
-            className="flex items-center justify-center gap-2 min-w-[84px] cursor-pointer rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors"
-          >
-            <Edit className="h-4 w-4" />
-            <span className="truncate">Editar Usuario</span>
-          </Button>
+          {!isOwner && (
+            <Button
+              onClick={onEdit}
+              className="flex items-center justify-center gap-2 min-w-[84px] cursor-pointer rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors"
+            >
+              <Edit className="h-4 w-4" />
+              <span className="truncate">Editar Usuario</span>
+            </Button>
+          )}
         </div>
 
         {/* Tarjetas de contacto */}

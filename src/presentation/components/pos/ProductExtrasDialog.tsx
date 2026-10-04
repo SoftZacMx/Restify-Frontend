@@ -11,6 +11,8 @@ import { Button } from '@/presentation/components/ui/button';
 import { Input } from '@/presentation/components/ui/input';
 import { Label } from '@/presentation/components/ui/label';
 import { ExtrasSelectionDialog } from '@/presentation/components/pos/ExtrasSelectionDialog';
+import { formatCurrency } from '@/shared/utils';
+import { getCategoryColor, getCategoryIcon } from '@/shared/utils/pos-category-visual.utils';
 import type { PosProduct } from '@/domain/types';
 import type { Category } from '@/domain/types';
 
@@ -67,6 +69,9 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
 
   if (!product) return null;
 
+  const categoryColor = getCategoryColor(product.categoryId, categories);
+  const categoryIcon = getCategoryIcon(product.categoryId, categories);
+
   const handleQuantityChange = (delta: number) => {
     setQuantity((prev) => Math.max(1, prev + delta));
   };
@@ -89,8 +94,12 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
         <DialogContent className="w-[min(26rem,95vw)] max-h-[90vh] flex flex-col p-0 overflow-hidden bg-card border border-border">
           {/* Header: icono + título + subtítulo + cerrar */}
           <DialogHeader className="flex-row items-start gap-3 px-5 pt-5 pb-4 shrink-0 border-b border-border">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary">
-              <UtensilsCrossed className="h-6 w-6 text-primary-foreground" />
+            <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${categoryColor.bg}`}>
+              {categoryIcon ? (
+                <span className="text-h3">{categoryIcon}</span>
+              ) : (
+                <UtensilsCrossed className={`h-6 w-6 ${categoryColor.text}`} />
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <DialogTitle className="leading-tight">
@@ -111,7 +120,7 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
               size="lg"
             >
               <ShoppingCart className="h-5 w-5 mr-2" />
-              Agregar al Carrito — ${itemSubtotal.toFixed(2)}
+              Agregar al Carrito
             </Button>
           </div>
 
@@ -180,13 +189,13 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
                     {selectedExtras.map((extra) => (
                       <span
                         key={extra.id}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-primary/10 dark:bg-primary/20 px-3 py-1.5 text-sm font-medium text-primary"
                       >
                         {extra.name}
                         <button
                           type="button"
                           onClick={() => removeExtra(extra)}
-                          className="rounded p-0.5 hover:bg-card/20"
+                          className="rounded p-0.5 hover:bg-primary/20"
                           aria-label={`Quitar ${extra.name}`}
                         >
                           <X className="h-3.5 w-3.5" />
@@ -203,7 +212,7 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
                     onClick={() => setIsExtrasPickerOpen(true)}
                     className="w-full rounded-lg"
                   >
-                    Extras
+                    Extras ({availableExtras.length})
                   </Button>
                 )}
                 {availableExtras.length === 0 && (
@@ -236,14 +245,14 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Precio Base</span>
                   <span className="font-medium text-foreground">
-                    ${product.price.toFixed(2)}
+                    {formatCurrency(product.price)}
                   </span>
                 </div>
                 {selectedExtras.length > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Extras ({selectedExtras.length})</span>
                     <span className="font-medium text-foreground">
-                      ${extrasTotal.toFixed(2)}
+                      {formatCurrency(extrasTotal)}
                     </span>
                   </div>
                 )}
@@ -254,9 +263,9 @@ export const ProductExtrasDialog: React.FC<ProductExtrasDialogProps> = ({
                 <div className="flex justify-between items-center pt-2 border-t border-border">
                   <span className="text-base font-bold text-foreground">Total</span>
                   <span
-                    className={`text-h2 text-primary inline-block ${animateTotal ? 'animate-total-bump' : ''}`}
+                    className={`text-h2 font-bold text-foreground inline-block ${animateTotal ? 'animate-total-bump' : ''}`}
                   >
-                    ${itemSubtotal.toFixed(2)}
+                    {formatCurrency(itemSubtotal)}
                   </span>
                 </div>
               </div>

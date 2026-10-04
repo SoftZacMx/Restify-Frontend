@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft } from 'lucide-react';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
+import { PageHeader } from '@/presentation/components/ui/PageHeader';
 import { Button } from '@/presentation/components/ui/button';
 import { MovementsFilters } from '@/presentation/components/stock/MovementsFilters';
 import { MovementsTable } from '@/presentation/components/stock/MovementsTable';
@@ -115,21 +116,17 @@ const MovementsHistoryPage: React.FC = () => {
         </div>
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          <div className="flex items-start gap-3">
-            <Button variant="outline" size="icon" onClick={() => navigate('/stock')} aria-label="Volver">
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <div>
-              <h1 className="text-h1 text-foreground">
-                Historial de movimientos
-              </h1>
-              {product && (
-                <p className="text-sm text-muted-foreground mt-1">
-                  Producto: <strong className="text-foreground">{product.name}</strong>
-                </p>
-              )}
-            </div>
+        <div className="flex items-start gap-3">
+          <Button variant="outline" size="icon" onClick={() => navigate('/stock')} aria-label="Volver" className="mt-1">
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <div className="flex-1">
+            <PageHeader title="Historial de movimientos" />
+            {product && (
+              <p className="text-sm text-muted-foreground -mt-1">
+                Producto: <strong className="text-foreground">{product.name}</strong>
+              </p>
+            )}
           </div>
         </div>
 

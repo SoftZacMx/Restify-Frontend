@@ -6,7 +6,6 @@ import { MainLayout } from '@/presentation/components/layouts/MainLayout';
 import { usePos, useQrPaymentFlow } from '@/presentation/hooks/pos';
 import { usePaymentSound } from '@/presentation/hooks/usePaymentSound';
 import { PosOrderBanner } from '@/presentation/components/pos/PosOrderBanner';
-import { PosHeader } from '@/presentation/components/pos/PosHeader';
 import { PosProductSection } from '@/presentation/components/pos/PosProductSection';
 import { PosOrderSidebar } from '@/presentation/components/pos/PosOrderSidebar';
 import { TableSelectionDialog } from '@/presentation/components/pos/TableSelectionDialog';
@@ -14,12 +13,16 @@ import { ProductExtrasDialog } from '@/presentation/components/pos/ProductExtras
 import { OrderPaymentLayout } from '@/presentation/components/pos/OrderPaymentLayout';
 import { PaymentSuccessView } from '@/presentation/components/pos/PaymentSuccessView';
 import { Button } from '@/presentation/components/ui/button';
+import { Badge } from '@/presentation/components/ui/badge';
+import { PageHeader } from '@/presentation/components/ui/PageHeader';
 import { LoadingOverlay } from '@/presentation/components/ui/loading-overlay';
 // Ya no usamos PRODUCT_CATEGORIES, ahora cargamos categorías del backend
-import { showSuccessToast, showErrorToast } from '@/shared/utils/toast';
+import { showSuccessToast, showErrorToast, showWarningToast } from '@/shared/utils/toast';
 import { useAuthStore } from '@/presentation/store/auth.store';
 import { orderService } from '@/application/services/order.service';
+import { ticketService } from '@/application/services/ticket.service';
 import { useActiveBranch } from '@/presentation/hooks/useActiveBranch';
+import { formatOrderNumber } from '@/shared/utils/order.utils';
 import type {
   OrderFormErrors,
   PosMode,
@@ -452,6 +455,11 @@ const PosPage = () => {
       playSuccess();
       queryClient.invalidateQueries({ queryKey: ['orders'] });
 
+      // Imprimir ticket de venta tras el pago. Su fallo no interrumpe el flujo del pago.
+      ticketService
+        .printSaleTicket(orderIdToProcess)
+        .catch(() => showWarningToast('Ticket no impreso', 'El pago fue exitoso pero no se pudo imprimir el ticket'));
+
       // Determine payment method number
       const pmNumber = selectedMethod1 === 'CASH' ? 1
         : selectedMethod1 === 'TRANSFER' ? 2
@@ -587,13 +595,45 @@ const PosPage = () => {
         )}
 
         {/* Header */}
-        <PosHeader
-          posMode={posMode}
-          loadedOrder={loadedOrder}
-          currentOrderId={currentOrderId}
-          isPaymentOnlyMode={isPaymentOnlyMode}
-          onBackToEdit={handleBackToEdit}
-        />
+        <div className="mb-6">
+          <PageHeader
+            title={
+              loadedOrder
+                ? `Orden ${formatOrderNumber(loadedOrder.id)}`
+                : posMode === 'ORDER_BUILDING'
+                  ? 'Crear/Editar Orden'
+                  : 'Procesar Pago'
+            }
+            description={
+              (currentOrderId || loadedOrder)
+                ? `ID: ${loadedOrder?.id || currentOrderId}`
+                : undefined
+            }
+            titleBadge={
+              !(posMode === 'ORDER_BUILDING' && !loadedOrder && !isPaymentOnlyMode) && (
+                <Badge
+                  variant={posMode === 'ORDER_BUILDING' ? 'default' : 'secondary'}
+                  className="text-sm px-3 py-1"
+                >
+                  {isPaymentOnlyMode
+                    ? 'Pago'
+                    : loadedOrder && posMode === 'ORDER_BUILDING'
+                      ? 'Edición'
+                      : loadedOrder
+                        ? 'Visualización'
+                        : 'Pago'}
+                </Badge>
+              )
+            }
+          >
+            {posMode === 'PAYMENT_PROCESSING' && !loadedOrder && !isPaymentOnlyMode && (
+              <Button variant="outline" onClick={handleBackToEdit} className="gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                Volver a Editar
+              </Button>
+            )}
+          </PageHeader>
+        </div>
 
         {/* Modo pago: layout 50% resumen orden / 50% pago (sin espacio en blanco) */}
         {posMode === 'PAYMENT_PROCESSING' && cartItems.length > 0 && (
@@ -649,6 +689,7 @@ const PosPage = () => {
                 selectedCategoryId={selectedCategoryId}
                 onCategorySelect={handleCategorySelect}
                 filteredProducts={filteredProducts}
+                cartItems={cartItems}
                 onProductSelect={handleProductSelect}
                 isLoading={isLoadingProducts}
                 error={productsError}

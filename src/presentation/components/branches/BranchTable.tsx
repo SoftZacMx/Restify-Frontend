@@ -53,7 +53,7 @@ export const BranchTable: React.FC<BranchTableProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <div className="px-4 py-5">
+      <div className="py-5">
         <div className="overflow-hidden rounded-xl border border-border bg-card">
           <div className="p-8 text-center text-muted-foreground">
             Cargando sucursales...
@@ -65,7 +65,7 @@ export const BranchTable: React.FC<BranchTableProps> = ({
 
   if (branches.length === 0) {
     return (
-      <div className="px-4 py-5">
+      <div className="py-5">
         <div className="overflow-hidden rounded-xl border border-border bg-card">
           <div className="p-8 text-center text-muted-foreground">
             No se encontraron sucursales
@@ -76,7 +76,7 @@ export const BranchTable: React.FC<BranchTableProps> = ({
   }
 
   return (
-    <div className="px-4 py-5">
+    <div className="py-5">
       <div className="overflow-hidden rounded-xl border border-border bg-card">
         <div className="overflow-x-auto">
           <Table>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from '@/presentation/components/ui/input';
+import { DatePicker } from '@/presentation/components/ui/date-picker';
 import { Label } from '@/presentation/components/ui/label';
 import {
   Select,
@@ -54,30 +54,26 @@ export const MovementsFilters: React.FC<MovementsFiltersProps> = ({ filters, onF
   const reset = () => onFiltersChange({ type: 'ALL', from: '', to: '' });
 
   return (
-    <div className="flex flex-col md:flex-row gap-3 px-4 py-3 border-b border-border">
+    <div className="flex flex-col md:flex-row gap-3 py-3">
       <div className="flex flex-col">
-        <Label htmlFor="movFrom" className="text-xs font-medium text-muted-foreground mb-1">
+        <Label className="text-xs font-medium text-muted-foreground mb-1">
           Desde
         </Label>
-        <Input
-          id="movFrom"
-          type="date"
+        <DatePicker
           value={filters.from}
-          onChange={(e) => onFiltersChange({ ...filters, from: e.target.value })}
-          className="h-10"
+          onChange={(value) => onFiltersChange({ ...filters, from: value })}
+          className="md:w-[150px]"
         />
       </div>
 
       <div className="flex flex-col">
-        <Label htmlFor="movTo" className="text-xs font-medium text-muted-foreground mb-1">
+        <Label className="text-xs font-medium text-muted-foreground mb-1">
           Hasta
         </Label>
-        <Input
-          id="movTo"
-          type="date"
+        <DatePicker
           value={filters.to}
-          onChange={(e) => onFiltersChange({ ...filters, to: e.target.value })}
-          className="h-10"
+          onChange={(value) => onFiltersChange({ ...filters, to: value })}
+          className="md:w-[150px]"
         />
       </div>
 

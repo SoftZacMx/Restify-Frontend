@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { Plus, RefreshCw, FileText, WifiOff, Filter, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, RefreshCw, WifiOff, Filter, ChevronDown, ChevronUp } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { MainLayout } from '@/presentation/components/layouts/MainLayout';
+import { PageHeader } from '@/presentation/components/ui/PageHeader';
 import { Button } from '@/presentation/components/ui/button';
 import {
   AlertDialog,
@@ -390,45 +391,39 @@ const OrdersPage: React.FC = () => {
     <MainLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between gap-2">
-          <h1 className="text-h1 text-foreground flex items-center gap-2">
-            <FileText className="h-7 w-7 hidden sm:block" />
-            Órdenes
-          </h1>
-          <div className="flex items-center gap-2">
-            <ConnectionIndicator
-              isConnected={isConnected}
-              connectionId={connectionId}
-              showLabel={false}
-            />
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => refetchOrders()}
-              disabled={isLoadingOrders}
-              title="Actualizar"
-              className="sm:hidden"
-            >
-              <RefreshCw className={`h-4 w-4 ${isLoadingOrders ? 'animate-spin' : ''}`} />
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => refetchOrders()}
-              disabled={isLoadingOrders}
-              className="hidden sm:inline-flex"
-            >
-              <RefreshCw className={`h-4 w-4 mr-2 ${isLoadingOrders ? 'animate-spin' : ''}`} />
-              Actualizar
-            </Button>
-            <Button onClick={handleNewOrder} size="icon" className="sm:hidden" title="Nueva Orden">
-              <Plus className="h-5 w-5" />
-            </Button>
-            <Button onClick={handleNewOrder} className="hidden sm:inline-flex">
-              <Plus className="h-4 w-4 mr-2" />
-              Nueva Orden
-            </Button>
-          </div>
-        </div>
+        <PageHeader title="Órdenes">
+          <ConnectionIndicator
+            isConnected={isConnected}
+            connectionId={connectionId}
+            showLabel={false}
+          />
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => refetchOrders()}
+            disabled={isLoadingOrders}
+            title="Actualizar"
+            className="sm:hidden"
+          >
+            <RefreshCw className={`h-4 w-4 ${isLoadingOrders ? 'animate-spin' : ''}`} />
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => refetchOrders()}
+            disabled={isLoadingOrders}
+            className="hidden sm:inline-flex"
+          >
+            <RefreshCw className={`h-4 w-4 mr-2 ${isLoadingOrders ? 'animate-spin' : ''}`} />
+            Actualizar
+          </Button>
+          <Button onClick={handleNewOrder} size="icon" className="sm:hidden" title="Nueva Orden">
+            <Plus className="h-5 w-5" />
+          </Button>
+          <Button onClick={handleNewOrder} className="hidden sm:inline-flex">
+            <Plus className="h-4 w-4 mr-2" />
+            Nueva Orden
+          </Button>
+        </PageHeader>
 
         {/* Banner de advertencia cuando no hay conexión WebSocket */}
         {!isConnected && (

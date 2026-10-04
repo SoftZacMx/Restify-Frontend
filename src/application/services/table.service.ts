@@ -50,7 +50,7 @@ export class TableService {
       return [];
     }
 
-    return response.data.sort((a, b) => a.name.localeCompare(b.name, 'es', { sensitivity: 'base' }));
+    return response.data;
   }
 
   /**
