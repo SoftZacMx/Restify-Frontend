@@ -77,12 +77,12 @@ const SubscriptionBlockedPage = () => {
         <h1 className="text-h1 text-foreground mb-2">
           {isPendingOnboardingPayment
             ? "Completa tu pago para activar tu cuenta"
-            : "Tu suscripción ha expirado"}
+            : "Tu prueba gratis ha terminado"}
         </h1>
         <p className="text-muted-foreground max-w-md mx-auto">
           {isPendingOnboardingPayment
             ? "Elegiste un plan de pago durante el registro. Confirma el pago para empezar a usar Restify."
-            : "Tu acceso a Restify se encuentra restringido actualmente. Elige un plan para continuar gestionando tu negocio sin interrupciones."}
+            : "Elige un plan para continuar gestionando tu negocio sin interrupciones."}
         </p>
       </div>
 

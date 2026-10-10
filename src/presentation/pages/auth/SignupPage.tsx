@@ -16,7 +16,6 @@ import {
   Crown,
 } from "lucide-react";
 import { useAuth } from "@/presentation/hooks/useAuth";
-import { AppError } from "@/domain/errors";
 import type { SignupRequest } from "@/domain/types";
 import type { SubscriptionPlan } from "@/domain/types/subscription.types";
 import { subscriptionService } from "@/application/services/subscription.service";
@@ -154,20 +153,11 @@ export default function SignupPage() {
       },
     };
 
+    // El registro ya no pide pago: la organización nace con el período de prueba
+    // y el cobro solo se pide al vencer (o si el negocio decide pagar antes).
     const result = await signup(payload);
     if (result.success) {
-      if (result.requiresCheckout) {
-        try {
-          const checkout = await subscriptionService.createCheckout(planData.planId);
-          window.location.href = checkout.checkoutUrl;
-        } catch (err) {
-          const appError = err instanceof AppError ? err : AppError.create("UNKNOWN_ERROR", "Error desconocido");
-          showErrorToast("Error al iniciar el pago", appError.message);
-          navigate("/dashboard");
-        }
-      } else {
-        navigate("/dashboard");
-      }
+      navigate("/dashboard");
     }
   };
 
@@ -641,11 +631,8 @@ export default function SignupPage() {
                   {plans.map((plan) => {
                     const isSelected = selectedPlanId === plan.id;
                     const isAnnual = plan.billingPeriod === "ANNUAL";
-                    const isFree = plan.price === 0;
-                    const priceDisplay = isFree
-                      ? "Gratis"
-                      : formatCurrency(plan.price / 100);
-                    const periodLabel = isFree ? "" : isAnnual ? "/año" : "/mes";
+                    const priceDisplay = formatCurrency(plan.price / 100);
+                    const periodLabel = isAnnual ? "/año" : "/mes";
 
                     return (
                       <button
@@ -678,6 +665,9 @@ export default function SignupPage() {
                               {periodLabel}
                             </span>
                           </div>
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            45 días gratis · sin tarjeta
+                          </p>
                         </div>
                       </button>
                     );

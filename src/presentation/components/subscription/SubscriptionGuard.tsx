@@ -13,9 +13,9 @@ export const SubscriptionGuard = ({ children }: SubscriptionGuardProps) => {
   const [isReady, setIsReady] = useState(false);
 
   // Alineado con el backend (SubscriptionMiddleware): cuando el billing está
-  // deshabilitado NO se valida la suscripción. Evita bloquear/redirigir a
-  // checkout justo después del onboarding (la org nace con una suscripción
-  // "Free Legacy" ACTIVE que no debe forzar el flujo de pago).
+  // deshabilitado NO se valida la suscripción. Evita bloquear justo después del
+  // onboarding (la org nace con una suscripción activa/lo de prueba que no debe
+  // forzar el flujo de pago).
   const billingDisabled = config?.billingEnabled === false;
 
   useEffect(() => {
