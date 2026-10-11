@@ -343,7 +343,7 @@ const DashboardPage = () => {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <Button
-                  className="h-24 flex flex-col gap-2 bg-primary/10 dark:bg-primary/20 hover:bg-primary/90 dark:hover:bg-primary/90 text-primary"
+                  className="h-24 flex flex-col gap-2 bg-primary/10 dark:bg-primary/20 hover:bg-primary/20 dark:hover:bg-primary/30 text-primary"
                   onClick={() => navigate('/pos')}
                 >
                   <Plus className="h-6 w-6" />
