@@ -31,7 +31,7 @@ const SubscriptionBlockedPage = () => {
 
   useEffect(() => {
     subscriptionService
-      .getPlans()
+      .getAvailablePlans()
       .then((data) => {
         setPlans(data);
         if (data.length > 0) setSelectedPlanId(data[0].id);

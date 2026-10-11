@@ -18,6 +18,11 @@ export class SubscriptionRepository {
     }
   }
 
+  async getAvailablePlans(): Promise<ApiResponse<SubscriptionPlan[]>> {
+    const response = await apiClient.get('/api/subscription/plans/available');
+    return response.data;
+  }
+
   async getStatus(): Promise<ApiResponse<SubscriptionStatusResponse>> {
     try {
       const response = await apiClient.get('/api/subscription/status');

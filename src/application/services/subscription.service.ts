@@ -19,6 +19,11 @@ export class SubscriptionService {
     return response.data!;
   }
 
+  async getAvailablePlans(): Promise<SubscriptionPlan[]> {
+    const response = await this.repository.getAvailablePlans();
+    return response.data!;
+  }
+
   async getStatus(): Promise<SubscriptionStatusResponse> {
     const response = await this.repository.getStatus();
     return response.data!;
